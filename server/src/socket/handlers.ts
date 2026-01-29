@@ -55,6 +55,7 @@ export function registerSocketHandlers(io: Server) {
       if (game && game.status === 'QUESTION') {
         const player = game.players.find((p: Player) => p.socketId === socket.id);
         if (player && !player.stealCardUsed) {
+          // Only set stealCardUsed = true for the player who used it
           player.stealCardUsed = true;
           // Generate random disabled indexes for each other player
           const disabledMap: Record<string, number[]> = {};

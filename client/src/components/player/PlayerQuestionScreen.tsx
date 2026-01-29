@@ -16,6 +16,8 @@ interface Props {
 }
 
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
+        // Track if steal card is available for this question (disappears for all when used)
+        const [stealCardActiveThisQuestion, setStealCardActiveThisQuestion] = useState(true);
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     // (stolenFromIds state removed; not used)
     const stealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -55,6 +57,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
     // Reset answer state when question changes
     useEffect(() => {
+                // Reset steal card for new question
+                setStealCardActiveThisQuestion(true);
             // No localStealCardUsed to reset
         // Use setTimeout to avoid cascading renders
         const timer = setTimeout(() => {
@@ -104,10 +108,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             const myId = localStorage.getItem('cw_playerId');
             console.log('[DEBUG] steal-card-used handler fired', { playerId, myId, disabledMap });
 
-            // Disable STEAL card UI for all players as soon as one is used
-            setUseStealCard(false); // Ensure the steal card is no longer active
-
-            // No localStealCardUsed to set
+            // Disable STEAL card UI for all players as soon as one is used (for this question only)
+            setUseStealCard(false);
+            setStealCardActiveThisQuestion(false);
 
             if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
                 console.log('[DEBUG] Disabling indexes for me:', disabledMap[myId]);
@@ -229,13 +232,14 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             </AnimatePresence>
                             {/* STEAL card at the end */}
                             <AnimatePresence>
-                                {me && !me.stealCardUsed && (
+                                {me && !me.stealCardUsed && stealCardActiveThisQuestion && (
                                     <ColorCard
                                         key="steal"
                                         color="#FFD700" // Gold color for STEAL card
                                         isSelected={false}
                                         onClick={() => {
                                             setUseStealCard(true);
+                                            setStealCardActiveThisQuestion(false); // Instantly hide for this player
                                             socket.emit('use-steal-card', {
                                                 code: gameState.code
                                             });

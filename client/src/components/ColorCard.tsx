@@ -130,7 +130,7 @@ export function ColorCard({
                             <span
                                 className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
                                 style={{
-                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
+                                    color: 'white',
                                     fontSize: getFontSize(),
                                     lineHeight: 1.1,
                                     wordBreak: 'break-word',
@@ -161,37 +161,7 @@ export function ColorCard({
                         </div>
                     )}
 
-                    {/* ...existing code... */}
-
-                    {/* Locked overlay for steal card - always on top if disabled */}
-                    {isStealCard && disabled && (
-                        <span style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: 'rgba(30,30,30,0.7)',
-                            color: '#fff',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 'bold',
-                            fontSize: 'clamp(0.8rem, 2vw, 1.1rem)',
-                            borderRadius: '1rem',
-                            zIndex: 50,
-                            textAlign: 'center',
-                            wordBreak: 'break-word',
-                            padding: '0 0.5em',
-                            lineHeight: 1.1,
-                            maxWidth: '90%',
-                            pointerEvents: 'none',
-                        }}>
-                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginBottom: '0.2em', minWidth: '28px' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 17v1m-6 0a2 2 0 002 2h8a2 2 0 002-2v-5a2 2 0 00-2-2H8a2 2 0 00-2 2v5zm10-7V7a4 4 0 10-8 0v4" /></svg>
-                            <span style={{ display: 'block', width: '100%' }}>LOCKED</span>
-                        </span>
-                    )}
+                         
 
                     {/* Selection indicator */}
                     {isSelected && (
