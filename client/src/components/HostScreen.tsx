@@ -138,7 +138,7 @@ export default function HostScreen({ socket, gameState }: Props) {
                     </div>
                     <div className="flex flex-col gap-2">
                         <div className="text-2xl font-black uppercase tracking-[0.4em] text-text-muted">Join Code</div>
-                        <div className="text-[56px] font-mono font-black tracking-[0.2em] text-white leading-none glow-text">{code}</div>
+                        <div className="!text-[56px] font-mono font-black tracking-[0.2em] text-white leading-none glow-text">{code}</div>
                     </div>
                 </div>
 
