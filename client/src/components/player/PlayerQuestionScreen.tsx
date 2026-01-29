@@ -208,50 +208,46 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 margin: '0 auto',
                             }}
                         >
-                            <AnimatePresence initial={false}>
-                                {currentQuestion.options.map((color, i) =>
-                                    disabledIndexes.includes(i)
-                                        ? (
-                                            <div
-                                                key={i}
-                                                style={{ width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                            />
-                                        )
-                                        : (
-                                            <ColorCard
-                                                key={i}
-                                                color={color}
-                                                isSelected={selectedColors.includes(color)}
-                                                onClick={() => toggleColor(color)}
-                                                disabled={hasAnswered || timeLeft === 0}
-                                                size="responsive"
-                                                index={i}
-                                            />
-                                        )
-                                )}
-                            </AnimatePresence>
+                            {currentQuestion.options.map((color, i) =>
+                                disabledIndexes.includes(i)
+                                    ? (
+                                        <div
+                                            key={i}
+                                            style={{ width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        />
+                                    )
+                                    : (
+                                        <ColorCard
+                                            key={i}
+                                            color={color}
+                                            isSelected={selectedColors.includes(color)}
+                                            onClick={() => toggleColor(color)}
+                                            disabled={hasAnswered || timeLeft === 0}
+                                            size="responsive"
+                                            index={i}
+                                        />
+                                    )
+                            )}
                             {/* STEAL card at the end */}
-                            <AnimatePresence>
-                                {me && !me.stealCardUsed && stealCardActiveThisQuestion && (
-                                    <ColorCard
-                                        key="steal"
-                                        color="#FFD700" // Gold color for STEAL card
-                                        isSelected={false}
-                                        onClick={() => {
-                                            setUseStealCard(true);
-                                            setStealCardActiveThisQuestion(false); // Instantly hide for this player
-                                            socket.emit('use-steal-card', {
-                                                code: gameState.code
-                                            });
-                                        }}
-                                        disabled={hasAnswered || timeLeft === 0}
-                                        size="responsive"
-                                        index={currentQuestion.options.length}
-                                        isStealCard={true}
-                                        stealValue={me.stealCardValue}
-                                    />
-                                )}
-                            </AnimatePresence>
+                            {me && !me.stealCardUsed && stealCardActiveThisQuestion && (
+                                <ColorCard
+                                    key="steal"
+                                    color="#FFD700" // Gold color for STEAL card
+                                    isSelected={false}
+                                    onClick={() => {
+                                        setUseStealCard(true);
+                                        setStealCardActiveThisQuestion(false); // Instantly hide for this player
+                                        socket.emit('use-steal-card', {
+                                            code: gameState.code
+                                        });
+                                    }}
+                                    disabled={hasAnswered || timeLeft === 0}
+                                    size="responsive"
+                                    index={currentQuestion.options.length}
+                                    isStealCard={true}
+                                    stealValue={me.stealCardValue}
+                                />
+                            )}
                         </div>
                     </div>
                     <div className="flex flex-col gap-4 w-full">
