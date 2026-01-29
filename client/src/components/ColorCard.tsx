@@ -95,7 +95,7 @@ export function ColorCard({
                     {/* Center color name */}
                     <div className="absolute inset-0 flex items-center justify-center p-2">
                         <span
-                            className="font-black text-2xl md:text-3xl uppercase tracking-widest text-center break-all drop-shadow-md"
+                            className="block md:hidden font-black text-sm uppercase tracking-widest text-center  drop-shadow-md"
                             style={{
                                 color: ['white', 'yellow', 'cyan', 'lime'].includes(color.toLowerCase()) ? 'black' : 'white',
                                 textShadow: '0 2px 4px rgba(0,0,0,0.3)'

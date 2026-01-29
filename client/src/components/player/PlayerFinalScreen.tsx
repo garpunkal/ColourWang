@@ -36,7 +36,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                     {isWinner ? 'LEGEND STATUS' : `RANK #${rank}`}
                 </h3>
                 <p className="text-2xl font-black text-color-purple uppercase tracking-[0.6em] italic opacity-80">
-                    {isWinner ? 'Field Dominance Confirmed' : 'Neural Sync Complete'}
+                    {isWinner ? 'You Win!' : 'You Lost!'}
                 </p>
             </div>
 
@@ -54,7 +54,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                 onClick={() => setGameState(null)}
                 className="btn btn-secondary w-full py-12 text-4xl rounded-[3.5rem] border-t-4 border-white/30 bg-white/10 hover:bg-white/15 transition-all font-black group relative overflow-hidden shadow-2xl italic tracking-tighter uppercase"
             >
-                <span className="relative z-10">RE-INITIALIZE</span>
+                <span className="relative z-10">RESTART</span>
                 <motion.div
                     animate={{ x: [-600, 1000] }}
                     transition={{ duration: 3, repeat: Infinity, repeatDelay: 5 }}

@@ -23,13 +23,13 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                     className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-[2rem] md:rounded-[3rem] flex items-center gap-6 md:gap-12"
                 >
                     <div className="flex flex-col items-start leading-none">
-                        <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Active Phase</span>
+                        <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Question</span>
                         <span className="text-6xl font-black italic tracking-tighter">0{currentQuestionIndex + 1}</span>
                     </div>
                     <div className="w-[2px] h-20 bg-white/10 mx-4" />
                     <div className="flex flex-col items-end leading-none">
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue mb-2 italic">Remaining</span>
-                        <span className={`text-8xl font-mono font-black tabular-nums ${timeLeft <= 5 ? 'text-error animate-ping' : 'text-white'}`}>
+                        <span className={`text-6xl font-black tabular-nums italic tracking-tighter ${timeLeft <= 5 ? 'text-error animate-ping' : 'text-white'}`}>
                             {timeLeft}s
                         </span>
                     </div>

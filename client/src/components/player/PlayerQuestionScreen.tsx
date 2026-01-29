@@ -87,7 +87,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             </div>
 
             {!hasAnswered ? (
-                <div className="flex-1 flex flex-col gap-10">
+                <div className="flex-1 flex flex-col gap-6">
                     <div className="grid grid-cols-2 gap-6 flex-1 p-2 place-items-center">
                         {currentQuestion.options.map((color, i) => (
                             <ColorCard
