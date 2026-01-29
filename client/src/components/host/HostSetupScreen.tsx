@@ -43,7 +43,7 @@ export function HostSetupScreen({ socket }: Props) {
     return (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-12 overflow-y-auto">
             <Logo className="w-auto max-w-[300px] md:max-w-[600px] lg:max-w-[800px] mb-8 md:mb-12" />
-            <div className="glass-card p-8 md:p-16 rounded-[2rem] md:rounded-[4rem] border-white/10 shadow-2xl max-w-4xl w-full mx-auto md:mx-8">
+            <div className="glass-card p-8 md:p-16 rounded-4xl md:rounded-[4rem] border-white/10 shadow-2xl max-w-4xl w-full mx-auto md:mx-8">
                 <h2 className="text-4xl md:text-6xl font-black mb-8 md:mb-12 uppercase tracking-tight italic">Game Settings</h2>
                 {loadingQuestions && <div className="text-2xl text-color-blue font-bold mb-8">Loading questions...</div>}
                 {error && <div className="text-2xl text-error font-bold mb-8">{error}</div>}
@@ -75,7 +75,7 @@ export function HostSetupScreen({ socket }: Props) {
                     whileHover={{ scale: 1.05, y: -5 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={createGame}
-                    className="btn btn-primary text-2xl md:text-5xl py-6 md:py-12 px-12 md:px-24 w-full rounded-[1.5rem] md:rounded-[3rem] shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20"
+                    className="btn btn-primary text-2xl md:text-5xl py-6 md:py-12 px-12 md:px-24 w-full rounded-3xl md:rounded-[3rem] shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20"
                     disabled={loadingQuestions || !!error || !allQuestions.length || !isConnected}
                 >
                     {isConnected ? 'Initialise Lobby' : 'Connecting...'}

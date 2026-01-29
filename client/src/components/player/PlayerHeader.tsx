@@ -15,7 +15,7 @@ export function PlayerHeader({ name, avatar, score }: Props) {
         <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="flex justify-between items-center mb-6 glass p-4 pr-6 rounded-[2rem] border-white/10 shadow-2xl bg-gradient-to-r from-white/5 to-transparent shrink-0"
+            className="flex justify-between items-center mb-6 glass p-4 pr-6 rounded-4xl border-white/10 shadow-2xl bg-gradient-to-r from-white/5 to-transparent shrink-0"
         >
             <div className="flex items-center gap-4">
                 <div className="!w-14 !h-14 rounded-2xl bg-white/5 flex items-center justify-center shadow-inner border border-white/5 p-1 overflow-hidden">

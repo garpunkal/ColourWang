@@ -20,7 +20,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                 <motion.div
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-[2rem] md:rounded-[3rem] flex items-center gap-6 md:gap-12"
+                    className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-4xl md:rounded-[3rem] flex items-center gap-6 md:gap-12"
                 >
                     <div className="flex flex-col items-start leading-none">
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Question</span>

@@ -90,12 +90,12 @@ export function ColorCard({
                     }}
                 >
                     {/* Card shine effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-50" />
+                    <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent opacity-50" />
 
                     {/* Center color name */}
                     <div className="absolute inset-0 flex items-center justify-center p-2">
                         <span
-                            className="block md:hidden font-black text-sm uppercase tracking-widest text-center  drop-shadow-md"
+                            className="block md:hidden font-black text-xs uppercase tracking-widest text-center  drop-shadow-md"
                             style={{
                                 color: ['white', 'yellow', 'cyan', 'lime'].includes(color.toLowerCase()) ? 'black' : 'white',
                                 textShadow: '0 2px 4px rgba(0,0,0,0.3)'

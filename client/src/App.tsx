@@ -48,7 +48,7 @@ function App() {
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="fixed top-0 left-0 right-0 z-[100] bg-error/90 backdrop-blur-md text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase"
+          className="fixed top-0 left-0 right-0 z-100 bg-error/90 backdrop-blur-md text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase"
         >
           Connecting to Wang Network... (Server Offline)
         </motion.div>
@@ -76,7 +76,7 @@ function App() {
               <motion.div
                 animate={{ width: ['0%', '100%', '0%'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent w-80"
+                className="h-1 bg-linear-to-r from-transparent via-white/50 to-transparent w-80"
               />
             </motion.div>
 
@@ -113,7 +113,7 @@ function App() {
                       <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Large Screen</p>
                     </div>
 
-                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-blue text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(0,229,255,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(0,229,255,0.6)]">
+                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-blue text-white rounded-3xl md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(0,229,255,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(0,229,255,0.6)]">
                       START HOST →
                     </div>
                   </div>
@@ -152,7 +152,7 @@ function App() {
                       <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Mobile device</p>
                     </div>
 
-                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-pink text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(248,58,123,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(248,58,123,0.6)]">
+                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-pink text-white rounded-3xl md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(248,58,123,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(248,58,123,0.6)]">
                       JOIN NOW →
                     </div>
                   </div>

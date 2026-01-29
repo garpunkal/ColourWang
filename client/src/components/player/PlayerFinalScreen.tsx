@@ -24,7 +24,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                     <motion.div
                         animate={{ scale: [1, 1.4, 1], rotate: 360 }}
                         transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="absolute -inset-16 bg-gradient-to-br from-color-orange/30 to-color-pink/30 blur-[100px] rounded-full"
+                        className="absolute -inset-16 bg-linear-to-br from-color-orange/30 to-color-pink/30 blur-[100px] rounded-full"
                     />
                 )}
                 <div className="text-[14rem] relative z-10 drop-shadow-[0_40px_80px_rgba(255,157,0,0.6)]">
@@ -32,7 +32,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                 </div>
             </div>
             <div className="space-y-4">
-                <h3 className="text-7xl font-black uppercase tracking-tighter italic leading-none bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
+                <h3 className="text-7xl font-black uppercase tracking-tighter italic leading-none bg-linear-to-b from-white to-white/40 bg-clip-text text-transparent">
                     {isWinner ? 'LEGEND STATUS' : `RANK #${rank}`}
                 </h3>
                 <p className="text-2xl font-black text-color-purple uppercase tracking-[0.6em] italic opacity-80">
@@ -40,8 +40,8 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                 </p>
             </div>
 
-            <div className="glass p-16 rounded-[4.5rem] border-white/10 shadow-[0_100px_150px_-30px_rgba(0,0,0,0.8)] relative overflow-hidden group bg-gradient-to-b from-white/5 to-transparent">
-                <div className="absolute inset-0 bg-gradient-to-br from-color-blue/20 to-transparent opacity-50" />
+            <div className="glass p-16 rounded-[4.5rem] border-white/10 shadow-[0_100px_150px_-30px_rgba(0,0,0,0.8)] relative overflow-hidden group bg-linear-to-b from-white/5 to-transparent">
+                <div className="absolute inset-0 bg-linear-to-br from-color-blue/20 to-transparent opacity-50" />
                 <div className="relative z-10">
                     <p className="text-xs font-black uppercase tracking-[0.6em] text-color-blue mb-6 italic opacity-70">Total XP Accrued</p>
                     <p className="text-[12rem] font-black text-white glow-text leading-none tracking-tighter font-mono">{player.score || 0}</p>

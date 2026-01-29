@@ -116,7 +116,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                 className="flex flex-col gap-6 md:gap-10 pb-8 md:pb-12 w-full my-auto"
             >
                 <div className="text-center flex flex-col items-center justify-start mb-2">
-                    <div className="w-[85vw] max-w-[280px] mb-2 scale-90 md:scale-100 origin-top">
+                    <div className="w-[85vw] max-w-70 mb-2 scale-90 md:scale-100 origin-top">
                         <Logo />
                     </div>
                 </div>
@@ -128,7 +128,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Codename</label>
                             <input
-                                className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-[2rem] py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl"
+                                className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-4xl py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl"
                                 placeholder="ENTER NAME"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
@@ -140,7 +140,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <div className="relative group">
                                 <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
                                 <input
-                                    className="input w-full pl-14 md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-[2rem] py-4 md:py-8 shadow-xl transition-all"
+                                    className="input w-full pl-14! md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-4xl py-4 md:py-8 shadow-xl transition-all"
                                     placeholder="CODE"
                                     maxLength={4}
                                     value={code}
@@ -191,12 +191,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     </div>
                 </div>
 
-
-
-
-
-
-
                 {
                     error && (
                         <motion.div
@@ -227,12 +221,12 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     disabled={isJoining}
                     className={`
                         btn btn-primary text-lg md:text-2xl py-4 md:py-8 mt-2 md:mt-6 flex items-center justify-center gap-4 md:gap-6 
-                        transition-all rounded-[1rem] md:rounded-[2.5rem] shadow-[0_20px_40px_-10px_rgba(0,229,255,0.4)] 
+                        transition-all rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_40px_-10px_rgba(0,229,255,0.4)] 
                         border-t border-white/20 uppercase font-black italic tracking-widest w-full relative z-20
                         ${(!name || code.length !== 4 || isJoining) ? 'opacity-80 grayscale-[0.5]' : ''}
                     `}
                 >
-                    {isJoining ? 'CONNECTING...' : 'INITIALIZE LINK'} <Smartphone size={24} strokeWidth={2.5} className={isJoining ? 'animate-pulse' : ''} />
+                    {isJoining ? 'CONNECTING...' : 'JOIN GAME'} <Smartphone size={24} strokeWidth={2.5} className={isJoining ? 'animate-pulse' : ''} />
                 </motion.button>
             </motion.div >
         </div >

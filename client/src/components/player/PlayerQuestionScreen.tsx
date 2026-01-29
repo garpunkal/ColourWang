@@ -5,6 +5,7 @@ import { Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ColorCard } from '../ColorCard';
 import { getAvatarColor } from '../../constants/avatars';
+import { sortColors } from '../../config/gameConfig';
 
 interface Props {
     socket: Socket;
@@ -33,6 +34,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
+    const lastAnswer = sortColors(me.lastAnswer || []);
 
 
     const toggleColor = (color: string) => {
@@ -81,14 +83,14 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         color: avatarColor
                     }}
                 >
-                    Phase {currentQuestionIndex + 1}
+                    Question {currentQuestionIndex + 1}
                 </div>
                 <h3 className="text-3xl md:text-5xl text-display text-display-gradient">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
                 <div className="flex-1 flex flex-col gap-6">
-                    <div className="grid grid-cols-2 gap-6 flex-1 p-2 place-items-center">
+                    <div className="grid grid-cols-3! gap-6 flex-1 p-2 place-items-center">
                         {currentQuestion.options.map((color, i) => (
                             <ColorCard
                                 key={i}
@@ -96,7 +98,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 isSelected={selectedColors.includes(color)}
                                 onClick={() => toggleColor(color)}
                                 disabled={hasAnswered || timeLeft === 0}
-                                size="medium"
+                                size="small"
                                 index={i}
                             />
                         ))}
@@ -106,13 +108,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         whileTap={{ scale: 0.95 }}
                         onClick={submitAnswer}
                         disabled={selectedColors.length === 0 || timeLeft === 0}
-                        className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-[1.5rem] md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
+                        className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-3xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
                         style={{
                             boxShadow: `0 40px 80px -20px ${avatarColor}60`,
                             borderColor: `${avatarColor}80`
                         }}
                     >
-                        SEND SELECTION <Send fill="currentColor" size={32} />
+                        Submit <Send fill="currentColor" size={32} />
                     </motion.button>
                 </div>
             ) : (
@@ -121,24 +123,23 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         className="absolute top-0 left-0 w-full h-2 opacity-50"
                         style={{ background: `linear-gradient(to right, transparent, ${avatarColor}, transparent)` }}
                     />
-                    <motion.div
-                        animate={{
-                            rotate: 360,
-                            scale: [1, 1.2, 1],
-                            filter: ["blur(0px)", "blur(10px)", "blur(0px)"]
-                        }}
-                        transition={{
-                            rotate: { repeat: Infinity, duration: 12, ease: "linear" },
-                            scale: { repeat: Infinity, duration: 4 },
-                            filter: { repeat: Infinity, duration: 4 }
-                        }}
-                        className="text-6xl md:text-[12rem] relative z-10"
-                    >
-                        ☄️
-                    </motion.div>
                     <div className="text-center px-6 md:px-12 relative z-10">
-                        <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter italic mb-4 md:mb-6">TRANSMITTED</h3>
-                        <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Data packets secured in the Arena.<br />Awaiting Final Confirmation...</p>
+                        <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter italic mb-4 md:mb-6">Your selection</h3>
+{lastAnswer}
+                        <div className="flex gap-3 md:gap-4 justify-center flex-wrap">
+                            {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
+                                <div
+                                    key={i}
+                                    className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl border-2 border-white/40 shadow-lg"
+                                    style={{ backgroundColor: color }}
+                                />
+                            )) : (
+                                <span className="text-xl md:text-2xl font-bold text-white/20 italic uppercase">Nothing selected</span>
+                            )}
+                        </div>
+
+
+                        <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Awaiting results...</p>
                     </div>
                     <motion.div
                         animate={{ height: ['0%', '100%'] }}
