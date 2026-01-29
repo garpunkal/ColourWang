@@ -48,15 +48,14 @@ export async function fetchQuestions(): Promise<Question[]> {
         throw new Error('Invalid questions format');
       }
 
-      // Map JSON format to our internal Question interface
+      // Use palette for options universally
+      const paletteOptions = data.palette.map(p => p.hex);
       const questions: Question[] = data.questions.map((q: QuestionData, index: number) => {
-        const options = (q.options || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
         const correctColors = (q.correct || q.correctColors || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
-
         return {
           id: q.id || `q-${index}`,
           question: q.question,
-          options: sortColors(options),
+          options: sortColors(paletteOptions),
           correctColors: sortColors(correctColors),
           image: q.image
         };
@@ -68,6 +67,6 @@ export async function fetchQuestions(): Promise<Question[]> {
 }
 
 export const GAME_CONFIG = {
-  rounds: 4,
-  timerSeconds: 15,
+  rounds: 6,
+  timerSeconds: 60,
 };

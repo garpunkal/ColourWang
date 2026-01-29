@@ -19,6 +19,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const [hasAnswered, setHasAnswered] = useState(false);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
+    // Reset answer state when question changes
+    useEffect(() => {
+        setSelectedColors([]);
+        setHasAnswered(false);
+        setTimeLeft(gameState.timerDuration || 15);
+    }, [currentQuestionIndex, gameState.timerDuration]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeLeft(prev => {
@@ -34,7 +41,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
-    const lastAnswer = sortColors(me.lastAnswer || []);
+    const lastAnswer = sortColors(me?.lastAnswer || []);
 
 
     const toggleColor = (color: string) => {
@@ -57,14 +64,22 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     }, [selectedColors, gameState, socket]);
 
     useEffect(() => {
-        if (timeLeft === 0 && !hasAnswered && selectedColors.length > 0) {
+        if (timeLeft === 0 && !hasAnswered) {
             // Use setTimeout to avoid synchronous state update in effect
             const timer = setTimeout(() => {
-                submitAnswer();
+                if (selectedColors.length > 0) {
+                    submitAnswer();
+                } else {
+                    setHasAnswered(true);
+                    socket.emit('submit-answer', {
+                        code: gameState.code,
+                        answers: []
+                    });
+                }
             }, 0);
             return () => clearTimeout(timer);
         }
-    }, [timeLeft, hasAnswered, selectedColors, submitAnswer]);
+    }, [timeLeft, hasAnswered, selectedColors, submitAnswer, gameState.code, socket]);
 
     return (
         <motion.div
@@ -85,23 +100,40 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 >
                     Question {currentQuestionIndex + 1}
                 </div>
-                <h3 className="text-3xl md:text-5xl text-display text-display-gradient">{currentQuestion.question}</h3>
+                <h3 className="text-3xl md:text-5xl text-display text-display-gradient px-4">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
-                <div className="flex-1 flex flex-col gap-6">
-                    <div className="grid grid-cols-3! gap-6 flex-1 p-2 place-items-center">
-                        {currentQuestion.options.map((color, i) => (
-                            <ColorCard
-                                key={i}
-                                color={color}
-                                isSelected={selectedColors.includes(color)}
-                                onClick={() => toggleColor(color)}
-                                disabled={hasAnswered || timeLeft === 0}
-                                size="small"
-                                index={i}
-                            />
-                        ))}
+                <div className="flex-1 flex flex-col gap-6 justify-center items-center min-h-0">
+                    <div
+                        className="flex-1 w-full flex justify-center items-center min-h-0"
+                        style={{ minHeight: '30vh' }}
+                    >
+                        <div
+                            className="grid mx-auto"
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))',
+                                gap: '3vw',
+                                width: '100%',
+                                maxWidth: '420px',
+                                alignItems: 'center',
+                                justifyItems: 'center',
+                                margin: '0 auto',
+                            }}
+                        >
+                            {currentQuestion.options.map((color, i) => (
+                                <ColorCard
+                                    key={i}
+                                    color={color}
+                                    isSelected={selectedColors.includes(color)}
+                                    onClick={() => toggleColor(color)}
+                                    disabled={hasAnswered || timeLeft === 0}
+                                    size="responsive"
+                                    index={i}
+                                />
+                            ))}
+                        </div>
                     </div>
                     <motion.button
                         whileHover={{ y: -8 }}

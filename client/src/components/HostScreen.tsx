@@ -128,6 +128,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                             players={players}
                             rounds={rounds}
                             timer={timer}
+                            code={code}
                         />
                     )}
                 </AnimatePresence>

@@ -81,6 +81,7 @@ function App() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl px-4 md:px-0">
+            
               {/* Host Game Card */}
               <motion.button
                 initial={{ x: -100, opacity: 0 }}

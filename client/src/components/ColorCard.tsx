@@ -8,7 +8,7 @@ interface ColorCardProps {
     isCorrect?: boolean;
     onClick?: () => void;
     disabled?: boolean;
-    size?: 'small' | 'medium' | 'large';
+    size?: 'small' | 'medium' | 'large' | 'responsive';
     index?: number;
 }
 
@@ -24,10 +24,19 @@ export function ColorCard({
     const sizeStyles = {
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
-        large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' }
+        large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' },
+        responsive: { width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px' }
     };
 
-    const cardStyle = sizeStyles[size];
+    const cardStyle = sizeStyles[size] || sizeStyles.medium;
+
+    // Responsive font size for color name
+    const getFontSize = () => {
+        if (size === 'responsive') return 'clamp(0.7rem, 1vw, 0.85rem)'; // smaller max for large screens
+        if (size === 'small') return '0.85rem';
+        if (size === 'large') return '1.3rem';
+        return '1rem';
+    };
 
     return (
         <motion.div
@@ -63,6 +72,7 @@ export function ColorCard({
         >
             {/* Card container with 3D effect */}
             <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+
                 {/* Card shadow */}
                 <div
                     className="absolute inset-0 rounded-2xl blur-xl opacity-40"
@@ -77,12 +87,12 @@ export function ColorCard({
                 <div
                     className={`
                         absolute inset-0 rounded-2xl overflow-hidden
-                        border-8 transition-all duration-300
+                        border transition-all duration-300
                         ${isSelected
-                            ? 'border-white ring-4 ring-color-blue/50 shadow-[0_0_40px_rgba(0,229,255,0.6)]'
+                            ? 'border-white ring-4 shadow-[0_0_40px_rgba(0,229,255,0.6)]'
                             : 'border-white/20 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)]'
                         }
-                        ${isCorrect ? 'ring-4 ring-success/70 border-white' : ''}
+                        ${isCorrect ? 'ring-4 border-white' : ''}
                     `}
                     style={{
                         backgroundColor: color,
@@ -92,13 +102,17 @@ export function ColorCard({
                     {/* Card shine effect */}
                     <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent opacity-50" />
 
-                    {/* Center color name */}
-                    <div className="absolute inset-0 flex items-center justify-center p-2">
+                    {/* Bottom-aligned color name */}
+                    <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full">
                         <span
-                            className="block md:hidden font-black text-xs uppercase tracking-widest text-center  drop-shadow-md"
+                            className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
                             style={{
-                                color: ['white', 'yellow', 'cyan', 'lime'].includes(color.toLowerCase()) ? 'black' : 'white',
-                                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                                color: ['blue','red','orange','green','white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
+                                fontSize: getFontSize(),
+                                lineHeight: 1.1,
+                                wordBreak: 'break-word',
+                                maxWidth: '90%',
+                                whiteSpace: 'normal',
                             }}
                         >
                             {getColorName(color)}
@@ -112,7 +126,7 @@ export function ColorCard({
                             animate={{ scale: 1, rotate: 0 }}
                             className="absolute inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center"
                         >
-                            <div className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-2xl border-4 border-black/10">
+                            <div className="w-20 h-20 rounded-full bg- text-black flex items-center justify-center shadow-2xl border-4 border-black/10">
                                 <Check size={48} strokeWidth={6} />
                             </div>
                         </motion.div>
@@ -126,9 +140,6 @@ export function ColorCard({
                             transition={{ type: "spring", bounce: 0.5 }}
                             className="absolute inset-0 flex items-center justify-center"
                         >
-                            <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-2xl border-4 border-success">
-                                <Check size={64} strokeWidth={8} className="text-success" />
-                            </div>
                         </motion.div>
                     )}
 

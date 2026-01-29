@@ -16,10 +16,10 @@ export function PlayerLobbyScreen() {
                     transition={{ duration: 5, repeat: Infinity }}
                     className="absolute inset-0 bg-color-blue/20 blur-[60px] rounded-full"
                 />
-                <div className="text-9xl relative drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">🎮</div>
             </div>
             <h3 className="text-5xl font-black mb-4 uppercase tracking-tighter italic z-10 relative">STAND BY</h3>
-            <p className="text-text-muted font-bold text-lg mb-12 z-10 relative px-4 leading-relaxed opacity-80 italic">You're in, please wait for the game to begin.</p>
+            <p className="text-text-muted font-bold text-lg mb-12 z-10 relative px-4 leading-relaxed opacity-80 italic">You're in!</p>
+            <p className="text-text-muted font-bold text-lg mb-12 z-10 relative px-4 leading-relaxed opacity-80 italic">Please wait for the game to begin.</p>
 
         </motion.div>
     );

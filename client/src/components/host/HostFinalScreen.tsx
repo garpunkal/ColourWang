@@ -3,14 +3,16 @@ import type { Player } from '../../types/game';
 import { motion } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
 
+
 interface Props {
     socket: Socket;
     players: Player[];
     rounds: number;
     timer: number;
+    code: string;
 }
 
-export function HostFinalScreen({ socket, players, rounds, timer }: Props) {
+export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
     return (
         <motion.div
             key="final"
@@ -51,7 +53,7 @@ export function HostFinalScreen({ socket, players, rounds, timer }: Props) {
             <div className="text-center mt-10 md:mt-20">
                 <motion.button
                     whileHover={{ scale: 1.05 }}
-                    onClick={() => socket.emit('create-game', { rounds, timer })}
+                    onClick={() => socket.emit('restart-game', { code, rounds, timer })}
                     className="btn btn-secondary justify-self-center text-2xl md:text-4xl py-6 md:py-8 px-12 md:px-20 rounded-3xl md:rounded-[2.5rem] opacity-80 hover:opacity-100"
                 >
                     Restart Game

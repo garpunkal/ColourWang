@@ -42,7 +42,7 @@ export function HostSetupScreen({ socket }: Props) {
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-12 overflow-y-auto">
-            <Logo className="w-auto max-w-[300px] md:max-w-[600px] lg:max-w-[800px] mb-8 md:mb-12" />
+            <Logo className="w-auto max-w-75 md:max-w-150 lg:max-w-200 mb-8 md:mb-12" />
             <div className="glass-card p-8 md:p-16 rounded-4xl md:rounded-[4rem] border-white/10 shadow-2xl max-w-4xl w-full mx-auto md:mx-8">
                 <h2 className="text-4xl md:text-6xl font-black mb-8 md:mb-12 uppercase tracking-tight italic">Game Settings</h2>
                 {loadingQuestions && <div className="text-2xl text-color-blue font-bold mb-8">Loading questions...</div>}
@@ -52,7 +52,7 @@ export function HostSetupScreen({ socket }: Props) {
                         <label className="text-xl md:text-2xl font-black uppercase tracking-widest text-text-muted ml-2">Total Rounds</label>
                         <div className="flex items-center gap-4 md:gap-6 bg-black/20 p-3 md:p-4 rounded-2xl md:rounded-3xl">
                             <input
-                                type="range" min="1" max="10"
+                                type="range" min="4" max="20"
                                 value={rounds} onChange={e => setRounds(parseInt(e.target.value))}
                                 className="w-full h-3 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-blue"
                             />
@@ -63,7 +63,7 @@ export function HostSetupScreen({ socket }: Props) {
                         <label className="text-xl md:text-2xl font-black uppercase tracking-widest text-text-muted ml-2">Timer (Sec)</label>
                         <div className="flex items-center gap-4 md:gap-6 bg-black/20 p-3 md:p-4 rounded-2xl md:rounded-3xl">
                             <input
-                                type="range" min="5" max="60" step="5"
+                                type="range" min="5" max="120" step="5"
                                 value={timer} onChange={e => setTimer(parseInt(e.target.value))}
                                 className="w-full h-3 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-pink"
                             />
