@@ -1,0 +1,267 @@
+{
+  "palette": [
+    {
+      "name": "black",
+      "hex": "#000000"
+    },
+    {
+      "name": "gray",
+      "hex": "#808080"
+    },
+    {
+      "name": "white",
+      "hex": "#ffffff"
+    },
+    {
+      "name": "red",
+      "hex": "#ff0000"
+    },
+    {
+      "name": "orange",
+      "hex": "#ff9d00"
+    },
+    {
+      "name": "yellow",
+      "hex": "#ffff00"
+    },
+    {
+      "name": "green",
+      "hex": "#00ff00"
+    },
+    {
+      "name": "blue",
+      "hex": "#00e5ff"
+    },
+    {
+      "name": "purple",
+      "hex": "#9d50bb"
+    },
+    {
+      "name": "pink",
+      "hex": "#f83a7b"
+    },
+    {
+      "name": "brown",
+      "hex": "#8B4513"
+    }
+  ],
+  "questions": [
+    {
+      "question": "What are the main colours of the Google logo?",
+      "options": [
+        "blue",
+        "red",
+        "yellow",
+        "green",
+        "black",
+        "gray",
+        "white",
+        "orange",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "blue",
+        "red",
+        "yellow",
+        "green"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+    },
+    {
+      "question": "What colour is the Twitter bird?",
+      "options": [
+        "blue",
+        "black",
+        "gray",
+        "white",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "blue"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg"
+    },
+    {
+      "question": "What are the main colours of the Microsoft Windows logo?",
+      "options": [
+        "blue",
+        "red",
+        "yellow",
+        "green",
+        "black",
+        "gray",
+        "white",
+        "orange",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "blue",
+        "red",
+        "yellow",
+        "green"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/Windows_logo_-_2021.svg"
+    },
+    {
+      "question": "What colour is the Coca-Cola logo text?",
+      "options": [
+        "red",
+        "white",
+        "black",
+        "gray",
+        "blue",
+        "orange",
+        "yellow",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "red"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Coca-Cola_logo.svg"
+    },
+    {
+      "question": "What are the main colours of the Olympic rings?",
+      "options": [
+        "blue",
+        "yellow",
+        "black",
+        "green",
+        "red",
+        "gray",
+        "white",
+        "orange",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "blue",
+        "yellow",
+        "black",
+        "green",
+        "red"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Olympic_rings_without_rims.svg"
+    },
+    {
+      "question": "What colour is the Ferrari logo background?",
+      "options": [
+        "yellow",
+        "red",
+        "black",
+        "gray",
+        "white",
+        "blue",
+        "orange",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "yellow"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/en/d/d7/Ferrari-Logo.svg"
+    },
+    {
+      "question": "What are the main colours of the Apple logo (classic rainbow version)?",
+      "options": [
+        "green",
+        "yellow",
+        "orange",
+        "red",
+        "purple",
+        "blue",
+        "black",
+        "gray",
+        "white",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "green",
+        "yellow",
+        "orange",
+        "red",
+        "purple",
+        "blue"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_rainbow.svg"
+    },
+    {
+      "question": "What colour is the background of the IKEA logo?",
+      "options": [
+        "blue",
+        "yellow",
+        "black",
+        "gray",
+        "white",
+        "red",
+        "orange",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "blue"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Ikea_logo.svg"
+    },
+    {
+      "question": "What are the main colours of the Pepsi logo?",
+      "options": [
+        "red",
+        "white",
+        "blue",
+        "black",
+        "gray",
+        "yellow",
+        "orange",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "red",
+        "white",
+        "blue"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Pepsi_logo_2014.svg"
+    },
+    {
+      "question": "What colour is the background of the McDonald's logo?",
+      "options": [
+        "red",
+        "yellow",
+        "black",
+        "gray",
+        "white",
+        "blue",
+        "orange",
+        "green",
+        "purple",
+        "pink",
+        "brown"
+      ],
+      "correct": [
+        "red"
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/4f/McDonald%27s_logo.svg"
+    }
+  ]
+}

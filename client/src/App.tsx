@@ -1,32 +1,48 @@
-import { useState, useEffect } from 'react'
-import { io, Socket } from 'socket.io-client'
-import type { GameState } from './types/game'
-import HostScreen from './components/HostScreen.tsx'
-import PlayerScreen from './components/PlayerScreen.tsx'
-import { motion, AnimatePresence } from 'framer-motion'
 
-const socket: Socket = io('http://localhost:3001')
+import { useState } from 'react';
+
+import { useSocketGameState } from './hooks/useSocketGameState';
+import { io, Socket } from 'socket.io-client';
+import type { GameState } from './types/game';
+import HostScreen from './components/HostScreen.tsx';
+import PlayerScreen from './components/PlayerScreen.tsx';
+import { Logo } from './components/Logo';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSocketConnection } from './hooks/useSocketConnection';
+import { Monitor, Smartphone } from 'lucide-react';
+
+
+const socket: Socket = io('http://localhost:3001');
+
 
 function App() {
-  const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>('NONE')
+  // Check URL params on initial render
+  const params = new URLSearchParams(window.location.search);
+  const initialRole = params.has('code') ? 'PLAYER' : 'NONE';
+
+  const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>(initialRole)
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const isConnected = useSocketConnection(socket);
 
-  useEffect(() => {
-    socket.on('game-created', (state: GameState) => setGameState(state))
-    socket.on('joined-game', (state: GameState) => setGameState(state))
-    socket.on('game-status-changed', (state: GameState) => setGameState(state))
-    socket.on('player-joined', (players) => setGameState(prev => prev ? { ...prev, players } : null))
-
-    return () => {
-      socket.off('game-created')
-      socket.off('joined-game')
-      socket.off('game-status-changed')
-      socket.off('player-joined')
-    }
-  }, [])
+  useSocketGameState(socket, setGameState);
 
   return (
-    <div className="flex-1 w-full relative overflow-hidden flex flex-col font-outfit">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.2, ease: 'easeOut' }}
+    >
+      {/* Connection Status */}
+      {!isConnected && (
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="fixed top-0 left-0 right-0 z-[100] bg-error/90 backdrop-blur-md text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase"
+        >
+          Connecting to Neural Network... (Server Offline)
+        </motion.div>
+      )}
+
       {/* Premium Background */}
       <div className="bg-animated">
         <div className="mesh-gradient" />
@@ -45,6 +61,17 @@ function App() {
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
           className="blob blob-3"
         />
+        <motion.div
+          animate={{ x: [0, -60, 0], y: [0, 40, 0] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+          className="blob blob-4"
+        />
+        {/* Floating Particles */}
+        <div className="particles">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="particle" />
+          ))}
+        </div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -55,60 +82,99 @@ function App() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex-1 flex flex-col items-center justify-center p-6 relative z-10"
+            className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 relative z-10"
           >
             <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="logo-container mb-16"
+              className="mb-20 flex flex-col items-center"
             >
-              <h1 className="logo-colour">Colour</h1>
-              <h1 className="logo-wang">wang</h1>
+              <Logo />
               <motion.div
                 animate={{ width: ['0%', '100%', '0%'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mt-4"
+                className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mt-6 w-80"
               />
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl px-4 md:px-0">
+              {/* Host Game Card */}
               <motion.button
-                initial={{ x: -50, opacity: 0 }}
+                initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.4, type: "spring", stiffness: 80 }}
                 whileHover={{ y: -10, scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
-                className="glass p-10 flex flex-col items-center gap-6 group transition-all rounded-[2rem]"
+                whileTap={{ scale: 0.98 }}
+                className="relative group w-full bg-transparent order-2 md:order-1"
                 onClick={() => setRole('HOST')}
               >
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-color-blue/20 to-color-purple/20 flex items-center justify-center group-hover:from-color-blue/40 group-hover:to-color-purple/40 transition-all duration-500 shadow-xl">
-                  <span className="text-5xl">📺</span>
+                <div className="relative p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] overflow-hidden glass-card border-white/10 shadow-2xl transition-all duration-500">
+                  {/* Tint Overlay */}
+                  <div className="absolute inset-0 bg-color-blue/5 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+
+                  {/* Decorative Glow */}
+                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-color-blue/20 rounded-full blur-[100px] group-hover:bg-color-blue/40 transition-colors duration-500" />
+
+                  <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                    <motion.div
+                      className="w-20 h-20 md:w-20 md:h-20 flex items-center justify-center"
+                      whileHover={{ rotate: -5, scale: 1.2 }}
+                    >
+
+                      <Monitor size={48} className="text-white" />
+
+                    </motion.div>
+
+                    <div className="space-y-2 -mt-4">
+                      <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter drop-shadow-lg">HOST</h3>
+                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Everyone sees this!</p>
+                    </div>
+
+                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-blue text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(0,229,255,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(0,229,255,0.6)]">
+                      INITIALIZE →
+                    </div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <h3 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-color-blue to-color-purple bg-clip-text text-transparent">Host Game</h3>
-                  <p className="text-text-muted text-lg font-medium">Show on the big screen</p>
-                </div>
-                <div className="btn btn-primary w-full mt-4">Create Room</div>
               </motion.button>
 
+              {/* Join Game Card */}
               <motion.button
-                initial={{ x: 50, opacity: 0 }}
+                initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 80 }}
                 whileHover={{ y: -10, scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
-                className="glass p-10 flex flex-col items-center gap-6 group transition-all rounded-[2rem]"
+                whileTap={{ scale: 0.98 }}
+                className="relative group w-full bg-transparent order-1 md:order-2"
                 onClick={() => setRole('PLAYER')}
               >
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-color-pink/20 to-color-orange/20 flex items-center justify-center group-hover:from-color-pink/40 group-hover:to-color-orange/40 transition-all duration-500 shadow-xl">
-                  <span className="text-5xl">📱</span>
+                <div className="relative p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] overflow-hidden glass-card border-white/10 shadow-2xl transition-all duration-500">
+                  {/* Tint Overlay */}
+                  <div className="absolute inset-0 bg-color-pink/5 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+
+                  {/* Decorative Glow */}
+                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-color-pink/20 rounded-full blur-[100px] group-hover:bg-color-pink/40 transition-colors duration-500" />
+
+                  <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                    <motion.div
+                      className="w-20 h-20 md:w-20 md:h-20 flex items-center justify-center"
+                      whileHover={{ rotate: 5, scale: 1.2 }}
+                    >
+                      <span className="text-7xl drop-shadow-2xl">
+                        <Smartphone size={48} className="text-white" />
+                      </span>
+                    </motion.div>
+
+                    <div className="space-y-2 -mt-4">
+                      <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter drop-shadow-lg">JOIN</h3>
+                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">This is for you alone!</p>
+                    </div>
+
+                    <div className="px-8 py-4 md:px-12 md:py-6 bg-color-pink text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(248,58,123,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(248,58,123,0.6)]">
+                      SYNC NOW →
+                    </div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <h3 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-color-pink to-color-orange bg-clip-text text-transparent">Join Game</h3>
-                  <p className="text-text-muted text-lg font-medium">Play on your phone</p>
-                </div>
-                <div className="btn btn-secondary w-full mt-4">Join Now</div>
               </motion.button>
             </div>
 
@@ -116,18 +182,18 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
-              className="mt-16 text-center"
+              className="mt-12 md:mt-20 text-center px-4"
             >
-              <p className="text-white/40 font-bold tracking-[0.3em] uppercase text-sm mb-4">
+              <p className="text-white/40 font-bold tracking-[0.3em] uppercase text-sm mb-6">
                 The Ultimate Multi-Screen Palette Challenge
               </p>
-              <div className="flex gap-2 justify-center">
+              <div className="flex gap-3 justify-center">
                 {['blue', 'purple', 'pink', 'orange'].map((c, i) => (
                   <motion.div
                     key={i}
                     animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
-                    className="w-2 h-2 rounded-full"
+                    className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: `var(--color-${c})` }}
                   />
                 ))}
@@ -149,7 +215,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,37 +1,69 @@
+import questionsData from './questions.generated.json';
 import type { Question } from '../types/game';
 
-export const QUESTIONS: Question[] = [
-    {
-        id: '1',
-        question: 'What colours are on the flag of England?',
-        image: 'https://upload.wikimedia.org/wikipedia/en/b/be/Flag_of_England.svg',
-        correctColors: ['#FFFFFF', '#CE1124'],
-        options: ['#FFFFFF', '#CE1124', '#00247D', '#000000', '#FFD700', '#00843D']
-    },
-    {
-        id: '2',
-        question: 'What colours are in the Google logo?',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-        correctColors: ['#4285F4', '#EA4335', '#FBBC05', '#34A853'],
-        options: ['#4285F4', '#EA4335', '#FBBC05', '#34A853', '#000000', '#808080']
-    },
-    {
-        id: '3',
-        question: 'What colours are on a standard Rubik\'s Cube?',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Rubik%27s_cube.svg',
-        correctColors: ['#FFFFFF', '#FFFF00', '#0000FF', '#00FF00', '#FF0000', '#FFA500'],
-        options: ['#FFFFFF', '#FFFF00', '#0000FF', '#00FF00', '#FF0000', '#FFA500', '#000000', '#800080']
-    },
-    {
-        id: '4',
-        question: 'What colours are on the Starbucks logo?',
-        image: 'https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg',
-        correctColors: ['#00704A', '#FFFFFF'],
-        options: ['#00704A', '#FFFFFF', '#000000', '#CE1124']
-    }
-];
+interface QuestionData {
+  id?: string;
+  question: string;
+  options: string[];
+  correct: string[];
+  correctColors?: string[];
+  image?: string;
+}
+
+interface QuestionsJSON {
+  palette: { name: string; hex: string }[];
+  questions: QuestionData[];
+}
+
+export const PALETTE = (questionsData as QuestionsJSON).palette;
+
+const nameMap = new Map<string, string>(); // hex -> name
+const hexMap = new Map<string, string>(); // name -> hex
+
+PALETTE.forEach(p => {
+  nameMap.set(p.hex.toLowerCase(), p.name.toLowerCase());
+  hexMap.set(p.name.toLowerCase(), p.hex);
+});
+
+export function sortColors(colors: string[]): string[] {
+  return [...colors].sort((a, b) => {
+    const nameA = nameMap.get(a.toLowerCase()) || a.toLowerCase();
+    const nameB = nameMap.get(b.toLowerCase()) || b.toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+}
+
+// Fetch questions at runtime from questions.json
+export async function fetchQuestions(): Promise<Question[]> {
+  // Simulate async for consistency, but data is already loaded
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const data = questionsData as QuestionsJSON;
+
+      if (!data.questions || !data.palette) {
+        throw new Error('Invalid questions format');
+      }
+
+      // Map JSON format to our internal Question interface
+      const questions: Question[] = data.questions.map((q: QuestionData, index: number) => {
+        const options = (q.options || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
+        const correctColors = (q.correct || q.correctColors || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
+
+        return {
+          id: q.id || `q-${index}`,
+          question: q.question,
+          options: sortColors(options),
+          correctColors: sortColors(correctColors),
+          image: q.image
+        };
+      });
+
+      resolve(questions);
+    }, 0);
+  });
+}
 
 export const GAME_CONFIG = {
-    rounds: 4,
-    timerSeconds: 15,
+  rounds: 4,
+  timerSeconds: 15,
 };
