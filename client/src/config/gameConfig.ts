@@ -25,6 +25,10 @@ PALETTE.forEach(p => {
   hexMap.set(p.name.toLowerCase(), p.hex);
 });
 
+export function getColorName(hex: string): string {
+  return nameMap.get(hex.toLowerCase()) || hex;
+}
+
 export function sortColors(colors: string[]): string[] {
   return [...colors].sort((a, b) => {
     const nameA = nameMap.get(a.toLowerCase()) || a.toLowerCase();

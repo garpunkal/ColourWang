@@ -28,7 +28,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
 
     const { status, players, currentQuestionIndex, questions } = gameState;
     const currentQuestion = questions[currentQuestionIndex];
-    const me = players.find(p => p.id === socket.id);
+    const me = players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
 
     return (
         <div className="flex-1 flex flex-col p-4 overflow-x-hidden overflow-y-auto h-full w-full max-w-md mx-auto relative z-10">

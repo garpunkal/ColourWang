@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
 import { Send } from 'lucide-react';
@@ -16,8 +16,22 @@ interface Props {
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [hasAnswered, setHasAnswered] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
-    const me = gameState.players.find(p => p.id === socket.id);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 0) {
+                    clearInterval(interval);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [gameState.timerDuration, currentQuestionIndex]);
+
+    const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
 
 
@@ -30,7 +44,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         );
     };
 
-    const submitAnswer = () => {
+    const submitAnswer = useCallback(() => {
         if (selectedColors.length > 0 && gameState) {
             setHasAnswered(true);
             socket.emit('submit-answer', {
@@ -38,7 +52,17 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 answers: selectedColors
             });
         }
-    };
+    }, [selectedColors, gameState, socket]);
+
+    useEffect(() => {
+        if (timeLeft === 0 && !hasAnswered && selectedColors.length > 0) {
+            // Use setTimeout to avoid synchronous state update in effect
+            const timer = setTimeout(() => {
+                submitAnswer();
+            }, 0);
+            return () => clearTimeout(timer);
+        }
+    }, [timeLeft, hasAnswered, selectedColors, submitAnswer]);
 
     return (
         <motion.div
@@ -59,7 +83,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 >
                     Phase {currentQuestionIndex + 1}
                 </div>
-                <h3 className="text-3xl md:text-5xl font-black tracking-tighter leading-[0.85] uppercase italic bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">{currentQuestion.question}</h3>
+                <h3 className="text-3xl md:text-5xl text-display text-display-gradient">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
@@ -71,7 +95,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 color={color}
                                 isSelected={selectedColors.includes(color)}
                                 onClick={() => toggleColor(color)}
-                                disabled={hasAnswered}
+                                disabled={hasAnswered || timeLeft === 0}
                                 size="medium"
                                 index={i}
                             />
@@ -81,7 +105,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         whileHover={{ y: -8 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={submitAnswer}
-                        disabled={selectedColors.length === 0}
+                        disabled={selectedColors.length === 0 || timeLeft === 0}
                         className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-[1.5rem] md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
                         style={{
                             boxShadow: `0 40px 80px -20px ${avatarColor}60`,

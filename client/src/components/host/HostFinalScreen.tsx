@@ -21,7 +21,7 @@ export function HostFinalScreen({ socket, players, rounds, timer }: Props) {
         >
             <div className="text-center mb-10 md:mb-20">
                 <Logo className="w-auto max-w-[300px] md:max-w-[500px] mx-auto mb-6 md:mb-10" />
-                <h3 className="text-[clamp(3.5rem,10vw,10rem)] font-black uppercase italic tracking-tighter leading-none bg-gradient-to-b from-color-gold via-color-orange to-color-pink bg-clip-text text-transparent drop-shadow-2xl">
+                <h3 className="text-[clamp(3.5rem,10vw,10rem)] text-display leading-none bg-gradient-to-b from-color-gold via-color-orange to-color-pink bg-clip-text text-transparent drop-shadow-2xl">
                     CHAMPIONS
                 </h3>
             </div>

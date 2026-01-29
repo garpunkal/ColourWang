@@ -1,4 +1,5 @@
 import { Server, Socket } from 'socket.io';
+import { randomUUID } from 'crypto';
 import { games } from '../game/gamesMap';
 import { generateCode } from '../utils/generateCode';
 import { GameState } from '../models/gameState';
@@ -38,7 +39,8 @@ export function registerSocketHandlers(io: Server) {
         status: 'LOBBY',
         currentQuestionIndex: 0,
         questions,
-        timerDuration: timer
+        timerDuration: timer,
+        hostSocketId: socket.id
       };
       games.set(code, game);
       socket.join(code);
@@ -52,8 +54,10 @@ export function registerSocketHandlers(io: Server) {
         const takenAvatars = game.players.map(p => p.avatar);
         const assignedAvatar = avatar || getNextAvailableAvatar(takenAvatars);
 
+        const playerId = randomUUID();
         const player: Player = {
-          id: socket.id,
+          id: playerId,
+          socketId: socket.id,
           name,
           avatar: assignedAvatar,
           score: 0,
@@ -62,10 +66,33 @@ export function registerSocketHandlers(io: Server) {
         };
         game.players.push(player);
         socket.join(code.toUpperCase());
-        socket.emit('joined-game', game);
+        // Emit playerId individually to the joining user so they can store it
+        socket.emit('joined-game', { game, playerId });
         io.to(code.toUpperCase()).emit('player-joined', game.players);
       } else {
         socket.emit('error', 'Game not found or already started');
+      }
+    });
+
+    socket.on('rejoin-game', ({ code, playerId }) => {
+      const game = games.get(code.toUpperCase());
+      if (game) {
+        const player = game.players.find(p => p.id === playerId);
+        if (player) {
+          player.socketId = socket.id;
+          socket.join(code.toUpperCase());
+          // Send current game state and confirm identity
+          socket.emit('joined-game', { game, playerId });
+          if (game.status === 'LOBBY') {
+            // If in lobby, also broadcast to others that this player is effectively here (maybe not needed if they never left the list)
+            io.to(code.toUpperCase()).emit('player-joined', game.players);
+          }
+          console.log(`Player ${player.name} (${playerId}) rejoined game ${code}`);
+        } else {
+          socket.emit('error', 'Player session not found');
+        }
+      } else {
+        socket.emit('error', 'Game not found');
       }
     });
 
@@ -97,7 +124,7 @@ export function registerSocketHandlers(io: Server) {
     socket.on('submit-answer', ({ code, answers }) => {
       const game = games.get(code);
       if (game && game.status === 'QUESTION') {
-        const player = game.players.find(p => p.id === socket.id);
+        const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
           player.lastAnswer = answers;
           const allAnswered = game.players.every(p => p.lastAnswer !== null);
@@ -154,11 +181,16 @@ export function registerSocketHandlers(io: Server) {
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
       games.forEach((game, code) => {
-        if (game.status === 'LOBBY') {
-          const index = game.players.findIndex(p => p.id === socket.id);
+        if (game.hostSocketId === socket.id) {
+          console.log(`Host disconnected for game ${code}. Ending game.`);
+          io.to(code).emit('game-ended');
+          games.delete(code);
+        } else if (game.status === 'LOBBY') {
+          const index = game.players.findIndex(p => p.socketId === socket.id);
           if (index !== -1) {
-            game.players.splice(index, 1);
-            io.to(code).emit('player-joined', game.players);
+            // We do NOT remove the player to allow reconnection.
+            // If you truly want to remove them, we might need a timeout or explicit 'leave' action.
+            console.log(`Player ${game.players[index].name} disconnected but kept in lobby for reconnection.`);
           }
         }
       });

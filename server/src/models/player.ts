@@ -4,5 +4,6 @@ export interface Player {
     avatar: string;
     score: number;
     lastAnswer: string[] | null;
+    socketId?: string;
     isCorrect: boolean;
 }

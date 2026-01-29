@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { getColorName } from '../config/gameConfig';
 
 interface ColorCardProps {
     color: string;
@@ -91,12 +92,17 @@ export function ColorCard({
                     {/* Card shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-50" />
 
-                    {/* Center color swatch */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                            className="w-16 h-16 rounded-full border-4 border-white/40 shadow-2xl"
-                            style={{ backgroundColor: color }}
-                        />
+                    {/* Center color name */}
+                    <div className="absolute inset-0 flex items-center justify-center p-2">
+                        <span
+                            className="font-black text-2xl md:text-3xl uppercase tracking-widest text-center break-all drop-shadow-md"
+                            style={{
+                                color: ['white', 'yellow', 'cyan', 'lime'].includes(color.toLowerCase()) ? 'black' : 'white',
+                                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                            }}
+                        >
+                            {getColorName(color)}
+                        </span>
                     </div>
 
                     {/* Selection indicator */}

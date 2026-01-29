@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useSocketGameState } from './hooks/useSocketGameState';
 import { io, Socket } from 'socket.io-client';
@@ -7,6 +7,7 @@ import type { GameState } from './types/game';
 import HostScreen from './components/HostScreen.tsx';
 import PlayerScreen from './components/PlayerScreen.tsx';
 import { Logo } from './components/Logo';
+import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocketConnection } from './hooks/useSocketConnection';
 import { Monitor, Smartphone } from 'lucide-react';
@@ -26,6 +27,16 @@ function App() {
 
   useSocketGameState(socket, setGameState);
 
+  // Auto-restore role if we rejoin a session
+  useEffect(() => {
+    if (gameState && role === 'NONE') {
+      const myId = localStorage.getItem('cw_playerId');
+      if (myId && gameState.players.some(p => p.id === myId)) {
+        setRole('PLAYER');
+      }
+    }
+  }, [gameState, role]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -39,40 +50,11 @@ function App() {
           animate={{ y: 0, opacity: 1 }}
           className="fixed top-0 left-0 right-0 z-[100] bg-error/90 backdrop-blur-md text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase"
         >
-          Connecting to Neural Network... (Server Offline)
+          Connecting to Wang Network... (Server Offline)
         </motion.div>
       )}
 
-      {/* Premium Background */}
-      <div className="bg-animated">
-        <div className="mesh-gradient" />
-        <motion.div
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="blob blob-1"
-        />
-        <motion.div
-          animate={{ x: [0, -40, 0], y: [0, 60, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="blob blob-2"
-        />
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -50, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="blob blob-3"
-        />
-        <motion.div
-          animate={{ x: [0, -60, 0], y: [0, 40, 0] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-          className="blob blob-4"
-        />
-        {/* Floating Particles */}
-        <div className="particles">
-          {[...Array(10)].map((_, i) => (
-            <div key={i} className="particle" />
-          ))}
-        </div>
-      </div>
+      <AnimatedBackground />
 
       <AnimatePresence mode="wait">
         {role === 'NONE' ? (
@@ -82,19 +64,19 @@ function App() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 relative z-10"
+            className="flex-1 flex flex-col items-center justify-center p-6 md:p-6 relative z-10"
           >
             <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="mb-20 flex flex-col items-center"
+              className="mb-4 md:mb-10 flex flex-col items-center"
             >
               <Logo />
               <motion.div
                 animate={{ width: ['0%', '100%', '0%'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mt-6 w-80"
+                className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent w-80"
               />
             </motion.div>
 
@@ -106,7 +88,7 @@ function App() {
                 transition={{ delay: 0.4, type: "spring", stiffness: 80 }}
                 whileHover={{ y: -10, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative group w-full bg-transparent order-2 md:order-1"
+                className="hidden md:block relative group w-full bg-transparent order-2 md:order-1"
                 onClick={() => setRole('HOST')}
               >
                 <div className="relative p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] overflow-hidden glass-card border-white/10 shadow-2xl transition-all duration-500">
@@ -128,11 +110,11 @@ function App() {
 
                     <div className="space-y-2 -mt-4">
                       <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter drop-shadow-lg">HOST</h3>
-                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Everyone sees this!</p>
+                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Large Screen</p>
                     </div>
 
                     <div className="px-8 py-4 md:px-12 md:py-6 bg-color-blue text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(0,229,255,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(0,229,255,0.6)]">
-                      INITIALIZE →
+                      START HOST →
                     </div>
                   </div>
                 </div>
@@ -167,11 +149,11 @@ function App() {
 
                     <div className="space-y-2 -mt-4">
                       <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter drop-shadow-lg">JOIN</h3>
-                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">This is for you alone!</p>
+                      <p className="text-xl font-bold text-white/40 uppercase tracking-[0.3em]">Mobile device</p>
                     </div>
 
                     <div className="px-8 py-4 md:px-12 md:py-6 bg-color-pink text-white rounded-[1.5rem] md:rounded-[2.5rem] font-black italic tracking-tighter text-2xl md:text-3xl shadow-[0_20px_50px_rgba(248,58,123,0.4)] transition-all group-hover:scale-105 group-hover:shadow-[0_30px_60px_rgba(248,58,123,0.6)]">
-                      SYNC NOW →
+                      JOIN NOW →
                     </div>
                   </div>
                 </div>
@@ -205,7 +187,7 @@ function App() {
             key="game"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="w-full flex flex-col relative z-20"
+            className="w-full flex flex-col relative z-20 flex-1"
           >
             {role === 'HOST' ? (
               <HostScreen socket={socket} gameState={gameState} />

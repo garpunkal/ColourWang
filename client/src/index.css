@@ -11,6 +11,8 @@
 	--color-pink: var(--color-pink);
 	--color-orange: var(--color-orange);
 
+	--color-gold: #ffd700;
+
 	--color-primary: var(--primary);
 	--color-primary-glow: var(--primary-glow);
 	--color-secondary: var(--secondary);
@@ -39,6 +41,7 @@
 	--color-purple: #9d50bb;
 	--color-pink: #f83a7b;
 	--color-orange: #ff9d00;
+	--color-gold: #ffd700;
 
 	--primary: var(--color-blue);
 	--primary-glow: rgba(0, 229, 255, 0.4);
@@ -315,6 +318,44 @@ button {
 		0 12px 50px rgba(0, 0, 0, 0.5),
 		inset 0 1px 0 rgba(255, 255, 255, 0.15);
 	transform: translateY(-2px);
+}
+
+/* --- Unified Utilities --- */
+.text-display {
+	font-weight: 900;
+	font-style: italic;
+	text-transform: uppercase;
+	letter-spacing: -0.05em;
+	line-height: 0.85;
+}
+
+.text-display-gradient {
+	background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0.5));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	/* Fallback for browsers that don't support text-fill-color */
+	color: white;
+}
+
+@supports (-webkit-text-fill-color: transparent) {
+	.text-display-gradient {
+		color: transparent;
+	}
+}
+
+.glass-panel {
+	background: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.glass-panel-lighter {
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --- Logo Styling --- */
@@ -641,13 +682,6 @@ button {
 	}
 	.text-4xl {
 		font-size: 1.25rem !important;
-	}
-
-	.grid-cols-4 {
-		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-	}
-	.grid-cols-5 {
-		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 	}
 
 	.px-12 {

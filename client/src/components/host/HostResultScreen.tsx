@@ -20,8 +20,8 @@ export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
             className="w-full max-w-7xl text-center"
         >
             <div className="mb-8 md:mb-20">
-                <h3 className="text-[clamp(3rem,8vw,8rem)] font-black uppercase italic tracking-tighter mb-4 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-                    Phase Complete
+                <h3 className="text-[clamp(3rem,8vw,8rem)] text-display mb-4 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                    {currentQuestion.question}
                 </h3>
                 <div className="text-2xl md:text-5xl font-black bg-white/10 inline-block px-8 md:px-12 py-2 md:py-4 rounded-[1.5rem] md:rounded-[2rem] text-color-blue tracking-widest border border-white/10">
                     CORRECT ANSWER
@@ -62,7 +62,7 @@ export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
                 onClick={onNextQuestion}
                 className="btn btn-primary text-2xl md:text-5xl py-6 md:py-10 px-12 md:px-32 rounded-[2rem] md:rounded-[3.5rem] shadow-2xl uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20"
             >
-                Next Phase <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
+                Next Question <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
             </motion.button>
         </motion.div>
     );

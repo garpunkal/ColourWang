@@ -17,15 +17,14 @@ export function HostLobbyScreen({ players, onStartGame }: Props) {
             exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
             className="w-full max-w-[90vw] flex flex-col items-center"
         >
-            <h2 className="text-[clamp(3rem,8vw,8rem)] font-black mb-8 md:mb-16 tracking-tighter leading-[0.85] text-center drop-shadow-2xl">
-                <span className="block text-xl md:text-4xl mb-2 md:mb-4 italic uppercase tracking-[0.4em] md:tracking-[0.6em] text-color-blue font-bold opacity-80">Awaiting Challengers</span>
-                <span className="bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent">PREPARE FOR<br /></span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-color-blue via-color-purple to-color-pink pulse-glow italic">CARNAGE</span>
+            <h2 className="text-[clamp(3rem,8vw,8rem)] text-display mb-8 md:mb-16 text-center drop-shadow-2xl">
+                <span className="block text-xl md:text-4xl mb-2 md:mb-4 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80">Awaiting</span>
+                <span className="text-display-gradient">Players</span>
             </h2>
 
             {players.length === 0 ? (
                 <div className="text-4xl text-text-muted animate-pulse font-mono tracking-widest uppercase border-2 border-dashed border-white/10 px-12 py-8 rounded-[2rem]">
-                    Scanning Frequency...
+                    waiting...
                 </div>
             ) : (
                 <div className="flex flex-wrap justify-center gap-6 md:gap-10 w-full mb-8 md:mb-16 px-4 md:px-12">
@@ -61,7 +60,7 @@ export function HostLobbyScreen({ players, onStartGame }: Props) {
                     onClick={onStartGame}
                     className="btn btn-primary text-3xl md:text-6xl py-6 md:py-10 px-12 md:px-32 rounded-[2rem] md:rounded-[3.5rem] shadow-[0_0_80px_rgba(0,229,255,0.4)] uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20 animate-pulse-slow"
                 >
-                    Initiate Sequence
+                    Start Game
                 </motion.button>
             )}
         </motion.div>

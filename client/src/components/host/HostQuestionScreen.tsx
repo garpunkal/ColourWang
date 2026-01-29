@@ -20,7 +20,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                 <motion.div
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="bg-black/40 backdrop-blur-3xl px-8 md:px-16 py-4 md:py-8 rounded-[2rem] md:rounded-[3rem] border-2 border-white/10 flex items-center gap-6 md:gap-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+                    className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-[2rem] md:rounded-[3rem] flex items-center gap-6 md:gap-12"
                 >
                     <div className="flex flex-col items-start leading-none">
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Active Phase</span>
@@ -39,7 +39,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                    className="text-[clamp(3rem,8vw,8rem)] font-black leading-[0.85] mb-0 uppercase italic tracking-tighter drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] bg-gradient-to-b from-white via-white to-white/40 bg-clip-text text-transparent px-8 max-w-[98vw] text-center"
+                    className="text-[clamp(3rem,8vw,8rem)] text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
                 >
                     {currentQuestion.question}
                 </motion.h3>

@@ -20,20 +20,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     const [timer] = useState(15);
     const [timeLeft, setTimeLeft] = useState(15);
 
-    // Add custom color for gold if not present
-    useEffect(() => {
-        const style = document.createElement('style');
-        style.textContent = `
-            .text-color-gold { color: #ffd700; }
-            .border-color-gold\\/30 { border-color: rgba(255, 215, 0, 0.3); }
-            .from-color-gold { --tw-gradient-from: #ffd700; }
-            .from-color-gold\\/20 { --tw-gradient-from: rgba(255, 215, 0, 0.2); }
-        `;
-        document.head.appendChild(style);
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, []);
+
 
     useEffect(() => {
         if (gameState?.status === 'RESULT') {
@@ -104,7 +91,11 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     return (
         <div className="flex-1 flex flex-col p-12 overflow-hidden relative w-full h-full">
-            <HostHeader code={code} playerCount={players.length} />
+            <HostHeader
+                code={code}
+                playerCount={players.length}
+                compact={status !== 'LOBBY'}
+            />
 
             <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
                 <AnimatePresence mode="wait">
