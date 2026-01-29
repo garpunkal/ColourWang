@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
@@ -16,20 +16,20 @@ interface Props {
 }
 
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
-    // Track which player IDs are being stolen from (for flyover text)
-    const [stolenFromIds, setStolenFromIds] = useState<string[]>([]);
+    const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    // (stolenFromIds state removed; not used)
     const stealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [hasAnswered, setHasAnswered] = useState(false);
     const [useStealCard, setUseStealCard] = useState(false);
     // Remove stealCardClicked and confirmStealPending state
     // Submit answer logic (fixed)
-    const submitAnswer = (forceStealCardOrEvent?: boolean | React.MouseEvent<HTMLButtonElement>) => {
+    const submitAnswer = useCallback((forceStealCardOrEvent?: boolean | React.MouseEvent<HTMLButtonElement>) => {
         let forceStealCard: boolean | undefined = undefined;
         if (typeof forceStealCardOrEvent === 'boolean') {
             forceStealCard = forceStealCardOrEvent;
         }
-        const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+        // use 'me' from outer scope
         const isSteal = typeof forceStealCard === 'boolean' ? forceStealCard : useStealCard;
         if (isSteal && !me?.stealCardUsed) {
             // Only emit steal event, do not submit answer
@@ -49,15 +49,20 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             });
             setUseStealCard(false);
         }
-    };
+    }, [gameState, selectedColors, socket, useStealCard, me]);
     const [disabledIndexes, setDisabledIndexes] = useState<number[]>([]);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
     // Reset answer state when question changes
     useEffect(() => {
-        setSelectedColors([]);
-        setHasAnswered(false);
-        setTimeLeft(gameState.timerDuration || 15);
+            // No localStealCardUsed to reset
+        // Use setTimeout to avoid cascading renders
+        const timer = setTimeout(() => {
+            setSelectedColors([]);
+            setHasAnswered(false);
+            setTimeLeft(gameState.timerDuration || 15);
+        }, 0);
+        return () => clearTimeout(timer);
     }, [currentQuestionIndex, gameState.timerDuration]);
 
     useEffect(() => {
@@ -73,15 +78,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         return () => clearInterval(interval);
     }, [gameState.timerDuration, currentQuestionIndex]);
 
-    const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    // const me = ... (removed duplicate declaration)
     if (typeof window !== 'undefined') {
         // Debug log for player object and stealCardValue
-        // eslint-disable-next-line no-console
-        console.log('[DEBUG] PlayerQuestionScreen: me', me, 'stealCardValue', me?.stealCardValue);
-        if (gameState.players.some(p => typeof p.stealCardValue !== 'number')) {
-            // eslint-disable-next-line no-console
-            console.warn('[DEBUG] Some players missing stealCardValue:', gameState.players);
-        }
+        // console.log('[DEBUG] PlayerQuestionScreen: me', me, 'stealCardValue', me?.stealCardValue);
+        // if (gameState.players.some(p => typeof p.stealCardValue !== 'number')) {
+        //     console.warn('[DEBUG] Some players missing stealCardValue:', gameState.players);
+        // }
     }
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
     const lastAnswer = sortColors(me?.lastAnswer || []);
@@ -101,9 +104,10 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             const myId = localStorage.getItem('cw_playerId');
             console.log('[DEBUG] steal-card-used handler fired', { playerId, myId, disabledMap });
 
-            // Disable STEAL card for all players as soon as one is used
+            // Disable STEAL card UI for all players as soon as one is used
             setUseStealCard(false); // Ensure the steal card is no longer active
-            setMe((prev) => prev ? { ...prev, stealCardUsed: true } : prev); // Update local player state
+
+            // No localStealCardUsed to set
 
             if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
                 console.log('[DEBUG] Disabling indexes for me:', disabledMap[myId]);
@@ -111,29 +115,32 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             }
 
             // Show flyover STEAL text for all affected players (except the stealer)
-            if (disabledMap) {
-                const ids = Object.keys(disabledMap);
-                setStolenFromIds(ids);
-                if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
-                stealTimeoutRef.current = setTimeout(() => setStolenFromIds([]), 2000); // Hide after 2s
-            }
+            // (removed: setStolenFromIds, since stolenFromIds state is not used)
+            if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
         };
         socket.on('steal-card-used', handler);
         return () => {
             socket.off('steal-card-used', handler);
-            if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
+            const timeout = stealTimeoutRef.current;
+            if (timeout) clearTimeout(timeout);
         };
     }, [socket, gameState.currentQuestionIndex]);
 
     // Reset disabledIndexes when question changes
     useEffect(() => {
-        setDisabledIndexes([]);
+        const timer = setTimeout(() => {
+            setDisabledIndexes([]);
+        }, 0);
+        return () => clearTimeout(timer);
     }, [currentQuestionIndex]);
 
     // Unselect any colors that are now disabled (cards that disappear)
     useEffect(() => {
         if (disabledIndexes.length > 0) {
-            setSelectedColors(prev => prev.filter((color) => !disabledIndexes.includes(currentQuestion.options.indexOf(color))));
+            const timer = setTimeout(() => {
+                setSelectedColors(prev => prev.filter((color) => !disabledIndexes.includes(currentQuestion.options.indexOf(color))));
+            }, 0);
+            return () => clearTimeout(timer);
         }
     }, [disabledIndexes, currentQuestion.options]);
 
@@ -229,7 +236,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         isSelected={false}
                                         onClick={() => {
                                             setUseStealCard(true);
-                                            setMe((prev) => prev ? { ...prev, stealCardUsed: true } : prev); // Hide the card instantly
                                             socket.emit('use-steal-card', {
                                                 code: gameState.code
                                             });

@@ -124,16 +124,31 @@ export function ColorCard({
 
                     {/* Bottom-aligned color name or STEAL card overlay */}
                     {isStealCard ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="font-bold text-4xl text-white">{typeof stealValue === 'number' ? stealValue : '?'}</span>
-                            <span className="font-bold text-mg text-white tracking-widest">STEAL</span>
+
+
+                        <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full">
+                            <span
+                                className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
+                                style={{
+                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
+                                    fontSize: getFontSize(),
+                                    lineHeight: 1.1,
+                                    wordBreak: 'break-word',
+                                    maxWidth: '90%',
+                                    whiteSpace: 'normal',
+                                }}
+                            >
+                                <span className="font-bold text-3xl">{typeof stealValue === 'number' ? stealValue : '?'}</span> STEAL
+                            </span>
                         </div>
+
+
                     ) : (
                         <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full">
                             <span
                                 className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
                                 style={{
-                                    color: ['blue','red','orange','green','white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
+                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
                                     fontSize: getFontSize(),
                                     lineHeight: 1.1,
                                     wordBreak: 'break-word',
@@ -173,8 +188,8 @@ export function ColorCard({
                             maxWidth: '90%',
                             pointerEvents: 'none',
                         }}>
-                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{marginBottom: '0.2em', minWidth: '28px'}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 17v1m-6 0a2 2 0 002 2h8a2 2 0 002-2v-5a2 2 0 00-2-2H8a2 2 0 00-2 2v5zm10-7V7a4 4 0 10-8 0v4" /></svg>
-                            <span style={{display:'block',width:'100%'}}>LOCKED</span>
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginBottom: '0.2em', minWidth: '28px' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 17v1m-6 0a2 2 0 002 2h8a2 2 0 002-2v-5a2 2 0 00-2-2H8a2 2 0 00-2 2v5zm10-7V7a4 4 0 10-8 0v4" /></svg>
+                            <span style={{ display: 'block', width: '100%' }}>LOCKED</span>
                         </span>
                     )}
 
