@@ -39,7 +39,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                    className="text-[clamp(4rem,18vw,16rem)] font-black leading-[0.85] mb-0 uppercase italic tracking-tighter drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] bg-gradient-to-b from-white via-white to-white/40 bg-clip-text text-transparent px-8 max-w-[98vw] text-center"
+                    className="text-[clamp(3rem,8vw,8rem)] font-black leading-[0.85] mb-0 uppercase italic tracking-tighter drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] bg-gradient-to-b from-white via-white to-white/40 bg-clip-text text-transparent px-8 max-w-[98vw] text-center"
                 >
                     {currentQuestion.question}
                 </motion.h3>

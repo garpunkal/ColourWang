@@ -205,7 +205,7 @@ function App() {
             key="game"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex-1 w-full flex flex-col relative z-20"
+            className="w-full flex flex-col relative z-20"
           >
             {role === 'HOST' ? (
               <HostScreen socket={socket} gameState={gameState} />

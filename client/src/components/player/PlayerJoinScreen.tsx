@@ -86,25 +86,29 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     const isAvatarTaken = (avatarId: string) => dynamicTakenAvatars.includes(avatarId);
 
     return (
-        <div className="flex-1 flex flex-col p-8 max-w-md mx-auto w-full overflow-y-auto overflow-x-hidden relative z-10 h-full justify-center">
+        <div className="flex flex-col max-w-md mx-auto w-full overflow-y-auto overflow-x-hidden relative z-10 h-full justify-center">
+
+
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col gap-6 md:gap-10 pb-8 md:pb-12 w-full"
             >
-                <div className="text-center flex flex-col items-center mb-4">
+                <div className="text-center flex flex-col items-center justify-start mb-2">
                     <div className="w-[85vw] max-w-[320px] mb-2">
                         <Logo />
                     </div>
-                    <h2 className="text-3xl font-black text-white/90 tracking-tight uppercase italic -mt-6">Challenger Setup</h2>
+                    <h2 className="text-3xl font-black text-white/90 tracking-tight uppercase italic">Player Setup</h2>
                     <div className="h-1 w-12 bg-color-blue rounded-full my-4" />
                 </div>
 
-                <div className="glass-card p-6 md:p-8 rounded-3xl shadow-xl space-y-8 md:space-y-10 w-full">
+                <div className="glass-card p-6 md:p-8 rounded-3xl shadow-xl space-y-8 md:space-y-10 m-4 ">
+
+
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
-                            <label className="text-sm font-black uppercase tracking-[0.3em] text-color-blue/80">Your Color</label>
-                            <p className="text-xs text-text-muted/60 italic">Each connection gets a unique color automatically</p>
+                            <label className="text-sm font-black uppercase tracking-[0.3em] text-color-blue/80 mb-10">Your Color</label>
                         </div>
                         <div className="grid grid-cols-4 gap-4 p-6 glass rounded-[2.5rem] border-white/10 shadow-inner bg-black/20">
                             {AVATAR_IDS.map((a, i) => {
@@ -144,6 +148,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             })}
                         </div>
                     </div>
+
+
+
+
 
                     <div className="space-y-8">
                         <div className="space-y-3">

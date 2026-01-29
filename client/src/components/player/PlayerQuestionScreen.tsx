@@ -59,7 +59,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 >
                     Phase {currentQuestionIndex + 1}
                 </div>
-                <h3 className="text-4xl md:text-[5rem] font-black tracking-tighter leading-[0.85] uppercase italic bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">{currentQuestion.question}</h3>
+                <h3 className="text-3xl md:text-5xl font-black tracking-tighter leading-[0.85] uppercase italic bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
