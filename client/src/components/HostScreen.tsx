@@ -9,18 +9,19 @@ import { HostLobbyScreen } from './host/HostLobbyScreen';
 import { HostQuestionScreen } from './host/HostQuestionScreen';
 import { HostResultScreen } from './host/HostResultScreen';
 import { HostFinalScreen } from './host/HostFinalScreen';
+// import { FullScreenCountdown } from './FullScreenCountdown';
 
 interface Props {
     socket: Socket;
     gameState: GameState | null;
 }
 
+
 const HostScreen = ({ socket, gameState }: Props) => {
     const [rounds] = useState(4);
     const [timer] = useState(15);
     const [timeLeft, setTimeLeft] = useState(15);
-
-
+    // const [showCountdown, setShowCountdown] = useState(false);
 
     useEffect(() => {
         if (gameState?.status === 'RESULT') {
@@ -35,10 +36,6 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     useEffect(() => {
         if (gameState?.status === 'QUESTION' && gameState.timerDuration) {
-            // Use a local countdown to avoid syncing state too frequently if needed,
-            // but here we just need to initialize the state once.
-            // Moving setTimeLeft into a microtask or just ensuring it only runs on mount/change.
-
             let current = gameState.timerDuration;
             queueMicrotask(() => setTimeLeft(current));
 
@@ -56,6 +53,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
             return () => clearInterval(interval);
         }
     }, [gameState?.status, gameState?.currentQuestionIndex, gameState?.timerDuration, gameState?.code, socket]);
+
 
     const startGame = () => {
         if (gameState) {
@@ -94,7 +92,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
             <HostHeader
                 code={code}
                 playerCount={players.length}
-                compact={status !== 'LOBBY'}
+                compact={true}
             />
 
             <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
@@ -118,6 +116,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     {status === 'RESULT' && (
                         <HostResultScreen
                             currentQuestion={currentQuestion}
+                            currentQuestionIndex={currentQuestionIndex}
+                            totalQuestions={questions.length}
                             onNextQuestion={nextQuestion}
                         />
                     )}
@@ -132,6 +132,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                         />
                     )}
                 </AnimatePresence>
+
             </div>
         </div>
     );

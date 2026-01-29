@@ -63,7 +63,7 @@ export function HostSetupScreen({ socket }: Props) {
                         <label className="text-xl md:text-2xl font-black uppercase tracking-widest text-text-muted ml-2">Timer (Sec)</label>
                         <div className="flex items-center gap-4 md:gap-6 bg-black/20 p-3 md:p-4 rounded-2xl md:rounded-3xl">
                             <input
-                                type="range" min="5" max="120" step="5"
+                                type="range" min="5" max="60" step="5"
                                 value={timer} onChange={e => setTimer(parseInt(e.target.value))}
                                 className="w-full h-3 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-pink"
                             />

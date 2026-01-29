@@ -38,7 +38,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                     >
                         <div className="flex items-center gap-4 md:gap-10 pl-0 md:pl-8 w-full md:w-auto">
                             <span className={`text-3xl md:text-6xl font-black font-mono w-12 md:w-24 ${i === 0 ? 'text-color-gold' : 'text-text-muted'}`}>#{i + 1}</span>
-                            <div className={`w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-4xl flex items-center justify-center border-2 md:border-4 border-white/10 shadow-lg ${i === 0 ? 'bg-color-gold text-black' : 'bg-white/5'} overflow-hidden flex-shrink-0`}>
+                            <div className={`w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-4xl flex items-center justify-center border-2 md:border-4 border-white/10 shadow-lg ${i === 0 ? 'bg-color-gold text-black' : 'bg-white/5'} overflow-hidden shrink-0`}>
                                 <Avatar seed={player.avatar} className="w-full h-full" />
                             </div>
                             <span className={`text-2xl md:text-6xl font-black uppercase italic tracking-tight truncate  pr-10 ${i === 0 ? 'text-white' : 'text-white/80'}`}>{player.name}</span>

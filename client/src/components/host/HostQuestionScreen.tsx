@@ -14,7 +14,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
-            className="w-full max-w-[90rem] text-center"
+            className="w-full max-w-360 text-center"
         >
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-16">
                 <motion.div
@@ -26,7 +26,7 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Question</span>
                         <span className="text-6xl font-black italic tracking-tighter">0{currentQuestionIndex + 1}</span>
                     </div>
-                    <div className="w-[2px] h-20 bg-white/10 mx-4" />
+                    <div className="w-0.5 h-20 bg-white/10 mx-4" />
                     <div className="flex flex-col items-end leading-none">
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue mb-2 italic">Remaining</span>
                         <span className={`text-6xl font-black tabular-nums italic tracking-tighter ${timeLeft <= 5 ? 'text-error animate-ping' : 'text-white'}`}>

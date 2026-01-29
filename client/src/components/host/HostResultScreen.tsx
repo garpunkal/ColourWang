@@ -1,16 +1,46 @@
+
 import type { Question } from '../../types/game';
 import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 
+
 interface Props {
     currentQuestion: Question;
+    currentQuestionIndex: number;
+    totalQuestions: number;
     onNextQuestion: () => void;
 }
 
-export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
+export function HostResultScreen({ currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
+    const [timeLeft, setTimeLeft] = useState(10);
+    const [autoProceed, setAutoProceed] = useState(false);
+    const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+
+    useEffect(() => {
+        setTimeLeft(10);
+        setAutoProceed(false);
+        const interval = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(interval);
+                    setAutoProceed(true);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [currentQuestion]);
+
+    useEffect(() => {
+        if (autoProceed) {
+            onNextQuestion();
+        }
+    }, [autoProceed, onNextQuestion]);
 
     return (
         <motion.div
@@ -29,7 +59,6 @@ export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
             </div>
 
             <div className="flex flex-col items-center gap-12 mb-6">
-               
                 <div className="flex justify-center gap-12 flex-wrap flex-row">
                     {correctColors.map((color, i) => (
                         <ColorCard
@@ -42,7 +71,7 @@ export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
                     ))}
                 </div>
 
-                 {currentQuestion.image && (
+                {currentQuestion.image && (
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -56,16 +85,19 @@ export function HostResultScreen({ currentQuestion, onNextQuestion }: Props) {
                         />
                     </motion.div>
                 )}
-
             </div>
 
-            <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={onNextQuestion}
-                className="btn btn-primary mt-10 justify-self-center text-2xl md:text-5xl py-6 md:py-10 px-12 md:px-32 rounded-4xl md:rounded-[3.5rem] shadow-2xl uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20"
-            >
-                Next Question <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
-            </motion.button>
+            <div className="flex flex-col items-center gap-4 mt-8">
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={onNextQuestion}
+                    className="btn btn-primary mt-2 justify-self-center text-2xl md:text-5xl py-6 md:py-10 px-12 md:px-32 rounded-4xl md:rounded-[3.5rem] shadow-2xl uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20 flex items-center gap-6"
+                >
+                    {isLastQuestion ? 'Show Results' : 'Next Question'}
+                    <span className="ml-4 text-color-blue font-black tabular-nums text-3xl md:text-5xl">{timeLeft}s</span>
+                    <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
+                </motion.button>
+            </div>
         </motion.div>
     );
 }

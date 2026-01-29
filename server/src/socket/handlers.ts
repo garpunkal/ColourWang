@@ -18,6 +18,7 @@ function getNextAvailableAvatar(takenAvatars: string[]): string {
   return available || AVATAR_IDS[0]; // Fallback to first if all taken
 }
 
+
 function compareAnswers(answers: string[] | null, correct: string[] | undefined): boolean {
   if (!answers || !correct) return false;
   if (answers.length !== correct.length) return false;
@@ -48,6 +49,31 @@ export function registerSocketHandlers(io: Server) {
       console.log(`Game created: ${code}`);
     });
 
+    socket.on('use-steal-card', (payload: { code: string }) => {
+      const { code } = payload;
+      const game = games.get(code);
+      if (game && game.status === 'QUESTION') {
+        const player = game.players.find((p: Player) => p.socketId === socket.id);
+        if (player && !player.stealCardUsed) {
+          player.stealCardUsed = true;
+          // Generate random disabled indexes for each other player
+          const disabledMap: Record<string, number[]> = {};
+          const optionCount = game.questions[game.currentQuestionIndex]?.options?.length || 0;
+          game.players.forEach((p: Player) => {
+            if (p.id !== player.id) {
+              let indexes = Array.from({ length: optionCount }, (_, i) => i);
+              for (let i = indexes.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+              }
+              disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
+            }
+          });
+          io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+        }
+      }
+    });
+
     socket.on('join-game', ({ code, name, avatar }) => {
       const game = games.get(code.toUpperCase());
       if (game && game.status === 'LOBBY') {
@@ -62,12 +88,23 @@ export function registerSocketHandlers(io: Server) {
           avatar: assignedAvatar,
           score: 0,
           lastAnswer: null,
-          isCorrect: false
+          isCorrect: false,
+          stealCardValue: Math.floor(Math.random() * 8) + 1, // 1-8
+          stealCardUsed: false
         };
         game.players.push(player);
         socket.join(code.toUpperCase());
-        // Emit playerId individually to the joining user so they can store it
+        // Patch the players array in the game object itself
+        game.players = game.players.map(p => ({
+          ...p,
+          stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
+          stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false
+        }));
+        // Debug: print all players before emitting joined-game
+        console.log('[DEBUG] joined-game emit, players:', JSON.stringify(game.players, null, 2));
         socket.emit('joined-game', { game, playerId });
+        // Debug: print all players before emitting player-joined
+        console.log('[DEBUG] player-joined emit, players:', JSON.stringify(game.players, null, 2));
         io.to(code.toUpperCase()).emit('player-joined', game.players);
       } else {
         socket.emit('error', 'Game not found or already started');
@@ -81,10 +118,19 @@ export function registerSocketHandlers(io: Server) {
         if (player) {
           player.socketId = socket.id;
           socket.join(code.toUpperCase());
+          // Patch the players array in the game object itself
+          game.players = game.players.map(p => ({
+            ...p,
+            stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
+            stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false
+          }));
+          // Debug: print all players before emitting joined-game
+          console.log('[DEBUG] rejoin joined-game emit, players:', JSON.stringify(game.players, null, 2));
           // Send current game state and confirm identity
           socket.emit('joined-game', { game, playerId });
           if (game.status === 'LOBBY') {
-            // If in lobby, also broadcast to others that this player is effectively here (maybe not needed if they never left the list)
+            // Debug: print all players before emitting player-joined
+            console.log('[DEBUG] rejoin player-joined emit, players:', JSON.stringify(game.players, null, 2));
             io.to(code.toUpperCase()).emit('player-joined', game.players);
           }
           console.log(`Player ${player.name} (${playerId}) rejoined game ${code}`);
@@ -109,34 +155,64 @@ export function registerSocketHandlers(io: Server) {
       if (game && game.status === 'QUESTION') {
         game.status = 'RESULT';
         const currentQuestion = game.questions[game.currentQuestionIndex];
+        let anyCorrect = false;
         game.players.forEach(p => {
           const correct = currentQuestion?.correctAnswers || currentQuestion?.correctColors;
           const isCorrect = compareAnswers(p.lastAnswer, correct);
           p.isCorrect = isCorrect;
           if (isCorrect) {
             p.score += 10;
+            anyCorrect = true;
           }
         });
+        // No pot logic
         io.to(code).emit('game-status-changed', game);
       }
     });
 
-    socket.on('submit-answer', ({ code, answers }) => {
+    socket.on('submit-answer', ({ code, answers, useStealCard }) => {
+        // Debug: print payload received for submit-answer
+        console.log(`[DEBUG] submit-answer received: code=${code}, useStealCard=`, useStealCard, 'answers=', answers);
       const game = games.get(code);
       if (game && game.status === 'QUESTION') {
         const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
           player.lastAnswer = answers;
+          // Handle STEAL card usage
+          if (useStealCard && !player.stealCardUsed) {
+            player.stealCardUsed = true;
+            // Generate random disabled indexes for each other player
+            const disabledMap: Record<string, number[]> = {};
+            const optionCount = game.questions[game.currentQuestionIndex]?.options?.length || 0;
+            game.players.forEach(p => {
+              if (p.id !== player.id) {
+                let indexes = Array.from({ length: optionCount }, (_, i) => i);
+                for (let i = indexes.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+                }
+                disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
+              }
+            });
+            io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+                      // Debug: print sockets in the room before emitting
+                      const room = io.sockets.adapter.rooms.get(code);
+                      const socketsInRoom = room ? Array.from(room) : [];
+                      console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${code}, sockets:`, socketsInRoom);
+                      io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+          }
           const allAnswered = game.players.every(p => p.lastAnswer !== null);
           if (allAnswered) {
             game.status = 'RESULT';
             const currentQuestion = game.questions[game.currentQuestionIndex];
+            let anyCorrect = false;
             game.players.forEach(p => {
               const correct = currentQuestion?.correctAnswers || currentQuestion?.correctColors;
               const isCorrect = compareAnswers(p.lastAnswer, correct);
               p.isCorrect = isCorrect;
               if (isCorrect) {
                 p.score += 10;
+                anyCorrect = true;
               }
             });
             io.to(code).emit('game-status-changed', game);
@@ -161,6 +237,29 @@ export function registerSocketHandlers(io: Server) {
           game.status = 'QUESTION';
         }
         io.to(code).emit('game-status-changed', game);
+      }
+    });
+
+    socket.on('restart-game', ({ code, rounds, timer }) => {
+      const game = games.get(code);
+      if (game) {
+        // Reset game state for a new game
+        game.status = 'LOBBY';
+        game.currentQuestionIndex = 0;
+        game.timerDuration = timer;
+        // Optionally, you may want to reset player scores and answers
+        game.players.forEach(p => {
+          p.score = 0;
+          p.lastAnswer = null;
+          p.isCorrect = false;
+          p.stealCardUsed = false;
+          // Optionally randomize stealCardValue again
+          p.stealCardValue = Math.floor(Math.random() * 8) + 1;
+        });
+        // Optionally, you may want to reshuffle or reload questions if needed
+        io.to(code).emit('game-status-changed', game);
+      } else {
+        socket.emit('error', 'Game not found');
       }
     });
 

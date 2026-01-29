@@ -12,11 +12,15 @@ interface Props {
 }
 
 export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
-    // Only persist name, not avatar (each connection should get unique color)
+    // Persist name and avatar
     const [name, setName] = useState(localStorage.getItem('playerName') || '');
 
-    // Auto-select first available avatar (not from localStorage)
+    // Try to restore avatar from localStorage if available and not taken
     const [avatar, setAvatar] = useState(() => {
+        const storedAvatar = localStorage.getItem('playerAvatar');
+        if (storedAvatar && AVATAR_IDS.includes(storedAvatar) && !takenAvatars.includes(storedAvatar)) {
+            return storedAvatar;
+        }
         return AVATAR_IDS.find(id => !takenAvatars.includes(id)) || AVATAR_IDS[0];
     });
 
@@ -25,10 +29,14 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         return params.get('code')?.toUpperCase() || '';
     });
 
-    // Only save name to localStorage, not avatar
+    // Save name and avatar to localStorage
     useEffect(() => {
         if (name) localStorage.setItem('playerName', name);
     }, [name]);
+
+    useEffect(() => {
+        if (avatar) localStorage.setItem('playerAvatar', avatar);
+    }, [avatar]);
 
     const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<string[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
@@ -55,7 +63,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         const handleError = (msg: string) => {
             console.error('Socket error received:', msg);
             setError(msg);
-            alert(msg);
         };
 
         socket.on('room-checked', handleRoomChecked);

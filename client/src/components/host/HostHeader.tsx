@@ -6,13 +6,15 @@ interface Props {
     code: string;
     playerCount: number;
     compact?: boolean;
+    pot?: number;
 }
 
-export function HostHeader({ code, playerCount, compact = false }: Props) {
+export function HostHeader({ code, playerCount, compact = false, pot = 0 }: Props) {
     const joinUrl = `${window.location.origin}?code=${code}`;
 
     return (
         <div className={`flex flex-col md:grid grid-cols-3 items-center md:items-center relative z-10 gap-8 w-full transition-all duration-500 ${compact ? 'mb-8' : 'mb-8'}`}>
+          
             {/* Left Section: Join Info */}
             <div className={`
                 flex flex-col md:flex-row items-center glass-panel rounded-4xl
@@ -24,15 +26,15 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
             `}>
                 {/* QR Code */}
                 <div className={`
-                    bg-white rounded-[1rem] shadow-2xl shrink-0 transform transition-transform hover:scale-105 duration-500
+                    bg-white rounded-2xl shadow-2xl shrink-0 transform transition-transform hover:scale-105 duration-500
                     ${compact ? 'p-2' : 'p-3 md:p-4 md:rounded-4xl'}
                 `}>
                     <QRCodeSVG
                         value={joinUrl}
                         size={compact ? 60 : 120}
                         className={`
-                            transition-all duration-500
-                            ${compact ? 'w-[60px] h-[60px]' : 'w-[120px] h-[120px] md:w-40 md:h-40'}
+                            transition-all duration-500 rounded
+                            ${compact ? 'w-15 h-15' : 'w-30 h-30 md:w-40 md:h-40'}
                         `}
                         level="H"
                         includeMargin={false}
@@ -60,7 +62,7 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
             {/* Count  */}
             <div className={`
                     flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 w-fit md:justify-self-end
-                    ${compact ? 'gap-3 px-6 py-2' : 'gap-6 px-8 py-4'}
+                    ${compact ? 'gap-3 px-6 py-2' : 'hidden'}
                 `}>
                 <Users size={compact ? 20 : 32} className="text-color-blue animate-pulse transition-all duration-500" />
                 <div className="flex items-baseline gap-3">
@@ -73,6 +75,7 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
                 </div>
             </div>
 
+         
 
 
         </div>

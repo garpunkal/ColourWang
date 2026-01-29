@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
 import { Send } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { ColorCard } from '../ColorCard';
 import { getAvatarColor } from '../../constants/avatars';
 import { sortColors } from '../../config/gameConfig';
@@ -15,8 +16,41 @@ interface Props {
 }
 
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
+    // Track which player IDs are being stolen from (for flyover text)
+    const [stolenFromIds, setStolenFromIds] = useState<string[]>([]);
+    const stealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [hasAnswered, setHasAnswered] = useState(false);
+    const [useStealCard, setUseStealCard] = useState(false);
+    // Remove stealCardClicked and confirmStealPending state
+    // Submit answer logic (fixed)
+    const submitAnswer = (forceStealCardOrEvent?: boolean | React.MouseEvent<HTMLButtonElement>) => {
+        let forceStealCard: boolean | undefined = undefined;
+        if (typeof forceStealCardOrEvent === 'boolean') {
+            forceStealCard = forceStealCardOrEvent;
+        }
+        const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+        const isSteal = typeof forceStealCard === 'boolean' ? forceStealCard : useStealCard;
+        if (isSteal && !me?.stealCardUsed) {
+            // Only emit steal event, do not submit answer
+            setHasAnswered(false);
+            socket.emit('use-steal-card', {
+                code: gameState.code
+            });
+            setUseStealCard(false);
+            return;
+        }
+        if (gameState && selectedColors.length > 0) {
+            setHasAnswered(true);
+            socket.emit('submit-answer', {
+                code: gameState.code,
+                answers: selectedColors,
+                useStealCard: false
+            });
+            setUseStealCard(false);
+        }
+    };
+    const [disabledIndexes, setDisabledIndexes] = useState<number[]>([]);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
     // Reset answer state when question changes
@@ -40,6 +74,15 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     }, [gameState.timerDuration, currentQuestionIndex]);
 
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    if (typeof window !== 'undefined') {
+        // Debug log for player object and stealCardValue
+        // eslint-disable-next-line no-console
+        console.log('[DEBUG] PlayerQuestionScreen: me', me, 'stealCardValue', me?.stealCardValue);
+        if (gameState.players.some(p => typeof p.stealCardValue !== 'number')) {
+            // eslint-disable-next-line no-console
+            console.warn('[DEBUG] Some players missing stealCardValue:', gameState.players);
+        }
+    }
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
     const lastAnswer = sortColors(me?.lastAnswer || []);
 
@@ -52,16 +95,47 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 : [...prev, color]
         );
     };
+    // Listen for steal-card-used event to randomly disable cards for this round
+    useEffect(() => {
+        const handler = ({ playerId, disabledMap }: { playerId: string, value: number, disabledMap: Record<string, number[]> }) => {
+            const myId = localStorage.getItem('cw_playerId');
+            console.log('[DEBUG] steal-card-used handler fired', { playerId, myId, disabledMap });
 
-    const submitAnswer = useCallback(() => {
-        if (selectedColors.length > 0 && gameState) {
-            setHasAnswered(true);
-            socket.emit('submit-answer', {
-                code: gameState.code,
-                answers: selectedColors
-            });
+            // Disable STEAL card for all players as soon as one is used
+            setUseStealCard(false); // Ensure the steal card is no longer active
+            setMe((prev) => prev ? { ...prev, stealCardUsed: true } : prev); // Update local player state
+
+            if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
+                console.log('[DEBUG] Disabling indexes for me:', disabledMap[myId]);
+                setDisabledIndexes(disabledMap[myId]);
+            }
+
+            // Show flyover STEAL text for all affected players (except the stealer)
+            if (disabledMap) {
+                const ids = Object.keys(disabledMap);
+                setStolenFromIds(ids);
+                if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
+                stealTimeoutRef.current = setTimeout(() => setStolenFromIds([]), 2000); // Hide after 2s
+            }
+        };
+        socket.on('steal-card-used', handler);
+        return () => {
+            socket.off('steal-card-used', handler);
+            if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
+        };
+    }, [socket, gameState.currentQuestionIndex]);
+
+    // Reset disabledIndexes when question changes
+    useEffect(() => {
+        setDisabledIndexes([]);
+    }, [currentQuestionIndex]);
+
+    // Unselect any colors that are now disabled (cards that disappear)
+    useEffect(() => {
+        if (disabledIndexes.length > 0) {
+            setSelectedColors(prev => prev.filter((color) => !disabledIndexes.includes(currentQuestion.options.indexOf(color))));
         }
-    }, [selectedColors, gameState, socket]);
+    }, [disabledIndexes, currentQuestion.options]);
 
     useEffect(() => {
         if (timeLeft === 0 && !hasAnswered) {
@@ -80,6 +154,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             return () => clearTimeout(timer);
         }
     }, [timeLeft, hasAnswered, selectedColors, submitAnswer, gameState.code, socket]);
+
+ 
 
     return (
         <motion.div
@@ -122,64 +198,96 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 margin: '0 auto',
                             }}
                         >
-                            {currentQuestion.options.map((color, i) => (
-                                <ColorCard
-                                    key={i}
-                                    color={color}
-                                    isSelected={selectedColors.includes(color)}
-                                    onClick={() => toggleColor(color)}
-                                    disabled={hasAnswered || timeLeft === 0}
-                                    size="responsive"
-                                    index={i}
-                                />
-                            ))}
+                            <AnimatePresence initial={false}>
+                                {currentQuestion.options.map((color, i) =>
+                                    disabledIndexes.includes(i)
+                                        ? (
+                                            <div
+                                                key={i}
+                                                style={{ width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            />
+                                        )
+                                        : (
+                                            <ColorCard
+                                                key={i}
+                                                color={color}
+                                                isSelected={selectedColors.includes(color)}
+                                                onClick={() => toggleColor(color)}
+                                                disabled={hasAnswered || timeLeft === 0}
+                                                size="responsive"
+                                                index={i}
+                                            />
+                                        )
+                                )}
+                            </AnimatePresence>
+                            {/* STEAL card at the end */}
+                            <AnimatePresence>
+                                {me && !me.stealCardUsed && (
+                                    <ColorCard
+                                        key="steal"
+                                        color="#FFD700" // Gold color for STEAL card
+                                        isSelected={false}
+                                        onClick={() => {
+                                            setUseStealCard(true);
+                                            setMe((prev) => prev ? { ...prev, stealCardUsed: true } : prev); // Hide the card instantly
+                                            socket.emit('use-steal-card', {
+                                                code: gameState.code
+                                            });
+                                        }}
+                                        disabled={hasAnswered || timeLeft === 0}
+                                        size="responsive"
+                                        index={currentQuestion.options.length}
+                                        isStealCard={true}
+                                        stealValue={me.stealCardValue}
+                                    />
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
-                    <motion.button
-                        whileHover={{ y: -8 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={submitAnswer}
-                        disabled={selectedColors.length === 0 || timeLeft === 0}
-                        className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-3xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
-                        style={{
-                            boxShadow: `0 40px 80px -20px ${avatarColor}60`,
-                            borderColor: `${avatarColor}80`
-                        }}
-                    >
-                        Submit <Send fill="currentColor" size={32} />
-                    </motion.button>
+                    <div className="flex flex-col gap-4 w-full">
+                        {/* Normal submit button */}
+                        <motion.button
+                            whileHover={{ y: -8 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={e => submitAnswer(e)}
+                            disabled={selectedColors.length === 0 || timeLeft === 0}
+                            className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-3xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
+                            style={{
+                                boxShadow: `0 40px 80px -20px ${avatarColor}60`,
+                                borderColor: `${avatarColor}80`
+                            }}
+                        >
+                            Submit <Send fill="currentColor" size={32} />
+                        </motion.button>
+                    </div>
                 </div>
             ) : (
-                <div className="flex-1 flex flex-col items-center justify-center gap-12 glass m-4 rounded-[5rem] border-white/5 relative overflow-hidden shadow-[0_100px_100px_-50px_rgba(0,0,0,0.8)]">
-                    <div
-                        className="absolute top-0 left-0 w-full h-2 opacity-50"
-                        style={{ background: `linear-gradient(to right, transparent, ${avatarColor}, transparent)` }}
-                    />
-                    <div className="text-center px-6 md:px-12 relative z-10">
-                        <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter italic mb-4 md:mb-6">Your selection</h3>
-{lastAnswer}
-                        <div className="flex gap-3 md:gap-4 justify-center flex-wrap">
-                            {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
-                                <div
-                                    key={i}
-                                    className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl border-2 border-white/40 shadow-lg"
-                                    style={{ backgroundColor: color }}
-                                />
-                            )) : (
-                                <span className="text-xl md:text-2xl font-bold text-white/20 italic uppercase">Nothing selected</span>
-                            )}
+                <motion.div
+                    key="selection"
+                    initial={{ scale: 0.8, opacity: 0, y: 100 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    className="text-center flex flex-col items-center justify-center gap-6 w-full max-w-lg mx-auto px-2"
+                >
+                    <div className="w-full space-y-3">
+                        <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-white/10 space-y-3 mt-6">
+                            <span className="text-xs uppercase tracking-[0.4em] text-color-blue font-black italic opacity-60">Your Selection</span>
+                            <div className="flex gap-2 md:gap-3 justify-center flex-wrap mt-2">
+                                {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
+                                    <ColorCard
+                                        key={i}
+                                        color={color}
+                                        size="small"
+                                        index={i}
+                                        disabled={true}
+                                    />
+                                )) : (
+                                    <span className="text-lg md:text-xl font-bold text-white/20 italic uppercase">Nothing selected</span>
+                                )}
+                            </div>
                         </div>
-
-
                         <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Awaiting results...</p>
                     </div>
-                    <motion.div
-                        animate={{ height: ['0%', '100%'] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute right-0 top-0 w-1"
-                        style={{ background: `linear-gradient(to b, transparent, ${avatarColor}, transparent)` }}
-                    />
-                </div>
+                </motion.div>
             )}
         </motion.div>
     );

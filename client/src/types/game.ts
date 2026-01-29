@@ -6,6 +6,8 @@ export interface Player {
     lastAnswer: string[] | null;
     socketId?: string;
     isCorrect: boolean;
+    stealCardValue: number;
+    stealCardUsed: boolean;
 }
 
 export interface Question {
