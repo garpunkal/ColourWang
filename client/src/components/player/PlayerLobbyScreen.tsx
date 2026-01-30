@@ -177,23 +177,6 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                     </div>
                 </motion.div>
             )}
-
-            {/* Create Lobby Option */}
-            <div className="mt-8 relative z-50 pt-4 border-t border-white/5 w-full">
-                <button
-                    onClick={() => {
-                        if (confirm("Create a new lobby? This will leave the current game completely.")) {
-                            localStorage.removeItem('cw_playerId');
-                            localStorage.removeItem('cw_gameCode');
-                            window.location.href = '/';
-                        }
-                    }}
-                    className="text-[10px] uppercase font-bold tracking-widest text-white/30 hover:text-white transition-colors cursor-pointer group flex items-center justify-center gap-2 w-full"
-                >
-                    <span className="border-b border-white/20 group-hover:border-white pb-0.5 transition-all">Create New Lobby</span>
-                </button>
-            </div>
-
         </motion.div>
     );
 }
