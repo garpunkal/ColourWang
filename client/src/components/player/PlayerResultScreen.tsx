@@ -2,8 +2,7 @@ import type { Player, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
-import { Check, X } from 'lucide-react';
-import { getAvatarColor } from '../../constants/avatars';
+
 
 interface Props {
     player: Player;
@@ -65,50 +64,6 @@ export function PlayerResultScreen({ player, gameState }: Props) {
                                 />
                             ))}
                         </div>
-                    </div>
-                </div>
-
-                {/* All Players Results */}
-                <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-white/10 space-y-3 mt-4 w-full">
-                    <span className="text-xs uppercase tracking-[0.4em] text-white font-black italic opacity-60">All Players</span>
-                    <div className="flex flex-col gap-2 mt-2">
-                        {gameState.players
-                            .sort((a, b) => b.score - a.score)
-                            .map((p) => {
-                                const playerColor = getAvatarColor(p.avatar);
-                                return (
-                                    <motion.div
-                                        key={p.id}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="flex items-center justify-between px-3 py-2 rounded-2xl transition-all"
-                                        style={{
-                                            backgroundColor: p.isCorrect ? `rgba(34, 197, 94, 0.1)` : `rgba(239, 68, 68, 0.1)`,
-                                            border: `1px solid ${p.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
-                                        }}
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <div
-                                                className="w-3 h-3 rounded-full"
-                                                style={{ backgroundColor: playerColor }}
-                                            />
-                                            <span className="font-bold text-sm" style={{ color: playerColor }}>
-                                                {p.name}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className={`text-xs font-black ${p.isCorrect ? 'text-success' : 'text-error'}`}>
-                                                {p.isCorrect ? '+10' : '+0'}
-                                            </span>
-                                            {p.isCorrect ? (
-                                                <Check size={16} className="text-success" strokeWidth={3} />
-                                            ) : (
-                                                <X size={16} className="text-error" strokeWidth={3} />
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Send, Check } from 'lucide-react';
+import { Send } from 'lucide-react';
 
 import { ColorCard } from '../ColorCard';
 import { getAvatarColor } from '../../constants/avatars';
@@ -24,7 +24,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [hasAnswered, setHasAnswered] = useState(false);
     const [useStealCard, setUseStealCard] = useState(false);
-    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>([]);
+
     // Remove stealCardClicked and confirmStealPending state
     // Submit answer logic (fixed)
     const submitAnswer = useCallback((forceStealCardOrEvent?: boolean | React.MouseEvent<HTMLButtonElement>) => {
@@ -66,7 +66,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             setSelectedColors([]);
             setHasAnswered(false);
             setTimeLeft(gameState.timerDuration || 15);
-            setPlayersAnswered([]);
+
         }, 0);
         return () => clearTimeout(timer);
     }, [currentQuestionIndex, gameState.timerDuration]);
@@ -166,17 +166,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         }
     }, [timeLeft, hasAnswered, selectedColors, submitAnswer, gameState.code, socket]);
 
-    // Listen for player-answered events
-    useEffect(() => {
-        const handler = (players: { id: string; hasAnswered: boolean }[]) => {
-            setPlayersAnswered(players);
-        };
-        socket.on('player-answered', handler);
-        return () => {
-            socket.off('player-answered', handler);
-        };
-    }, [socket]);
-
 
 
     return (
@@ -199,51 +188,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     Question {currentQuestionIndex + 1}
                 </div>
                 <h3 className="text-3xl md:text-5xl text-display text-display-gradient px-4">{currentQuestion.question}</h3>
-
-                {/* Player submission status */}
-                {playersAnswered.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex justify-center gap-2 mt-4 flex-wrap px-2"
-                    >
-                        {gameState.players.map((player) => {
-                            const playerStatus = playersAnswered.find(p => p.id === player.id);
-                            const playerColor = getAvatarColor(player.avatar);
-                            const isAnswered = playerStatus?.hasAnswered || false;
-
-                            return (
-                                <motion.div
-                                    key={player.id}
-                                    initial={{ scale: 0.8 }}
-                                    animate={{ scale: 1 }}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all"
-                                    style={{
-                                        backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}10`,
-                                        border: `1px solid ${isAnswered ? playerColor : `${playerColor}30`}`,
-                                        color: playerColor,
-                                        opacity: isAnswered ? 1 : 0.5
-                                    }}
-                                >
-                                    <div
-                                        className="w-2 h-2 rounded-full"
-                                        style={{ backgroundColor: playerColor }}
-                                    />
-                                    <span className="uppercase tracking-wider">{player.name}</span>
-                                    {isAnswered && (
-                                        <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                                        >
-                                            <Check size={12} strokeWidth={3} />
-                                        </motion.div>
-                                    )}
-                                </motion.div>
-                            );
-                        })}
-                    </motion.div>
-                )}
             </div>
 
             {!hasAnswered ? (
@@ -351,7 +295,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Awaiting results...</p>
                     </div>
                 </motion.div>
-            )}
-        </motion.div>
+            )
+            }
+        </motion.div >
     );
 }
