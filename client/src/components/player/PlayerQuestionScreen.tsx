@@ -101,7 +101,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 }
                 const next = prev - 1;
                 // Play tick sound for last 5 seconds (5, 4, 3, 2, 1)
-                if (next <= 5 && next > 0) audioManager.playTick();
+                if (next <= 5 && next > 0) audioManager.playTick(next);
                 return next;
             });
         }, 1000);

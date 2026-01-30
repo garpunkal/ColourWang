@@ -6,6 +6,7 @@ import { useMemo, useState, useEffect, useRef } from 'react';
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
 import { useSparkle } from '../../hooks/useSparkle';
+import { audioManager } from '../../utils/audioManager';
 
 // Optimized celebratory elements
 const GOLDEN_PARTICLES = [...Array(10)].map((_, i) => ({
@@ -36,6 +37,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
 
     useEffect(() => {
         // Trigger supernova after a small delay for the winner reveal
+        audioManager.playChime(); // Play celebration chime
         const timer = setTimeout(() => setShowSupernova(true), 800);
         return () => clearTimeout(timer);
     }, []);
