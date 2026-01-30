@@ -18,7 +18,7 @@ export function HostLobbyScreen({ players, onStartGame }: Props) {
             if (players.length >= 2) {
                 // Only start if not already running
                 if (autoStartTimer === null) {
-                    setAutoStartTimer(15);
+                    setAutoStartTimer(30);
                 }
             } else {
                 // Reset if drops below 2
@@ -82,7 +82,7 @@ export function HostLobbyScreen({ players, onStartGame }: Props) {
                                 <span
                                     className="text-xl md:text-2xl font-black truncate tracking-tight uppercase italic w-full text-center"
                                     style={{
-                                        color: textColor,
+                                        color: 'white',
                                         textShadow: textColor === 'white' ? `0 0 15px ${avatarColor}40` : 'none'
                                     }}
                                 >

@@ -9,6 +9,7 @@ import { HostLobbyScreen } from './host/HostLobbyScreen';
 import { HostQuestionScreen } from './host/HostQuestionScreen';
 import { HostResultScreen } from './host/HostResultScreen';
 import { HostFinalScreen } from './host/HostFinalScreen';
+import { CountdownScreen } from './shared/CountdownScreen';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
 interface Props {
@@ -89,7 +90,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     if ((status === 'QUESTION' || status === 'RESULT') && (!questions || !questions[currentQuestionIndex])) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                <h2 className="text-4xl font-bold text-white mb-4">Synchronizing Neural Network...</h2>
+                <h2 className="text-4xl font-bold text-white mb-4">Synchronizing Wang Network...</h2>
                 <p className="text-xl text-white/60">Phase Data: {currentQuestionIndex + 1}/{questions?.length || 0}</p>
             </div>
         );
@@ -114,6 +115,10 @@ const HostScreen = ({ socket, gameState }: Props) => {
                             players={players}
                             onStartGame={startGame}
                         />
+                    )}
+
+                    {status === 'COUNTDOWN' && (
+                        <CountdownScreen />
                     )}
 
                     {status === 'QUESTION' && (

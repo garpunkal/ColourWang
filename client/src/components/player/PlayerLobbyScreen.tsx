@@ -14,7 +14,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 1.1, rotate: 2 }}
-            className="text-center glass rounded-[4rem] p-8 md:p-12 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden"
+            className="text-center glass rounded-[4rem] p-8 md:p-8 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden"
         >
             <div className="absolute inset-0 bg-linear-to-br from-color-blue/15 via-transparent to-color-purple/15 opacity-50" />
             <div className="mb-6 relative inline-block z-10">
@@ -53,7 +53,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                 />
                                 <span
                                     className="font-black text-base md:text-lg uppercase tracking-wider flex-1 text-left"
-                                    style={{ color: playerColor }}
+                                    style={{ color: 'white' }}
                                 >
                                     {player.name}
                                 </span>

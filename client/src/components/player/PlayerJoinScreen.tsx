@@ -123,18 +123,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col gap-6 md:gap-10 pb-8 md:pb-12 w-full my-auto"
+                className="flex flex-col gap-4 md:gap-6 pb-4 w-full"
             >
-                <div className="text-center flex flex-col items-center justify-start mb-2">
-                    {/* Logo Removed */}
-                </div>
-
-                <div className="glass-card p-4 md:p-6 rounded-3xl shadow-xl space-y-6 md:space-y-10 m-2 md:m-4">
-
+                <div className="glass-card p-4 md:p-6 rounded-3xl shadow-xl space-y-6 md:space-y-6 m-2 md:m-4">
 
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Codename</label>
+                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Name</label>
                             <input
                                 className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-4xl py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl uppercase"
                                 placeholder="ENTER NAME"
@@ -144,7 +139,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Access Code</label>
+                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Code</label>
                             <div className="relative group">
                                 <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
                                 <input
@@ -157,9 +152,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             </div>
                         </div>
                     </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-black uppercase tracking-[0.3em] text-color-blue/80 mb-2">Your Color</label>
-                    </div>
+
                     <div className="grid grid-cols-4 gap-2 md:gap-4 p-3 md:p-6 glass rounded-[2.5rem] border-white/10 shadow-inner bg-black/20">
                         {AVATAR_IDS.map((a, i) => {
                             const taken = isAvatarTaken(a);
@@ -204,45 +197,48 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             );
                         })}
                     </div>
-                </div>
 
-                {
-                    error && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mx-4 mb-2 p-4 bg-red-500/20 border border-red-500/50 rounded-2xl text-red-100 text-center font-bold"
-                        >
-                            {error}
-                        </motion.div>
-                    )
-                }
+                    {
+                        error && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="mx-4 mb-2 p-4 bg-red-500/20 border border-red-500/50 rounded-2xl text-red-100 text-center font-bold"
+                            >
+                                {error}
+                            </motion.div>
+                        )
+                    }
 
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                        if (isJoining) return;
-                        if (!name) {
-                            setError("Please enter a codename!");
-                            return;
-                        }
-                        if (code.length !== 4) {
-                            setError("Please enter a valid 4-character room code!");
-                            return;
-                        }
-                        handleJoin();
-                    }}
-                    disabled={isJoining}
-                    className={`
-                        btn btn-primary text-lg md:text-2xl py-4 md:py-8 mt-2 md:mt-6 flex items-center justify-center gap-4 md:gap-6 
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => {
+                            if (isJoining) return;
+                            if (!name) {
+                                setError("Please enter a codename!");
+                                return;
+                            }
+                            if (code.length !== 4) {
+                                setError("Please enter a valid 4-character room code!");
+                                return;
+                            }
+                            handleJoin();
+                        }}
+                        disabled={isJoining}
+                        className={`
+                        btn btn-primary text-lg md:text-2xl py-4 md:py-8 flex items-center justify-center gap-4 md:gap-6 
                         transition-all rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_40px_-10px_rgba(0,229,255,0.4)] 
                         border-t border-white/20 uppercase font-black italic tracking-widest w-full relative z-20
                         ${(!name || code.length !== 4 || isJoining) ? 'opacity-80 grayscale-[0.5]' : ''}
                     `}
-                >
-                    {isJoining ? 'CONNECTING...' : 'JOIN GAME'} <Smartphone size={24} strokeWidth={2.5} className={isJoining ? 'animate-pulse' : ''} />
-                </motion.button>
+                    >
+                        {isJoining ? 'CONNECTING...' : 'JOIN'}
+                    </motion.button>
+                </div>
+
+
+
             </motion.div >
         </div >
     );

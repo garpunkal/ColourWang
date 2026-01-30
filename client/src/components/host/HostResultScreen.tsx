@@ -1,12 +1,11 @@
 
 import type { Question, GameState } from '../../types/game';
-import { Play, Check, X } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
-import { getAvatarColor } from '../../constants/avatars';
 import { Avatar } from '../GameAvatars';
 
 
@@ -20,7 +19,7 @@ interface Props {
 
 export function HostResultScreen({ gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
-    const [timeLeft, setTimeLeft] = useState(10);
+    const [timeLeft, setTimeLeft] = useState(30);
     const [autoProceed, setAutoProceed] = useState(false);
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
@@ -30,7 +29,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
 
     useEffect(() => {
         setTimeout(() => {
-            setTimeLeft(10);
+            setTimeLeft(30);
             setAutoProceed(false);
         }, 0);
         const interval = setInterval(() => {
@@ -67,7 +66,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
             <div className="flex flex-col items-center text-center">
                 {/* Question Section */}
                 <div className="mb-12 max-w-5xl">
-                    <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] text-display mb-8 text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
+                    <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
                         {currentQuestion.question}
                     </h3>
                     <div className="flex flex-col items-center gap-10">
@@ -102,9 +101,8 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                         <div className="h-px w-20 bg-linear-to-l from-transparent to-white/20" />
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 px-4">
+                    <div className="flex flex-wrap justify-center gap-4 md:gap-6 px-4 w-full">
                         {sortedPlayers.map((player, index) => {
-                            const playerColor = getAvatarColor(player.avatar);
                             const playerAnswer = sortColors(player.lastAnswer || []);
 
                             return (
@@ -113,44 +111,36 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 + (index * 0.05) }}
-                                    className="glass-panel group relative flex flex-col p-4 rounded-[2.5rem] border-white/5 overflow-hidden transition-all duration-500 hover:scale-105"
+                                    className="glass group relative flex flex-col flex-1 min-w-50 max-w-sm p-4 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
                                     style={{
                                         background: player.isCorrect
-                                            ? `linear-gradient(180deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.02) 100%)`
-                                            : `linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.02) 100%)`,
-                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'
+                                            ? `linear-gradient(180deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)`
+                                            : `linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)`,
+                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
+                                        borderWidth: '1px',
+                                        borderStyle: 'solid'
                                     }}
                                 >
                                     {/* Player Info */}
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white/5 shadow-lg">
-                                            <Avatar seed={player.avatar} className="w-full h-full" />
+                                        <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white/5 shadow-lg relative">
+                                            <div className="absolute inset-0 bg-black/20" />
+                                            <Avatar seed={player.avatar} className="w-full h-full relative z-10" />
                                         </div>
                                         <div className="flex flex-col items-start min-w-0">
-                                            <span className="font-black text-xs uppercase italic tracking-wider truncate w-full" style={{ color: playerColor }}>
+                                            <span className="font-black text-lg uppercase italic tracking-wider truncate w-full text-white drop-shadow-md pr-10">
                                                 {player.name}
                                             </span>
                                             <div className="flex items-center gap-1">
-                                                <span className={`text-[10px] font-black italic ${player.isCorrect ? 'text-success' : 'text-error/60'}`}>
-                                                    {player.isCorrect ? '+10 POINTS' : '+0'}
+                                                <span className={`text-[16px] font-black italic tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
+                                                    {player.isCorrect ? '+10 PTS' : '+0 PTS'}
                                                 </span>
                                             </div>
-                                        </div>
-                                        <div className="ml-auto">
-                                            {player.isCorrect ? (
-                                                <div className="p-1 rounded-full bg-success/20">
-                                                    <Check size={14} className="text-success" strokeWidth={4} />
-                                                </div>
-                                            ) : (
-                                                <div className="p-1 rounded-full bg-error/20">
-                                                    <X size={14} className="text-error" strokeWidth={4} />
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
 
                                     {/* Answer Display */}
-                                    <div className="flex-1 flex items-center justify-center min-h-20 py-2">
+                                    <div className="flex-1 flex items-center justify-center min-h-20 py-2 bg-black/20 rounded-xl border border-white/5">
                                         <div className="flex gap-1.5 justify-center flex-wrap">
                                             {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
                                                 <ColorCard
@@ -167,7 +157,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                                     </div>
 
                                     {/* Corner Accents */}
-                                    <div className={`absolute top-0 right-0 w-12 h-12 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity ${player.isCorrect ? 'bg-success' : 'bg-error'} blur-2xl`} />
+                                    <div className={`absolute top-0 right-0 w-20 h-20 opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity ${player.isCorrect ? 'bg-success' : 'bg-error'} blur-2xl`} />
                                 </motion.div>
                             );
                         })}

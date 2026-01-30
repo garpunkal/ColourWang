@@ -148,8 +148,18 @@ export function registerSocketHandlers(io: Server) {
     socket.on('start-game', (code) => {
       const game = games.get(code);
       if (game) {
-        game.status = 'QUESTION';
+        // Start with a countdown
+        game.status = 'COUNTDOWN';
         io.to(code).emit('game-status-changed', game);
+
+        // Transition to QUESTION after 5 seconds
+        setTimeout(() => {
+          const currentGame = games.get(code);
+          if (currentGame && currentGame.status === 'COUNTDOWN') {
+            currentGame.status = 'QUESTION';
+            io.to(code).emit('game-status-changed', currentGame);
+          }
+        }, 5000);
       }
     });
 
@@ -220,12 +230,24 @@ export function registerSocketHandlers(io: Server) {
           p.isCorrect = false;
           p.disabledIndexes = [];
         });
+
         if (game.currentQuestionIndex >= game.questions.length) {
           game.status = 'FINAL_SCORE';
+          io.to(code).emit('game-status-changed', game);
         } else {
-          game.status = 'QUESTION';
+          // Transition to COUNTDOWN first
+          game.status = 'COUNTDOWN';
+          io.to(code).emit('game-status-changed', game);
+
+          // Transition to QUESTION after 5 seconds
+          setTimeout(() => {
+            const currentGame = games.get(code);
+            if (currentGame && currentGame.status === 'COUNTDOWN') {
+              currentGame.status = 'QUESTION';
+              io.to(code).emit('game-status-changed', currentGame);
+            }
+          }, 5000);
         }
-        io.to(code).emit('game-status-changed', game);
       }
     });
 

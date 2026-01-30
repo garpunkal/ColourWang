@@ -7,6 +7,7 @@ import { PlayerLobbyScreen } from './player/PlayerLobbyScreen';
 import { PlayerQuestionScreen } from './player/PlayerQuestionScreen';
 import { PlayerResultScreen } from './player/PlayerResultScreen';
 import { PlayerFinalScreen } from './player/PlayerFinalScreen';
+import { CountdownScreen } from './shared/CountdownScreen';
 
 interface Props {
     socket: Socket;
@@ -71,6 +72,8 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
 
             <div className="flex-1 flex flex-col justify-start">
                 {status === 'LOBBY' && <PlayerLobbyScreen gameState={gameState} />}
+
+                {status === 'COUNTDOWN' && <CountdownScreen />}
 
                 {status === 'QUESTION' && (!currentQuestion ? (
                     <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-pulse">

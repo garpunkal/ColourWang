@@ -97,7 +97,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 >
                     <div className="flex flex-col items-start leading-none">
                         <span className="text-lg font-black uppercase tracking-[0.5em] text-color-blue/60 mb-1 italic">Question</span>
-                        <span className="text-4xl font-black italic tracking-tighter">0{currentQuestionIndex + 1}</span>
+                        <span className="text-4xl font-black italic tracking-tighter">{currentQuestionIndex + 1}</span>
                     </div>
                     <div className="w-0.5 h-16 bg-white/10 mx-3" />
                     <div className="flex flex-col items-end leading-none">
@@ -125,7 +125,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 >
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl px-4">
+                        <div className="flex flex-wrap justify-center gap-6 w-full max-w-7xl px-4">
                             {gameState.players.map((player) => {
                                 const playerStatus = playersAnswered.find(p => p.id === player.id);
                                 const playerColor = getAvatarColor(player.avatar);
@@ -142,7 +142,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.03)',
                                             borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.05)'
                                         }}
-                                        className="relative flex items-center gap-4 p-3 rounded-2xl border-2 transition-all overflow-hidden"
+                                        className="relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-70 max-w-100"
                                     >
                                         {/* Background pulse for answered */}
                                         {isAnswered && (
@@ -155,26 +155,26 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                         )}
 
                                         <div className="relative z-10">
-                                            <div className="w-12 h-12 bg-black/20 rounded-xl overflow-hidden shrink-0 shadow-inner">
+                                            <div className="w-16 h-16 bg-black/20 rounded-2xl overflow-hidden shrink-0 shadow-inner">
                                                 <Avatar seed={player.avatar} className="w-full h-full" />
                                             </div>
                                             {isAnswered && (
                                                 <motion.div
                                                     initial={{ scale: 0 }}
                                                     animate={{ scale: 1 }}
-                                                    className="absolute -bottom-2 -right-2 bg-success text-black rounded-full p-1 border-2 border-black"
+                                                    className="absolute -bottom-2 -right-2 bg-success text-black rounded-full p-1.5 border-[3px] border-black shadow-lg"
                                                 >
-                                                    <Check size={12} strokeWidth={4} />
+                                                    <Check size={16} strokeWidth={4} />
                                                 </motion.div>
                                             )}
                                         </div>
 
                                         <div className="flex flex-col min-w-0 relative z-10">
-                                            <span className="text-sm md:text-lg font-black truncate text-white uppercase italic tracking-wider leading-none mb-1">
+                                            <span className="text-xl md:text-2xl font-black truncate text-white uppercase italic tracking-wider leading-none mb-1.5">
                                                 {player.name}
                                             </span>
                                             <span
-                                                className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] leading-none transition-colors"
+                                                className="text-xs md:text-sm font-black uppercase tracking-[0.2em] leading-none transition-colors"
                                                 style={{ color: isAnswered ? playerColor : 'rgba(255,255,255,0.3)' }}
                                             >
                                                 {isAnswered ? 'READY' : 'THINKING...'}
