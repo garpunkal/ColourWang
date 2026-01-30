@@ -28,10 +28,10 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
             className="w-full max-w-7xl"
         >
             <div className="text-center mb-10 md:mb-20">
-                <h2 className="mt-24 text-[clamp(3rem,8vw,8rem)] text-display mb-8 md:mb-16 text-center drop-shadow-2xl">
+                <h1 className="mt-24 text-hero text-display mb-8 md:mb-16 text-center drop-shadow-2xl">
                     <span className="block text-xl md:text-4xl mb-2 md:mb-4 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80">the</span>
                     <span className="text-display-gradient pr-10">Results</span>
-                </h2>
+                </h1>
             </div>
 
             <div className="flex flex-col gap-6">
@@ -86,7 +86,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     onClick={() => socket.emit('restart-game', { code, rounds, timer })}
-                    className="btn btn-secondary justify-self-center text-2xl md:text-4xl py-6 md:py-8 px-12 md:px-20 rounded-3xl md:rounded-[2.5rem] opacity-80 hover:opacity-100"
+                    className="btn btn-secondary justify-self-center text-2xl md:text-4xl py-6 md:py-8 px-12 md:px-20 rounded-[3rem] opacity-80 hover:opacity-100"
                 >
                     Restart Game
                 </motion.button>

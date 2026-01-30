@@ -21,7 +21,7 @@ export function PlayerHeader({ name, avatar, score, rank }: Props) {
             <div className="flex items-center gap-4">
                 <Avatar seed={avatar} className="w-14! h-14!" />
                 <div className="flex flex-col min-w-0">
-                    <span className="font-black text-2xl tracking-tight leading-none uppercase italic bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent truncate max-w-45 pr-10">{name}</span>
+                    <span className="font-black text-2xl tracking-tight leading-none uppercase italic bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent truncate max-w-45 pr-4">{name}</span>
 
                 </div>
             </div>

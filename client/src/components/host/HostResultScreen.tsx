@@ -66,9 +66,9 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
             <div className="flex flex-col items-center text-center">
                 {/* Question Section */}
                 <div className="mb-12 max-w-5xl">
-                    <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
+                    <h1 className="text-hero text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
                         {currentQuestion.question}
-                    </h3>
+                    </h1>
                     <div className="flex flex-col items-center gap-10">
                         <div className="flex flex-col items-center">
                             <span className="text-sm md:text-lg font-black text-color-blue tracking-[0.6em] uppercase italic mb-6 opacity-80">Correct Answer</span>

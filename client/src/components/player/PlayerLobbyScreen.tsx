@@ -24,7 +24,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                     className="absolute inset-0 bg-color-blue/20 blur-[60px] rounded-full"
                 />
             </div>
-            <h3 className="text-4xl md:text-5xl font-black mb-3 uppercase tracking-tighter italic z-10 relative">STAND BY</h3>
+            <h1 className="text-4xl md:text-5xl font-black mb-3 uppercase tracking-tighter italic z-10 relative">STAND BY</h1>
             <p className="text-text-muted font-bold text-base md:text-lg mb-2 z-10 relative px-4 leading-relaxed opacity-80 italic mt-8">You're in the game!</p>
 
             {/* Players List */}

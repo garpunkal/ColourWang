@@ -5,6 +5,7 @@ import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
 import { Send } from 'lucide-react';
 import { ColorCard } from '../ColorCard';
+import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
 import { sortColors } from '../../config/gameConfig';
 
@@ -308,7 +309,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             whileTap={{ scale: 0.97 }}
                             onClick={e => submitAnswer(e)}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
-                            className="btn btn-primary w-full py-4 md:py-12 text-xl md:text-3xl transition-all flex items-center justify-center gap-4 md:gap-8 rounded-2xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0"
+                            className="btn btn-primary w-full py-4 md:py-12 text-xl md:text-3xl transition-all flex items-center justify-center gap-4 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0"
                             style={{
                                 boxShadow: `0 20px 40px -10px ${avatarColor}60`,
                                 borderColor: `${avatarColor}80`
@@ -342,9 +343,39 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 )}
                             </div>
                         </div>
-                        <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Awaiting results...</p>
 
-                        {/* Player Intel Removed */}
+                        {/* Player Submission Status */}
+                        <div className="w-full mt-4 border-t border-white/5 pt-6">
+                            <div className="flex items-center justify-between mb-4 px-2">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 italic">
+                                    Room Status
+                                </span>
+                                <span className="text-[10px] font-black font-mono text-white/50">
+                                    {playersAnswered.filter(p => p.hasAnswered).length} / {gameState.players.length}
+                                </span>
+                            </div>
+
+                            <div className="flex flex-wrap justify-center gap-2">
+                                {gameState.players.map(player => {
+                                    const status = playersAnswered.find(p => p.id === player.id);
+                                    const isAnswered = status?.hasAnswered || false;
+                                    const playerColor = getAvatarColor(player.avatar);
+
+                                    return (
+                                        <div
+                                            key={player.id}
+                                            className={`relative w-8 h-8 rounded-lg overflow-hidden transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-30 grayscale scale-90'}`}
+                                            style={{
+                                              
+                                                boxShadow: isAnswered ? `0 0 10px ${playerColor}40` : 'none'
+                                            }}
+                                        >
+                                            <Avatar seed={player.avatar} className="w-full h-full" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
 
                 </motion.div>

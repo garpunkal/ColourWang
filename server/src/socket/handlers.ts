@@ -275,6 +275,27 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('remove-player', ({ code, playerId }) => {
+      const game = games.get(code);
+      if (game && game.status === 'LOBBY') {
+        const playerIndex = game.players.findIndex(p => p.id === playerId);
+        if (playerIndex !== -1) {
+          const removedPlayer = game.players[playerIndex];
+          game.players.splice(playerIndex, 1);
+
+          // Notify the room (updates lobby list)
+          io.to(code).emit('player-joined', game.players);
+
+          // Notify the specific player they were kicked
+          if (removedPlayer.socketId) {
+            io.to(removedPlayer.socketId).emit('game-ended'); // Forces them back to start
+            io.to(removedPlayer.socketId).emit('error', 'You have been removed from the game');
+          }
+          console.log(`Player ${removedPlayer.name} removed from game ${code}`);
+        }
+      }
+    });
+
     socket.on('check-room', (code) => {
       const game = games.get(code.toUpperCase());
       if (game) {

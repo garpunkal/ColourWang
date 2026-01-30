@@ -108,14 +108,14 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </div>
                 </motion.div>
 
-                <motion.h3
+                <motion.h1
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                    className="text-[clamp(3rem,8vw,6rem)] text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
+                    className="text-hero text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
                 >
                     {currentQuestion.question}
-                </motion.h3>
+                </motion.h1>
 
                 {/* Player submission status */}
                 <motion.div
@@ -139,10 +139,10 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                         animate={{
                                             opacity: isAnswered ? 1 : 0.6,
                                             scale: isAnswered ? 1.05 : 1,
-                                            backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.03)',
-                                            borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.05)'
+                                            backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.05)',
+                                            borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.1)'
                                         }}
-                                        className="relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-70 max-w-100"
+                                        className="glass relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-70 max-w-100 shadow-lg"
                                     >
                                         {/* Background pulse for answered */}
                                         {isAnswered && (

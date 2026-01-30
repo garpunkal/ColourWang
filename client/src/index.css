@@ -81,6 +81,14 @@
 
 	font-family: "Outfit", "Inter", system-ui, sans-serif;
 }
+.text-hero {
+	font-size: clamp(3rem, 7vw, 6rem);
+	line-height: 1.1;
+}
+.text-hero-sm {
+	font-size: clamp(2rem, 5vw, 4rem);
+	line-height: 1.2;
+}
 
 body {
 	margin: 0;

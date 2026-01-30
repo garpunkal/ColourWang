@@ -98,16 +98,7 @@
         }
     ],
     "styles": {
-        "available": [
-            "bottts-neutral",
-            "avataaars",
-            "micah",
-            "open-peeps",
-            "personas",
-            "pixel-art",
-            "lorelei",
-            "fun-emoji"
-        ],
+        "available": [],
         "default": "avataaars"
     }
 }

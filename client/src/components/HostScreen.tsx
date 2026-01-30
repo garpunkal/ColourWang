@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
-import confetti from 'canvas-confetti';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { HostSetupScreen } from './host/HostSetupScreen';
 import { HostHeader } from './host/HostHeader';
 import { HostLobbyScreen } from './host/HostLobbyScreen';
@@ -22,14 +21,13 @@ const HostScreen = ({ socket, gameState }: Props) => {
     const [timeLeft, setTimeLeft] = useState(15);
     // const [showCountdown, setShowCountdown] = useState(false);
 
+    const [showExplosion, setShowExplosion] = useState(false);
+
     useEffect(() => {
         if (gameState?.status === 'RESULT') {
-            confetti({
-                particleCount: 150,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#00e5ff', '#9d50bb', '#f83a7b', '#ff9d00']
-            });
+            setTimeout(() => setShowExplosion(true), 0);
+            const timer = setTimeout(() => setShowExplosion(false), 2000);
+            return () => clearTimeout(timer);
         }
     }, [gameState?.status]);
 
@@ -79,6 +77,12 @@ const HostScreen = ({ socket, gameState }: Props) => {
         }
     };
 
+    const removePlayer = (playerId: string) => {
+        if (gameState) {
+            socket.emit('remove-player', { code: gameState.code, playerId });
+        }
+    };
+
     // If no game state, show setup screen
     if (!gameState) {
         return <HostSetupScreen socket={socket} />;
@@ -100,6 +104,52 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     return (
         <div className="flex-1 flex flex-col p-12 overflow-hidden relative w-full h-full">
+            {/* Massive Shockwave Overlay */}
+            <AnimatePresence>
+                {showExplosion && (
+                    <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center overflow-hidden">
+                        {/* 1. The Blind Flash */}
+                        <motion.div
+                            initial={{ opacity: 1 }}
+                            animate={{ opacity: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="absolute inset-0 bg-white mix-blend-overlay"
+                        />
+
+                        {/* 2. Expanding Core Blast */}
+                        <motion.div
+                            initial={{ scale: 0, opacity: 1 }}
+                            animate={{ scale: 4, opacity: 0 }}
+                            transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
+                            className="w-[50vw] h-[50vw] rounded-full bg-radial-gradient from-white via-transparent to-transparent mix-blend-screen"
+                        />
+
+                        {/* 3. High Velocity Shock Rings */}
+                        {[...Array(3)].map((_, i) => (
+                            <motion.div
+                                key={`ring-${i}`}
+                                initial={{ scale: 0.1, opacity: 0, borderWidth: "50px" }}
+                                animate={{ scale: 2 + i, opacity: [0, 1, 0], borderWidth: "0px" }}
+                                transition={{
+                                    duration: 1.5,
+                                    ease: "circOut",
+                                    delay: i * 0.1
+                                }}
+                                className="absolute rounded-full border-color-blue mix-blend-screen box-border w-[60vh] h-[60vh]"
+                                style={{ borderColor: i === 1 ? 'var(--color-pink)' : 'var(--color-blue)' }}
+                            />
+                        ))}
+
+                        {/* 4. Horizontal energy slice */}
+                        <motion.div
+                            initial={{ scaleX: 0, height: "20px", opacity: 1 }}
+                            animate={{ scaleX: 3, height: "0px", opacity: 0 }}
+                            transition={{ duration: 0.5, ease: "circOut" }}
+                            className="absolute w-full bg-white mix-blend-overlay"
+                        />
+                    </div>
+                )}
+            </AnimatePresence>
             {status === 'LOBBY' && (
                 <HostHeader
                     code={code}
@@ -114,6 +164,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                         <HostLobbyScreen
                             players={players}
                             onStartGame={startGame}
+                            onRemovePlayer={removePlayer}
                         />
                     )}
 

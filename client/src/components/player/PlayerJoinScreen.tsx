@@ -133,6 +133,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <input
                                 className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-4xl py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl uppercase"
                                 placeholder="ENTER NAME"
+                                maxLength={10}
                                 value={name}
                                 onChange={e => setName(e.target.value.toUpperCase())}
                             />
