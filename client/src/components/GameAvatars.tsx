@@ -32,7 +32,7 @@ export const Avatar = ({
 
     return (
         <div className="flex flex-col items-center">
-            <div className={`${className} rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-2 border-white/10`}>
+            <div className={`${className} rounded-2xl overflow-hidden flex items-center justify-center shadow-lg `}>
                 <img
                     src={url}
                     alt={`Avatar ${seed}`}

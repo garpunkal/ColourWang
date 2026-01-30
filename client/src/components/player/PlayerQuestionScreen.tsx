@@ -3,10 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Send, Check } from 'lucide-react';
-import { Avatar } from '../GameAvatars';
-
-
+import { Send } from 'lucide-react';
 import { ColorCard } from '../ColorCard';
 import { getAvatarColor } from '../../constants/avatars';
 import { sortColors } from '../../config/gameConfig';
@@ -66,10 +63,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const [disabledIndexes, setDisabledIndexes] = useState<number[]>(me?.disabledIndexes || []);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
-    // Reset when question changes
-    useEffect(() => {
-        setTimeout(() => setPlayersAnswered([]), 0);
-    }, [currentQuestionIndex]);
 
     // Listen for player-answered events
     useEffect(() => {
@@ -192,7 +185,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     setHasAnswered(true);
                     socket.emit('submit-answer', {
                         code: gameState.code,
-                        answers: []
+                        answers: [],
+                        useStealCard: false
                     });
                 }
             }, 0);
@@ -241,7 +235,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                     {stealNotice.name}
                                 </span>
                                 <span className="text-5xl md:text-[8rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] -mt-2 md:-mt-4">
-                                    STOLE {stealNotice.value} CARDS!
+                                    STOLE {stealNotice.value} {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
                                 </span>
                             </div>
                         </motion.div>
@@ -273,12 +267,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 lg:gap-5 w-full max-w-7xl px-2 md:px-6 mx-auto items-center justify-items-center"
                         >
                             {currentQuestion.options.map((color, i) =>
-                                disabledIndexes.includes(i) ? (
-                                    <div
-                                        key={i}
-                                        className="w-full aspect-3/4 max-w-[clamp(120px,18vw,240px)] min-w-25 bg-transparent"
-                                    />
-                                ) : (
+                                disabledIndexes.includes(i) ? null : (
                                     <ColorCard
                                         key={i}
                                         color={color}
@@ -290,8 +279,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                     />
                                 )
                             )}
-                            {/* STEAL card at the end */}
-                            {me && !me.stealCardUsed && stealCardActiveThisQuestion && (
+                            {/* STEAL card at the end - only if there are at least 2 people (including me) who haven't answered yet */}
+                            {me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
                                 <ColorCard
                                     key="steal"
                                     color="#FFD700" // Gold color for STEAL card
@@ -355,45 +344,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         </div>
                         <p className="text-text-muted font-bold text-lg leading-relaxed italic opacity-80">Awaiting results...</p>
 
-                        {/* Player submission status */}
-                        {playersAnswered.length > 0 && (
-                            <div className="flex justify-center gap-2 flex-wrap max-w-lg mt-4">
-                                {gameState.players.map((player) => {
-                                    const playerStatus = playersAnswered.find(p => p.id === player.id);
-                                    const playerColor = getAvatarColor(player.avatar);
-                                    const isAnswered = playerStatus?.hasAnswered || false;
-
-                                    return (
-                                        <motion.div
-                                            key={player.id}
-                                            initial={{ scale: 0.8 }}
-                                            animate={{ scale: 1 }}
-                                            className="flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold transition-all"
-                                            style={{
-                                                backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}10`,
-                                                border: `1px solid ${isAnswered ? playerColor : `${playerColor}30`}`,
-                                                color: playerColor,
-                                                opacity: isAnswered ? 1 : 0.4
-                                            }}
-                                        >
-                                            <div className="w-4 h-4 bg-white/5 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
-                                                <Avatar seed={player.avatar} className="w-full h-full" />
-                                            </div>
-                                            <span className="uppercase tracking-wider">{player.name}</span>
-                                            {isAnswered && (
-                                                <motion.div
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
-                                                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                                                >
-                                                    <Check size={12} strokeWidth={4} />
-                                                </motion.div>
-                                            )}
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
-                        )}
+                        {/* Player Intel Removed */}
                     </div>
 
                 </motion.div>

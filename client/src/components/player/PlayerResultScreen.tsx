@@ -1,4 +1,4 @@
-import type { Player, GameState } from '../../types/game';
+import type { Player, GameState, Question } from '../../types/game';
 import { motion } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
@@ -7,13 +7,30 @@ import { ChevronDown } from 'lucide-react';
 interface Props {
     player: Player;
     gameState: GameState;
+    currentQuestion?: Question;
 }
 
-export function PlayerResultScreen({ player, gameState }: Props) {
-    const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
-    const rawCorrectColors = currentQuestion.correctAnswers || currentQuestion.correctColors;
+export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
+    const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
+
+    // Debug render
+    if (typeof window !== 'undefined') {
+        console.log('[DEBUG] PlayerResultScreen mounting', { playerId: player.id, isCorrect: player.isCorrect, questionId: question?.id });
+    }
+
+    if (!question) {
+        return (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-pulse">
+                <h2 className="text-2xl font-bold text-white mb-2">Loading results...</h2>
+                <p className="text-white/60">Waiting for data...</p>
+            </div>
+        );
+    }
+
+    const rawCorrectColors = question.correctAnswers || question.correctColors || [];
     const correctColors = sortColors(rawCorrectColors);
-    const lastAnswer = sortColors(player.lastAnswer || []);
+    const lastAnswerRaw = player.lastAnswer || [];
+    const lastAnswer = sortColors(lastAnswerRaw);
 
     const themeColor = player.isCorrect ? 'var(--color-success)' : 'var(--color-error)';
 

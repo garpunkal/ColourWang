@@ -80,7 +80,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         >
                             {[...Array(5)].map((_, i) => (
                                 <span key={i} className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white mr-4">
-                                    {stealNotice.name} STOLE {stealNotice.value} CARDS!
+                                    {stealNotice.name} STOLE {stealNotice.value} {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
                                 </span>
                             ))}
                         </motion.div>
@@ -125,7 +125,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 >
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
-                        <div className="flex justify-center gap-5 flex-wrap max-w-5xl">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl px-4">
                             {gameState.players.map((player) => {
                                 const playerStatus = playersAnswered.find(p => p.id === player.id);
                                 const playerColor = getAvatarColor(player.avatar);
@@ -134,31 +134,52 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 return (
                                     <motion.div
                                         key={player.id}
-                                        initial={{ scale: 0.8 }}
-                                        animate={{ scale: isAnswered ? 1.1 : 1 }}
-                                        className="flex items-center gap-4 px-6 py-3 rounded-3xl text-xl font-black transition-all shadow-xl"
-                                        style={{
-                                            backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}05`,
-                                            border: `3px solid ${isAnswered ? playerColor : `${playerColor}20`}`,
-                                            color: playerColor,
-                                            boxShadow: isAnswered ? `0 10px 30px -5px ${playerColor}40` : 'none',
-                                            opacity: isAnswered ? 1 : 0.4
+                                        layout
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{
+                                            opacity: isAnswered ? 1 : 0.6,
+                                            scale: isAnswered ? 1.05 : 1,
+                                            backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.03)',
+                                            borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.05)'
                                         }}
+                                        className="relative flex items-center gap-4 p-3 rounded-2xl border-2 transition-all overflow-hidden"
                                     >
-                                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border-2 border-white/10 overflow-hidden shrink-0 shadow-lg">
-                                            <Avatar seed={player.avatar} className="w-full h-full" />
-                                        </div>
-                                        <span className="uppercase tracking-tight italic">{player.name}</span>
+                                        {/* Background pulse for answered */}
                                         {isAnswered && (
                                             <motion.div
-                                                initial={{ scale: 0, rotate: -45 }}
-                                                animate={{ scale: 1, rotate: 0 }}
-                                                transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                                                className="bg-success rounded-full p-1 shadow-lg"
-                                            >
-                                                <Check size={20} strokeWidth={5} className="text-white" />
-                                            </motion.div>
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: [0, 0.2, 0] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                                className="absolute inset-0 bg-white"
+                                            />
                                         )}
+
+                                        <div className="relative z-10">
+                                            <div className="w-12 h-12 bg-black/20 rounded-xl overflow-hidden shrink-0 shadow-inner">
+                                                <Avatar seed={player.avatar} className="w-full h-full" />
+                                            </div>
+                                            {isAnswered && (
+                                                <motion.div
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
+                                                    className="absolute -bottom-2 -right-2 bg-success text-black rounded-full p-1 border-2 border-black"
+                                                >
+                                                    <Check size={12} strokeWidth={4} />
+                                                </motion.div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col min-w-0 relative z-10">
+                                            <span className="text-sm md:text-lg font-black truncate text-white uppercase italic tracking-wider leading-none mb-1">
+                                                {player.name}
+                                            </span>
+                                            <span
+                                                className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] leading-none transition-colors"
+                                                style={{ color: isAnswered ? playerColor : 'rgba(255,255,255,0.3)' }}
+                                            >
+                                                {isAnswered ? 'READY' : 'THINKING...'}
+                                            </span>
+                                        </div>
                                     </motion.div>
                                 );
                             })}

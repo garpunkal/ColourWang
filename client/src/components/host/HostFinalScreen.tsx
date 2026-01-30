@@ -43,21 +43,39 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                             initial={{ x: -50, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ delay: i * 0.1 }}
-                            className={`glass p-4 md:p-8 rounded-3xl md:rounded-[3rem] flex items-center justify-between border-white/10 flex-col md:flex-row gap-4 md:gap-0 ${i === 0 ? 'bg-linear-to-r from-color-gold/20 to-transparent border-color-gold/30 scale-105 shadow-[0_0_60px_rgba(255,215,0,0.2)]' : ''}`}
-                            style={i === 0 ? {} : { border: `2px solid ${avatarColor}30` }}
+                            className={`glass p-4 md:p-8 rounded-3xl md:rounded-[3rem] flex items-center justify-between border-white/10 flex-col md:flex-row gap-4 md:gap-0 ${i === 0 ? 'scale-105 z-10' : ''}`}
+                            style={{
+                                border: `2px solid ${avatarColor}${i === 0 ? '60' : '30'}`,
+                                background: i === 0 ? `linear-gradient(to right, ${avatarColor}30, transparent)` : undefined,
+                                boxShadow: i === 0 ? `0 0 60px -10px ${avatarColor}50` : undefined
+                            }}
                         >
                             <div className="flex items-center gap-4 md:gap-10 pl-0 md:pl-8 w-full md:w-auto">
-                                <span className={`text-3xl md:text-6xl font-black font-mono w-12 md:w-24 ${i === 0 ? 'text-color-gold' : 'text-text-muted'}`}>#{i + 1}</span>
+                                <span
+                                    className="text-3xl md:text-6xl font-black font-mono w-12 md:w-24"
+                                    style={{ color: i === 0 ? avatarColor : 'rgba(160,160,192,1)' }} // text-muted equivalent
+                                >
+                                    #{i + 1}
+                                </span>
                                 <div
-                                    className={`w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-4xl flex items-center justify-center border-2 md:border-4 border-white/10 shadow-lg ${i === 0 ? 'bg-color-gold text-black' : 'bg-white/5'} overflow-hidden shrink-0`}
-                                    style={i === 0 ? {} : { borderColor: `${avatarColor}40` }}
+                                    className="w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-4xl flex items-center justify-center border-2 md:border-4 border-white/10 shadow-lg overflow-hidden shrink-0"
+                                    style={{
+                                        borderColor: `${avatarColor}40`,
+                                        backgroundColor: i === 0 ? `${avatarColor}40` : 'rgba(255,255,255,0.05)',
+                                        boxShadow: i === 0 ? `0 0 30px ${avatarColor}40` : undefined
+                                    }}
                                 >
                                     <Avatar seed={player.avatar} className="w-full h-full" />
                                 </div>
                                 <span className={`text-2xl md:text-6xl font-black uppercase italic tracking-tight truncate pr-10 ${i === 0 ? 'text-white' : 'text-white/80'}`}>{player.name}</span>
                             </div>
                             <div className="pr-0 md:pr-12">
-                                <span className={`text-4xl md:text-7xl font-mono font-black ${i === 0 ? 'text-color-gold glow-text' : 'text-white/60'}`}>{player.score}</span>
+                                <span
+                                    className={`text-4xl md:text-7xl font-mono font-black ${i === 0 ? 'glow-text' : ''}`}
+                                    style={{ color: i === 0 ? avatarColor : 'rgba(255,255,255,0.6)' }}
+                                >
+                                    {player.score}
+                                </span>
                             </div>
                         </motion.div>
                     );

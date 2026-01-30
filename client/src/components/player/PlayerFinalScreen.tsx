@@ -50,13 +50,13 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                                 textShadow: `0 0 40px ${themeColor}`
                             }}
                         >
-                            {isWinner ? 'LEGEND STATUS' : `RANK #${rank}`}
+                            RANK #{rank}
                         </h3>
                         <div
                             className="mt-3 inline-block px-6 py-1.5 rounded-full text-sm font-black tracking-[0.4em] uppercase opacity-70 border border-white/10"
                             style={{ backgroundColor: `${themeColor}20`, color: 'white' }}
                         >
-                            {isWinner ? 'CHAMPION' : 'PARTICIPANT'}
+                            {isWinner ? 'WINNER' : 'LOSER'}
                         </div>
                     </motion.div>
                 </div>
@@ -126,7 +126,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                     className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-xs group mt-4"
                 >
                     <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
-                        start a new game
+                    start a new game
                 </motion.button>
             </div>
         </motion.div>

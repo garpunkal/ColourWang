@@ -6,12 +6,10 @@ import { GameState } from '../models/gameState';
 import { Player } from '../models/player';
 
 // Available avatar colors
-const AVATAR_IDS = [
-  'midnight-black', 'iron-gray', 'cloud-white', 'crimson-red',
-  'solar-orange', 'golden-yellow', 'matrix-green', 'cyber-blue',
-  'electric-purple', 'neon-pink', 'muddy-brown', 'aqua-teal',
-  'royal-violet', 'hot-magenta', 'lime-punch', 'deep-indigo'
-];
+import avatarsData from '../constants/avatars.json';
+
+// Available avatar colors
+const AVATAR_IDS = avatarsData.colors.map(c => c.id);
 
 function getNextAvailableAvatar(takenAvatars: string[]): string {
   const available = AVATAR_IDS.find(id => !takenAvatars.includes(id));

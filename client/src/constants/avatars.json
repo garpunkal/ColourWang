@@ -1,0 +1,113 @@
+{
+    "colors": [
+        {
+            "id": "midnight-black",
+            "color": "#000000",
+            "name": "MIDNIGHT BLACK",
+            "textColor": "white"
+        },
+        {
+            "id": "iron-gray",
+            "color": "#808080",
+            "name": "IRON GRAY",
+            "textColor": "white"
+        },
+        {
+            "id": "cloud-white",
+            "color": "#ffffff",
+            "name": "CLOUD WHITE",
+            "textColor": "black"
+        },
+        {
+            "id": "crimson-red",
+            "color": "#ff0000",
+            "name": "CRIMSON RED",
+            "textColor": "white"
+        },
+        {
+            "id": "solar-orange",
+            "color": "#ff9d00",
+            "name": "SOLAR ORANGE",
+            "textColor": "black"
+        },
+        {
+            "id": "golden-yellow",
+            "color": "#ffff00",
+            "name": "GOLDEN YELLOW",
+            "textColor": "black"
+        },
+        {
+            "id": "matrix-green",
+            "color": "#00ff00",
+            "name": "MATRIX GREEN",
+            "textColor": "black"
+        },
+        {
+            "id": "cyber-blue",
+            "color": "#00e5ff",
+            "name": "CYBER BLUE",
+            "textColor": "black"
+        },
+        {
+            "id": "electric-purple",
+            "color": "#9d50bb",
+            "name": "ELECTRIC PURPLE",
+            "textColor": "white"
+        },
+        {
+            "id": "neon-pink",
+            "color": "#f83a7b",
+            "name": "NEON PINK",
+            "textColor": "white"
+        },
+        {
+            "id": "muddy-brown",
+            "color": "#8B4513",
+            "name": "MUDDY BROWN",
+            "textColor": "white"
+        },
+        {
+            "id": "aqua-teal",
+            "color": "#00ffcc",
+            "name": "AQUA TEAL",
+            "textColor": "black"
+        },
+        {
+            "id": "royal-violet",
+            "color": "#7b2cbf",
+            "name": "ROYAL VIOLET",
+            "textColor": "white"
+        },
+        {
+            "id": "hot-magenta",
+            "color": "#ff00ff",
+            "name": "HOT MAGENTA",
+            "textColor": "white"
+        },
+        {
+            "id": "lime-punch",
+            "color": "#ccff00",
+            "name": "LIME PUNCH",
+            "textColor": "black"
+        },
+        {
+            "id": "deep-indigo",
+            "color": "#3f51b5",
+            "name": "DEEP INDIGO",
+            "textColor": "white"
+        }
+    ],
+    "styles": {
+        "available": [
+            "bottts-neutral",
+            "avataaars",
+            "micah",
+            "open-peeps",
+            "personas",
+            "pixel-art",
+            "lorelei",
+            "fun-emoji"
+        ],
+        "default": "avataaars"
+    }
+}

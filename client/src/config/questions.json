@@ -1,25 +1,79 @@
 [
     {
-        "question": "What colour is Mickey Mouse's shorts?",
-        "correct": [
+        "question": "What colour is a typical ripe tomato?",
+        "answer": [
             "red"
         ]
     },
     {
-        "question": "What colour is the Burger King logo text?",
-        "correct": [
-            "red"
+        "question": "What colour is the sun usually drawn as?",
+        "answer": [
+            "yellow"
         ]
     },
     {
-        "question": "What colour is the Twitter bird?",
-        "correct": [
+        "question": "What colour is fresh grass?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colour is the ocean on a clear day?",
+        "answer": [
             "blue"
         ]
     },
     {
-        "question": "What are the main colours of the Google logo?",
-        "correct": [
+        "question": "What colour is fresh snow?",
+        "answer": [
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is charcoal?",
+        "answer": [
+            "black"
+        ]
+    },
+    {
+        "question": "What colour is a carrot?",
+        "answer": [
+            "orange"
+        ]
+    },
+    {
+        "question": "What colour is a lemon?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is broccoli?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colour is an eggplant?",
+        "answer": [
+            "purple"
+        ]
+    },
+    {
+        "question": "What colour is cotton candy often?",
+        "answer": [
+            "pink"
+        ]
+    },
+    {
+        "question": "What colour is chocolate?",
+        "answer": [
+            "brown"
+        ]
+    },
+    {
+        "question": "What colours are in the Google logo?",
+        "answer": [
             "blue",
             "red",
             "yellow",
@@ -27,661 +81,484 @@
         ]
     },
     {
-        "question": "What colour is the Facebook logo?",
-        "correct": [
-            "blue"
+        "question": "What colours are in the Coca-Cola logo?",
+        "answer": [
+            "red",
+            "white"
         ]
     },
     {
-        "question": "What colour is the YouTube play button?",
-        "correct": [
-            "red"
+        "question": "What colour are the McDonald's arches?",
+        "answer": [
+            "yellow"
         ]
     },
     {
-        "question": "What colour is the Instagram logo background?",
-        "correct": [
+        "question": "What colours are in the FedEx logo arrow?",
+        "answer": [
             "purple",
-            "pink",
-            "yellow",
             "orange"
         ]
     },
     {
-        "question": "What colour is the LinkedIn logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main Apple logo?",
-        "correct": [
-            "gray"
-        ]
-    },
-    {
-        "question": "What colour is the Amazon smile?",
-        "correct": [
+        "question": "What colours are in the Amazon smile arrow?",
+        "answer": [
+            "black",
             "orange"
         ]
     },
     {
         "question": "What colour is the Spotify logo?",
-        "correct": [
+        "answer": [
             "green"
         ]
     },
     {
-        "question": "What colour is the WhatsApp logo background?",
-        "correct": [
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the Snapchat ghost?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the McDonald's logo?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the Starbucks mermaid?",
-        "correct": [
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the Coca-Cola logo text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the background of the Coca-Cola logo?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Pepsi logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Microsoft Windows logo?",
-        "correct": [
-            "blue",
-            "red",
-            "yellow",
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Shell logo?",
-        "correct": [
-            "yellow"
-        ]
-    },
-    {
-        "question": "What colour is the Ferrari logo horse?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the Ferrari logo background?",
-        "correct": [
-            "yellow"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the IKEA logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main text of the IKEA logo?",
-        "correct": [
-            "yellow"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the FedEx logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main text of the FedEx logo?",
-        "correct": [
-            "purple",
-            "orange"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Adidas logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour are the Adidas stripes?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Nike logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the Nike swoosh?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Disney logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main text of the Disney logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the PlayStation logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the PlayStation logo?",
-        "correct": [
-            "red",
-            "yellow",
-            "blue",
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Xbox logo?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the Xbox X?",
-        "correct": [
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Netflix logo?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the Netflix N?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the YouTube logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Google Chrome logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Google Chrome logo?",
-        "correct": [
-            "red",
-            "yellow",
-            "green",
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Firefox logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Firefox logo?",
-        "correct": [
-            "orange",
-            "yellow",
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the WhatsApp logo?",
-        "correct": [
-            "green"
-        ]
-    },
-    {
-        "question": "What colour is the WhatsApp phone icon?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Instagram logo?",
-        "correct": [
+        "question": "What colours are in the classic Instagram logo?",
+        "answer": [
             "purple",
             "pink",
-            "yellow",
-            "orange"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the TikTok logo?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the TikTok note?",
-        "correct": [
-            "blue",
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Pinterest logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the Pinterest P?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Uber logo?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the Uber text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the PayPal logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the PayPal logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Visa logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Visa logo?",
-        "correct": [
-            "blue",
+            "orange",
             "yellow"
         ]
     },
     {
-        "question": "What colour is the main background of the MasterCard logo?",
-        "correct": [
-            "white"
+        "question": "What colour is the Facebook logo?",
+        "answer": [
+            "blue"
         ]
     },
     {
-        "question": "What are the main colours of the MasterCard logo?",
-        "correct": [
-            "red",
+        "question": "What colour is SpongeBob SquarePants?",
+        "answer": [
             "yellow"
         ]
     },
     {
-        "question": "What colour is the main background of the American Express logo?",
-        "correct": [
-            "blue"
+        "question": "What colours does Mickey Mouse usually wear?",
+        "answer": [
+            "black",
+            "red"
         ]
     },
     {
-        "question": "What colour is the main text of the American Express logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the BBC logo?",
-        "correct": [
-            "black"
-        ]
-    },
-    {
-        "question": "What colour is the BBC text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the National Geographic logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the National Geographic rectangle?",
-        "correct": [
+        "question": "What colour is Homer Simpson?",
+        "answer": [
             "yellow"
         ]
     },
     {
-        "question": "What colour is the main background of the NASA logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the NASA text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Red Bull logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Red Bull logo?",
-        "correct": [
-            "red",
-            "yellow",
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Lego logo?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the Lego text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Barbie logo?",
-        "correct": [
-            "pink"
-        ]
-    },
-    {
-        "question": "What colour is the Barbie text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Hello Kitty logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is Hello Kitty's bow?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Pokémon logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the Pokémon text?",
-        "correct": [
-            "yellow"
-        ]
-    },
-    {
-        "question": "What colour is Pikachu's cheeks?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is Pikachu's body?",
-        "correct": [
-            "yellow"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Mario logo?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is Mario's hat?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is Luigi's hat?",
-        "correct": [
+        "question": "What colour is Shrek?",
+        "answer": [
             "green"
         ]
     },
     {
-        "question": "What colour is Princess Peach's dress?",
-        "correct": [
-            "pink"
-        ]
-    },
-    {
-        "question": "What colour is Bowser's shell?",
-        "correct": [
-            "green"
+        "question": "What colours is Pikachu?",
+        "answer": [
+            "yellow",
+            "black",
+            "red"
         ]
     },
     {
         "question": "What colour is Sonic the Hedgehog?",
-        "correct": [
+        "answer": [
             "blue"
         ]
     },
     {
-        "question": "What colour is Tails' fur?",
-        "correct": [
+        "question": "What colour is Garfield the cat?",
+        "answer": [
             "orange"
         ]
     },
     {
-        "question": "What colour is Knuckles' fur?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Minecraft logo?",
-        "correct": [
-            "gray"
-        ]
-    },
-    {
-        "question": "What colour is Steve's shirt in Minecraft?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Fortnite logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Roblox logo?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the Roblox text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Among Us logo?",
-        "correct": [
+        "question": "What colours is Scooby-Doo?",
+        "answer": [
+            "brown",
             "black"
         ]
     },
     {
-        "question": "What colour is the Among Us crewmate?",
-        "correct": [
-            "red"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Pokémon Go logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Animal Crossing logo?",
-        "correct": [
+        "question": "What colour is Kermit the Frog?",
+        "answer": [
             "green"
         ]
     },
     {
-        "question": "What colour is the Animal Crossing text?",
-        "correct": [
-            "yellow"
+        "question": "What colour is Elmo?",
+        "answer": [
+            "red"
         ]
     },
     {
-        "question": "What colour is the main background of the Fortnite Battle Bus?",
-        "correct": [
+        "question": "What colour is Cookie Monster?",
+        "answer": [
             "blue"
         ]
     },
     {
-        "question": "What colour is the main background of the Overwatch logo?",
-        "correct": [
-            "white"
+        "question": "What colours are in Superman's logo?",
+        "answer": [
+            "red",
+            "yellow",
+            "blue"
         ]
     },
     {
-        "question": "What are the main colours of the Overwatch logo?",
-        "correct": [
-            "orange",
-            "gray"
+        "question": "What colours are in Spider-Man's suit?",
+        "answer": [
+            "red",
+            "blue"
         ]
     },
     {
-        "question": "What colour is the main background of the League of Legends logo?",
-        "correct": [
+        "question": "What colours are in Captain America's shield?",
+        "answer": [
+            "red",
+            "white",
+            "blue"
+        ]
+    },
+    {
+        "question": "What colours is Iron Man's classic suit?",
+        "answer": [
+            "red",
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is Batman's suit?",
+        "answer": [
             "black"
         ]
     },
     {
-        "question": "What colour is the League of Legends text?",
-        "correct": [
+        "question": "What colour is the Hulk?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colour is Wonder Woman's top?",
+        "answer": [
+            "red",
+            "blue"
+        ]
+    },
+    {
+        "question": "What colour is a school bus?",
+        "answer": [
             "yellow"
         ]
     },
     {
-        "question": "What colour is the main background of the FIFA logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the FIFA text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the NBA logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the NBA player silhouette?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the NFL logo?",
-        "correct": [
-            "blue"
-        ]
-    },
-    {
-        "question": "What colour is the NFL text?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What colour is the main background of the Olympic rings logo?",
-        "correct": [
-            "white"
-        ]
-    },
-    {
-        "question": "What are the main colours of the Olympic rings?",
-        "correct": [
-            "blue",
-            "yellow",
-            "black",
-            "green",
+        "question": "What colour is a fire truck usually?",
+        "answer": [
             "red"
+        ]
+    },
+    {
+        "question": "What colour is a typical taxi in many cities?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is a basketball?",
+        "answer": [
+            "orange"
+        ]
+    },
+    {
+        "question": "What colours is a soccer ball usually?",
+        "answer": [
+            "black",
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is a stop sign?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is Santa's suit?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is Rudolph's nose?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a jack-o-lantern?",
+        "answer": [
+            "orange"
+        ]
+    },
+    {
+        "question": "What colour is a rose often?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a daisy?",
+        "answer": [
+            "white",
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is a traffic light go signal?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colour is a yield sign?",
+        "answer": [
+            "red",
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is a penguin?",
+        "answer": [
+            "black",
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is a zebra?",
+        "answer": [
+            "black",
+            "white"
+        ]
+    },
+    {
+        "question": "What colours is a tiger?",
+        "answer": [
+            "orange",
+            "black"
+        ]
+    },
+    {
+        "question": "What colour is a ladybug?",
+        "answer": [
+            "red",
+            "black"
+        ]
+    },
+    {
+        "question": "What colours is a bee?",
+        "answer": [
+            "yellow",
+            "black"
+        ]
+    },
+    {
+        "question": "What colour is a clownfish?",
+        "answer": [
+            "orange",
+            "white",
+            "black"
+        ]
+    },
+    {
+        "question": "What colour is Winnie the Pooh?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is the Michelin Man?",
+        "answer": [
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is Hello Kitty?",
+        "answer": [
+            "white",
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a Minion's body?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is Darth Vader?",
+        "answer": [
+            "black"
+        ]
+    },
+    {
+        "question": "What colour is a Ferrari often?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a classic VW Beetle sometimes?",
+        "answer": [
+            "blue"
+        ]
+    },
+    {
+        "question": "What colour is butter?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is cheese often?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is a blueberry?",
+        "answer": [
+            "blue"
+        ]
+    },
+    {
+        "question": "What colour is a strawberry?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a pumpkin?",
+        "answer": [
+            "orange"
+        ]
+    },
+    {
+        "question": "What colour is coffee?",
+        "answer": [
+            "brown"
+        ]
+    },
+    {
+        "question": "What colour is a polar bear?",
+        "answer": [
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is a giraffe?",
+        "answer": [
+            "yellow",
+            "brown"
+        ]
+    },
+    {
+        "question": "What colour is a flamingo?",
+        "answer": [
+            "pink"
+        ]
+    },
+    {
+        "question": "What colour is Big Bird?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is Oscar the Grouch?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colours are in the Pepsi logo?",
+        "answer": [
+            "red",
+            "blue",
+            "white"
+        ]
+    },
+    {
+        "question": "What colour is the Netflix logo?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is the Target logo bullseye?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colours are in the Shell logo?",
+        "answer": [
+            "red",
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is a typical apple?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a banana peel?",
+        "answer": [
+            "yellow"
+        ]
+    },
+    {
+        "question": "What colour is a lime?",
+        "answer": [
+            "green"
+        ]
+    },
+    {
+        "question": "What colour is a cherry?",
+        "answer": [
+            "red"
+        ]
+    },
+    {
+        "question": "What colour is a grape often?",
+        "answer": [
+            "purple"
+        ]
+    },
+    {
+        "question": "What colour is a French flag?",
+        "answer": [
+            "blue",
+            "white",
+            "red"
+        ]
+    },
+    {
+        "question": "What colours are in the Japanese flag?",
+        "answer": [
+            "white",
+            "red"
+        ]
+    },
+    {
+        "question": "What colours are in the Brazilian flag?",
+        "answer": [
+            "green",
+            "yellow",
+            "blue"
         ]
     }
 ]

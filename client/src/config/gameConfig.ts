@@ -6,9 +6,9 @@ interface QuestionData {
   id?: string;
   question: string;
   options?: string[];
-  correct?: string[];
+  answer?: string[]; // Renamed from correct
+  correct?: string[]; // Legacy support
   correctColors?: string[];
-
 }
 
 export const PALETTE = paletteRaw.palette;
@@ -44,7 +44,9 @@ export async function fetchQuestions(): Promise<Question[]> {
       // Use palette for options universally
       const paletteOptions = paletteData.map(p => p.hex);
       const questions: Question[] = questionsData.map((q: QuestionData, index: number) => {
-        const correctColors = (q.correct || q.correctColors || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
+        // Prioritize 'answer', fallback to 'correct' or 'correctColors'
+        const rawAnswers = q.answer || q.correct || q.correctColors || [];
+        const correctColors = rawAnswers.map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
         return {
           id: q.id || `q-${index}`,
           question: q.question,
