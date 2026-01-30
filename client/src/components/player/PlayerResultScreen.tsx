@@ -39,7 +39,7 @@ export function PlayerResultScreen({ player, gameState }: Props) {
                                 <ColorCard
                                     key={i}
                                     color={color}
-                                    size="small"
+                                    size="mini"
                                     index={i}
                                     disabled={true}
                                 />
@@ -57,7 +57,7 @@ export function PlayerResultScreen({ player, gameState }: Props) {
                                 <ColorCard
                                     key={i}
                                     color={color}
-                                    size="small"
+                                    size="mini"
                                     index={i}
                                     isCorrect={false}
                                     disabled={true}

@@ -141,7 +141,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                                             <ColorCard
                                                 key={i}
                                                 color={color}
-                                                size="small"
+                                                size="mini"
                                                 index={i}
                                                 disabled={true}
                                             />

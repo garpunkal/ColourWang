@@ -9,7 +9,7 @@ interface ColorCardProps {
     isCorrect?: boolean;
     onClick?: () => void;
     disabled?: boolean;
-    size?: 'small' | 'medium' | 'large' | 'responsive';
+    size?: 'mini' | 'small' | 'medium' | 'large' | 'responsive';
     index?: number;
     isStealCard?: boolean;
     stealValue?: number;
@@ -27,6 +27,7 @@ export const ColorCard = memo(function ColorCard({
     stealValue
 }: ColorCardProps) {
     const sizeStyles = {
+        mini: { width: '3.5rem', height: '4.5rem' },
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
         large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' },
@@ -37,6 +38,7 @@ export const ColorCard = memo(function ColorCard({
 
     // Responsive font size for color name
     const getFontSize = () => {
+        if (size === 'mini') return '0.5rem';
         if (size === 'responsive') return 'clamp(0.7rem, 1vw, 0.85rem)'; // smaller max for large screens
         if (size === 'small') return '0.85rem';
         if (size === 'large') return '1.3rem';
@@ -147,7 +149,7 @@ export const ColorCard = memo(function ColorCard({
 
 
                     ) : (
-                        <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full">
+                        <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full ${size === 'mini' ? 'opacity-0' : ''}`}>
                             <span
                                 className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
                                 style={{
@@ -173,8 +175,8 @@ export const ColorCard = memo(function ColorCard({
                             animate={{ scale: 1, rotate: 0 }}
                             className="absolute inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center"
                         >
-                            <div className="w-20 h-20 rounded-full bg- text-black flex items-center justify-center shadow-2xl border-4 border-black/10">
-                                <Check size={48} strokeWidth={6} />
+                            <div className={`rounded-full bg-white text-black flex items-center justify-center shadow-2xl border-4 border-black/10 ${size === 'mini' ? 'w-8 h-8' : 'w-20 h-20'}`}>
+                                <Check size={size === 'mini' ? 20 : 48} strokeWidth={6} />
                             </div>
                         </motion.div>
                     )}
