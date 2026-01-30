@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 import { getAvatarColor } from '../../constants/avatars';
+import { Avatar } from '../GameAvatars';
 
 
 interface Props {
@@ -115,10 +116,9 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                                     {/* Player header */}
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <div
-                                                className="w-3 h-3 rounded-full"
-                                                style={{ backgroundColor: playerColor }}
-                                            />
+                                            <div className="w-6 h-6 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                                                <Avatar seed={player.avatar} className="w-full h-full" />
+                                            </div>
                                             <span className="font-black text-sm" style={{ color: playerColor }}>
                                                 {player.name}
                                             </span>

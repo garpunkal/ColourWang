@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
 import { Check } from 'lucide-react';
 import { getAvatarColor } from '../../constants/avatars';
+import { Avatar } from '../GameAvatars';
 
 interface Props {
     socket: Socket;
@@ -67,7 +68,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                    className="text-[clamp(3rem,8vw,8rem)] text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
+                    className="text-[clamp(3rem,8vw,6rem)] text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
                 >
                     {currentQuestion.question}
                 </motion.h3>
@@ -106,10 +107,9 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             opacity: isAnswered ? 1 : 0.5
                                         }}
                                     >
-                                        <div
-                                            className="w-3 h-3 rounded-full"
-                                            style={{ backgroundColor: playerColor }}
-                                        />
+                                        <div className="w-5 h-5 bg-white/5 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                                            <Avatar seed={player.avatar} className="w-full h-full" />
+                                        </div>
                                         <span className="uppercase tracking-wider">{player.name}</span>
                                         {isAnswered && (
                                             <motion.div
