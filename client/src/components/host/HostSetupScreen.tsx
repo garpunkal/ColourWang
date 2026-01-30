@@ -218,11 +218,12 @@ export function HostSetupScreen({ socket }: Props) {
                                     </span>
 
                                     {musicEnabled && bgmList.length > 0 && (
-                                        <div className="mt-1 md:mt-2 w-full pr-2" onClick={(e) => e.stopPropagation()}>
+                                        <div className="mt-3 md:mt-4 w-full flex items-center bg-black/40 rounded-2xl" style={{ margin: '12px 0' }} onClick={(e) => e.stopPropagation()}>
                                             <select
                                                 value={selectedBgm}
                                                 onChange={(e) => setSelectedBgm(e.target.value)}
-                                                className="w-full bg-black/80 text-white text-xs md:text-sm p-3 rounded-xl border border-white/20 outline-none hover:bg-black transition-colors cursor-pointer"
+                                                className="w-full bg-black/80 text-white text-xs md:text-sm px-4 py-2 md:px-5 md:py-3 rounded-xl border border-white/20 outline-none hover:bg-black transition-colors cursor-pointer shadow-sm focus:ring-2 focus:ring-cyan-400 appearance-none"
+                                                style={{ backgroundPosition: 'right 1rem center' }}
                                             >
                                                 {bgmList.map(bgm => (
                                                     <option key={bgm} value={bgm}>{bgm.replace('.mp3', '')}</option>

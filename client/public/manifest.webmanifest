@@ -1,0 +1,21 @@
+{
+  "name": "ColourWang",
+  "short_name": "ColourWang",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22223b",
+  "description": "A color-based game.",
+  "icons": [
+    {
+      "src": "/public/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

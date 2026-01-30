@@ -85,13 +85,14 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
 
                 {/* Comparison Section */}
                 <div className="w-full space-y-6">
-                    {/* Player Selection */}
+                    {/* Player Selection - fly in from left */}
                     <motion.div
-                        initial={{ x: -20, opacity: 0 }}
+                        initial={{ x: '-100vw', opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ type: 'spring', stiffness: 180, damping: 12, delay: 0.4 }}
                         className="glass-panel p-6 rounded-4xl border-white/10 relative overflow-hidden"
-                    >                        <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }} />
+                    >
+                        <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }} />
                         <span className="text-[14px] uppercase tracking-[0.4em] text-white/40 font-black italic block mb-4">Your answer</span>
                         <div className="flex gap-2 justify-center flex-wrap">
                             {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
@@ -115,11 +116,11 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         </div>
                     </div>
 
-                    {/* Correct Answer */}
+                    {/* Correct Answer - fly in from right */}
                     <motion.div
-                        initial={{ x: 20, opacity: 0 }}
+                        initial={{ x: '100vw', opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ type: 'spring', stiffness: 180, damping: 12, delay: 0.6 }}
                         className="glass-panel p-6 rounded-4xl border-success/20 bg-success/5 relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 w-1 h-full bg-success" />

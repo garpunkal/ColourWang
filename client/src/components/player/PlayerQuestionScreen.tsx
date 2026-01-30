@@ -258,7 +258,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 )}
             </AnimatePresence>
 
-            <div className="text-center px-4 shrink-0">
+            <div className="text-center px-4 shrink-0 py-2">
                 <div className="flex items-center justify-center gap-2 mb-1 md:mb-8 glass-panel px-4 py-1 rounded-2xl mx-auto w-fit">
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Question</span>
