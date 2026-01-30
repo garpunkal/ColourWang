@@ -105,7 +105,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                             {countdown}
                         </span>
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-white/60 -mt-2 animate-pulse">
-                            Get Ready!
+                           Shuffling
                         </span>
                     </motion.div>
                 ) : (

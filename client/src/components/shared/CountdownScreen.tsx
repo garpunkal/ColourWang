@@ -36,7 +36,7 @@ export function CountdownScreen() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-2xl md:text-5xl font-black text-white/60 mt-8 uppercase tracking-[0.5em] animate-pulse"
             >
-                Get Ready
+               Shuffling
             </motion.h2>
         </div>
     );
