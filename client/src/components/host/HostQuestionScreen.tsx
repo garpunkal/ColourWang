@@ -43,7 +43,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             transition={{ duration: 0.3 }}
             className="w-full max-w-360 text-center"
         >
-            <div className="flex flex-col items-center justify-center min-h-[60vh] gap-16">
+            <div className="flex flex-col items-center justify-center gap-6">
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -51,13 +51,13 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-4xl md:rounded-[3rem] flex items-center gap-6 md:gap-12"
                 >
                     <div className="flex flex-col items-start leading-none">
-                        <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue/60 mb-2 italic">Question</span>
-                        <span className="text-6xl font-black italic tracking-tighter">0{currentQuestionIndex + 1}</span>
+                        <span className="text-lg font-black uppercase tracking-[0.5em] text-color-blue/60 mb-1 italic">Question</span>
+                        <span className="text-4xl font-black italic tracking-tighter">0{currentQuestionIndex + 1}</span>
                     </div>
-                    <div className="w-0.5 h-20 bg-white/10 mx-4" />
+                    <div className="w-0.5 h-16 bg-white/10 mx-3" />
                     <div className="flex flex-col items-end leading-none">
-                        <span className="text-xl font-black uppercase tracking-[0.5em] text-color-blue mb-2 italic">Remaining</span>
-                        <span className={`text-6xl font-black tabular-nums italic tracking-tighter ${timeLeft <= 5 ? 'text-error' : 'text-white'}`}>
+                        <span className="text-lg font-black uppercase tracking-[0.5em] text-color-blue mb-1 italic">Remaining</span>
+                        <span className={`text-4xl font-black tabular-nums italic tracking-tighter ${timeLeft <= 5 ? 'text-error' : 'text-white'}`}>
                             {timeLeft}s
                         </span>
                     </div>
@@ -79,8 +79,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     className="mt-12 flex flex-col items-center gap-6"
                 >
                     {/* Progress indicator */}
-                    <div className="glass-panel px-8 py-4 rounded-3xl">
-                        <span className="text-2xl font-black uppercase tracking-widest text-color-blue">
+                    <div className="glass-panel px-6 py-2 rounded-2xl">
+                        <span className="text-xl font-black uppercase tracking-widest text-color-blue">
                             {answeredCount} / {totalPlayers} Submitted
                         </span>
                     </div>
@@ -98,7 +98,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                         key={player.id}
                                         initial={{ scale: 0.8 }}
                                         animate={{ scale: 1 }}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all"
+                                        className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all"
                                         style={{
                                             backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}10`,
                                             border: `2px solid ${isAnswered ? playerColor : `${playerColor}30`}`,
