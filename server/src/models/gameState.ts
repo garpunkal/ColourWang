@@ -7,5 +7,9 @@ export interface GameState {
     currentQuestionIndex: number;
     questions: any[];
     timerDuration?: number;
+    resultDuration?: number;
+    lobbyDuration?: number;
+    jokersEnabled?: boolean;
+    soundEnabled?: boolean;
     hostSocketId?: string;
 }

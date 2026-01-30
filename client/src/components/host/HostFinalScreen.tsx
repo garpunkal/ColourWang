@@ -1,10 +1,11 @@
 import type { Socket } from 'socket.io-client';
 import type { Player } from '../../types/game';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
+import { useSparkle } from '../../hooks/useSparkle';
 
 // Optimized celebratory elements
 const GOLDEN_PARTICLES = [...Array(10)].map((_, i) => ({
@@ -66,14 +67,30 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
         }
     };
 
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { spawnConfetti } = useSparkle(canvasRef);
+
+    useEffect(() => {
+        if (showSupernova) {
+            spawnConfetti(window.innerWidth / 2, window.innerHeight * 0.3);
+            // Keep spawning for a bit
+            const interval = setInterval(() => {
+                spawnConfetti(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.5);
+            }, 300);
+            return () => clearInterval(interval);
+        }
+    }, [showSupernova, spawnConfetti]);
+
     return (
         <motion.div
             key="final"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="w-full max-w-5xl mx-auto py-8 px-4 md:py-12 md:px-6"
+            className="w-full max-w-5xl mx-auto py-8 px-4 md:py-12 md:px-6 relative"
         >
+            <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-50" />
+
             {/* High-Performance Supernova Effect */}
             <AnimatePresence>
                 {showSupernova && (
@@ -140,8 +157,8 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                             key={player.id}
                             variants={itemVariants}
                             className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
-                                    ? 'bg-linear-to-r from-white/10 to-transparent border-yellow-500/50'
-                                    : 'border-white/5 hover:border-white/10'
+                                ? 'bg-linear-to-r from-white/10 to-transparent border-yellow-500/50'
+                                : 'border-white/5 hover:border-white/10'
                                 }`}
                             style={{
                                 boxShadow: isWinner ? `0 20px 60px -15px ${avatarColor}30` : 'none'

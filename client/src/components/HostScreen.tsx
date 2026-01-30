@@ -24,7 +24,7 @@ interface Props {
 
 
 const HostScreen = ({ socket, gameState }: Props) => {
-    const [timeLeft, setTimeLeft] = useState(15);
+    const [timeLeft, setTimeLeft] = useState(30);
     // const [showCountdown, setShowCountdown] = useState(false);
 
     const [showExplosion, setShowExplosion] = useState(false);
@@ -295,6 +295,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                             players={players}
                             onStartGame={startGame}
                             onRemovePlayer={removePlayer}
+                            lobbyDuration={gameState.lobbyDuration}
                         />
                     ) : status === 'COUNTDOWN' ? (
                         <CountdownScreen key="countdown" />
@@ -323,7 +324,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                             socket={socket}
                             players={players}
                             rounds={questions.length}
-                            timer={gameState.timerDuration || 15}
+                            timer={gameState.timerDuration || 30}
                             code={code}
                         />
                     ) : null}

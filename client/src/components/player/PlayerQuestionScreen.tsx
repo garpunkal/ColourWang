@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { audioManager } from '../../utils/audioManager';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Send } from 'lucide-react';
 import { ColorCard } from '../ColorCard';
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
@@ -62,7 +62,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         }
     }, [gameState, selectedColors, socket, useStealCard, me]);
     const [disabledIndexes, setDisabledIndexes] = useState<number[]>(me?.disabledIndexes || []);
-    const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
+    const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 30);
 
 
     // Listen for player-answered events
@@ -86,11 +86,11 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         const timer = setTimeout(() => {
             setSelectedColors([]);
             setHasAnswered(false);
-            setTimeLeft(gameState.timerDuration || 15);
+            setTimeLeft(gameState.timerDuration || 30);
             setDisabledIndexes(me?.disabledIndexes || []);
         }, 0);
         return () => clearTimeout(timer);
-    }, [currentQuestionIndex, gameState.timerDuration, gameState.players, me?.disabledIndexes]);
+    }, [currentQuestionIndex]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -99,7 +99,10 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     clearInterval(interval);
                     return 0;
                 }
-                return prev - 1;
+                const next = prev - 1;
+                // Play tick sound for last 5 seconds (5, 4, 3, 2, 1)
+                if (next <= 5 && next > 0) audioManager.playTick();
+                return next;
             });
         }, 1000);
         return () => clearInterval(interval);
@@ -118,6 +121,10 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
     const toggleColor = (color: string) => {
         if (hasAnswered) return;
+
+        // Play select sound
+        audioManager.playSelect();
+
         setSelectedColors(prev =>
             prev.includes(color)
                 ? prev.filter(c => c !== color)
@@ -132,6 +139,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             // Only show notice and apply disabled cards if I haven't answered yet
             if (!hasAnswered) {
                 if (stealer && playerId !== myId) {
+                    audioManager.playSteal();
                     setStealNotice({ name: stealer.name, value });
                     setTimeout(() => setStealNotice(null), 3500); // Clear after 3.5s
                 }
@@ -251,15 +259,25 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             </AnimatePresence>
 
             <div className="text-center px-4 shrink-0">
-                <div
-                    className="inline-block px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-[0.4em] mb-3 md:mb-6 italic shadow-xl"
-                    style={{
-                        backgroundColor: `${avatarColor}20`,
-                        border: `1px solid ${avatarColor}40`,
-                        color: avatarColor
-                    }}
-                >
-                    Question {currentQuestionIndex + 1}
+                <div className="flex items-center justify-center gap-4 mb-4 md:mb-8 glass-panel px-6 py-3 rounded-2xl mx-auto w-fit">
+                    <div className="flex flex-col items-center leading-none">
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Question</span>
+                        <span className="text-2xl font-black italic tracking-tighter text-white">
+                            {currentQuestionIndex + 1}
+                        </span>
+                    </div>
+
+                    <div className="w-px h-8 bg-white/10" />
+
+                    <div className="flex flex-col items-center leading-none">
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Time Left</span>
+                        <div className="flex items-baseline gap-1">
+                            <span className={`text-2xl font-black font-mono tabular-nums italic tracking-tighter transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-color-blue'}`}>
+                                {timeLeft}
+                            </span>
+                            <span className={`text-[10px] font-black opacity-40 transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : ''}`}>S</span>
+                        </div>
+                    </div>
                 </div>
                 <h3 className="text-2xl md:text-5xl text-display text-display-gradient px-2">{currentQuestion.question}</h3>
             </div>
@@ -286,8 +304,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                     />
                                 )
                             )}
-                            {/* STEAL card at the end - only if there are at least 2 people (including me) who haven't answered yet */}
-                            {me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
+                            {gameState.jokersEnabled !== false && me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
                                 <ColorCard
                                     key="steal"
                                     color="#FFD700" // Gold color for STEAL card

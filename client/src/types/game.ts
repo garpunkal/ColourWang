@@ -29,4 +29,9 @@ export interface GameState {
     currentQuestionIndex: number;
     questions: Question[];
     timerDuration?: number;
+    // Game Settings
+    jokersEnabled?: boolean;
+    resultDuration?: number;
+    lobbyDuration?: number;
+    soundEnabled?: boolean;
 }

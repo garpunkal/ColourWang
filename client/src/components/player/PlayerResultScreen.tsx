@@ -2,7 +2,8 @@ import type { Player, GameState, Question } from '../../types/game';
 import { motion } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Timer } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface Props {
     player: Player;
@@ -12,6 +13,14 @@ interface Props {
 
 export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
     const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
+    const [timeLeft, setTimeLeft] = useState(30);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeLeft((prev) => (prev <= 0 ? 0 : prev - 1));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     // Debug render
     if (typeof window !== 'undefined') {
@@ -127,16 +136,25 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                             ))}
                         </div>
                     </motion.div>
-                </div>
+                </div>           
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.4 }}
-                    transition={{ delay: 1.2 }}
-                    className="text-[10px] font-bold uppercase tracking-[0.5em] italic pb-10"
+                {/* Next Question Timer Badge */}
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="relative z-20 bg-white/5 border border-white/10 px-8 py-4 rounded-3xl flex items-center gap-4 backdrop-blur-md shadow-2xl mb-10"
                 >
-                    Awaiting next round...
-                </motion.p>
+                    <Timer size={24} className={timeLeft <= 5 ? 'text-error animate-pulse' : 'text-color-blue'} />
+                    <div className="flex flex-col items-start leading-none">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Next Round In</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className={`text-4xl font-black font-mono tabular-nums ${timeLeft <= 5 ? 'text-error' : 'text-white'}`}>
+                                {timeLeft}
+                            </span>
+                            <span className="text-xs font-black opacity-30">SEC</span>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </motion.div>
     );

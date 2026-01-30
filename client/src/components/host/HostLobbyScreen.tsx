@@ -9,9 +9,10 @@ interface Props {
     players: Player[];
     onStartGame: () => void;
     onRemovePlayer: (playerId: string) => void;
+    lobbyDuration?: number;
 }
 
-export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props) {
+export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDuration }: Props) {
     const [autoStartTimer, setAutoStartTimer] = useState<number | null>(null);
 
     // Initialize or reset timer based on player count
@@ -20,7 +21,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props)
             if (players.length >= 2) {
                 // Only start if not already running
                 if (autoStartTimer === null) {
-                    setAutoStartTimer(30);
+                    setAutoStartTimer(lobbyDuration || 30);
                 }
             } else {
                 // Reset if drops below 2

@@ -763,13 +763,6 @@
         ]
     },
     {
-        "question": "What colour is Draco Malfoy's hair?",
-        "answer": [
-            "yellow",
-            "white"
-        ]
-    },
-    {
         "question": "What colour is Voldemort's robe?",
         "answer": [
             "black"
@@ -1395,12 +1388,6 @@
         "answer": [
             "grey",
             "brown"
-        ]
-    },
-    {
-        "question": "What colour is Cardiff Castle?",
-        "answer": [
-            "grey"
         ]
     },
     {
@@ -2272,12 +2259,6 @@
         ]
     },
     {
-        "question": "What colour is the M&M's Red character?",
-        "answer": [
-            "red"
-        ]
-    },
-    {
         "question": "What colour is the M&M's Yellow character?",
         "answer": [
             "yellow"
@@ -2603,12 +2584,6 @@
         "question": "What colour is My Melody?",
         "answer": [
             "pink"
-        ]
-    },
-    {
-        "question": "What colour is Cinnamoroll?",
-        "answer": [
-            "white"
         ]
     },
     {
@@ -3101,12 +3076,6 @@
         ]
     },
     {
-        "question": "What colour is Shere Khan?",
-        "answer": [
-            "orange"
-        ]
-    },
-    {
         "question": "What colour is Kaa the snake?",
         "answer": [
             "green",
@@ -3187,12 +3156,6 @@
             "orange",
             "purple",
             "pink"
-        ]
-    },
-    {
-        "question": "What colour is Russell's sash in Up?",
-        "answer": [
-            "orange"
         ]
     },
     {
@@ -3393,12 +3356,6 @@
         ]
     },
     {
-        "question": "What colour is Chef Skinner's toque?",
-        "answer": [
-            "white"
-        ]
-    },
-    {
         "question": "What colour is the Beast in Beauty and the Beast?",
         "answer": [
             "brown",
@@ -3519,12 +3476,6 @@
         "question": "What colour is Merryweather from Sleeping Beauty?",
         "answer": [
             "blue"
-        ]
-    },
-    {
-        "question": "What colour is Prince Phillip's cape?",
-        "answer": [
-            "red"
         ]
     },
     {
@@ -3696,12 +3647,6 @@
         "answer": [
             "brown",
             "orange"
-        ]
-    },
-    {
-        "question": "What colour is the Great Prince of the Forest?",
-        "answer": [
-            "brown"
         ]
     },
     {

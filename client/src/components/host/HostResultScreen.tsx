@@ -3,11 +3,12 @@ import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
 import { Play, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 import { Avatar } from '../GameAvatars';
+import { useSparkle } from '../../hooks/useSparkle';
 
 interface Props {
     socket: Socket;
@@ -20,7 +21,7 @@ interface Props {
 
 export function HostResultScreen({ socket, gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
-    const [timeLeft, setTimeLeft] = useState(30);
+    const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
     const [autoProceed, setAutoProceed] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
@@ -31,7 +32,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
 
     useEffect(() => {
         setTimeout(() => {
-            setTimeLeft(30);
+            setTimeLeft(gameState.resultDuration || 30);
             setAutoProceed(false);
         }, 0);
         const interval = setInterval(() => {
@@ -68,6 +69,19 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
         }
     };
 
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { spawnSparkles } = useSparkle(canvasRef);
+
+    useEffect(() => {
+        // Trigger sparkles for each correct answer revealed
+        correctColors.forEach((_, i) => {
+            setTimeout(() => {
+                const x = window.innerWidth / 2 + (i - (correctColors.length - 1) / 2) * 100;
+                spawnSparkles(x, window.innerHeight * 0.4, '#FFD700', 30);
+            }, 200 + (i * 100));
+        });
+    }, [correctColors, spawnSparkles]);
+
     return (
         <motion.div
             key="result"
@@ -75,6 +89,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
             className="w-full max-w-7xl relative"
         >
+            <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-50" />
             {/* Background Atmosphere */}
             <div
                 className="absolute left-1/2 top-40 -translate-x-1/2 w-full h-150 blur-[160px] opacity-20 -z-10 bg-color-blue"

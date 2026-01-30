@@ -84,12 +84,12 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                     className="absolute top-4 left-4 flex items-center gap-2"
                                 >
                                     <div className="w-3 h-3 rounded-full bg-black animate-ping" />
-                                    <span className="text-[10px] md:text-xs font-black text-black tracking-[0.5em]">LIVE</span>
+                                    <span className="text-[10px] md:text-xs font-black text-white tracking-[0.5em]">LIVE</span>
                                 </motion.div>
-                                <span className="text-4xl md:text-6xl font-black text-black italic uppercase tracking-tighter leading-none text-center">
+                                <span className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-none text-center">
                                     BREAKING
                                 </span>
-                                <span className="text-xl md:text-2xl font-black text-black/80 uppercase tracking-widest -mt-1 text-center">
+                                <span className="text-xl md:text-2xl font-black text-white/80 uppercase tracking-widest -mt-1 text-center">
                                     STEAL ALERT
                                 </span>
                             </div>

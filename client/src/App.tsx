@@ -10,6 +10,7 @@ import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocketConnection } from './hooks/useSocketConnection';
 import { Monitor, Smartphone, WifiOff } from 'lucide-react';
+import { audioManager } from './utils/audioManager';
 
 
 // Socket.IO connection - uses relative path to leverage Vite proxy
@@ -59,6 +60,20 @@ function App() {
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, [role]);
+
+  // Attempt to play BGM when user enters the game (Host/Player)
+  useEffect(() => {
+    if (role !== 'NONE') {
+      audioManager.playBGM();
+    }
+  }, [role]);
+
+  // Handle global sound setting from GameState
+  useEffect(() => {
+    if (gameState?.soundEnabled !== undefined) {
+      audioManager.setMute(!gameState.soundEnabled);
+    }
+  }, [gameState?.soundEnabled]);
 
   return (
     <motion.div

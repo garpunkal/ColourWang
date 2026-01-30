@@ -52,7 +52,7 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds, timer } = payload;
+      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
       // Use server-side shuffling for maximum variety
@@ -65,6 +65,9 @@ export function registerSocketHandlers(io: Server) {
         currentQuestionIndex: 0,
         questions: finalQuestions,
         timerDuration: timer,
+        resultDuration,
+        jokersEnabled,
+        soundEnabled,
         hostSocketId: socket.id
       };
       games.set(code, game);

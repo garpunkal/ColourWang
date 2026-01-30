@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { audioManager } from '../../utils/audioManager';
 
 export function CountdownScreen() {
     const [count, setCount] = useState(5);
 
     useEffect(() => {
+        // Play tick immediately on mount/start
+        if (count > 0) audioManager.playTick();
+
         const timer = setInterval(() => {
-            setCount(prev => prev > 0 ? prev - 1 : 0);
+            setCount(prev => {
+                const next = prev - 1;
+                if (next > 0) audioManager.playTick();
+                return next > 0 ? next : 0;
+            });
         }, 1000);
         return () => clearInterval(timer);
     }, []);

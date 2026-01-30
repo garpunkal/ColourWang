@@ -18,7 +18,18 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
 
-    const rank = sortedPlayers.findIndex(p => p.id === player.id) + 1;
+    // Calculate ranks properly handling ties
+    const ranks = useMemo(() => {
+        return sortedPlayers.map((p, _, array) => {
+            // Calculate rank by finding the first index (1-based) with the same score
+            // Since the array is sorted by score descending, the first person with this score determines the rank for all ties
+            const rank = array.findIndex(prev => prev.score === p.score) + 1;
+            return { ...p, rank };
+        });
+    }, [sortedPlayers]);
+
+    const myRankData = ranks.find(p => p.id === player.id);
+    const rank = myRankData?.rank || 999;
     const isWinner = rank === 1;
 
     const themeColor = isWinner ? 'var(--color-yellow)' : 'var(--color-blue)';
@@ -82,7 +93,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                     </div>
 
                     <div className="space-y-3">
-                        {sortedPlayers.map((p, index) => {
+                        {ranks.map((p, index) => {
                             const pColor = getAvatarColor(p.avatar);
                             const isMe = p.id === player.id;
 
@@ -95,8 +106,8 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                                     className={`flex items-center justify-between p-3 rounded-3xl transition-all ${isMe ? 'bg-white/15 ring-2 ring-white/20 scale-105' : 'bg-white/5'}`}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <span className={`text-sm font-black italic w-6 ${index === 0 ? 'text-color-yellow' : 'opacity-40'}`}>
-                                            {index + 1}
+                                        <span className={`text-sm font-black italic w-6 ${p.rank === 1 ? 'text-color-yellow' : 'opacity-40'}`}>
+                                            {p.rank}
                                         </span>
                                         <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0">
                                             <Avatar seed={p.avatar} style={p.avatarStyle} className="w-full h-full" />
