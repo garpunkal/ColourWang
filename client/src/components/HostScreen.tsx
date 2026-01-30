@@ -18,8 +18,6 @@ interface Props {
 
 
 const HostScreen = ({ socket, gameState }: Props) => {
-    const [rounds] = useState(4);
-    const [timer] = useState(15);
     const [timeLeft, setTimeLeft] = useState(15);
     // const [showCountdown, setShowCountdown] = useState(false);
 
@@ -85,15 +83,16 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     const currentQuestion = questions[currentQuestionIndex];
-    console.log('HostScreen: rendering question:', currentQuestion);
 
     return (
         <div className="flex-1 flex flex-col p-12 overflow-hidden relative w-full h-full">
-            <HostHeader
-                code={code}
-                playerCount={players.length}
-                compact={true}
-            />
+            {status === 'LOBBY' && (
+                <HostHeader
+                    code={code}
+                    playerCount={players.length}
+                    compact={true}
+                />
+            )}
 
             <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
                 <AnimatePresence mode="wait">
@@ -129,8 +128,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
                         <HostFinalScreen
                             socket={socket}
                             players={players}
-                            rounds={rounds}
-                            timer={timer}
+                            rounds={questions.length}
+                            timer={gameState.timerDuration || 15}
                             code={code}
                         />
                     )}

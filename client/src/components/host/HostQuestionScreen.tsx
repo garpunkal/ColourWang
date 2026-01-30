@@ -1,5 +1,6 @@
 import type { Question, GameState } from '../../types/game';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
 import { Check } from 'lucide-react';
@@ -16,6 +17,8 @@ interface Props {
 
 export function HostQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex, timeLeft }: Props) {
     const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>([]);
+    const [stealNotice, setStealNotice] = useState<string | null>(null);
+
 
     // Listen for player-answered events
     useEffect(() => {
@@ -28,9 +31,25 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
         };
     }, [socket]);
 
+    // Listen for steal events
+    useEffect(() => {
+        const handler = ({ playerId }: { playerId: string }) => {
+            const stealer = gameState.players.find(p => p.id === playerId);
+            if (stealer) {
+                setStealNotice(stealer.name);
+                setTimeout(() => setStealNotice(null), 3000);
+            }
+        };
+        socket.on('steal-card-used', handler);
+        return () => {
+            socket.off('steal-card-used', handler);
+        };
+    }, [socket, gameState.players]);
+
+
     // Reset when question changes
     useEffect(() => {
-        setPlayersAnswered([]);
+        setTimeout(() => setPlayersAnswered([]), 0);
     }, [currentQuestionIndex]);
 
     return (
@@ -40,8 +59,26 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             animate={{ scale: 1, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-360 text-center"
+            className="w-full max-w-360 text-center relative"
         >
+            <AnimatePresence>
+                {stealNotice && (
+                    <motion.div
+                        initial={{ x: '100vw', opacity: 0 }}
+                        animate={{ x: '-100vw', opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 3, ease: "linear" }}
+                        className="fixed inset-0 pointer-events-none z-100 flex items-center whitespace-nowrap"
+                    >
+                        <div className="bg-linear-to-r from-transparent via-color-pink to-transparent py-12 md:py-20 w-full">
+                            <span className="text-8xl md:text-[15rem] font-black italic uppercase tracking-tighter text-white drop-shadow-[0_0_100px_rgba(248,58,123,0.9)]">
+                                {stealNotice} HAS STOLEN! • {stealNotice} HAS STOLEN! • {stealNotice} HAS STOLEN!
+                            </span>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="flex flex-col items-center justify-center gap-6">
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}

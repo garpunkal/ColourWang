@@ -88,10 +88,10 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setGameState(null)}
-                    className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-sm group"
+                    className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-xs group"
                 >
                     <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
-                    Initialize Reset
+                    disconnect and start a new game...
                 </motion.button>
             </div>
         </motion.div>

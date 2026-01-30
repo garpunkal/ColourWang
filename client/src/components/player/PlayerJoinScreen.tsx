@@ -45,8 +45,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     // Clear error when user types
     useEffect(() => {
-        if (error) setError(null);
-    }, [name, code]);
+        if (error) {
+            setTimeout(() => setError(null), 0);
+        }
+    }, [name, code, error]);
 
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
@@ -86,7 +88,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         if (code.length === 4) {
             socket.emit('check-room', code);
         } else {
-            setDynamicTakenAvatars([]);
+            setTimeout(() => setDynamicTakenAvatars([]), 0);
         }
     }, [code, socket]);
 
@@ -94,7 +96,9 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     useEffect(() => {
         if (dynamicTakenAvatars.includes(avatar)) {
             const available = AVATAR_IDS.find(id => !dynamicTakenAvatars.includes(id));
-            if (available) setAvatar(available);
+            if (available) {
+                setTimeout(() => setAvatar(available), 0);
+            }
         }
     }, [dynamicTakenAvatars, avatar]);
 

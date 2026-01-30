@@ -12,7 +12,7 @@ export function useSocketConnection(socket: Socket) {
         socket.on('disconnect', handleDisconnect);
 
         // Initial check
-        setIsConnected(socket.connected);
+        setTimeout(() => setIsConnected(socket.connected), 0);
 
         return () => {
             socket.off('connect', handleConnect);

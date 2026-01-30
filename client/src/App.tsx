@@ -44,7 +44,7 @@ function App() {
     if (gameState && role === 'NONE') {
       const myId = localStorage.getItem('cw_playerId');
       if (myId && gameState.players.some(p => p.id === myId)) {
-        setRole('PLAYER');
+        setTimeout(() => setRole('PLAYER'), 0);
       }
     }
   }, [gameState, role]);

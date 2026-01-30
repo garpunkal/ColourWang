@@ -2,7 +2,8 @@
 import type { Question, GameState } from '../../types/game';
 import { Play, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 import { getAvatarColor } from '../../constants/avatars';
@@ -23,9 +24,15 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
     const [autoProceed, setAutoProceed] = useState(false);
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
+    const sortedPlayers = useMemo(() => {
+        return [...gameState.players].sort((a, b) => b.score - a.score);
+    }, [gameState.players]);
+
     useEffect(() => {
-        setTimeLeft(10);
-        setAutoProceed(false);
+        setTimeout(() => {
+            setTimeLeft(10);
+            setAutoProceed(false);
+        }, 0);
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
@@ -74,20 +81,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                     ))}
                 </div>
 
-                {/* {currentQuestion.image && (
-                    <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        className="relative group"
-                    >
-                        <div className="absolute -inset-4 bg-linear-to-r from-color-blue to-color-pink blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-                        <img
-                            src={currentQuestion.image}
-                            alt="Reference"
-                            className="relative object-contain p-2 md:p-4 w-75"
-                        />
-                    </motion.div>
-                )} */}
+
             </div>
 
             {/* All Players Results */}
@@ -96,62 +90,60 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                     PLAYER RESULTS
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-w-6xl mx-auto">
-                    {gameState.players
-                        .sort((a, b) => b.score - a.score)
-                        .map((player) => {
-                            const playerColor = getAvatarColor(player.avatar);
-                            const playerAnswer = sortColors(player.lastAnswer || []);
+                    {sortedPlayers.map((player) => {
+                        const playerColor = getAvatarColor(player.avatar);
+                        const playerAnswer = sortColors(player.lastAnswer || []);
 
-                            return (
-                                <motion.div
-                                    key={player.id}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="glass p-2 rounded-2xl space-y-2"
-                                    style={{
-                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
-                                        backgroundColor: player.isCorrect ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)'
-                                    }}
-                                >
-                                    {/* Player header */}
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
-                                                <Avatar seed={player.avatar} className="w-full h-full" />
-                                            </div>
-                                            <span className="font-black text-sm" style={{ color: playerColor }}>
-                                                {player.name}
-                                            </span>
+                        return (
+                            <motion.div
+                                key={player.id}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="glass p-2 rounded-2xl space-y-2"
+                                style={{
+                                    borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
+                                    backgroundColor: player.isCorrect ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)'
+                                }}
+                            >
+                                {/* Player header */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                                            <Avatar seed={player.avatar} className="w-full h-full" />
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className={`text-xs font-black ${player.isCorrect ? 'text-success' : 'text-error'}`}>
-                                                {player.isCorrect ? '+10' : '+0'}
-                                            </span>
-                                            {player.isCorrect ? (
-                                                <Check size={14} className="text-success" strokeWidth={3} />
-                                            ) : (
-                                                <X size={14} className="text-error" strokeWidth={3} />
-                                            )}
-                                        </div>
+                                        <span className="font-black text-sm" style={{ color: playerColor }}>
+                                            {player.name}
+                                        </span>
                                     </div>
-
-                                    {/* Player's answer */}
-                                    <div className="flex gap-1 justify-center flex-wrap">
-                                        {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
-                                            <ColorCard
-                                                key={i}
-                                                color={color}
-                                                size="mini"
-                                                index={i}
-                                                disabled={true}
-                                            />
-                                        )) : (
-                                            <span className="text-xs text-white/30 italic">No answer</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className={`text-xs font-black ${player.isCorrect ? 'text-success' : 'text-error'}`}>
+                                            {player.isCorrect ? '+10' : '+0'}
+                                        </span>
+                                        {player.isCorrect ? (
+                                            <Check size={14} className="text-success" strokeWidth={3} />
+                                        ) : (
+                                            <X size={14} className="text-error" strokeWidth={3} />
                                         )}
                                     </div>
-                                </motion.div>
-                            );
-                        })}
+                                </div>
+
+                                {/* Player's answer */}
+                                <div className="flex gap-1 justify-center flex-wrap">
+                                    {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
+                                        <ColorCard
+                                            key={i}
+                                            color={color}
+                                            size="mini"
+                                            index={i}
+                                            disabled={true}
+                                        />
+                                    )) : (
+                                        <span className="text-xs text-white/30 italic">No answer</span>
+                                    )}
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
 

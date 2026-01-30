@@ -20,7 +20,7 @@ export function HostSetupScreen({ socket }: Props) {
     const isConnected = useSocketConnection(socket);
 
     useEffect(() => {
-        setLoadingQuestions(true);
+        setTimeout(() => setLoadingQuestions(true), 0);
         fetchQuestions()
             .then((data) => {
                 setAllQuestions(data);

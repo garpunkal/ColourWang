@@ -1,6 +1,8 @@
 import type { Socket } from 'socket.io-client';
 import type { Player } from '../../types/game';
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
+
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
 
@@ -14,6 +16,10 @@ interface Props {
 }
 
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
+    const sortedPlayers = useMemo(() => {
+        return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
+    }, [players]);
+
     return (
         <motion.div
             key="final"
@@ -29,7 +35,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
             </div>
 
             <div className="flex flex-col gap-6">
-                {players.sort((a, b) => b.score - a.score).slice(0, 5).map((player, i) => {
+                {sortedPlayers.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     return (
                         <motion.div

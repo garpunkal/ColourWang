@@ -7,7 +7,7 @@ interface QuestionData {
   options: string[];
   correct: string[];
   correctColors?: string[];
-  image?: string;
+
 }
 
 interface QuestionsJSON {
@@ -57,7 +57,7 @@ export async function fetchQuestions(): Promise<Question[]> {
           question: q.question,
           options: sortColors(paletteOptions),
           correctColors: sortColors(correctColors),
-          image: q.image
+
         };
       });
 

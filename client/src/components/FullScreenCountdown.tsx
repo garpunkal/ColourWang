@@ -13,8 +13,10 @@ export const FullScreenCountdown = ({ start, onComplete }: CountdownProps) => {
   useEffect(() => {
     let interval: ReturnType<typeof setTimeout> | null = null;
     if (start) {
-      setCount(5);
-      setRunning(true);
+      const timer1 = setTimeout(() => {
+        setCount(5);
+        setRunning(true);
+      }, 0);
       let current = 5;
       interval = setInterval(() => {
         current -= 1;
@@ -26,13 +28,17 @@ export const FullScreenCountdown = ({ start, onComplete }: CountdownProps) => {
           if (onComplete) onComplete();
         }
       }, 1000);
+      return () => {
+        clearTimeout(timer1);
+        if (interval) clearInterval(interval);
+      };
     } else {
-      setRunning(false);
-      setCount(null);
+      const timer2 = setTimeout(() => {
+        setRunning(false);
+        setCount(null);
+      }, 0);
+      return () => clearTimeout(timer2);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
   }, [start, onComplete]);
 
   if (!running && count === null) return null;
