@@ -30,11 +30,11 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     useEffect(() => {
         if (gameState?.status === 'RESULT') {
-            setTimeout(() => setShowExplosion(true), 0);
+            queueMicrotask(() => setShowExplosion(true));
             const timer = setTimeout(() => setShowExplosion(false), 2500);
             return () => clearTimeout(timer);
         }
-    }, [gameState?.status]);
+    }, [gameState?.status, gameState?.currentQuestionIndex]);
 
     // Shake animation variants
     const shakeVariants = {
@@ -129,61 +129,121 @@ const HostScreen = ({ socket, gameState }: Props) => {
                         className="fixed pointer-events-none flex items-center justify-center overflow-hidden"
                         style={{ top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 9999, willChange: 'transform, opacity' }}
                     >
-                        {/* 1. Peak Flash - Blinding additive light */}
+                        {/* 1. Initial Blinding Flash */}
                         <motion.div
                             initial={{ opacity: 1 }}
                             animate={{ opacity: 0 }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                            className="absolute inset-0 bg-white z-101"
-                            style={{ mixBlendMode: 'overlay' }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="absolute inset-0 bg-white"
                         />
 
-                        {/* 2. Chromatic Ripple Rings */}
+                        {/* 2. Golden/Pink Gradient Wash */}
+                        <motion.div
+                            initial={{ opacity: 0.8 }}
+                            animate={{ opacity: 0 }}
+                            transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
+                            className="absolute inset-0"
+                            style={{ background: 'radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,51,102,0.4) 50%, transparent 70%)' }}
+                        />
+
+                        {/* 3. Rotating Light Beams */}
+                        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+                            <motion.div
+                                key={`beam-${i}`}
+                                initial={{ opacity: 0.8, scaleY: 0 }}
+                                animate={{ opacity: 0, scaleY: 1 }}
+                                transition={{ duration: 1.2, ease: "easeOut", delay: i * 0.03 }}
+                                className="absolute h-[200vh] w-8"
+                                style={{
+                                    background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.8), transparent)',
+                                    transform: `rotate(${angle}deg)`,
+                                    transformOrigin: 'center center'
+                                }}
+                            />
+                        ))}
+
+                        {/* 4. Expanding Starburst */}
+                        <motion.div
+                            initial={{ scale: 0, rotate: 0, opacity: 1 }}
+                            animate={{ scale: 15, rotate: 180, opacity: 0 }}
+                            transition={{ duration: 1.8, ease: [0.2, 0, 0, 1] }}
+                            className="absolute"
+                            style={{
+                                width: '100px',
+                                height: '100px',
+                                background: 'conic-gradient(from 0deg, transparent, white 10%, transparent 20%, transparent, white 30%, transparent 40%,transparent, white 50%, transparent 60%, transparent, white 70%, transparent 80%, transparent, white 90%, transparent)',
+                                willChange: 'transform, opacity'
+                            }}
+                        />
+
+                        {/* 5. Multiple Expanding Rings */}
                         {[
-                            { color: '#ff3366', delay: 0, scale: 8 },
-                            { color: '#00e5ff', delay: 0.1, scale: 7 },
-                            { color: '#ffffff', delay: 0.2, scale: 6 }
+                            { color: '#FFD700', delay: 0, scale: 12, duration: 1.2 },
+                            { color: '#ff3366', delay: 0.1, scale: 10, duration: 1.1 },
+                            { color: '#00e5ff', delay: 0.2, scale: 8, duration: 1 },
+                            { color: '#ffffff', delay: 0.3, scale: 6, duration: 0.9 }
                         ].map((ring, i) => (
                             <motion.div
-                                key={`ripple-${i}`}
-                                initial={{ scale: 0, opacity: 0.9, borderWidth: "100px" }}
+                                key={`ring-${i}`}
+                                initial={{ scale: 0, opacity: 1, borderWidth: "80px" }}
                                 animate={{ scale: ring.scale, opacity: 0, borderWidth: "0px" }}
-                                transition={{ duration: 1, ease: "easeOut", delay: ring.delay }}
-                                className="absolute rounded-full box-border w-[30vh] h-[30vh]"
+                                transition={{ duration: ring.duration, ease: "easeOut", delay: ring.delay }}
+                                className="absolute rounded-full box-border"
                                 style={{
+                                    width: '20vh',
+                                    height: '20vh',
                                     borderColor: ring.color,
+                                    borderStyle: 'solid',
                                     willChange: 'transform, opacity'
                                 }}
                             />
                         ))}
 
-                        {/* 3. High Velocity Pressure Wave */}
+                        {/* 6. Central Glowing Orb */}
                         <motion.div
-                            initial={{ scaleX: 0, height: "150px", opacity: 1 }}
-                            animate={{ scaleX: 4, height: "0px", opacity: 0 }}
-                            transition={{ duration: 0.4, ease: "circOut" }}
-                            className="absolute w-full bg-white"
-                            style={{ mixBlendMode: 'overlay' }}
+                            initial={{ scale: 0, opacity: 1 }}
+                            animate={{ scale: 3, opacity: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="absolute w-32 h-32 rounded-full"
+                            style={{
+                                background: 'radial-gradient(circle, white 0%, rgba(255,215,0,0.8) 30%, rgba(255,51,102,0.6) 60%, transparent 70%)',
+                                boxShadow: '0 0 100px 50px rgba(255,215,0,0.5)',
+                                willChange: 'transform, opacity'
+                            }}
                         />
 
-                        {/* 4. Particle Ejection (Sparks) */}
+                        {/* 7. Outward Energy Sparks - more dramatic */}
                         {SPARK_DATA.map((p, i) => (
                             <motion.div
                                 key={`spark-${i}`}
                                 initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
                                 animate={{
-                                    x: Math.cos(p.angle) * p.velocity,
-                                    y: Math.sin(p.angle) * p.velocity,
+                                    x: Math.cos(p.angle) * p.velocity * 1.5,
+                                    y: Math.sin(p.angle) * p.velocity * 1.5,
                                     scale: 0,
                                     opacity: 0
                                 }}
-                                transition={{ duration: 0.6, ease: "easeOut" }}
-                                className="absolute w-3 h-3 rounded-full bg-white"
+                                transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                                className="absolute w-4 h-4 rounded-full"
                                 style={{
+                                    background: i % 2 === 0 ? '#FFD700' : '#ff3366',
+                                    boxShadow: `0 0 20px ${i % 2 === 0 ? '#FFD700' : '#ff3366'}`,
                                     willChange: 'transform, opacity'
                                 }}
                             />
                         ))}
+
+                        {/* 8. Screen Edge Glow Pulse */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.6, 0] }}
+                            transition={{ duration: 1, ease: "easeInOut" }}
+                            className="absolute inset-0"
+                            style={{
+                                boxShadow: 'inset 0 0 200px 100px rgba(255,215,0,0.3)',
+                                willChange: 'opacity'
+                            }}
+                        />
                     </div>
                 )}
             </AnimatePresence>

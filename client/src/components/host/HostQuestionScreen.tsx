@@ -62,7 +62,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             animate={{ scale: 1, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-360 text-center relative"
+            className="w-full max-w-360 text-center relative min-h-screen"
         >
             <AnimatePresence>
                 {stealNotice && (
@@ -80,7 +80,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         >
                             {[...Array(5)].map((_, i) => (
                                 <span key={i} className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white mr-4">
-                                    {stealNotice.name} STOLE {stealNotice.value} {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
+                                    {stealNotice.name} STOLE  {stealNotice.value}  {stealNotice.value === 1 ? ' CARD' : ' CARDS'}!
                                 </span>
                             ))}
                         </motion.div>
@@ -88,7 +88,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 )}
             </AnimatePresence>
 
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col">
                 {/* Meta info - fixed at top */}
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}
@@ -110,7 +110,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 </motion.div>
 
                 {/* Question text - centered in remaining space */}
-                <div className="flex-1 flex items-center justify-center -mt-32">
+                <div className="flex-1 flex items-center justify-center mt-24 mb-24">
                     <motion.h1
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -125,7 +125,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="pb-8 flex flex-col items-center gap-6"
+                    className=" pb-4 flex flex-col items-center gap-6"
                 >
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
@@ -204,7 +204,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                         {/* Player info */}
                                         <div className="flex flex-col min-w-0 relative z-10 flex-1">
                                             <span
-                                                className="text-xl md:text-2xl font-black truncate uppercase italic tracking-wider leading-none mb-2"
+                                                className="text-xl md:text-2xl font-black truncate uppercase italic tracking-wider leading-none mb-2 text-left"
                                                 style={{
                                                     color: isAnswered ? 'white' : 'rgba(255,255,255,0.5)',
                                                     textShadow: isAnswered ? `0 0 20px ${playerColor}60` : 'none'
