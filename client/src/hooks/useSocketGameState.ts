@@ -7,6 +7,7 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
   useEffect(() => {
     socket.on('game-created', (state: GameState) => {
       setGameState(state);
+      localStorage.setItem('cw_hostCode', state.code);
     });
 
     socket.on('joined-game', (data: GameState | { game: GameState, playerId: string }) => {
@@ -34,7 +35,12 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
     const handleRejoin = () => {
       const savedId = localStorage.getItem('cw_playerId');
       const savedCode = localStorage.getItem('cw_gameCode');
-      if (savedId && savedCode) {
+      const hostCode = localStorage.getItem('cw_hostCode');
+
+      if (hostCode) {
+        console.log('Attempting to rejoin as Host...', { hostCode });
+        socket.emit('rejoin-game', { code: hostCode, isHost: true });
+      } else if (savedId && savedCode) {
         console.log('Attempting to rejoin session...', { savedCode, savedId });
         socket.emit('rejoin-game', { code: savedCode, playerId: savedId });
       }

@@ -31,6 +31,20 @@ const HostScreen = ({ socket, gameState }: Props) => {
     const lastResultKey = useRef<string | null>(null);
 
     useEffect(() => {
+        const handleUnload = () => {
+            if (gameState?.code) {
+                // Synchronously signal to workers/server we are leaving
+                socket.emit('kill-game', gameState.code);
+            }
+            // Clear host session so it doesn't auto-rejoin if they just wanted to quit
+            localStorage.removeItem('cw_hostCode');
+        };
+
+        window.addEventListener('beforeunload', handleUnload);
+        return () => window.removeEventListener('beforeunload', handleUnload);
+    }, [gameState?.code, socket]);
+
+    useEffect(() => {
         // Create a unique key for this result state
         const resultKey = `${gameState?.status}-${gameState?.currentQuestionIndex}`;
 

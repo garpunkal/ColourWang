@@ -120,9 +120,17 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('rejoin-game', ({ code, playerId }) => {
+    socket.on('rejoin-game', ({ code, playerId, isHost }) => {
       const game = games.get(code.toUpperCase());
       if (game) {
+        if (isHost) {
+          game.hostSocketId = socket.id;
+          socket.join(code.toUpperCase());
+          socket.emit('joined-game', game);
+          console.log(`Host rejoined game ${code}`);
+          return;
+        }
+
         const player = game.players.find(p => p.id === playerId);
         if (player) {
           player.socketId = socket.id;
@@ -282,6 +290,15 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('kill-game', (code) => {
+      const game = games.get(code.toUpperCase());
+      if (game) {
+        console.log(`Explicit kill-game request for ${code}`);
+        io.to(code.toUpperCase()).emit('game-ended');
+        games.delete(code.toUpperCase());
+      }
+    });
+
     socket.on('remove-player', ({ code, playerId }) => {
       const game = games.get(code);
       if (game && game.status === 'LOBBY') {
@@ -330,19 +347,24 @@ export function registerSocketHandlers(io: Server) {
 
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
+
+      const gamesToEnd: string[] = [];
+
       games.forEach((game, code) => {
         if (game.hostSocketId === socket.id) {
-          console.log(`Host disconnected for game ${code}. Ending game.`);
-          io.to(code).emit('game-ended');
-          games.delete(code);
+          gamesToEnd.push(code);
         } else if (game.status === 'LOBBY') {
-          const index = game.players.findIndex(p => p.socketId === socket.id);
-          if (index !== -1) {
-            // We do NOT remove the player to allow reconnection.
-            // If you truly want to remove them, we might need a timeout or explicit 'leave' action.
-            console.log(`Player ${game.players[index].name} disconnected but kept in lobby for reconnection.`);
+          const player = game.players?.find(p => p.socketId === socket.id);
+          if (player) {
+            console.log(`Player ${player.name} disconnected from lobby ${code}.`);
           }
         }
+      });
+
+      gamesToEnd.forEach(code => {
+        console.log(`Host disconnected for game ${code}. Ending game immediately.`);
+        io.to(code).emit('game-ended');
+        games.delete(code);
       });
     });
   });

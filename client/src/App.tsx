@@ -9,7 +9,7 @@ import PlayerScreen from './components/PlayerScreen.tsx';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocketConnection } from './hooks/useSocketConnection';
-import { Monitor, Smartphone } from 'lucide-react';
+import { Monitor, Smartphone, WifiOff } from 'lucide-react';
 
 
 // Socket.IO connection - uses relative path to leverage Vite proxy
@@ -42,11 +42,16 @@ function App() {
   useEffect(() => {
     if (gameState && role === 'NONE') {
       const myId = localStorage.getItem('cw_playerId');
-      if (myId && gameState.players.some(p => p.id === myId)) {
+      const hostCode = localStorage.getItem('cw_hostCode');
+
+      if (hostCode && gameState.code === hostCode) {
+        setTimeout(() => setRole('HOST'), 0);
+      } else if (myId && gameState.players.some(p => p.id === myId)) {
         setTimeout(() => setRole('PLAYER'), 0);
       }
     }
   }, [gameState, role]);
+
 
   // Clear URL params if we are on landing page to prevent "remembering" old codes
   useEffect(() => {
@@ -61,16 +66,6 @@ function App() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: 'easeOut' }}
     >
-      {/* Connection Status */}
-      {!isConnected && (
-        <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="fixed top-0 left-0 right-0 z-100 bg-error/90 backdrop-blur-md text-white py-2 px-4 text-center font-bold text-sm tracking-widest uppercase"
-        >
-          Connecting to Wang Network... (Server Offline)
-        </motion.div>
-      )}
 
       <AnimatedBackground />
 
@@ -208,6 +203,100 @@ function App() {
             ) : (
               <PlayerScreen socket={socket} gameState={gameState} setGameState={setGameState} />
             )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Connection Status Overlay - Moved to bottom for maximum z-visibility */}
+      <AnimatePresence>
+        {!isConnected && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#050510]/95 backdrop-blur-3xl text-white p-8 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 30, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              className="flex flex-col items-center gap-12 max-w-3xl"
+            >
+              {/* Animated Connection Icon */}
+              <div className="relative group">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.4, 1],
+                    opacity: [0.1, 0.3, 0.1],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  className="absolute -inset-10 bg-error/30 blur-[80px] rounded-full"
+                />
+                <motion.div
+                  animate={{
+                    borderColor: ['rgba(255, 51, 102, 0.2)', 'rgba(255, 51, 102, 0.6)', 'rgba(255, 51, 102, 0.2)'],
+                    boxShadow: [
+                      '0 0 0px rgba(255, 51, 102, 0)',
+                      '0 0 50px rgba(255, 51, 102, 0.3)',
+                      '0 0 0px rgba(255, 51, 102, 0)'
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-40 h-40 md:w-56 md:h-56 rounded-full border-4 border-error/30 flex items-center justify-center relative z-10 bg-black/40 backdrop-blur-md"
+                >
+                  <WifiOff size={80} className="text-error animate-pulse" />
+                </motion.div>
+              </div>
+
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <motion.h2
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="text-6xl md:text-9xl font-black italic tracking-tighter uppercase drop-shadow-[0_0_50px_rgba(255,51,102,0.6)] leading-none"
+                  >
+                    Signal Lost
+                  </motion.h2>
+                  <div className="h-2 w-24 md:w-32 bg-error mx-auto rounded-full" />
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-xl md:text-4xl font-bold text-white tracking-[0.2em] uppercase italic">
+                    Reconnecting to Wang Network
+                  </p>
+                  <p className="text-base md:text-xl font-medium text-white/30 uppercase tracking-[0.4em]">
+                    Hold tight... searching for host...
+                  </p>
+                </div>
+              </div>
+
+              {/* Premium Loading dots */}
+              <div className="flex gap-6 items-center">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{
+                      y: [0, -20, 0],
+                      scale: [1, 1.5, 1],
+                      backgroundColor: ['#ffffff', '#ff3366', '#ffffff'],
+                      boxShadow: [
+                        '0 0 0px rgba(255,255,255,0)',
+                        '0 0 20px rgba(255,51,102,0.8)',
+                        '0 0 0px rgba(255,255,255,0)'
+                      ]
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      delay: i * 0.2,
+                      ease: "easeInOut"
+                    }}
+                    className="w-4 h-4 rounded-full"
+                  />
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

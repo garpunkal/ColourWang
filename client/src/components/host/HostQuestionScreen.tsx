@@ -67,23 +67,60 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             <AnimatePresence>
                 {stealNotice && (
                     <motion.div
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 100, opacity: 0 }}
-                        className="fixed bottom-0 left-0 right-0 z-50 bg-color-pink py-4 overflow-hidden border-t-4 border-white shadow-[0_-20px_50px_rgba(248,58,123,0.5)]"
+                        initial={{ y: 200, opacity: 0, scaleY: 0.5 }}
+                        animate={{ y: 0, opacity: 1, scaleY: 1 }}
+                        exit={{ y: 200, opacity: 0, scaleY: 0.5 }}
+                        className="fixed bottom-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-t-8 border-color-yellow shadow-[0_-30px_100px_rgba(0,0,0,0.9)]"
                     >
-                        <motion.div
-                            initial={{ x: '100%' }}
-                            animate={{ x: '-100%' }}
-                            transition={{ duration: 5, ease: "linear", repeat: Infinity }}
-                            className="whitespace-nowrap flex items-center gap-12"
-                        >
-                            {[...Array(5)].map((_, i) => (
-                                <span key={i} className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white mr-4">
-                                    {stealNotice.name} STOLE  {stealNotice.value}  {stealNotice.value === 1 ? ' CARD' : ' CARDS'}!
+                        {/* Top Accent Bar */}
+                        <div className="h-2 w-full bg-linear-to-r from-color-yellow via-white to-color-yellow animate-pulse" />
+
+                        <div className="flex-1 flex items-center">
+                            {/* Static BREAKING Badge - Yellow Alert Style */}
+                            <div className="relative z-30 h-full bg-color-yellow px-8 md:px-16 flex flex-col items-center justify-center shadow-[40px_0_60px_rgba(0,0,0,0.8)] shrink-0 border-r-4 border-black">
+                                <motion.div
+                                    animate={{ opacity: [1, 0, 1] }}
+                                    transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 1 }}
+                                    className="absolute top-4 left-4 flex items-center gap-2"
+                                >
+                                    <div className="w-3 h-3 rounded-full bg-black animate-ping" />
+                                    <span className="text-[10px] md:text-xs font-black text-black tracking-[0.5em]">LIVE</span>
+                                </motion.div>
+                                <span className="text-4xl md:text-6xl font-black text-black italic uppercase tracking-tighter leading-none text-center">
+                                    BREAKING
                                 </span>
-                            ))}
-                        </motion.div>
+                                <span className="text-xl md:text-2xl font-black text-black/80 uppercase tracking-widest -mt-1 text-center">
+                                    STEAL ALERT
+                                </span>
+                            </div>
+
+                            {/* Main Ticker Container */}
+                            <div className="flex-1 h-full relative overflow-hidden bg-black/40">
+                                <motion.div
+                                    initial={{ x: '100%' }}
+                                    animate={{ x: '-100%' }}
+                                    transition={{ duration: 8, ease: "linear", repeat: Infinity }}
+                                    className="absolute inset-0 whitespace-nowrap flex items-center gap-48"
+                                >
+                                    {[...Array(8)].map((_, i) => (
+                                        <span key={i} className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-white flex items-center gap-12">
+                                            <span className="text-color-yellow">{stealNotice.name}</span>
+                                            <span className="flex items-center gap-4 md:gap-8">
+                                                STOLE
+                                                <span className="text-7xl md:text-[14rem] text-color-yellow drop-shadow-[0_0_50px_rgba(255,215,0,0.8)] leading-none px-6">
+                                                    {stealNotice.value}
+                                                </span>
+                                                {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
+                                            </span>
+                                            <span className="text-color-yellow/40">///</span>
+                                        </span>
+                                    ))}
+                                </motion.div>
+                            </div>
+                        </div>
+
+                        {/* Scanline & Glitch Effect Overlay */}
+                        <div className="absolute inset-0 pointer-events-none opacity-30 bg-size-[100%_4px] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)]" />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -224,7 +261,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                                 )}
                                                 <span
                                                     className="text-xs md:text-sm font-black uppercase tracking-[0.15em] leading-none"
-                                                    style={{ color: isAnswered ? playerColor : 'rgba(255,255,255,0.3)' }}
+                                                    style={{ color: isAnswered ? 'white' : 'rgba(255,255,255,0.3)' }}
                                                 >
                                                     {isAnswered ? '✓ LOCKED IN' : 'THINKING...'}
                                                 </span>
