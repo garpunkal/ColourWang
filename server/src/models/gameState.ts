@@ -3,7 +3,7 @@ import { Player } from './player';
 export interface GameState {
     code: string;
     players: Player[];
-    status: 'LOBBY' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
     currentQuestionIndex: number;
     questions: any[];
     timerDuration?: number;

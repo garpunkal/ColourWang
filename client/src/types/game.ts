@@ -25,7 +25,7 @@ export interface Question {
 export interface GameState {
     code: string;
     players: Player[];
-    status: 'LOBBY' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
     currentQuestionIndex: number;
     questions: Question[];
     timerDuration?: number;
