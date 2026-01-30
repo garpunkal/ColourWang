@@ -68,7 +68,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                             key={i}
                             color={color}
                             isCorrect={true}
-                            size="medium"
+                            size="small"
                             index={i}
                         />
                     ))}

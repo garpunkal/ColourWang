@@ -33,8 +33,6 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
         setPlayersAnswered([]);
     }, [currentQuestionIndex]);
 
-    const answeredCount = playersAnswered.filter(p => p.hasAnswered).length;
-    const totalPlayers = gameState.players.length;
     return (
         <motion.div
             key="question"
@@ -79,13 +77,6 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-12 flex flex-col items-center gap-6"
                 >
-                    {/* Progress indicator */}
-                    <div className="glass-panel px-6 py-2 rounded-2xl">
-                        <span className="text-xl font-black uppercase tracking-widest text-color-blue">
-                            {answeredCount} / {totalPlayers} Submitted
-                        </span>
-                    </div>
-
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
                         <div className="flex justify-center gap-3 flex-wrap max-w-4xl">
