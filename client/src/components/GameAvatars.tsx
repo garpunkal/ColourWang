@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { avatarConfig } from "../config/avatarConfig";
 import { getAvatarColor } from "../constants/avatars";
 
@@ -22,6 +22,11 @@ export const Avatar = ({
     showStyleSelector = false,
 }: AvatarProps) => {
     const [selectedStyle, setSelectedStyle] = useState(style);
+
+    useEffect(() => {
+        setSelectedStyle(style);
+    }, [style]);
+
     const backgroundColor = getAvatarColor(seed).replace('#', '');
     const url = `https://api.dicebear.com/9.x/${selectedStyle}/svg?seed=${seed}&backgroundColor=${backgroundColor}`;
 

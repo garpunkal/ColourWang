@@ -11,6 +11,11 @@ import { HostFinalScreen } from './host/HostFinalScreen';
 import { CountdownScreen } from './shared/CountdownScreen';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
+const SPARK_DATA = [...Array(12)].map((_, i) => ({
+    angle: (i / 12) * Math.PI * 2,
+    velocity: 800 + Math.random() * 400
+}));
+
 interface Props {
     socket: Socket;
     gameState: GameState | null;
@@ -26,10 +31,19 @@ const HostScreen = ({ socket, gameState }: Props) => {
     useEffect(() => {
         if (gameState?.status === 'RESULT') {
             setTimeout(() => setShowExplosion(true), 0);
-            const timer = setTimeout(() => setShowExplosion(false), 2000);
+            const timer = setTimeout(() => setShowExplosion(false), 2500);
             return () => clearTimeout(timer);
         }
     }, [gameState?.status]);
+
+    // Shake animation variants
+    const shakeVariants = {
+        shake: {
+            x: [0, -15, 15, -15, 15, -10, 10, -5, 5, 0],
+            y: [0, 8, -8, 8, -8, 4, -4, 2, -2, 0],
+            transition: { duration: 0.5 }
+        }
+    };
 
     useEffect(() => {
         if (gameState?.status === 'QUESTION' && gameState.timerDuration) {
@@ -103,50 +117,73 @@ const HostScreen = ({ socket, gameState }: Props) => {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
-        <div className="flex-1 flex flex-col p-12 overflow-hidden relative w-full h-full">
+        <motion.div
+            className="flex-1 flex flex-col p-12 overflow-hidden relative w-full min-h-screen"
+            animate={showExplosion ? "shake" : ""}
+            variants={shakeVariants}
+        >
             {/* Massive Shockwave Overlay */}
             <AnimatePresence>
                 {showExplosion && (
-                    <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center overflow-hidden">
-                        {/* 1. The Blind Flash */}
+                    <div
+                        className="fixed pointer-events-none flex items-center justify-center overflow-hidden"
+                        style={{ top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 9999, willChange: 'transform, opacity' }}
+                    >
+                        {/* 1. Peak Flash - Blinding additive light */}
                         <motion.div
                             initial={{ opacity: 1 }}
                             animate={{ opacity: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="absolute inset-0 bg-white mix-blend-overlay"
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="absolute inset-0 bg-white z-101"
+                            style={{ mixBlendMode: 'overlay' }}
                         />
 
-                        {/* 2. Expanding Core Blast */}
-                        <motion.div
-                            initial={{ scale: 0, opacity: 1 }}
-                            animate={{ scale: 4, opacity: 0 }}
-                            transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
-                            className="w-[50vw] h-[50vw] rounded-full bg-radial-gradient from-white via-transparent to-transparent mix-blend-screen"
-                        />
-
-                        {/* 3. High Velocity Shock Rings */}
-                        {[...Array(3)].map((_, i) => (
+                        {/* 2. Chromatic Ripple Rings */}
+                        {[
+                            { color: '#ff3366', delay: 0, scale: 8 },
+                            { color: '#00e5ff', delay: 0.1, scale: 7 },
+                            { color: '#ffffff', delay: 0.2, scale: 6 }
+                        ].map((ring, i) => (
                             <motion.div
-                                key={`ring-${i}`}
-                                initial={{ scale: 0.1, opacity: 0, borderWidth: "50px" }}
-                                animate={{ scale: 2 + i, opacity: [0, 1, 0], borderWidth: "0px" }}
-                                transition={{
-                                    duration: 1.5,
-                                    ease: "circOut",
-                                    delay: i * 0.1
+                                key={`ripple-${i}`}
+                                initial={{ scale: 0, opacity: 0.9, borderWidth: "100px" }}
+                                animate={{ scale: ring.scale, opacity: 0, borderWidth: "0px" }}
+                                transition={{ duration: 1, ease: "easeOut", delay: ring.delay }}
+                                className="absolute rounded-full box-border w-[30vh] h-[30vh]"
+                                style={{
+                                    borderColor: ring.color,
+                                    willChange: 'transform, opacity'
                                 }}
-                                className="absolute rounded-full border-color-blue mix-blend-screen box-border w-[60vh] h-[60vh]"
-                                style={{ borderColor: i === 1 ? 'var(--color-pink)' : 'var(--color-blue)' }}
                             />
                         ))}
 
-                        {/* 4. Horizontal energy slice */}
+                        {/* 3. High Velocity Pressure Wave */}
                         <motion.div
-                            initial={{ scaleX: 0, height: "20px", opacity: 1 }}
-                            animate={{ scaleX: 3, height: "0px", opacity: 0 }}
-                            transition={{ duration: 0.5, ease: "circOut" }}
-                            className="absolute w-full bg-white mix-blend-overlay"
+                            initial={{ scaleX: 0, height: "150px", opacity: 1 }}
+                            animate={{ scaleX: 4, height: "0px", opacity: 0 }}
+                            transition={{ duration: 0.4, ease: "circOut" }}
+                            className="absolute w-full bg-white"
+                            style={{ mixBlendMode: 'overlay' }}
                         />
+
+                        {/* 4. Particle Ejection (Sparks) */}
+                        {SPARK_DATA.map((p, i) => (
+                            <motion.div
+                                key={`spark-${i}`}
+                                initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+                                animate={{
+                                    x: Math.cos(p.angle) * p.velocity,
+                                    y: Math.sin(p.angle) * p.velocity,
+                                    scale: 0,
+                                    opacity: 0
+                                }}
+                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                className="absolute w-3 h-3 rounded-full bg-white"
+                                style={{
+                                    willChange: 'transform, opacity'
+                                }}
+                            />
+                        ))}
                     </div>
                 )}
             </AnimatePresence>
@@ -205,7 +242,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 </AnimatePresence>
 
             </div>
-        </div>
+        </motion.div>
     );
 };
 

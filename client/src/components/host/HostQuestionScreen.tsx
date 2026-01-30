@@ -88,12 +88,13 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 )}
             </AnimatePresence>
 
-            <div className="flex flex-col items-center justify-center gap-6">
+            <div className="flex flex-col min-h-screen">
+                {/* Meta info - fixed at top */}
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-4xl md:rounded-[3rem] flex items-center gap-6 md:gap-12"
+                    className="glass-panel px-8 md:px-16 py-4 md:py-8 rounded-4xl md:rounded-[3rem] flex items-center gap-6 md:gap-12 mx-auto mt-4"
                 >
                     <div className="flex flex-col items-start leading-none">
                         <span className="text-lg font-black uppercase tracking-[0.5em] text-color-blue/60 mb-1 italic">Question</span>
@@ -108,20 +109,23 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </div>
                 </motion.div>
 
-                <motion.h1
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                    className="text-hero text-display text-display-gradient mb-0 drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
-                >
-                    {currentQuestion.question}
-                </motion.h1>
+                {/* Question text - centered in remaining space */}
+                <div className="flex-1 flex items-center justify-center -mt-32">
+                    <motion.h1
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                        className="text-hero text-display text-display-gradient drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
+                    >
+                        {currentQuestion.question}
+                    </motion.h1>
+                </div>
 
-                {/* Player submission status */}
+                {/* Player submission status - at bottom */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-12 flex flex-col items-center gap-6"
+                    className="pb-8 flex flex-col items-center gap-6"
                 >
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
@@ -142,7 +146,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.05)',
                                             borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.1)'
                                         }}
-                                        className="glass relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-70 max-w-100 shadow-lg"
+                                        className="glass relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-80 max-w-120 shadow-lg"
                                     >
                                         {/* Background pulse for answered */}
                                         {isAnswered && (
@@ -156,7 +160,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
 
                                         <div className="relative z-10">
                                             <div className="w-16 h-16 bg-black/20 rounded-2xl overflow-hidden shrink-0 shadow-inner">
-                                                <Avatar seed={player.avatar} className="w-full h-full" />
+                                                <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                             </div>
                                             {isAnswered && (
                                                 <motion.div

@@ -25,13 +25,11 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 />
             </div>
             <h1 className="text-4xl md:text-5xl font-black mb-3 uppercase tracking-tighter italic z-10 relative">STAND BY</h1>
-            <p className="text-text-muted font-bold text-base md:text-lg mb-2 z-10 relative px-4 leading-relaxed opacity-80 italic mt-8">You're in the game!</p>
+            <p className="text-text-muted font-bold text-base md:text-lg z-10 relative px-4 leading-relaxed opacity-80 italic mt-6 mb-6">You're in the game!</p>
 
             {/* Players List */}
             <div className="relative z-10">
-                <div className="text-xs md:text-sm uppercase tracking-widest text-color-blue/60 font-black mb-4 italic">
-                    Players ({gameState.players.length})
-                </div>
+               
                 <div className="flex flex-col items-center gap-3 max-w-sm mx-auto">
                     {gameState.players.map((player, index) => {
                         const playerColor = getAvatarColor(player.avatar);
@@ -49,6 +47,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                             >
                                 <Avatar
                                     seed={player.avatar}
+                                    style={player.avatarStyle}
                                     className="w-12 h-12"
                                 />
                                 <span

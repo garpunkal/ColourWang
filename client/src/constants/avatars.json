@@ -95,10 +95,115 @@
             "color": "#3f51b5",
             "name": "DEEP INDIGO",
             "textColor": "white"
+        },
+        {
+            "id": "emerald-city",
+            "color": "#50C878",
+            "name": "EMERALD CITY",
+            "textColor": "white"
+        },
+        {
+            "id": "sapphire-gem",
+            "color": "#0F52BA",
+            "name": "SAPPHIRE GEM",
+            "textColor": "white"
+        },
+        {
+            "id": "ruby-slick",
+            "color": "#E0115F",
+            "name": "RUBY SLICK",
+            "textColor": "white"
+        },
+        {
+            "id": "sunset-blaze",
+            "color": "#FD5E53",
+            "name": "SUNSET BLAZE",
+            "textColor": "white"
+        },
+        {
+            "id": "electric-mint",
+            "color": "#3EB489",
+            "name": "ELECTRIC MINT",
+            "textColor": "black"
+        },
+        {
+            "id": "lavender-lush",
+            "color": "#E6E6FA",
+            "name": "LAVENDER LUSH",
+            "textColor": "black"
+        },
+        {
+            "id": "bubblegum-pop",
+            "color": "#FFC1CC",
+            "name": "BUBBLEGUM POP",
+            "textColor": "black"
+        },
+        {
+            "id": "nuclear-waste",
+            "color": "#C0FF00",
+            "name": "NUCLEAR WASTE",
+            "textColor": "black"
+        },
+        {
+            "id": "deep-ocean",
+            "color": "#000080",
+            "name": "DEEP OCEAN",
+            "textColor": "white"
+        },
+        {
+            "id": "bronzed-god",
+            "color": "#CD7F32",
+            "name": "BRONZED GOD",
+            "textColor": "white"
+        },
+        {
+            "id": "silver-fox",
+            "color": "#C0C0C0",
+            "name": "SILVER FOX",
+            "textColor": "black"
+        },
+        {
+            "id": "midnight-navy",
+            "color": "#000033",
+            "name": "MIDNIGHT NAVY",
+            "textColor": "white"
+        },
+        {
+            "id": "blood-orange",
+            "color": "#FF4500",
+            "name": "BLOOD ORANGE",
+            "textColor": "white"
+        },
+        {
+            "id": "forest-dweller",
+            "color": "#228B22",
+            "name": "FOREST DWELLER",
+            "textColor": "white"
+        },
+        {
+            "id": "chocolate-bar",
+            "color": "#D2691E",
+            "name": "CHOCOLATE BAR",
+            "textColor": "white"
+        },
+        {
+            "id": "ice-cold-blue",
+            "color": "#E0FFFF",
+            "name": "ICE COLD BLUE",
+            "textColor": "black"
         }
     ],
     "styles": {
-        "available": [],
+        "available": [
+            "adventurer",
+            "avataaars",
+            "bottts-neutral",
+            "micah",
+            "open-peeps",
+            "personas",
+            "pixel-art",
+            "toon-head"
+        ],
         "default": "avataaars"
     }
 }

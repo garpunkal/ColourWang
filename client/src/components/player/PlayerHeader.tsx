@@ -5,11 +5,12 @@ import { getAvatarColor } from '../../constants/avatars';
 interface Props {
     name: string;
     avatar: string;
+    avatarStyle?: string;
     score: number;
     rank?: number;
 }
 
-export function PlayerHeader({ name, avatar, score, rank }: Props) {
+export function PlayerHeader({ name, avatar, avatarStyle, score, rank }: Props) {
     const color = getAvatarColor(avatar);
 
     return (
@@ -19,7 +20,7 @@ export function PlayerHeader({ name, avatar, score, rank }: Props) {
             className="flex justify-between items-center mb-6 glass p-4 pr-6 rounded-4xl border-white/10 shadow-2xl bg-linear-to-r from-white/5 to-transparent shrink-0"
         >
             <div className="flex items-center gap-4">
-                <Avatar seed={avatar} className="w-14! h-14!" />
+                <Avatar seed={avatar} style={avatarStyle} className="w-14! h-14!" />
                 <div className="flex flex-col min-w-0">
                     <span className="font-black text-2xl tracking-tight leading-none uppercase italic bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent truncate max-w-45 pr-4">{name}</span>
 

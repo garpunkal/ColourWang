@@ -125,7 +125,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white/5 shadow-lg relative">
                                             <div className="absolute inset-0 bg-black/20" />
-                                            <Avatar seed={player.avatar} className="w-full h-full relative z-10" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full relative z-10" />
                                         </div>
                                         <div className="flex flex-col items-start min-w-0">
                                             <span className="font-black text-lg uppercase italic tracking-wider truncate w-full text-white drop-shadow-md pr-10">

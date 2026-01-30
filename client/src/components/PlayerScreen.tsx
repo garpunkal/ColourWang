@@ -66,6 +66,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
             <PlayerHeader
                 name={me?.name || name}
                 avatar={me?.avatar || 'cyber-blue'}
+                avatarStyle={me?.avatarStyle || 'avataaars'}
                 score={me?.score || 0}
                 rank={status === 'FINAL_SCORE' ? myRank : undefined}
             />

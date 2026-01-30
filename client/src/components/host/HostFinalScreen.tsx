@@ -65,7 +65,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                         boxShadow: i === 0 ? `0 0 30px ${avatarColor}40` : undefined
                                     }}
                                 >
-                                    <Avatar seed={player.avatar} className="w-full h-full" />
+                                    <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                 </div>
                                 <span className={`text-2xl md:text-6xl font-black uppercase italic tracking-tight truncate pr-10 ${i === 0 ? 'text-white' : 'text-white/80'}`}>{player.name}</span>
                             </div>

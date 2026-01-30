@@ -9,7 +9,7 @@ export interface Player {
     stealCardValue: number;
     stealCardUsed: boolean;
     disabledIndexes?: number[];
-
+    avatarStyle?: string;
 }
 
 export interface Question {

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
-import { Hash, Smartphone, Lock } from 'lucide-react';
+import { Hash, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
 import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
+import { avatarConfig } from '../../config/avatarConfig';
 
 interface Props {
     socket: Socket;
@@ -13,6 +14,10 @@ interface Props {
 export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     // Persist name and avatar
     const [name, setName] = useState(localStorage.getItem('playerName') || '');
+
+    const [avatarStyle, setAvatarStyle] = useState(() => {
+        return localStorage.getItem('playerAvatarStyle') || avatarConfig.defaultStyle;
+    });
 
     // Try to restore avatar from localStorage if available and not taken
     const [avatar, setAvatar] = useState(() => {
@@ -28,7 +33,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         return params.get('code')?.toUpperCase() || '';
     });
 
-    // Save name and avatar to localStorage
+    // Save name, avatar, and style to localStorage
     useEffect(() => {
         if (name) localStorage.setItem('playerName', name);
     }, [name]);
@@ -36,6 +41,22 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     useEffect(() => {
         if (avatar) localStorage.setItem('playerAvatar', avatar);
     }, [avatar]);
+
+    useEffect(() => {
+        if (avatarStyle) localStorage.setItem('playerAvatarStyle', avatarStyle);
+    }, [avatarStyle]);
+
+    const cycleStyle = (direction: 'next' | 'prev') => {
+        const styles = avatarConfig.availableStyles;
+        const currentIndex = styles.indexOf(avatarStyle);
+        let nextIndex;
+        if (direction === 'next') {
+            nextIndex = (currentIndex + 1) % styles.length;
+        } else {
+            nextIndex = (currentIndex - 1 + styles.length) % styles.length;
+        }
+        setAvatarStyle(styles[nextIndex]);
+    };
 
     const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<string[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
@@ -108,8 +129,8 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         }
         if (name && code.length === 4) {
             setIsJoining(true);
-            console.log('Emitting join-game:', { name, avatar, code: code.toUpperCase() });
-            socket.emit('join-game', { name, avatar, code: code.toUpperCase() });
+            console.log('Emitting join-game:', { name, avatar, avatarStyle, code: code.toUpperCase() });
+            socket.emit('join-game', { name, avatar, avatarStyle, code: code.toUpperCase() });
 
             // Timeout to reset loading if no response
             setTimeout(() => setIsJoining(false), 5000);
@@ -154,49 +175,84 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-2 md:gap-4 p-3 md:p-6 glass rounded-[2.5rem] border-white/10 shadow-inner bg-black/20">
-                        {AVATAR_IDS.map((a, i) => {
-                            const taken = isAvatarTaken(a);
-                            const isSelected = avatar === a;
-                            return (
-                                <motion.button
-                                    key={a}
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: i * 0.05, type: "spring" }}
-                                    whileTap={!taken ? { scale: 0.8 } : {}}
-                                    onClick={() => !taken && setAvatar(a)}
-                                    disabled={taken}
-                                    className={`
-                                            relative aspect-square flex items-center justify-center p-2 rounded-2xl transition-all duration-300
-                                            ${isSelected
-                                            ? 'bg-white/10 ring-4 ring-offset-4 ring-offset-black scale-110 z-10'
-                                            : taken
-                                                ? 'opacity-20 cursor-not-allowed'
-                                                : 'opacity-60 hover:opacity-100 hover:scale-105'
-                                        }
-                                        `}
-                                    style={isSelected ? { '--tw-ring-color': getAvatarColor(a) } as React.CSSProperties : {}}
-                                    title={taken ? `${getAvatarName(a)} - Taken` : getAvatarName(a)}
-                                >
-                                    <div className="w-full h-full relative">
-                                        <Avatar seed={a} className="w-full h-full drop-shadow-lg" />
-                                        {taken && (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl backdrop-blur-sm">
-                                                <Lock size={20} className="text-white/80" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    {isSelected && (
-                                        <motion.div
-                                            layoutId="activeAvatar"
-                                            className="absolute inset-0 rounded-2xl"
-                                            style={{ backgroundColor: `${getAvatarColor(a)}20` }}
-                                        />
-                                    )}
-                                </motion.button>
-                            );
-                        })}
+                    {/* Avatar Style & Preview */}
+                    <div className="flex flex-col items-center space-y-4 pt-2">
+                        <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60">Style Your Wang</label>
+
+                        <div className="flex items-center justify-between w-full max-w-70 px-4">
+                            <motion.button
+                                whileTap={{ scale: 0.8 }}
+                                onClick={() => cycleStyle('prev')}
+                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors"
+                            >
+                                <ChevronLeft size={24} />
+                            </motion.button>
+
+                            <motion.div
+                                key={`${avatar}-${avatarStyle}`}
+                                initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
+                                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                                className="relative group"
+                            >
+                                <Avatar
+                                    seed={avatar}
+                                    style={avatarStyle}
+                                    className="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                                />
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 glass rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+                                    {avatarStyle.replace('-', ' ')}
+                                </div>
+                            </motion.div>
+
+                            <motion.button
+                                whileTap={{ scale: 0.8 }}
+                                onClick={() => cycleStyle('next')}
+                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors"
+                            >
+                                <ChevronRight size={24} />
+                            </motion.button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Colour Choice</label>
+                        <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-3 p-3 md:p-4 glass rounded-4xl border-white/10 shadow-inner bg-black/20">
+                            {AVATAR_IDS.map((a, i) => {
+                                const taken = isAvatarTaken(a);
+                                const isSelected = avatar === a;
+                                return (
+                                    <motion.button
+                                        key={a}
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: i * 0.02, type: "spring" }}
+                                        whileTap={!taken ? { scale: 0.8 } : {}}
+                                        onClick={() => !taken && setAvatar(a)}
+                                        disabled={taken}
+                                        className={`
+                                                relative aspect-square flex items-center justify-center p-1.5 rounded-xl transition-all duration-300
+                                                ${isSelected
+                                                ? 'bg-white/10 ring-2 ring-offset-2 ring-offset-black scale-105 z-10'
+                                                : taken
+                                                    ? 'opacity-20 cursor-not-allowed'
+                                                    : 'opacity-60 hover:opacity-100 hover:scale-105'
+                                            }
+                                            `}
+                                        style={isSelected ? { '--tw-ring-color': getAvatarColor(a) } as React.CSSProperties : {}}
+                                        title={taken ? `${getAvatarName(a)} - Taken` : getAvatarName(a)}
+                                    >
+                                        <div className="w-full h-full relative">
+                                            <Avatar seed={a} style={avatarStyle} className="w-full h-full drop-shadow-md" />
+                                            {taken && (
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl backdrop-blur-sm">
+                                                    <Lock size={16} className="text-white/80" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.button>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {

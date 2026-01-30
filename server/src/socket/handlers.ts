@@ -74,9 +74,15 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('join-game', ({ code, name, avatar }) => {
+    socket.on('join-game', ({ code, name, avatar, avatarStyle }) => {
       const game = games.get(code.toUpperCase());
       if (game && game.status === 'LOBBY') {
+        // Check for maximum players
+        if (game.players.length >= 10) {
+          socket.emit('error', 'Game is full (maximum 10 players)');
+          return;
+        }
+
         const takenAvatars = game.players.map(p => p.avatar);
         const assignedAvatar = avatar || getNextAvailableAvatar(takenAvatars);
 
@@ -86,6 +92,7 @@ export function registerSocketHandlers(io: Server) {
           socketId: socket.id,
           name,
           avatar: assignedAvatar,
+          avatarStyle: avatarStyle || 'avataaars',
           score: 0,
           lastAnswer: null,
           isCorrect: false,

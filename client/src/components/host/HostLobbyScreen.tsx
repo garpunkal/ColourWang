@@ -57,7 +57,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props)
             className="w-full max-w-[95vw] flex flex-col items-center"
         >
             <h1 className="mt-12 md:mt-16 text-hero text-display mb-8 text-center drop-shadow-2xl">
-                <span className="block text-xl md:text-3xl mb-1 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80 uppercase">Awaiting players</span>
+                <span className="block text-xl md:text-3xl mb-1 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80 uppercase">Player</span>
                 <span className="text-display-gradient pr-10">Lobby</span>
             </h1>
 
@@ -71,7 +71,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props)
                             initial={{ scale: 0, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             transition={{ type: "spring", delay: i * 0.05, stiffness: 200, damping: 20 }}
-                            className="glass group relative p-3 rounded-2xl flex flex-col items-center gap-2 border-white/10 shadow-lg transition-all duration-300 min-w-40"
+                            className="glass group relative p-3 rounded-2xl flex flex-col items-center gap-2 border-white/10 shadow-lg transition-all duration-300 min-w-52"
                             style={{
                                 border: `2px solid ${avatarColor}40`,
                                 background: `linear-gradient(180deg, ${avatarColor}15 0%, transparent 100%)`
@@ -82,14 +82,14 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props)
                                     e.stopPropagation();
                                     onRemovePlayer(player.id);
                                 }}
-                                className="absolute -top-2 -right-2 bg-error text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:scale-110 z-20 cursor-pointer border-2 border-white/20"
+                                className="absolute -top-2 -right-2 bg-error text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:scale-110 hover:bg-white! hover:text-error! z-20 cursor-pointer border-2 border-white/20"
                                 title="Kick Player"
                             >
                                 <X size={16} strokeWidth={3} />
                             </button>
 
                             <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 rounded-2xl flex items-center justify-center shadow-inner border border-white/10 overflow-hidden shrink-0">
-                                <Avatar seed={player.avatar} className="w-full h-full" />
+                                <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                             </div>
                             <div className="flex flex-col items-center overflow-hidden w-full">
                                 <span

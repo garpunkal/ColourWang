@@ -48,15 +48,21 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
 
     socket.on('error', (msg: string) => {
       // If we get an error related to session (game not found), clear storage so we don't keep trying to rejoin bad sessions
-      if (msg === 'Game not found' || msg === 'Player session not found') {
-        const hasId = localStorage.getItem('cw_playerId');
-        if (hasId) {
-          console.log('Clearing stale session data due to error:', msg);
-          localStorage.removeItem('cw_playerId');
-          localStorage.removeItem('cw_gameCode');
-          setGameState(null);
-        }
+      if (msg === 'Game not found' || msg === 'Player session not found' || msg === 'Game not found or already started' || msg.includes('not found')) {
+        console.log('Clearing stale session data due to error:', msg);
+        localStorage.removeItem('cw_playerId');
+        localStorage.removeItem('cw_gameCode');
+        localStorage.removeItem('cw_hostCode');
+        setGameState(null);
       }
+    });
+
+    // Handle server disconnect - if we were in a game, try to rejoin on reconnect
+    // If rejoin fails, we'll get an error and be reset to homepage
+    socket.on('disconnect', (reason) => {
+      console.log('Socket disconnected:', reason);
+      // If server crashed (transport close/error), the reconnect + rejoin will handle it
+      // The error handler above will clear state if the game no longer exists
     });
 
     return () => {
@@ -67,6 +73,7 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
       socket.off('game-ended');
       socket.off('error');
       socket.off('connect', handleRejoin);
+      socket.off('disconnect');
     };
   }, [socket, setGameState]);
 }

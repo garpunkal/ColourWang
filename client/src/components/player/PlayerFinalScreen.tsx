@@ -97,7 +97,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                                             {index + 1}
                                         </span>
                                         <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0">
-                                            <Avatar seed={p.avatar} className="w-full h-full" />
+                                            <Avatar seed={p.avatar} style={p.avatarStyle} className="w-full h-full" />
                                         </div>
                                         <span className={`text-base font-black uppercase italic ${isMe ? 'text-white' : 'text-white/60'}`}>
                                             {p.name} {isMe && '(YOU)'}

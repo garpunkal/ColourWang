@@ -315,7 +315,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 borderColor: `${avatarColor}80`
                             }}
                         >
-                            Submit <Send fill="currentColor" size={24} className="md:w-8 md:h-8" />
+                            Submit 
                         </motion.button>
                     </div>
                 </div>
@@ -366,11 +366,11 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                             key={player.id}
                                             className={`relative w-8 h-8 rounded-lg overflow-hidden transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-30 grayscale scale-90'}`}
                                             style={{
-                                              
+
                                                 boxShadow: isAnswered ? `0 0 10px ${playerColor}40` : 'none'
                                             }}
                                         >
-                                            <Avatar seed={player.avatar} className="w-full h-full" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                         </div>
                                     );
                                 })}
