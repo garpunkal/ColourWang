@@ -4,6 +4,7 @@ import type { Question } from '../../types/game';
 import { motion } from 'framer-motion';
 import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
+import { audioManager } from '../../utils/audioManager';
 
 interface Props {
     socket: Socket;
@@ -16,10 +17,23 @@ export function HostSetupScreen({ socket }: Props) {
     const [lobbyDuration, setLobbyDuration] = useState(30);
     const [jokers, setJokers] = useState(true);
     const [playSounds, setPlaySounds] = useState(true);
+    const [musicEnabled, setMusicEnabled] = useState(true);
+    const [bgmList, setBgmList] = useState<string[]>([]);
+    const [selectedBgm, setSelectedBgm] = useState<string>('');
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const isConnected = useSocketConnection(socket);
+
+    useEffect(() => {
+        fetch('/api/bgm-list')
+            .then(res => res.json())
+            .then((data: string[]) => {
+                setBgmList(data);
+                if (data.length > 0) setSelectedBgm(data[0]);
+            })
+            .catch(err => console.error("Failed to fetch BGM list", err));
+    }, []);
 
     useEffect(() => {
         setTimeout(() => setLoadingQuestions(true), 0);
@@ -29,10 +43,40 @@ export function HostSetupScreen({ socket }: Props) {
                 setLoadingQuestions(false);
             })
             .catch(() => {
-                setError('Failed to load questions');
                 setLoadingQuestions(false);
             });
     }, []);
+
+    useEffect(() => {
+        // Preview BGM when selected in setup
+        if (musicEnabled && selectedBgm) {
+            // We use the manager to play it immediately
+            // Since it checks for existing track, it won't restart if already playing identical
+            // But here we might want to force it if it switched? 
+            // audioManager.playBGM handles track switch logic.
+            // However, we should ensure we don't start it if not desired? 
+            // User implies "I can't hear the music" -> suggesting they EXPECT to hear it.
+            // So we play it.
+            audioManager.playBGM(selectedBgm);
+        } else {
+            audioManager.stopBGM();
+        }
+
+        // Cleanup on unmount (e.g. going to game keeps it playing? No, HostScreen re-calls playBGM. 
+        // If track is same, it continues. If we stop here, it stops then restarts.
+        // Better to NOT stop on unmount if we act as persistent host audio?
+        // But if we go back to menu?
+        // Let's stop on unmount for safety, HostScreen will restart it.
+        return () => {
+            // We don't want to stop if we are transitioning to GAME.
+            // But we can't easily know.
+            // If we stop, HostScreen will start it 100ms later. It's okay.
+            // Actually, if we stop, `bgmAudio` is paused.
+            // HostScreen calls `playBGM`. It sees paused = plays.
+            // Fine.
+            audioManager.stopBGM();
+        };
+    }, [selectedBgm, musicEnabled]);
 
     const createGame = () => {
         // We now let the server handle the question picking for better variety and consistency
@@ -43,7 +87,9 @@ export function HostSetupScreen({ socket }: Props) {
             resultDuration: resultTimer,
             lobbyDuration,
             jokersEnabled: jokers,
-            soundEnabled: playSounds
+            soundEnabled: playSounds,
+            musicEnabled,
+            bgmTrack: selectedBgm
         });
     };
 
@@ -121,39 +167,76 @@ export function HostSetupScreen({ socket }: Props) {
                         </div>
                     </div>
 
-                    {/* Toggles */}
-                    <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col md:flex-row items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 col-span-1 md:col-span-2 md:grid md:grid-cols-2 gap-4"
-                        onClick={() => setJokers(!jokers)}>
-                        <div className="flex flex-row md:flex-col items-center justify-between w-full md:w-auto gap-2">
-                            <div className="flex flex-col gap-0.5 md:gap-1 text-left">
-                                <label className="text-sm md:text-2xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Steals</label>
-                                <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
-                                    {jokers ? 'STEAL CARDS ENABLED' : 'STANDARD PLAY ONLY'}
-                                </span>
-                            </div>
-                            <div className={`w-10 h-6 md:w-16 md:h-9 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
-                                <motion.div
-                                    animate={{ x: jokers ? '100%' : '0%' }}
-                                    className="w-4 h-4 md:w-7 md:h-7 bg-white rounded-full shadow-md"
-                                />
+                    {/* Toggles Container */}
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6">
+                        {/* Steals */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full"
+                            onClick={() => setJokers(!jokers)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Steals</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {jokers ? 'ENABLED' : 'DISABLED'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: jokers ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col md:flex-row items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 col-span-1 md:col-span-2 md:grid md:grid-cols-2 gap-4"
-                        onClick={() => setPlaySounds(!playSounds)}>
-                        <div className="flex flex-row md:flex-col items-center justify-between w-full md:w-auto gap-2">
-                            <div className="flex flex-col gap-0.5 md:gap-1 text-left">
-                                <label className="text-sm md:text-2xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Audio</label>
-                                <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
-                                    {playSounds ? 'AUDIO ENABLED' : 'SILENT MODE'}
-                                </span>
+                        {/* Sound FX */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full"
+                            onClick={() => setPlaySounds(!playSounds)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Sound FX</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {playSounds ? 'ON' : 'OFF'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${playSounds ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: playSounds ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
                             </div>
-                            <div className={`w-10 h-6 md:w-16 md:h-9 rounded-full p-1 transition-colors duration-300 ${playSounds ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
-                                <motion.div
-                                    animate={{ x: playSounds ? '100%' : '0%' }}
-                                    className="w-4 h-4 md:w-7 md:h-7 bg-white rounded-full shadow-md"
-                                />
+                        </div>
+
+                        {/* Music */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative"
+                            onClick={() => setMusicEnabled(!musicEnabled)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left w-full">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Music</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
+                                        {musicEnabled ? 'ON' : 'OFF'}
+                                    </span>
+
+                                    {musicEnabled && bgmList.length > 0 && (
+                                        <div className="mt-1 md:mt-2 w-full pr-2" onClick={(e) => e.stopPropagation()}>
+                                            <select
+                                                value={selectedBgm}
+                                                onChange={(e) => setSelectedBgm(e.target.value)}
+                                                className="w-full bg-black/80 text-white text-xs md:text-sm p-3 rounded-xl border border-white/20 outline-none hover:bg-black transition-colors cursor-pointer"
+                                            >
+                                                {bgmList.map(bgm => (
+                                                    <option key={bgm} value={bgm}>{bgm.replace('.mp3', '')}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${musicEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'} shrink-0 ml-2 md:ml-0`}>
+                                    <motion.div
+                                        animate={{ x: musicEnabled ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

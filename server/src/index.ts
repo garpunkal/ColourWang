@@ -4,7 +4,7 @@ console.log('Starting ColourWang server...');
 import express from 'express';
 import { createServer as createHttpsServer } from 'https';
 import { createServer as createHttpServer } from 'http';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { Server } from 'socket.io';
 import cors from 'cors';
@@ -12,6 +12,22 @@ import { registerSocketHandlers } from './socket/handlers';
 
 const app = express();
 app.use(cors());
+
+// List all mp3 files in client/public/bgm for the frontend to consume
+app.get('/api/bgm-list', (req, res) => {
+    try {
+        const bgmPath = join(__dirname, '../../client/public/bgm');
+        if (existsSync(bgmPath)) {
+            const files = readdirSync(bgmPath).filter(f => f.endsWith('.mp3'));
+            res.json(files);
+        } else {
+            res.json([]);
+        }
+    } catch (e) {
+        console.error('Error listing BGM files:', e);
+        res.status(500).json([]);
+    }
+});
 
 // Check if SSL certificates exist
 const certPath = join(__dirname, '../../certs');

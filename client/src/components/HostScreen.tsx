@@ -9,6 +9,7 @@ import { HostQuestionScreen } from './host/HostQuestionScreen';
 import { HostResultScreen } from './host/HostResultScreen';
 import { HostFinalScreen } from './host/HostFinalScreen';
 import { CountdownScreen } from './shared/CountdownScreen';
+import { audioManager } from '../utils/audioManager';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
 // Reduced spark count for performance
@@ -67,6 +68,19 @@ const HostScreen = ({ socket, gameState }: Props) => {
             lastResultKey.current = null;
         }
     }, [gameState?.status, gameState?.currentQuestionIndex]);
+
+    // BGM Control
+    useEffect(() => {
+        if (gameState?.musicEnabled) {
+            audioManager.playBGM(gameState.bgmTrack);
+        } else {
+            audioManager.stopBGM();
+        }
+    }, [gameState?.musicEnabled, gameState?.bgmTrack]);
+
+    useEffect(() => {
+        return () => audioManager.stopBGM();
+    }, []);
 
     // Shake animation variants
     const shakeVariants = {

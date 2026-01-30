@@ -211,7 +211,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            className="flex-1 flex flex-col gap-4 md:gap-8 relative"
+            className="flex-1 flex flex-col gap-2 md:gap-8 relative overflow-hidden"
         >
             <AnimatePresence>
                 {stealNotice && (
@@ -259,34 +259,33 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             </AnimatePresence>
 
             <div className="text-center px-4 shrink-0">
-                <div className="flex items-center justify-center gap-4 mb-4 md:mb-8 glass-panel px-6 py-3 rounded-2xl mx-auto w-fit">
+                <div className="flex items-center justify-center gap-2 mb-1 md:mb-8 glass-panel px-4 py-1 rounded-2xl mx-auto w-fit">
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Question</span>
-                        <span className="text-2xl font-black italic tracking-tighter text-white">
+                        <span className="text-lg font-black italic tracking-tighter text-white">
                             {currentQuestionIndex + 1}
                         </span>
                     </div>
 
-                    <div className="w-px h-8 bg-white/10" />
+                    <div className="w-px h-6 bg-white/10" />
 
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Time Left</span>
                         <div className="flex items-baseline gap-1">
-                            <span className={`text-2xl font-black font-mono tabular-nums italic tracking-tighter transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-color-blue'}`}>
+                            <span className={`text-lg font-black font-mono tabular-nums italic tracking-tighter transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-color-blue'}`}>
                                 {timeLeft}
                             </span>
-                            <span className={`text-[10px] font-black opacity-40 transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : ''}`}>S</span>
+                            <span className={`text-[8px] font-black opacity-40 transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : ''}`}>S</span>
                         </div>
                     </div>
                 </div>
-                <h3 className="text-2xl md:text-5xl text-display text-display-gradient px-2">{currentQuestion.question}</h3>
+                <h3 className="text-xl md:text-5xl text-display text-display-gradient px-1 leading-tight">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
-                <div className="flex-1 flex flex-col gap-4 md:gap-6 justify-center items-center min-h-0">
+                <div className="flex-1 flex flex-col gap-2 md:gap-6 items-center min-h-0 w-full overflow-hidden">
                     <div
-                        className="flex-1 w-full flex justify-center items-center min-h-0 py-2"
-                        style={{ minHeight: '25vh' }}
+                        className="flex-1 w-full overflow-y-auto min-h-0 py-1 px-1"
                     >
                         <div
                             className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 lg:gap-5 w-full max-w-7xl px-2 md:px-6 mx-auto items-center justify-items-center"
@@ -325,14 +324,14 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             )}
                         </div>
                     </div>
-                    <div className="flex flex-col gap-4 w-full">
+                    <div className="flex flex-col gap-2 w-full shrink-0 p-2 pt-0">
                         {/* Normal submit button */}
                         <motion.button
-                            whileHover={{ y: -4 }}
+                            whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={e => submitAnswer(e)}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
-                            className="btn btn-primary w-full py-4 md:py-12 text-xl md:text-3xl transition-all flex items-center justify-center gap-4 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0"
+                            className="btn btn-primary w-full py-3 md:py-8 text-xl md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0 shadow-lg"
                             style={{
                                 boxShadow: `0 20px 40px -10px ${avatarColor}60`,
                                 borderColor: `${avatarColor}80`

@@ -34,4 +34,6 @@ export interface GameState {
     resultDuration?: number;
     lobbyDuration?: number;
     soundEnabled?: boolean;
+    musicEnabled?: boolean;
+    bgmTrack?: string;
 }

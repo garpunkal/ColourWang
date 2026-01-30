@@ -25,6 +25,11 @@ export default defineConfig({
         ws: true, // Enable WebSocket proxying
         changeOrigin: true,
         secure: false, // Allow self-signed certificates
+      },
+      '/api': {
+        target: 'https://localhost:3001',
+        changeOrigin: true,
+        secure: false,
       }
     }
   },

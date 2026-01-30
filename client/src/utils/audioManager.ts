@@ -2,6 +2,7 @@ class AudioManager {
     private audioContext: AudioContext | null = null;
     private bgmAudio: HTMLAudioElement | null = null;
     private isMuted: boolean = false;
+    private proceduralNodes: any[] = [];
 
     constructor() {
         // Initialize AudioContext lazily to comply with browser autoplay policies
@@ -35,36 +36,39 @@ class AudioManager {
         if (!this.audioContext) return;
 
         const t = this.audioContext.currentTime;
-        const osc = this.audioContext.createOscillator();
-        const gain = this.audioContext.createGain();
-        const filter = this.audioContext.createBiquadFilter();
 
-        osc.connect(filter);
+        // Card Flip - Single crisp snap
+        const bufferSize = this.audioContext.sampleRate * 0.1; // 100ms
+        const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1);
+        }
+
+        const noise = this.audioContext.createBufferSource();
+        noise.buffer = buffer;
+
+        // Bandpass filter to create the "paper" snap tone
+        const filter = this.audioContext.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(2000, t);
+        filter.Q.value = 0.5;
+
+        // Slight frequency sweep
+        filter.frequency.linearRampToValueAtTime(1200, t + 0.08);
+
+        const gain = this.audioContext.createGain();
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.8, t + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+
+        noise.connect(filter);
         filter.connect(gain);
         gain.connect(this.audioContext.destination);
 
-        // Larger tonal difference: 50Hz per step (Distinct pitch change)
-        // 5->300Hz, 4->250Hz, 3->200Hz, 2->150Hz, 1->100Hz
-        const steps = remaining || 5;
-        const startFreq = 50 + (steps * 50);
-
-        // Impact synth: Sine sweep (Kick drum style)
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(startFreq, t);
-        osc.frequency.exponentialRampToValueAtTime(30, t + 0.15); // Fast drop to sub-bass
-
-        // Filter to add "thump" body and cut harshness
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(startFreq * 1.5, t); // Filter follows pitch
-        filter.frequency.exponentialRampToValueAtTime(50, t + 0.1);
-
-        // Snappy envelope for IMPACT
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(1.5, t + 0.01); // Hard attack
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-
-        osc.start(t);
-        osc.stop(t + 0.3);
+        noise.start(t);
+        noise.stop(t + 0.1);
     }
 
     public playSelect() {
@@ -170,21 +174,95 @@ class AudioManager {
         osc.stop(this.audioContext.currentTime + 0.6);
     }
 
-    public playBGM() {
-        // Just a placeholder for file-based BGM
-        // Users can place a 'bgm.mp3' in the public folder
-        if (!this.bgmAudio) {
-            this.bgmAudio = new Audio('/bgm.mp3');
-            this.bgmAudio.loop = true;
-            this.bgmAudio.volume = 0.3;
+    public playBGM(track?: string) {
+        if (this.isMuted) return;
+
+        const path = track ? `/bgm/${track}` : '/bgm.mp3';
+
+        // Check if existing audio is playing same track
+        if (this.bgmAudio && !this.bgmAudio.paused && this.bgmAudio.src.endsWith(path)) {
+            return;
         }
 
-        // Only play if not already playing
-        if (this.bgmAudio.paused) {
-            this.bgmAudio.play().catch(e => {
-                console.log("Autoplay blocked, waiting for interaction");
-            });
+        this.stopBGM();
+
+        this.bgmAudio = new Audio(path);
+        this.bgmAudio.loop = true;
+        this.bgmAudio.volume = 0.2;
+
+        this.bgmAudio.addEventListener('error', () => {
+            console.log("BGM file missing:", path);
+            if (!track) {
+                // Only fallback to procedural if default failed
+                console.log("Playing procedural.");
+                this.playProceduralBGM();
+            }
+        });
+
+        this.bgmAudio.play().catch(e => {
+            console.log("Autoplay blocked");
+        });
+    }
+
+    public playProceduralBGM() {
+        if (this.isMuted) return;
+        this.init();
+        if (!this.audioContext) return;
+        if (this.proceduralNodes.length > 0) return; // Already playing
+
+        const t = this.audioContext.currentTime;
+
+        // Ambient Drone: A Major add9 (A2, E3, A3, B3, E4)
+        const freqs = [110, 164.81, 220, 246.94, 329.63];
+
+        const masterGain = this.audioContext.createGain();
+        masterGain.gain.value = 0.05; // Very subtle
+        masterGain.connect(this.audioContext.destination);
+
+        freqs.forEach((f, i) => {
+            const osc = this.audioContext!.createOscillator();
+            osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+            osc.frequency.value = f;
+
+            // Volume LFO for "breathing" pad sound
+            const lfo = this.audioContext!.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = 0.05 + (Math.random() * 0.1);
+
+            const lfoGain = this.audioContext!.createGain();
+            lfoGain.gain.value = 0.3;
+
+            const oscAmp = this.audioContext!.createGain();
+            oscAmp.gain.value = 0.6;
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(oscAmp.gain);
+
+            osc.connect(oscAmp);
+            oscAmp.connect(masterGain);
+
+            osc.start(t);
+            lfo.start(t);
+
+            this.proceduralNodes.push(osc);
+            this.proceduralNodes.push(lfo);
+        });
+    }
+
+    public stopBGM() {
+        if (this.bgmAudio) {
+            this.bgmAudio.pause();
+            this.bgmAudio.currentTime = 0;
         }
+        this.stopProceduralBGM();
+    }
+
+    public stopProceduralBGM() {
+        this.proceduralNodes.forEach((node: any) => {
+            try { node.stop(); } catch (e) { }
+            try { node.disconnect(); } catch (e) { }
+        });
+        this.proceduralNodes = [];
     }
 
     public playSwoosh() {

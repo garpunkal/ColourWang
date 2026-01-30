@@ -61,10 +61,10 @@ function App() {
     }
   }, [role]);
 
-  // Attempt to play BGM when user enters the game (Host/Player)
   useEffect(() => {
-    if (role !== 'NONE') {
-      audioManager.playBGM();
+    // Ensure BGM is stopped for players (BGM is Host-only)
+    if (role === 'PLAYER') {
+      audioManager.stopBGM();
     }
   }, [role]);
 

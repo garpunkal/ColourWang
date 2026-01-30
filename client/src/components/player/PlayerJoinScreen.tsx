@@ -267,7 +267,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         </div>
                     </div>
 
-                    {
+                    {/* {
                         error && (
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
@@ -277,7 +277,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 {error}
                             </motion.div>
                         )
-                    }
+                    } */}
 
                     <motion.button
                         whileHover={{ scale: 1.02 }}

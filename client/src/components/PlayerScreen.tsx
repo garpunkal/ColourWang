@@ -60,10 +60,33 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
     const myRank = me ? sortedPlayers.findIndex(p => p.id === me.id) + 1 : undefined;
 
-
+    const leaveGame = () => {
+        if (window.confirm("Are you sure you want to leave the game completely?")) {
+            if (gameState) {
+                const pid = me?.id || localStorage.getItem('cw_playerId');
+                socket.emit('leave-game', { code: gameState.code, playerId: pid });
+            }
+            localStorage.removeItem('cw_playerId');
+            localStorage.removeItem('cw_gameCode');
+            setGameState(null);
+        }
+    };
 
     return (
         <div className="flex flex-col p-4 h-full w-full max-w-2xl mx-auto relative z-10">
+            {/* Leave Game Button */}
+            <div className="absolute top-0 right-0 p-4 z-50">
+                <button
+                    onClick={leaveGame}
+                    className="p-2 bg-white hover:bg-red-500 rounded-full text-black hover:text-white transition-colors shadow-lg"
+                    title="Leave Game"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
             <PlayerHeader
                 name={me?.name || name}
                 avatar={me?.avatar || 'cyber-blue'}

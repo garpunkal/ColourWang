@@ -52,7 +52,7 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled } = payload;
+      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
       // Use server-side shuffling for maximum variety
@@ -68,6 +68,8 @@ export function registerSocketHandlers(io: Server) {
         resultDuration,
         jokersEnabled,
         soundEnabled,
+        musicEnabled,
+        bgmTrack,
         hostSocketId: socket.id
       };
       games.set(code, game);
@@ -390,6 +392,30 @@ export function registerSocketHandlers(io: Server) {
         socket.join(code.toUpperCase());
       } else {
         socket.emit('room-checked', { exists: false });
+      }
+    });
+
+    socket.on('leave-game', ({ code, playerId }) => {
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
+      if (game) {
+        const playerIndex = game.players.findIndex(p => p.id === playerId);
+        if (playerIndex !== -1) {
+          const removedPlayer = game.players[playerIndex];
+          game.players.splice(playerIndex, 1);
+
+          console.log(`Player ${removedPlayer.name} (${playerId}) left game ${normalizedCode} voluntarily.`);
+
+          // Notify room of updated player list
+          if (game.status === 'LOBBY') {
+            io.to(normalizedCode).emit('player-joined', game.players);
+          } else {
+            // If game is in progress, sync state
+            io.to(normalizedCode).emit('game-status-changed', game); // Updates host and other players
+            // Also emit player-joined to ensure lists are in sync
+            io.to(normalizedCode).emit('player-joined', game.players);
+          }
+        }
       }
     });
 

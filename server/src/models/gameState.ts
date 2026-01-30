@@ -11,5 +11,7 @@ export interface GameState {
     lobbyDuration?: number;
     jokersEnabled?: boolean;
     soundEnabled?: boolean;
+    musicEnabled?: boolean;
+    bgmTrack?: string;
     hostSocketId?: string;
 }
