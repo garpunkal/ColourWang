@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
 import { Send } from 'lucide-react';
@@ -16,8 +16,8 @@ interface Props {
 }
 
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
-        // Track if steal card is available for this question (disappears for all when used)
-        const [stealCardActiveThisQuestion, setStealCardActiveThisQuestion] = useState(true);
+    // Track if steal card is available for this question (disappears for all when used)
+    const [stealCardActiveThisQuestion, setStealCardActiveThisQuestion] = useState(true);
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     // (stolenFromIds state removed; not used)
     const stealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,9 +57,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
     // Reset answer state when question changes
     useEffect(() => {
-                // Reset steal card for new question
-                setStealCardActiveThisQuestion(true);
-            // No localStealCardUsed to reset
+        // Reset steal card for new question
+        setStealCardActiveThisQuestion(true);
+        // No localStealCardUsed to reset
         // Use setTimeout to avoid cascading renders
         const timer = setTimeout(() => {
             setSelectedColors([]);
@@ -91,7 +91,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         // }
     }
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
-    const lastAnswer = sortColors(me?.lastAnswer || []);
 
 
     const toggleColor = (color: string) => {
@@ -165,7 +164,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         }
     }, [timeLeft, hasAnswered, selectedColors, submitAnswer, gameState.code, socket]);
 
- 
+
 
     return (
         <motion.div
@@ -278,7 +277,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-white/10 space-y-3 mt-6">
                             <span className="text-xs uppercase tracking-[0.4em] text-color-blue font-black italic opacity-60">Your Selection</span>
                             <div className="flex gap-2 md:gap-3 justify-center flex-wrap mt-2">
-                                {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
+                                {selectedColors.length > 0 ? sortColors(selectedColors).map((color, i) => (
                                     <ColorCard
                                         key={i}
                                         color={color}

@@ -2,7 +2,10 @@
 console.log('Starting ColourWang server...');
 
 import express from 'express';
-import { createServer } from 'http';
+import { createServer as createHttpsServer } from 'https';
+import { createServer as createHttpServer } from 'http';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
@@ -10,8 +13,31 @@ import { registerSocketHandlers } from './socket/handlers';
 const app = express();
 app.use(cors());
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
+// Check if SSL certificates exist
+const certPath = join(__dirname, '../../certs');
+const keyPath = join(certPath, 'localhost-key.pem');
+const certFilePath = join(certPath, 'localhost.pem');
+
+let server;
+let protocol = 'http';
+
+if (existsSync(keyPath) && existsSync(certFilePath)) {
+    // Use HTTPS if certificates exist
+    const httpsOptions = {
+        key: readFileSync(keyPath),
+        cert: readFileSync(certFilePath)
+    };
+    server = createHttpsServer(httpsOptions, app);
+    protocol = 'https';
+    console.log('✓ SSL certificates found, using HTTPS');
+} else {
+    // Fallback to HTTP if certificates don't exist yet
+    server = createHttpServer(app);
+    console.log('⚠ SSL certificates not found, using HTTP');
+    console.log('  Run the client first to generate certificates, then restart the server');
+}
+
+const io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
@@ -22,6 +48,6 @@ console.log('Registering socket handlers...');
 registerSocketHandlers(io);
 
 const PORT = 3001;
-httpServer.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+server.listen(PORT, () => {
+    console.log(`Server running on ${protocol}://localhost:${PORT}`);
 });

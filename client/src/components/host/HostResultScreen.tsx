@@ -71,7 +71,7 @@ export function HostResultScreen({ currentQuestion, currentQuestionIndex, totalQ
                     ))}
                 </div>
 
-                {currentQuestion.image && (
+                {/* {currentQuestion.image && (
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -84,7 +84,7 @@ export function HostResultScreen({ currentQuestion, currentQuestionIndex, totalQ
                             className="relative object-contain p-2 md:p-4 w-75"
                         />
                     </motion.div>
-                )}
+                )} */}
             </div>
 
             <div className="flex flex-col items-center gap-4 mt-8">
