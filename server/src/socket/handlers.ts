@@ -406,6 +406,14 @@ export function registerSocketHandlers(io: Server) {
 
           console.log(`Player ${removedPlayer.name} (${playerId}) left game ${normalizedCode} voluntarily.`);
 
+          if (game.status !== 'LOBBY' && game.players.length === 0) {
+            console.log(`All players left game ${normalizedCode}. Resetting to LOBBY.`);
+            game.status = 'LOBBY';
+            game.currentQuestionIndex = 0;
+            io.to(normalizedCode).emit('game-status-changed', game);
+            return;
+          }
+
           // Notify room of updated player list
           if (game.status === 'LOBBY') {
             io.to(normalizedCode).emit('player-joined', game.players);
