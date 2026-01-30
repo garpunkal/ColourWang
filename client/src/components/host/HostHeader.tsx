@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { audioManager } from '../../utils/audioManager';
 import { QRCodeSVG } from 'qrcode.react';
 import { Users } from 'lucide-react';
 
@@ -9,8 +10,18 @@ interface Props {
     pot?: number;
 }
 
+const BGM_TRACKS = [
+    { label: 'Casino Royal', value: 'Casino Royal.mp3' },
+    { label: 'Las Vegas', value: 'Las Vegas.mp3' },
+    { label: 'Move and Shake', value: 'Move and Shake.mp3' },
+    { label: 'Poker Player', value: 'Poker Player.mp3' },
+    { label: 'Robbery of the Century', value: 'Robbery of the Century.mp3' },
+];
+
+
 export function HostHeader({ code, playerCount, compact = false }: Props) {
     const [showQrModal, setShowQrModal] = useState(false);
+    const [selectedBGM, setSelectedBGM] = useState('');
     const joinUrl = `${window.location.origin}?code=${code}`;
 
     return (
@@ -48,6 +59,24 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
                             ${compact ? 'text-4xl md:text-5xl' : 'text-[4rem] md:text-[7rem] lg:text-[10rem]'}
                         `}>
                             {code}
+                        </div>
+                       
+                        {/* BGM Selector */}
+                        <div className="">
+                            
+                            <select
+                                id="bgm-select"
+                                value={selectedBGM}
+                                onChange={e => {
+                                    setSelectedBGM(e.target.value);
+                                    audioManager.playBGM(e.target.value);
+                                }}
+                                className="rounded pr-2 py-1 text-white/35 text-xs"
+                            >
+                                {BGM_TRACKS.map(track => (
+                                    <option key={track.value} value={track.value} className="text-black">{track.label}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </div>
