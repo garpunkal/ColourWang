@@ -138,7 +138,6 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 return (
                                     <motion.div
                                         key={player.id}
-                                        layout
                                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                         animate={{
                                             opacity: isAnswered ? 1 : 0.5,
@@ -146,6 +145,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             y: 0
                                         }}
                                         whileHover={{ scale: 1.02 }}
+                                        transition={{ type: "tween", duration: 0.2 }}
                                         className="relative flex items-center gap-5 p-5 rounded-3xl border-2 overflow-hidden flex-1 min-w-80 max-w-120 backdrop-blur-xl"
                                         style={{
                                             background: isAnswered
@@ -154,7 +154,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             borderColor: isAnswered ? `${playerColor}60` : 'rgba(255,255,255,0.1)',
                                             boxShadow: isAnswered
                                                 ? `0 0 40px ${playerColor}30, inset 0 1px 0 rgba(255,255,255,0.1)`
-                                                : '0 10px 40px rgba(0,0,0,0.3)'
+                                                : '0 10px 40px rgba(0,0,0,0.3)',
+                                            willChange: 'transform, opacity'
                                         }}
                                     >
                                         {/* Animated gradient shine */}
@@ -162,18 +163,19 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             <motion.div
                                                 initial={{ x: '-100%' }}
                                                 animate={{ x: '200%' }}
-                                                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 5 }}
                                                 className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                                                style={{ willChange: 'transform' }}
                                             />
                                         )}
 
                                         {/* Pulsing glow ring for answered */}
                                         {isAnswered && (
                                             <motion.div
-                                                animate={{ opacity: [0.3, 0.6, 0.3] }}
-                                                transition={{ duration: 2, repeat: Infinity }}
+                                                animate={{ opacity: [0.3, 0.5, 0.3] }}
+                                                transition={{ duration: 3, repeat: Infinity }}
                                                 className="absolute inset-0 rounded-3xl"
-                                                style={{ boxShadow: `inset 0 0 30px ${playerColor}40` }}
+                                                style={{ boxShadow: `inset 0 0 30px ${playerColor}40`, willChange: 'opacity' }}
                                             />
                                         )}
 

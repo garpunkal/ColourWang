@@ -303,6 +303,17 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('get-active-games', () => {
+      // Return list of active game codes in LOBBY status
+      const activeGames: string[] = [];
+      games.forEach((game, code) => {
+        if (game.status === 'LOBBY') {
+          activeGames.push(code);
+        }
+      });
+      socket.emit('active-games', activeGames);
+    });
+
     socket.on('check-room', (code) => {
       const game = games.get(code.toUpperCase());
       if (game) {

@@ -61,24 +61,24 @@ export const ColorCard = memo(function ColorCard({
             whileHover={!disabled && !isTouchDevice ? {
                 y: -10,
                 rotateZ: index % 2 === 0 ? -3 : 3,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.15 }
             } : {}}
             whileTap={!disabled ? {
                 scale: 0.95,
                 rotateZ: index % 2 === 0 ? -5 : 5
             } : {}}
             transition={{
-                delay: index * 0.1,
+                delay: index * 0.08,
                 type: "spring",
-                stiffness: 120,
-                damping: 20
+                stiffness: 200,
+                damping: 25
             }}
             onClick={!disabled ? onClick : undefined}
             className={`
                 relative cursor-pointer
                 ${disabled ? 'cursor-not-allowed opacity-50' : ''}
             `}
-            style={{ ...cardStyle, perspective: '1000px' }}
+            style={{ ...cardStyle, perspective: '1000px', willChange: 'transform, opacity' }}
         >
             {/* Card container */}
             <div className="relative w-full h-full">

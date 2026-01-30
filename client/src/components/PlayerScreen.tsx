@@ -112,6 +112,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                         player={me}
                         gameState={gameState}
                         setGameState={setGameState}
+                        socket={socket}
                     />
                 )}
             </div>

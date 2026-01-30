@@ -33,6 +33,23 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         return params.get('code')?.toUpperCase() || '';
     });
 
+    // Fetch active games on mount and prepopulate if only 1 game is available
+    useEffect(() => {
+        // Only request if no code is already set
+        if (!code) {
+            socket.emit('get-active-games');
+            const handleActiveGames = (games: string[]) => {
+                if (games.length === 1) {
+                    setCode(games[0]);
+                }
+            };
+            socket.on('active-games', handleActiveGames);
+            return () => {
+                socket.off('active-games', handleActiveGames);
+            };
+        }
+    }, [socket, code]);
+
     // Save name, avatar, and style to localStorage
     useEffect(() => {
         if (name) localStorage.setItem('playerName', name);
@@ -190,8 +207,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
                             <motion.div
                                 key={`${avatar}-${avatarStyle}`}
-                                initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
-                                animate={{ scale: 1, opacity: 1, rotate: 0 }}
                                 className="relative group"
                             >
                                 <Avatar
@@ -217,15 +232,12 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     <div className="space-y-2">
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Colour Choice</label>
                         <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-3 p-3 md:p-4 glass rounded-4xl border-white/10 shadow-inner bg-black/20">
-                            {AVATAR_IDS.map((a, i) => {
+                            {AVATAR_IDS.map((a) => {
                                 const taken = isAvatarTaken(a);
                                 const isSelected = avatar === a;
                                 return (
                                     <motion.button
                                         key={a}
-                                        initial={{ scale: 0, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        transition={{ delay: i * 0.02, type: "spring" }}
                                         whileTap={!taken ? { scale: 0.8 } : {}}
                                         onClick={() => !taken && setAvatar(a)}
                                         disabled={taken}

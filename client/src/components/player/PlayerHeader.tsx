@@ -31,8 +31,8 @@ export function PlayerHeader({ name, avatar, avatarStyle, score, rank }: Props) 
                     {rank ? 'Ranking' : 'Points'}
                 </span>
                 <span
-                    className="text-4xl font-black glow-text leading-none font-mono tracking-tighter"
-                    style={{ color }}
+                    className="text-4xl font-black glow-text leading-none font-mono tracking-tighter text-white"
+                 
                 >
                     {rank ? `#${rank}` : (score || 0)}
                 </span>

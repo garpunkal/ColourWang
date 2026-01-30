@@ -48,6 +48,13 @@ function App() {
     }
   }, [gameState, role]);
 
+  // Clear URL params if we are on landing page to prevent "remembering" old codes
+  useEffect(() => {
+    if (role === 'NONE' && window.location.search) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [role]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

@@ -82,9 +82,8 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.4 }}
                         className="glass-panel p-6 rounded-4xl border-white/10 relative overflow-hidden"
-                    >
-                        <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }} />
-                        <span className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-black italic block mb-4">Your answer</span>
+                    >                        <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }} />
+                        <span className="text-[14px] uppercase tracking-[0.4em] text-white/40 font-black italic block mb-4">Your answer</span>
                         <div className="flex gap-2 justify-center flex-wrap">
                             {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
                                 <ColorCard
@@ -95,7 +94,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                     disabled={true}
                                 />
                             )) : (
-                                <span className="text-sm font-black text-white/20 uppercase tracking-widest italic my-4">No answer given</span>
+                                <span className="text-[14px] font-black text-white/20 uppercase tracking-widest italic my-4">No answer given</span>
                             )}
                         </div>
                     </motion.div>
@@ -115,7 +114,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         className="glass-panel p-6 rounded-4xl border-success/20 bg-success/5 relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 w-1 h-full bg-success" />
-                        <span className="text-[10px] uppercase tracking-[0.4em] text-success font-black italic block mb-4 text-right">The answer</span>
+                        <span className="text-[14px] uppercase tracking-[0.4em] text-success font-black italic block mb-4 text-right">The answer</span>
                         <div className="flex gap-2 justify-center flex-wrap">
                             {correctColors.map((color, i) => (
                                 <ColorCard

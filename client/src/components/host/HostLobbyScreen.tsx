@@ -82,10 +82,10 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer }: Props)
                                     e.stopPropagation();
                                     onRemovePlayer(player.id);
                                 }}
-                                className="absolute -top-2 -right-2 text-black rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all shadow-lg  bg-white! hover:text-error! z-20 cursor-pointer border-2 border-white/20"
+                                className="absolute -top-2 -right-2 text-black! rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all shadow-lg  bg-white! z-20 cursor-pointer border-2 border-white/20"
                                 title="Kick Player"
                             >
-                                <X size={16} strokeWidth={3} />
+                                <X size={24} strokeWidth={3} />
                             </button>
 
                             <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 rounded-2xl flex items-center justify-center shadow-inner border border-white/10 overflow-hidden shrink-0">

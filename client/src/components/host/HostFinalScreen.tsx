@@ -7,19 +7,19 @@ import { Sparkles } from 'lucide-react';
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
 
-// Generate firework particles
-const FIREWORK_BURSTS = [...Array(5)].map((_, burstIndex) => ({
-    x: (burstIndex - 2) * 25, // Spread across screen
-    delay: burstIndex * 0.3,
-    particles: [...Array(12)].map((_, i) => ({
-        angle: (i / 12) * Math.PI * 2,
+// Generate firework particles - reduced for performance
+const FIREWORK_BURSTS = [...Array(3)].map((_, burstIndex) => ({
+    x: (burstIndex - 1) * 35, // Spread across screen
+    delay: burstIndex * 0.4,
+    particles: [...Array(8)].map((_, i) => ({
+        angle: (i / 8) * Math.PI * 2,
         velocity: 150 + Math.random() * 100,
         color: ['#FFD700', '#ff3366', '#00e5ff', '#ffffff', '#ff9900'][Math.floor(Math.random() * 5)]
     }))
 }));
 
-// Floating golden particles
-const GOLDEN_PARTICLES = [...Array(30)].map(() => ({
+// Floating golden particles - reduced for performance
+const GOLDEN_PARTICLES = [...Array(15)].map(() => ({
     x: Math.random() * 100,
     delay: Math.random() * 2,
     duration: 3 + Math.random() * 2,
@@ -141,17 +141,18 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                     width: p.size,
                                     height: p.size,
                                     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-                                    boxShadow: '0 0 10px #FFD700'
+                                    boxShadow: '0 0 8px #FFD700',
+                                    willChange: 'transform, opacity'
                                 }}
                             />
                         ))}
 
                         {/* Pulsing glow around edges */}
                         <motion.div
-                            animate={{ opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 2, repeat: Infinity }}
+                            animate={{ opacity: [0.3, 0.5, 0.3] }}
+                            transition={{ duration: 3, repeat: Infinity }}
                             className="absolute inset-0"
-                            style={{ boxShadow: `inset 0 0 150px 50px ${winnerColor}30` }}
+                            style={{ boxShadow: `inset 0 0 150px 50px ${winnerColor}30`, willChange: 'opacity' }}
                         />
                     </div>
                 )}

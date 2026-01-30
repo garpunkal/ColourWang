@@ -1,6 +1,7 @@
 import type { Player, GameState } from '../../types/game';
+import type { Socket } from 'socket.io-client';
 import { motion } from 'framer-motion';
-import { RotateCcw, Trophy } from 'lucide-react';
+import { LogOut, Trophy } from 'lucide-react';
 import { getAvatarColor } from '../../constants/avatars';
 import { Avatar } from '../GameAvatars';
 import { useMemo } from 'react';
@@ -9,9 +10,10 @@ interface Props {
     player: Player;
     gameState: GameState;
     setGameState: (state: GameState | null) => void;
+    socket: Socket;
 }
 
-export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
+export function PlayerFinalScreen({ player, gameState, setGameState, socket }: Props) {
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
@@ -100,7 +102,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                                             <Avatar seed={p.avatar} style={p.avatarStyle} className="w-full h-full" />
                                         </div>
                                         <span className={`text-base font-black uppercase italic ${isMe ? 'text-white' : 'text-white/60'}`}>
-                                            {p.name} 
+                                            {p.name}
                                         </span>
                                     </div>
                                     <span
@@ -115,18 +117,26 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
                     </div>
                 </motion.div>
 
-                {/* Return Action */}
+                {/* Disconnect Action */}
                 <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5 }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setGameState(null)}
+                    onClick={() => {
+                        // Clear stored game data
+                        localStorage.removeItem('cw_gameCode');
+                        localStorage.removeItem('cw_playerId');
+                        // Disconnect from socket
+                        socket.disconnect();
+                        // Clear game state
+                        setGameState(null);
+                    }}
                     className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-xs group mt-4"
                 >
-                    <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
-                    start a new game
+                    <LogOut size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
+                    Leave Game
                 </motion.button>
             </div>
         </motion.div>

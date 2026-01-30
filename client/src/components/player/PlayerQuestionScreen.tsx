@@ -231,11 +231,17 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             }}
                             className="relative"
                         >
-                            <div className="bg-color-pink border-8 md:border-12 border-white px-6 md:px-12 py-5 md:py-8 shadow-[0_25px_50px_rgba(248,58,123,0.8),0_0_40px_rgba(255,255,255,0.3)] flex flex-col items-center">
-                                <span className="text-3xl md:text-[5rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_8px_15px_rgba(0,0,0,0.5)]">
+                            <div
+                                className="bg-color-pink border-8 md:border-12 border-white px-8 md:px-12 py-6 md:py-8 flex flex-col items-center rounded-lg"
+                                style={{
+                                    boxShadow: '0 25px 50px rgba(248,58,123,0.8), 0 0 40px rgba(255,255,255,0.3), inset 0 0 0 4px rgba(0,0,0,0.2)',
+                                    background: 'linear-gradient(135deg, #f83a7b 0%, #d42d6a 100%)'
+                                }}
+                            >
+                                <span className="text-3xl md:text-[5rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_8px_15px_rgba(0,0,0,0.7)]">
                                     {stealNotice.name}
                                 </span>
-                                <span className="text-5xl md:text-[8rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] -mt-2 md:-mt-4">
+                                <span className="text-4xl md:text-[8rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] -mt-1 md:-mt-4">
                                     STOLE {stealNotice.value} {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
                                 </span>
                             </div>
@@ -315,7 +321,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 borderColor: `${avatarColor}80`
                             }}
                         >
-                            Submit 
+                            Submit
                         </motion.button>
                     </div>
                 </div>

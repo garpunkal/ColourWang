@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,8 +11,9 @@ import { HostFinalScreen } from './host/HostFinalScreen';
 import { CountdownScreen } from './shared/CountdownScreen';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
-const SPARK_DATA = [...Array(12)].map((_, i) => ({
-    angle: (i / 12) * Math.PI * 2,
+// Reduced spark count for performance
+const SPARK_DATA = [...Array(8)].map((_, i) => ({
+    angle: (i / 8) * Math.PI * 2,
     velocity: 800 + Math.random() * 400
 }));
 
@@ -27,12 +28,24 @@ const HostScreen = ({ socket, gameState }: Props) => {
     // const [showCountdown, setShowCountdown] = useState(false);
 
     const [showExplosion, setShowExplosion] = useState(false);
+    const lastResultKey = useRef<string | null>(null);
 
     useEffect(() => {
-        if (gameState?.status === 'RESULT') {
-            queueMicrotask(() => setShowExplosion(true));
+        // Create a unique key for this result state
+        const resultKey = `${gameState?.status}-${gameState?.currentQuestionIndex}`;
+
+        if (gameState?.status === 'RESULT' && lastResultKey.current !== resultKey) {
+            lastResultKey.current = resultKey;
+            // Use requestAnimationFrame to defer setState
+            const rafId = requestAnimationFrame(() => setShowExplosion(true));
             const timer = setTimeout(() => setShowExplosion(false), 2500);
-            return () => clearTimeout(timer);
+            return () => {
+                cancelAnimationFrame(rafId);
+                clearTimeout(timer);
+            };
+        } else if (gameState?.status !== 'RESULT') {
+            // Reset when leaving RESULT state so it can trigger again
+            lastResultKey.current = null;
         }
     }, [gameState?.status, gameState?.currentQuestionIndex]);
 
