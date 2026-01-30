@@ -9,48 +9,52 @@ interface Props {
     pot?: number;
 }
 
-export function HostHeader({ code, playerCount, compact = false, pot = 0 }: Props) {
+export function HostHeader({ code, playerCount, compact = false }: Props) {
     const joinUrl = `${window.location.origin}?code=${code}`;
 
     return (
         <div className={`flex flex-col md:grid grid-cols-3 items-center md:items-center relative z-10 gap-8 w-full transition-all duration-500 ${compact ? 'mb-8' : 'mb-8'}`}>
-          
-            {/* Left Section: Join Info */}
-            <div className={`
-                flex flex-col md:flex-row items-center glass-panel rounded-4xl
-                transition-all duration-500 w-fit
-                ${compact
-                    ? 'gap-4 p-3 pr-8 md:rounded-4xl'
-                    : 'gap-6 md:gap-10 p-6 md:p-8 pr-6 md:pr-16 md:rounded-4xl'
-                }
-            `}>
-                {/* QR Code */}
-                <div className={`
-                    bg-white rounded-2xl shadow-2xl shrink-0 transform transition-transform hover:scale-105 duration-500
-                    ${compact ? 'p-2' : 'p-3 md:p-4 md:rounded-4xl'}
-                `}>
-                    <QRCodeSVG
-                        value={joinUrl}
-                        size={compact ? 60 : 120}
-                        className={`
-                            transition-all duration-500 rounded
-                            ${compact ? 'w-15 h-15' : 'w-30 h-30 md:w-40 md:h-40'}
-                        `}
-                        level="H"
-                        includeMargin={false}
-                    />
-                </div>
 
-                {/* Room Code */}
-                <div className="flex flex-col items-center md:items-start gap-0">
+            {/* Left Section: Join Info (Only in Lobby) */}
+            {!compact ? (
+                <div className={`
+                    flex flex-col md:flex-row items-center glass-panel rounded-4xl
+                    transition-all duration-500 w-fit
+                    ${compact
+                        ? 'gap-4 p-3 pr-8 md:rounded-4xl'
+                        : 'gap-6 md:gap-10 p-6 md:p-8 pr-6 md:pr-16 md:rounded-4xl'
+                    }
+                `}>
+                    {/* QR Code */}
                     <div className={`
-                        font-mono font-black tracking-widest text-white leading-none drop-shadow-[0_10px_30px_rgba(0,0,255,0.4)] transition-all duration-500
-                        ${compact ? 'text-4xl md:text-5xl' : 'text-[4rem] md:text-[7rem] lg:text-[10rem]'}
+                        bg-white rounded-2xl shadow-2xl shrink-0 transform transition-transform hover:scale-105 duration-500
+                        ${compact ? 'p-2' : 'p-3 md:p-4 md:rounded-4xl'}
                     `}>
-                        {code}
+                        <QRCodeSVG
+                            value={joinUrl}
+                            size={compact ? 60 : 120}
+                            className={`
+                                transition-all duration-500 rounded
+                                ${compact ? 'w-15 h-15' : 'w-30 h-30 md:w-40 md:h-40'}
+                            `}
+                            level="H"
+                            includeMargin={false}
+                        />
+                    </div>
+
+                    {/* Room Code */}
+                    <div className="flex flex-col items-center md:items-start gap-0">
+                        <div className={`
+                            font-mono font-black tracking-widest text-white leading-none drop-shadow-[0_10px_30px_rgba(0,229,255,0.4)] transition-all duration-500
+                            ${compact ? 'text-4xl md:text-5xl' : 'text-[4rem] md:text-[7rem] lg:text-[10rem]'}
+                        `}>
+                            {code}
+                        </div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div /> // Placeholder to keep Logo in 2nd column
+            )}
 
             {/* Logo  */}
             <div className={`flex flex-col items-center gap-6 transition-all duration-500 ${compact ? 'gap-2' : 'gap-6'}`}>
@@ -69,13 +73,11 @@ export function HostHeader({ code, playerCount, compact = false, pot = 0 }: Prop
                     <span className={`font-black font-mono text-white tabular-nums tracking-tighter transition-all duration-500 ${compact ? 'text-2xl' : 'text-5xl'}`}>
                         {playerCount}
                     </span>
-                    <span className={`font-bold uppercase tracking-widest text-text-muted transition-all duration-500 ${compact ? 'text-xs' : 'text-lg'}`}>
-                        Connected
-                    </span>
+
                 </div>
             </div>
 
-         
+
 
 
         </div>

@@ -1,5 +1,6 @@
 import type { Player, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
+import { Trophy, Target, RotateCcw } from 'lucide-react';
 
 interface Props {
     player: Player;
@@ -12,55 +13,112 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
     const rank = sortedPlayers.findIndex(p => p.id === player.id) + 1;
     const isWinner = rank === 1;
 
+    const themeColor = isWinner ? 'var(--color-gold)' : 'var(--color-blue)';
+
     return (
         <motion.div
             key="final"
-            initial={{ y: 100, opacity: 0, filter: "blur(20px)" }}
-            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-            className="text-center space-y-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center w-full max-w-lg mx-auto overflow-hidden min-h-[80vh] relative py-10"
         >
-            <div className="relative inline-block">
-                {isWinner && (
+            {/* Background Atmosphere */}
+            <div
+                className="absolute inset-x-0 top-1/4 h-80 blur-[150px] opacity-20 transition-all duration-1000"
+                style={{ backgroundColor: themeColor }}
+            />
+
+            <div className="relative z-10 w-full flex flex-col items-center gap-12">
+                {/* Ranking Visual */}
+                <div className="flex flex-col items-center gap-4">
                     <motion.div
-                        animate={{ scale: [1, 1.4, 1], rotate: 360 }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="absolute -inset-16 bg-linear-to-br from-color-orange/30 to-color-pink/30 blur-[100px] rounded-full"
-                    />
-                )}
-                <div className="text-[14rem] relative z-10 drop-shadow-[0_40px_80px_rgba(255,157,0,0.6)]">
-                    {isWinner ? '👑' : '🔥'}
-                </div>
-            </div>
-            <div className="space-y-4">
-                <h3 className="text-7xl font-black uppercase tracking-tighter italic leading-none bg-linear-to-b from-white to-white/40 bg-clip-text text-transparent">
-                    {isWinner ? 'LEGEND STATUS' : `RANK #${rank}`}
-                </h3>
-                <p className="text-2xl font-black text-color-purple uppercase tracking-[0.6em] italic opacity-80">
-                    {isWinner ? 'You Win!' : 'You Lost!'}
-                </p>
-            </div>
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", bounce: 0.4, duration: 1 }}
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center border-4 shadow-2xl relative"
+                        style={{
+                            borderColor: themeColor,
+                            backgroundColor: `${themeColor}10`,
+                            boxShadow: `0 0 60px ${themeColor}40`
+                        }}
+                    >
+                        {isWinner ? (
+                            <Trophy size={80} className="text-color-gold" strokeWidth={1.5} />
+                        ) : (
+                            <Target size={80} className="text-color-blue" strokeWidth={1.5} />
+                        )}
 
-            <div className="glass p-16 rounded-[4.5rem] border-white/10 shadow-[0_100px_150px_-30px_rgba(0,0,0,0.8)] relative overflow-hidden group bg-linear-to-b from-white/5 to-transparent">
-                <div className="absolute inset-0 bg-linear-to-br from-color-blue/20 to-transparent opacity-50" />
-                <div className="relative z-10">
-                    <p className="text-xs font-black uppercase tracking-[0.6em] text-color-blue mb-6 italic opacity-70">Total XP Accrued</p>
-                    <p className="text-[12rem] font-black text-white glow-text leading-none tracking-tighter font-mono">{player.score || 0}</p>
-                </div>
-            </div>
+                        {/* Rotating ring */}
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            className="absolute -inset-4 border border-dashed border-white/10 rounded-full"
+                        />
+                    </motion.div>
 
-            <motion.button
-                whileHover={{ scale: 1.05, y: -10 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setGameState(null)}
-                className="btn btn-secondary w-full py-12 text-4xl rounded-[3.5rem] border-t-4 border-white/30 bg-white/10 hover:bg-white/15 transition-all font-black group relative overflow-hidden shadow-2xl italic tracking-tighter uppercase"
-            >
-                <span className="relative z-10">RESTART</span>
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-center mt-4"
+                    >
+                        <h3
+                            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-none"
+                            style={{
+                                color: 'white',
+                                textShadow: `0 0 40px ${themeColor}`
+                            }}
+                        >
+                            {isWinner ? 'LEGEND STATUS' : `RANK #${rank}`}
+                        </h3>
+                        <div
+                            className="mt-3 inline-block px-6 py-1.5 rounded-full text-sm font-black tracking-[0.4em] uppercase opacity-70 border border-white/10"
+                            style={{ backgroundColor: `${themeColor}20`, color: 'white' }}
+                        >
+                            {isWinner ? 'CHAMPION' : 'PARTICIPANT'}
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Score Panel */}
                 <motion.div
-                    animate={{ x: [-600, 1000] }}
-                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 5 }}
-                    className="absolute inset-0 bg-white/5 -skew-x-12"
-                />
-            </motion.button>
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="w-full glass-panel p-10 rounded-[3rem] border-white/10 relative overflow-hidden text-center group"
+                >
+                    <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent opacity-50" />
+                    <span className="relative z-10 text-[10px] uppercase tracking-[0.6em] text-white/40 font-black italic block mb-6">Aggregate XP Signal</span>
+
+                    <div className="relative z-10 flex flex-col items-center">
+                        <span className="text-[10rem] md:text-[14rem] font-black text-white leading-none tracking-tighter font-mono drop-shadow-2xl">
+                            {player.score || 0}
+                        </span>
+                        <div className="h-1 w-24 bg-white/10 rounded-full mt-4 overflow-hidden">
+                            <motion.div
+                                initial={{ x: '-100%' }}
+                                animate={{ x: '100%' }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                className="h-full w-full bg-linear-to-r from-transparent via-white/40 to-transparent"
+                            />
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Return Action */}
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setGameState(null)}
+                    className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-sm group"
+                >
+                    <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
+                    Initialize Reset
+                </motion.button>
+            </div>
         </motion.div>
     );
 }

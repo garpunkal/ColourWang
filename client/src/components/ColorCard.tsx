@@ -110,7 +110,7 @@ export const ColorCard = memo(function ColorCard({
                             ? 'border-white ring-4 shadow-[0_0_30px_rgba(0,229,255,0.5)]'
                             : 'border-white/20 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.3)]'
                         }
-                        ${isCorrect ? 'ring-4 border-white' : ''}
+                        ${isCorrect ? '' : ''}
                     `}
                     style={
                         isStealCard

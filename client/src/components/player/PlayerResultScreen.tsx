@@ -2,7 +2,7 @@ import type { Player, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
-
+import { ChevronDown } from 'lucide-react';
 
 interface Props {
     player: Player;
@@ -15,57 +15,112 @@ export function PlayerResultScreen({ player, gameState }: Props) {
     const correctColors = sortColors(rawCorrectColors);
     const lastAnswer = sortColors(player.lastAnswer || []);
 
+    const themeColor = player.isCorrect ? 'var(--color-success)' : 'var(--color-error)';
+
     return (
         <motion.div
             key="result"
-            initial={{ scale: 0.8, opacity: 0, y: 100 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="text-center flex flex-col items-center justify-center gap-6 w-full max-w-lg mx-auto px-2"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="flex flex-col items-center justify-center w-full max-w-lg mx-auto overflow-hidden min-h-[70vh] relative"
         >
-            <div className="flex flex-col items-center gap-6 w-full py-2">
-                <div className="space-y-2 md:space-y-3">
-                    <h3 className={`text-4xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-none drop-shadow-lg`}>{player.isCorrect ? 'CORRECT!' : 'INCORRECT!'}</h3>
-                    <div className={`inline-block bg-linear-to-r ${player.isCorrect ? 'from-success/30 to-success/10 border-success/40' : 'from-error/30 to-error/10 border-error/40'} px-6 md:px-10 py-2 md:py-3 rounded-3xl md:rounded-[2.5rem] border-2 shadow-2xl backdrop-blur-lg`}>
-                        <span className={`text-lg md:text-2xl font-black ${player.isCorrect ? 'text-success' : 'text-error'} tracking-[0.2em] italic`}>{player.isCorrect ? '+10 points' : '0 points'}</span>
-                    </div>
+            {/* Background Glow */}
+            <div
+                className="absolute inset-x-0 top-1/4 h-64 blur-[120px] opacity-20 transition-all duration-1000"
+                style={{ backgroundColor: themeColor }}
+            />
+
+            <div className="relative z-10 w-full flex flex-col items-center gap-10">
+                {/* Status Header */}
+                <div className="flex flex-col items-center gap-3">
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-center"
+                    >
+                        <h3
+                            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-none"
+                            style={{
+                                color: 'white',
+                                textShadow: `0 0 30px ${themeColor}`
+                            }}
+                        >
+                            {player.isCorrect ? 'CORRECT' : 'WRONG'}
+                        </h3>
+                        <div
+                            className="mt-2 inline-block px-4 py-1 rounded-full text-xs font-black tracking-[0.4em] uppercase opacity-60"
+                            style={{ backgroundColor: `${themeColor}20`, color: themeColor }}
+                        >
+                            {player.isCorrect ? '+10 POINTS' : '0 POINTS'}
+                        </div>
+                    </motion.div>
                 </div>
 
-                <div className="w-full space-y-3">
+                {/* Comparison Section */}
+                <div className="w-full space-y-6">
                     {/* Player Selection */}
-                    <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-white/10 space-y-3 mt-6">
-                        <span className="text-xs uppercase tracking-[0.4em] text-color-blue font-black italic opacity-60">Your Selection</span>
-                        <div className="flex gap-2 md:gap-3 justify-center flex-wrap mt-2">
+                    <motion.div
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="glass-panel p-6 rounded-[2rem] border-white/10 relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }} />
+                        <span className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-black italic block mb-4">Your Data</span>
+                        <div className="flex gap-2 justify-center flex-wrap">
                             {lastAnswer.length > 0 ? lastAnswer.map((color, i) => (
                                 <ColorCard
-                                    key={i}
+                                    key={`me-${i}`}
                                     color={color}
                                     size="mini"
                                     index={i}
                                     disabled={true}
                                 />
                             )) : (
-                                <span className="text-lg md:text-xl font-bold text-white/20 italic uppercase">Nothing selected</span>
+                                <span className="text-sm font-black text-white/20 uppercase tracking-widest italic my-4">No signal detected</span>
                             )}
+                        </div>
+                    </motion.div>
+
+                    {/* Transition Arrow */}
+                    <div className="flex justify-center -my-2 relative z-20">
+                        <div className="bg-background border border-white/10 p-2 rounded-full shadow-xl">
+                            <ChevronDown size={20} className="text-white/40" />
                         </div>
                     </div>
 
                     {/* Correct Answer */}
-                    <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-success/20 space-y-3 bg-success/5">
-                        <span className="text-xs uppercase tracking-[0.4em] text-white font-black italic opacity-60">The Answer</span>
-                        <div className="flex gap-2 md:gap-3 justify-center flex-wrap mt-2">
+                    <motion.div
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.7 }}
+                        className="glass-panel p-6 rounded-[2rem] border-success/20 bg-success/5 relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 w-1 h-full bg-success" />
+                        <span className="text-[10px] uppercase tracking-[0.4em] text-success font-black italic block mb-4 text-right">The Target</span>
+                        <div className="flex gap-2 justify-center flex-wrap">
                             {correctColors.map((color, i) => (
                                 <ColorCard
-                                    key={i}
+                                    key={`correct-${i}`}
                                     color={color}
                                     size="mini"
                                     index={i}
-                                    isCorrect={false}
                                     disabled={true}
                                 />
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
+
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.4 }}
+                    transition={{ delay: 1.2 }}
+                    className="text-[10px] font-bold uppercase tracking-[0.5em] italic"
+                >
+                    Awaiting next round signal...
+                </motion.p>
             </div>
         </motion.div>
     );
