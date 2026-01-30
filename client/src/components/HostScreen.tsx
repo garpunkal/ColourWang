@@ -107,6 +107,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     {status === 'QUESTION' && (
                         <HostQuestionScreen
                             key={currentQuestionIndex}
+                            socket={socket}
+                            gameState={gameState}
                             currentQuestion={currentQuestion}
                             currentQuestionIndex={currentQuestionIndex}
                             timeLeft={timeLeft}
@@ -115,6 +117,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
                     {status === 'RESULT' && (
                         <HostResultScreen
+                            gameState={gameState}
                             currentQuestion={currentQuestion}
                             currentQuestionIndex={currentQuestionIndex}
                             totalQuestions={questions.length}

@@ -1,13 +1,39 @@
-import type { Question } from '../../types/game';
+import type { Question, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import type { Socket } from 'socket.io-client';
+import { Check } from 'lucide-react';
+import { getAvatarColor } from '../../constants/avatars';
 
 interface Props {
+    socket: Socket;
+    gameState: GameState;
     currentQuestion: Question;
     currentQuestionIndex: number;
     timeLeft: number;
 }
 
-export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, timeLeft }: Props) {
+export function HostQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex, timeLeft }: Props) {
+    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>([]);
+
+    // Listen for player-answered events
+    useEffect(() => {
+        const handler = (players: { id: string; hasAnswered: boolean }[]) => {
+            setPlayersAnswered(players);
+        };
+        socket.on('player-answered', handler);
+        return () => {
+            socket.off('player-answered', handler);
+        };
+    }, [socket]);
+
+    // Reset when question changes
+    useEffect(() => {
+        setPlayersAnswered([]);
+    }, [currentQuestionIndex]);
+
+    const answeredCount = playersAnswered.filter(p => p.hasAnswered).length;
+    const totalPlayers = gameState.players.length;
     return (
         <motion.div
             key="question"
@@ -45,6 +71,61 @@ export function HostQuestionScreen({ currentQuestion, currentQuestionIndex, time
                 >
                     {currentQuestion.question}
                 </motion.h3>
+
+                {/* Player submission status */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-12 flex flex-col items-center gap-6"
+                >
+                    {/* Progress indicator */}
+                    <div className="glass-panel px-8 py-4 rounded-3xl">
+                        <span className="text-2xl font-black uppercase tracking-widest text-color-blue">
+                            {answeredCount} / {totalPlayers} Submitted
+                        </span>
+                    </div>
+
+                    {/* Player list */}
+                    {playersAnswered.length > 0 && (
+                        <div className="flex justify-center gap-3 flex-wrap max-w-4xl">
+                            {gameState.players.map((player) => {
+                                const playerStatus = playersAnswered.find(p => p.id === player.id);
+                                const playerColor = getAvatarColor(player.avatar);
+                                const isAnswered = playerStatus?.hasAnswered || false;
+
+                                return (
+                                    <motion.div
+                                        key={player.id}
+                                        initial={{ scale: 0.8 }}
+                                        animate={{ scale: 1 }}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all"
+                                        style={{
+                                            backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}10`,
+                                            border: `2px solid ${isAnswered ? playerColor : `${playerColor}30`}`,
+                                            color: playerColor,
+                                            opacity: isAnswered ? 1 : 0.5
+                                        }}
+                                    >
+                                        <div
+                                            className="w-3 h-3 rounded-full"
+                                            style={{ backgroundColor: playerColor }}
+                                        />
+                                        <span className="uppercase tracking-wider">{player.name}</span>
+                                        {isAnswered && (
+                                            <motion.div
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                                            >
+                                                <Check size={16} strokeWidth={3} />
+                                            </motion.div>
+                                        )}
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </motion.div>
             </div>
         </motion.div>
     );

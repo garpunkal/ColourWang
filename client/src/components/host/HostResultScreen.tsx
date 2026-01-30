@@ -1,20 +1,22 @@
 
-import type { Question } from '../../types/game';
-import { Play } from 'lucide-react';
+import type { Question, GameState } from '../../types/game';
+import { Play, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
+import { getAvatarColor } from '../../constants/avatars';
 
 
 interface Props {
+    gameState: GameState;
     currentQuestion: Question;
     currentQuestionIndex: number;
     totalQuestions: number;
     onNextQuestion: () => void;
 }
 
-export function HostResultScreen({ currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
+export function HostResultScreen({ gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
     const [timeLeft, setTimeLeft] = useState(10);
     const [autoProceed, setAutoProceed] = useState(false);
@@ -85,6 +87,72 @@ export function HostResultScreen({ currentQuestion, currentQuestionIndex, totalQ
                         />
                     </motion.div>
                 )} */}
+            </div>
+
+            {/* All Players Results */}
+            <div className="mb-8">
+                <div className="text-xl md:text-3xl font-black bg-white/10 inline-block px-6 md:px-8 py-2 md:py-3 rounded-2xl md:rounded-3xl text-white tracking-wider border border-white/10 mb-6">
+                    PLAYER RESULTS
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
+                    {gameState.players
+                        .sort((a, b) => b.score - a.score)
+                        .map((player) => {
+                            const playerColor = getAvatarColor(player.avatar);
+                            const playerAnswer = sortColors(player.lastAnswer || []);
+
+                            return (
+                                <motion.div
+                                    key={player.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="glass p-4 rounded-3xl space-y-3"
+                                    style={{
+                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
+                                        backgroundColor: player.isCorrect ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)'
+                                    }}
+                                >
+                                    {/* Player header */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div
+                                                className="w-4 h-4 rounded-full"
+                                                style={{ backgroundColor: playerColor }}
+                                            />
+                                            <span className="font-black text-lg" style={{ color: playerColor }}>
+                                                {player.name}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`text-sm font-black ${player.isCorrect ? 'text-success' : 'text-error'}`}>
+                                                {player.isCorrect ? '+10' : '+0'}
+                                            </span>
+                                            {player.isCorrect ? (
+                                                <Check size={20} className="text-success" strokeWidth={3} />
+                                            ) : (
+                                                <X size={20} className="text-error" strokeWidth={3} />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Player's answer */}
+                                    <div className="flex gap-2 justify-center flex-wrap">
+                                        {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
+                                            <ColorCard
+                                                key={i}
+                                                color={color}
+                                                size="small"
+                                                index={i}
+                                                disabled={true}
+                                            />
+                                        )) : (
+                                            <span className="text-xs text-white/30 italic">No answer</span>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                </div>
             </div>
 
             <div className="flex flex-col items-center gap-4 mt-8">
