@@ -139,50 +139,94 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                     <motion.div
                                         key={player.id}
                                         layout
-                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                         animate={{
-                                            opacity: isAnswered ? 1 : 0.6,
-                                            scale: isAnswered ? 1.05 : 1,
-                                            backgroundColor: isAnswered ? `${playerColor}15` : 'rgba(255,255,255,0.05)',
-                                            borderColor: isAnswered ? `${playerColor}50` : 'rgba(255,255,255,0.1)'
+                                            opacity: isAnswered ? 1 : 0.5,
+                                            scale: isAnswered ? 1 : 0.95,
+                                            y: 0
                                         }}
-                                        className="glass relative flex items-center gap-5 p-5 rounded-3xl border-2 transition-all overflow-hidden flex-1 min-w-80 max-w-120 shadow-lg"
+                                        whileHover={{ scale: 1.02 }}
+                                        className="relative flex items-center gap-5 p-5 rounded-3xl border-2 overflow-hidden flex-1 min-w-80 max-w-120 backdrop-blur-xl"
+                                        style={{
+                                            background: isAnswered
+                                                ? `linear-gradient(135deg, ${playerColor}25 0%, ${playerColor}10 50%, transparent 100%)`
+                                                : 'rgba(0,0,0,0.3)',
+                                            borderColor: isAnswered ? `${playerColor}60` : 'rgba(255,255,255,0.1)',
+                                            boxShadow: isAnswered
+                                                ? `0 0 40px ${playerColor}30, inset 0 1px 0 rgba(255,255,255,0.1)`
+                                                : '0 10px 40px rgba(0,0,0,0.3)'
+                                        }}
                                     >
-                                        {/* Background pulse for answered */}
+                                        {/* Animated gradient shine */}
                                         {isAnswered && (
                                             <motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: [0, 0.2, 0] }}
-                                                transition={{ duration: 2, repeat: Infinity }}
-                                                className="absolute inset-0 bg-white"
+                                                initial={{ x: '-100%' }}
+                                                animate={{ x: '200%' }}
+                                                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12"
                                             />
                                         )}
 
+                                        {/* Pulsing glow ring for answered */}
+                                        {isAnswered && (
+                                            <motion.div
+                                                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                                className="absolute inset-0 rounded-3xl"
+                                                style={{ boxShadow: `inset 0 0 30px ${playerColor}40` }}
+                                            />
+                                        )}
+
+                                        {/* Avatar with fancy frame */}
                                         <div className="relative z-10">
-                                            <div className="w-16 h-16 bg-black/20 rounded-2xl overflow-hidden shrink-0 shadow-inner">
+                                            <div
+                                                className="w-18 h-18 rounded-2xl overflow-hidden shrink-0 border-3"
+                                                style={{
+                                                    borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
+                                                    boxShadow: isAnswered ? `0 0 20px ${playerColor}50` : 'inset 0 2px 10px rgba(0,0,0,0.5)'
+                                                }}
+                                            >
                                                 <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                             </div>
                                             {isAnswered && (
                                                 <motion.div
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
-                                                    className="absolute -bottom-2 -right-2 bg-success text-black rounded-full p-1.5 border-[3px] border-black shadow-lg"
+                                                    initial={{ scale: 0, rotate: -180 }}
+                                                    animate={{ scale: 1, rotate: 0 }}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                                    className="absolute -bottom-2 -right-2 bg-success text-black rounded-full p-2 shadow-xl"
+                                                    style={{ boxShadow: '0 0 15px rgba(0, 255, 170, 0.6)' }}
                                                 >
-                                                    <Check size={16} strokeWidth={4} />
+                                                    <Check size={14} strokeWidth={4} />
                                                 </motion.div>
                                             )}
                                         </div>
 
-                                        <div className="flex flex-col min-w-0 relative z-10">
-                                            <span className="text-xl md:text-2xl font-black truncate text-white uppercase italic tracking-wider leading-none mb-1.5">
+                                        {/* Player info */}
+                                        <div className="flex flex-col min-w-0 relative z-10 flex-1">
+                                            <span
+                                                className="text-xl md:text-2xl font-black truncate uppercase italic tracking-wider leading-none mb-2"
+                                                style={{
+                                                    color: isAnswered ? 'white' : 'rgba(255,255,255,0.5)',
+                                                    textShadow: isAnswered ? `0 0 20px ${playerColor}60` : 'none'
+                                                }}
+                                            >
                                                 {player.name}
                                             </span>
-                                            <span
-                                                className="text-xs md:text-sm font-black uppercase tracking-[0.2em] leading-none transition-colors"
-                                                style={{ color: isAnswered ? playerColor : 'rgba(255,255,255,0.3)' }}
-                                            >
-                                                {isAnswered ? 'READY' : 'THINKING...'}
-                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                {!isAnswered && (
+                                                    <motion.div
+                                                        animate={{ opacity: [0.3, 1, 0.3] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity }}
+                                                        className="w-2 h-2 rounded-full bg-white/50"
+                                                    />
+                                                )}
+                                                <span
+                                                    className="text-xs md:text-sm font-black uppercase tracking-[0.15em] leading-none"
+                                                    style={{ color: isAnswered ? playerColor : 'rgba(255,255,255,0.3)' }}
+                                                >
+                                                    {isAnswered ? '✓ LOCKED IN' : 'THINKING...'}
+                                                </span>
+                                            </div>
                                         </div>
                                     </motion.div>
                                 );

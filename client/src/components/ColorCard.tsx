@@ -83,20 +83,22 @@ export const ColorCard = memo(function ColorCard({
             {/* Card container */}
             <div className="relative w-full h-full">
 
-                {/* Card shadow - simplified for mobile */}
+                {/* Card shadow - enhanced glow */}
                 <div
-                    className="absolute inset-0 rounded-2xl opacity-40"
+                    className="absolute inset-0 rounded-2xl"
                     style={
                         isStealCard
                             ? {
                                 background: 'black',
-                                transform: 'translateZ(-10px) scale(0.95)',
-                                filter: 'blur(10px)'
+                                transform: 'translateY(8px) scale(0.92)',
+                                filter: 'blur(15px)',
+                                opacity: 0.6
                             }
                             : {
                                 backgroundColor: color,
-                                transform: 'translateZ(-10px) scale(0.95)',
-                                filter: 'blur(10px)'
+                                transform: 'translateY(8px) scale(0.92)',
+                                filter: 'blur(15px)',
+                                opacity: isSelected ? 0.8 : 0.4
                             }
                     }
                 />
@@ -105,60 +107,66 @@ export const ColorCard = memo(function ColorCard({
                 <div
                     className={`
                         absolute inset-0 rounded-2xl overflow-hidden
-                        border transition-all duration-300
+                        border-2 transition-all duration-300
                         ${isSelected
-                            ? 'border-white ring-4 shadow-[0_0_30px_rgba(0,229,255,0.5)]'
-                            : 'border-white/20 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.3)]'
+                            ? 'border-white ring-4 ring-white/30 shadow-[0_0_40px_rgba(255,255,255,0.4)]'
+                            : 'border-white/30 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.5)]'
                         }
-                        ${isCorrect ? '' : ''}
                     `}
                     style={
                         isStealCard
                             ? {
-                                background: 'black',
+                                background: 'linear-gradient(145deg, #1a1a2e 0%, #0d0d1a 100%)',
                                 transform: 'translateZ(0)'
                             }
                             : {
-                                backgroundColor: color,
+                                background: `linear-gradient(145deg, ${color} 0%, ${color}dd 50%, ${color}bb 100%)`,
                                 transform: 'translateZ(0)'
                             }
                     }
                 >
-                    {/* Card shine effect */}
-                    <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent opacity-50" />
+                    {/* Top shine gradient */}
+                    <div className="absolute inset-0 bg-linear-to-b from-white/40 via-transparent to-black/20" />
+
+                    {/* Diagonal shine */}
+                    <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-transparent" />
 
                     {/* Bottom-aligned color name or STEAL card overlay */}
                     {isStealCard ? (
-
-
-                        <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full">
-                            <span
-                                className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
-                                style={{
-                                    color: 'white',
-                                    fontSize: getFontSize(),
-                                    lineHeight: 1.1,
-                                    wordBreak: 'break-word',
-                                    maxWidth: '90%',
-                                    whiteSpace: 'normal',
-                                }}
-                            >
-                                <span className="font-bold text-3xl">{typeof stealValue === 'number' ? stealValue : '?'}</span> STEAL
-                            </span>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
+                            {/* Steal card design */}
+                            <div className="text-center">
+                                <motion.span
+                                    className="block text-4xl md:text-5xl font-black text-white drop-shadow-lg"
+                                    animate={{ scale: [1, 1.05, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                    {typeof stealValue === 'number' ? stealValue : '?'}
+                                </motion.span>
+                                <span
+                                    className="block text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white/80 mt-1"
+                                >
+                                    STEAL
+                                </span>
+                            </div>
+                            {/* Decorative lines */}
+                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
+                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
                         </div>
-
-
                     ) : (
-                        <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center p-2 h-full ${size === 'mini' ? 'opacity-0' : ''}`}>
+                        <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4 ${size === 'mini' ? 'opacity-0' : ''}`}>
                             <span
-                                className="font-mono uppercase tracking-widest text-center drop-shadow-md mb-2"
+                                className="font-black uppercase tracking-wider text-center drop-shadow-lg px-2"
                                 style={{
-                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'black' : 'white',
+                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'rgba(0,0,0,0.8)' : 'white',
                                     fontSize: getFontSize(),
                                     lineHeight: 1.1,
                                     wordBreak: 'break-word',
-                                    maxWidth: '90%',
+                                    maxWidth: '95%',
                                     whiteSpace: 'normal',
+                                    textShadow: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase())
+                                        ? 'none'
+                                        : '0 2px 4px rgba(0,0,0,0.5)'
                                 }}
                             >
                                 {getColorName(color)}
@@ -166,18 +174,21 @@ export const ColorCard = memo(function ColorCard({
                         </div>
                     )}
 
-
-
                     {/* Selection indicator */}
                     {isSelected && (
                         <motion.div
                             initial={{ scale: 0, rotate: -90 }}
                             animate={{ scale: 1, rotate: 0 }}
-                            className="absolute inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center"
+                            className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
                         >
-                            <div className={`rounded-full bg-white text-black flex items-center justify-center shadow-2xl border-4 border-black/10 ${size === 'mini' ? 'w-8 h-8' : 'w-20 h-20'}`}>
-                                <Check size={size === 'mini' ? 20 : 48} strokeWidth={6} />
-                            </div>
+                            <motion.div
+                                className={`rounded-full bg-white text-black flex items-center justify-center shadow-2xl ${size === 'mini' ? 'w-8 h-8' : 'w-16 h-16 md:w-20 md:h-20'}`}
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                style={{ boxShadow: '0 0 30px rgba(255,255,255,0.6)' }}
+                            >
+                                <Check size={size === 'mini' ? 20 : 40} strokeWidth={5} />
+                            </motion.div>
                         </motion.div>
                     )}
 
@@ -192,8 +203,11 @@ export const ColorCard = memo(function ColorCard({
                         </motion.div>
                     )}
 
-                    {/* Card edge highlight */}
-                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+                    {/* Card edge highlight - metallic effect */}
+                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20" />
+
+                    {/* Bottom edge shadow for depth */}
+                    <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-black/30 to-transparent rounded-b-2xl" />
                 </div>
             </div>
         </motion.div>
