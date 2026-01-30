@@ -153,8 +153,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                     onClick={onNextQuestion}
                     className="btn btn-primary mt-2 justify-self-center text-2xl md:text-5xl py-6 md:py-10 px-12 md:px-32 rounded-4xl md:rounded-[3.5rem] shadow-2xl uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20 flex items-center gap-6"
                 >
-                    {isLastQuestion ? 'Show Results' : 'Next Question'}
-                    <span className="ml-4 text-color-blue font-black tabular-nums text-3xl md:text-5xl">{timeLeft}s</span>
+                    {isLastQuestion ? `Show Results in ${timeLeft}s` : `Next Question in ${timeLeft}s`}
                     <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
                 </motion.button>
             </div>

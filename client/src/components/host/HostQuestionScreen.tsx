@@ -64,17 +64,38 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             <AnimatePresence>
                 {stealNotice && (
                     <motion.div
-                        initial={{ x: '100vw', opacity: 0 }}
-                        animate={{ x: '-100vw', opacity: 1 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 3, ease: "linear" }}
-                        className="fixed inset-0 pointer-events-none z-100 flex items-center whitespace-nowrap"
+                        className="fixed inset-0 z-110 flex items-center justify-center pointer-events-none p-10"
                     >
-                        <div className="bg-linear-to-r from-transparent via-color-pink to-transparent py-12 md:py-20 w-full">
-                            <span className="text-8xl md:text-[15rem] font-black italic uppercase tracking-tighter text-white drop-shadow-[0_0_100px_rgba(248,58,123,0.9)]">
-                                {stealNotice} HAS STOLEN! • {stealNotice} HAS STOLEN! • {stealNotice} HAS STOLEN!
-                            </span>
-                        </div>
+                        {/* High-impact background flash */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.4, 0.6] }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute inset-0 bg-color-pink/30 mix-blend-color-dodge"
+                        />
+
+                        <motion.div
+                            initial={{ scale: 5, rotate: -40, opacity: 0, filter: 'blur(20px)' }}
+                            animate={{ scale: 1, rotate: -8, opacity: 1, filter: 'blur(0px)' }}
+                            transition={{
+                                type: "spring",
+                                damping: 10,
+                                stiffness: 300,
+                            }}
+                            className="relative"
+                        >
+                            <div className="bg-color-pink border-15 md:border-24 border-white px-12 md:px-24 py-8 md:py-14 shadow-[0_50px_100px_rgba(248,58,123,0.8),0_0_100px_rgba(255,255,255,0.4)] flex flex-col items-center">
+                                <span className="text-7xl md:text-[10rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                                    {stealNotice}
+                                </span>
+                                <span className="text-9xl md:text-[16rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)] -mt-4 md:-mt-10">
+                                    HAS STOLEN!
+                                </span>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
