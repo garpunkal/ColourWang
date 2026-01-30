@@ -1,6 +1,5 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { Users } from 'lucide-react';
-import { Logo } from '../Logo';
 
 interface Props {
     code: string;
@@ -52,11 +51,8 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
                 </div>
             </div>
 
-            {/* Logo  */}
             <div className={`flex flex-col items-center gap-6 transition-all duration-500 ${compact ? 'gap-2' : 'gap-6'}`}>
-                <div className={`transition-all duration-500 origin-right ${compact ? 'scale-75' : 'scale-100'}`}>
-                    <Logo className={`drop-shadow-2xl transition-all duration-500 ${compact ? 'w-40' : 'w-64 md:w-80'} h-auto`} />
-                </div>
+                {/* Logo Removed */}
             </div>
 
             {/* Count  */}

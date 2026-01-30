@@ -10,6 +10,14 @@
 	--color-purple: var(--color-purple);
 	--color-pink: var(--color-pink);
 	--color-orange: var(--color-orange);
+	--color-teal: var(--color-teal);
+	--color-violet: var(--color-violet);
+	--color-magenta: var(--color-magenta);
+	--color-lime: var(--color-lime);
+	--color-indigo: var(--color-indigo);
+	--color-gray: var(--color-gray);
+	--color-black: var(--color-black);
+	--color-brown: var(--color-brown);
 
 	--color-gold: #ffd700;
 
@@ -41,6 +49,15 @@
 	--color-purple: #9d50bb;
 	--color-pink: #f83a7b;
 	--color-orange: #ff9d00;
+	--color-teal: #00ffcc;
+	--color-violet: #7b2cbf;
+	--color-magenta: #ff00ff;
+	--color-lime: #ccff00;
+	--color-indigo: #3f51b5;
+	--color-gray: #808080;
+	--color-black: #000000;
+
+	--color-brown: #8b4513;
 	--color-gold: #ffd700;
 
 	--primary: var(--color-blue);
@@ -240,7 +257,7 @@ button {
 }
 
 @media (max-width: 768px) {
-	.particle:nth-child(n+7) {
+	.particle:nth-child(n + 7) {
 		display: none;
 	}
 }

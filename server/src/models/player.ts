@@ -8,4 +8,6 @@ export interface Player {
     isCorrect: boolean;
     stealCardValue: number; // Value of the STEAL card (1-8)
     stealCardUsed: boolean; // Has the STEAL card been used?
+    disabledIndexes?: number[]; // Indexes of options currently disabled for this player
+
 }

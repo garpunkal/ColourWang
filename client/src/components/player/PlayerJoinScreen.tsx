@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
 import { Hash, Smartphone, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Logo } from '../Logo';
 import { Avatar } from '../GameAvatars';
-import { AVATAR_IDS, getAvatarName } from '../../constants/avatars';
+import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
 
 interface Props {
     socket: Socket;
@@ -127,9 +126,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                 className="flex flex-col gap-6 md:gap-10 pb-8 md:pb-12 w-full my-auto"
             >
                 <div className="text-center flex flex-col items-center justify-start mb-2">
-                    <div className="w-[85vw] max-w-70 mb-2 scale-90 md:scale-100 origin-top">
-                        <Logo />
-                    </div>
+                    {/* Logo Removed */}
                 </div>
 
                 <div className="glass-card p-4 md:p-6 rounded-3xl shadow-xl space-y-6 md:space-y-10 m-2 md:m-4">
@@ -139,10 +136,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Codename</label>
                             <input
-                                className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-4xl py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl"
+                                className="input w-full text-xl md:text-3xl font-bold border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-pink/50 rounded-[1.2rem] md:rounded-4xl py-3 md:py-6 px-4 md:px-8 placeholder:text-white/10 transition-all shadow-xl uppercase"
                                 placeholder="ENTER NAME"
                                 value={name}
-                                onChange={e => setName(e.target.value)}
+                                onChange={e => setName(e.target.value.toUpperCase())}
                             />
                         </div>
 
@@ -179,12 +176,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     className={`
                                             relative aspect-square flex items-center justify-center p-2 rounded-2xl transition-all duration-300
                                             ${isSelected
-                                            ? 'bg-white/10 ring-4 ring-color-blue ring-offset-4 ring-offset-black scale-110 z-10'
+                                            ? 'bg-white/10 ring-4 ring-offset-4 ring-offset-black scale-110 z-10'
                                             : taken
                                                 ? 'opacity-20 cursor-not-allowed'
                                                 : 'opacity-60 hover:opacity-100 hover:scale-105'
                                         }
                                         `}
+                                    style={isSelected ? { '--tw-ring-color': getAvatarColor(a) } as React.CSSProperties : {}}
                                     title={taken ? `${getAvatarName(a)} - Taken` : getAvatarName(a)}
                                 >
                                     <div className="w-full h-full relative">
@@ -195,7 +193,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                             </div>
                                         )}
                                     </div>
-                                    {isSelected && <motion.div layoutId="activeAvatar" className="absolute inset-0 rounded-2xl bg-color-blue/10" />}
+                                    {isSelected && (
+                                        <motion.div
+                                            layoutId="activeAvatar"
+                                            className="absolute inset-0 rounded-2xl"
+                                            style={{ backgroundColor: `${getAvatarColor(a)}20` }}
+                                        />
+                                    )}
                                 </motion.button>
                             );
                         })}

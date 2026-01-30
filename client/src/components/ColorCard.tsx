@@ -31,7 +31,7 @@ export const ColorCard = memo(function ColorCard({
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
         large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' },
-        responsive: { width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px' }
+        responsive: { width: '100%', aspectRatio: '3/4', maxWidth: 'clamp(120px, 18vw, 240px)', minWidth: '100px' }
     };
 
     const cardStyle = sizeStyles[size] || sizeStyles.medium;
@@ -39,7 +39,7 @@ export const ColorCard = memo(function ColorCard({
     // Responsive font size for color name
     const getFontSize = () => {
         if (size === 'mini') return '0.5rem';
-        if (size === 'responsive') return 'clamp(0.7rem, 1vw, 0.85rem)'; // smaller max for large screens
+        if (size === 'responsive') return 'clamp(0.6rem, 1.2vw, 1rem)'; // Adjusted scaling
         if (size === 'small') return '0.85rem';
         if (size === 'large') return '1.3rem';
         return '1rem';

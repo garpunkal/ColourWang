@@ -16,8 +16,11 @@ interface Props {
 }
 
 export function HostQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex, timeLeft }: Props) {
-    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>([]);
-    const [stealNotice, setStealNotice] = useState<string | null>(null);
+    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>(
+        gameState.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null }))
+    );
+
+    const [stealNotice, setStealNotice] = useState<{ name: string; value: number } | null>(null);
 
 
     // Listen for player-answered events
@@ -33,11 +36,11 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
 
     // Listen for steal events
     useEffect(() => {
-        const handler = ({ playerId }: { playerId: string }) => {
+        const handler = ({ playerId, value }: { playerId: string, value: number }) => {
             const stealer = gameState.players.find(p => p.id === playerId);
             if (stealer) {
-                setStealNotice(stealer.name);
-                setTimeout(() => setStealNotice(null), 3000);
+                setStealNotice({ name: stealer.name, value });
+                setTimeout(() => setStealNotice(null), 5000); // Host marquee stays longer
             }
         };
         socket.on('steal-card-used', handler);
@@ -64,37 +67,22 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             <AnimatePresence>
                 {stealNotice && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-110 flex items-center justify-center pointer-events-none p-10"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 100, opacity: 0 }}
+                        className="fixed bottom-0 left-0 right-0 z-50 bg-color-pink py-4 overflow-hidden border-t-4 border-white shadow-[0_-20px_50px_rgba(248,58,123,0.5)]"
                     >
-                        {/* High-impact background flash */}
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 1, 0.4, 0.6] }}
-                            transition={{ duration: 0.15 }}
-                            className="absolute inset-0 bg-color-pink/30 mix-blend-color-dodge"
-                        />
-
-                        <motion.div
-                            initial={{ scale: 5, rotate: -40, opacity: 0, filter: 'blur(20px)' }}
-                            animate={{ scale: 1, rotate: -8, opacity: 1, filter: 'blur(0px)' }}
-                            transition={{
-                                type: "spring",
-                                damping: 10,
-                                stiffness: 300,
-                            }}
-                            className="relative"
+                            initial={{ x: '100%' }}
+                            animate={{ x: '-100%' }}
+                            transition={{ duration: 5, ease: "linear", repeat: Infinity }}
+                            className="whitespace-nowrap flex items-center gap-12"
                         >
-                            <div className="bg-color-pink border-15 md:border-24 border-white px-12 md:px-24 py-8 md:py-14 shadow-[0_50px_100px_rgba(248,58,123,0.8),0_0_100px_rgba(255,255,255,0.4)] flex flex-col items-center">
-                                <span className="text-7xl md:text-[10rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-                                    {stealNotice}
+                            {[...Array(5)].map((_, i) => (
+                                <span key={i} className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white mr-4">
+                                    {stealNotice.name} STOLE {stealNotice.value} CARDS!
                                 </span>
-                                <span className="text-9xl md:text-[16rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)] -mt-4 md:-mt-10">
-                                    HAS STOLEN!
-                                </span>
-                            </div>
+                            ))}
                         </motion.div>
                     </motion.div>
                 )}
@@ -137,7 +125,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 >
                     {/* Player list */}
                     {playersAnswered.length > 0 && (
-                        <div className="flex justify-center gap-3 flex-wrap max-w-4xl">
+                        <div className="flex justify-center gap-5 flex-wrap max-w-5xl">
                             {gameState.players.map((player) => {
                                 const playerStatus = playersAnswered.find(p => p.id === player.id);
                                 const playerColor = getAvatarColor(player.avatar);
@@ -147,26 +135,28 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                     <motion.div
                                         key={player.id}
                                         initial={{ scale: 0.8 }}
-                                        animate={{ scale: 1 }}
-                                        className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all"
+                                        animate={{ scale: isAnswered ? 1.1 : 1 }}
+                                        className="flex items-center gap-4 px-6 py-3 rounded-3xl text-xl font-black transition-all shadow-xl"
                                         style={{
-                                            backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}10`,
-                                            border: `2px solid ${isAnswered ? playerColor : `${playerColor}30`}`,
+                                            backgroundColor: isAnswered ? `${playerColor}30` : `${playerColor}05`,
+                                            border: `3px solid ${isAnswered ? playerColor : `${playerColor}20`}`,
                                             color: playerColor,
-                                            opacity: isAnswered ? 1 : 0.5
+                                            boxShadow: isAnswered ? `0 10px 30px -5px ${playerColor}40` : 'none',
+                                            opacity: isAnswered ? 1 : 0.4
                                         }}
                                     >
-                                        <div className="w-5 h-5 bg-white/5 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border-2 border-white/10 overflow-hidden shrink-0 shadow-lg">
                                             <Avatar seed={player.avatar} className="w-full h-full" />
                                         </div>
-                                        <span className="uppercase tracking-wider">{player.name}</span>
+                                        <span className="uppercase tracking-tight italic">{player.name}</span>
                                         {isAnswered && (
                                             <motion.div
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
+                                                initial={{ scale: 0, rotate: -45 }}
+                                                animate={{ scale: 1, rotate: 0 }}
                                                 transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                                                className="bg-success rounded-full p-1 shadow-lg"
                                             >
-                                                <Check size={16} strokeWidth={3} />
+                                                <Check size={20} strokeWidth={5} className="text-white" />
                                             </motion.div>
                                         )}
                                     </motion.div>

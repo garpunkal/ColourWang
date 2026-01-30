@@ -24,11 +24,14 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
     // (stolenFromIds state removed; not used)
     const stealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const [selectedColors, setSelectedColors] = useState<string[]>([]);
-    const [hasAnswered, setHasAnswered] = useState(false);
+    const [selectedColors, setSelectedColors] = useState<string[]>(me?.lastAnswer || []);
+    const [hasAnswered, setHasAnswered] = useState(me?.lastAnswer !== null);
     const [useStealCard, setUseStealCard] = useState(false);
-    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>([]);
-    const [stealNotice, setStealNotice] = useState<string | null>(null);
+    const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>(
+        gameState.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null }))
+    );
+
+    const [stealNotice, setStealNotice] = useState<{ name: string; value: number } | null>(null);
 
 
 
@@ -60,7 +63,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             setUseStealCard(false);
         }
     }, [gameState, selectedColors, socket, useStealCard, me]);
-    const [disabledIndexes, setDisabledIndexes] = useState<number[]>([]);
+    const [disabledIndexes, setDisabledIndexes] = useState<number[]>(me?.disabledIndexes || []);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 15);
 
     // Reset when question changes
@@ -82,17 +85,18 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     // Reset answer state when question changes
     useEffect(() => {
         // Reset steal card for new question
-        setTimeout(() => setStealCardActiveThisQuestion(true), 0);
+        const anyoneStole = gameState.players.some(p => p.disabledIndexes && p.disabledIndexes.length > 0);
+        setTimeout(() => setStealCardActiveThisQuestion(!anyoneStole), 0);
         // No localStealCardUsed to reset
         // Use setTimeout to avoid cascading renders
         const timer = setTimeout(() => {
             setSelectedColors([]);
             setHasAnswered(false);
             setTimeLeft(gameState.timerDuration || 15);
-
+            setDisabledIndexes(me?.disabledIndexes || []);
         }, 0);
         return () => clearTimeout(timer);
-    }, [currentQuestionIndex, gameState.timerDuration]);
+    }, [currentQuestionIndex, gameState.timerDuration, gameState.players, me?.disabledIndexes]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -126,24 +130,26 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 : [...prev, color]
         );
     };
-    // Listen for steal-card-used event to randomly disable cards for this round
     useEffect(() => {
-        const handler = ({ playerId, disabledMap }: { playerId: string, value: number, disabledMap: Record<string, number[]> }) => {
+        const handler = ({ playerId, value, disabledMap }: { playerId: string, value: number, disabledMap: Record<string, number[]> }) => {
             const myId = localStorage.getItem('cw_playerId');
             const stealer = gameState.players.find(p => p.id === playerId);
 
-            if (stealer) {
-                setStealNotice(stealer.name);
-                setTimeout(() => setStealNotice(null), 3000); // Clear after 3 seconds
+            // Only show notice and apply disabled cards if I haven't answered yet
+            if (!hasAnswered) {
+                if (stealer && playerId !== myId) {
+                    setStealNotice({ name: stealer.name, value });
+                    setTimeout(() => setStealNotice(null), 3500); // Clear after 3.5s
+                }
+
+                if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
+                    setDisabledIndexes(disabledMap[myId]);
+                }
             }
 
             // Disable STEAL card UI for all players as soon as one is used (for this question only)
             setUseStealCard(false);
             setStealCardActiveThisQuestion(false);
-
-            if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
-                setDisabledIndexes(disabledMap[myId]);
-            }
 
             if (stealTimeoutRef.current) clearTimeout(stealTimeoutRef.current);
         };
@@ -153,16 +159,18 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             socket.off('steal-card-used', handler);
             if (currentTimeout) clearTimeout(currentTimeout);
         };
-    }, [socket, gameState.currentQuestionIndex, gameState.players]);
+    }, [socket, gameState.currentQuestionIndex, gameState.players, hasAnswered]);
 
 
-    // Reset disabledIndexes when question changes
+    // Reset disabledIndexes when question changes (already handled in the effect above, but keeping for safety if question changes but gameState doesn't update immediately)
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setDisabledIndexes([]);
-        }, 0);
-        return () => clearTimeout(timer);
-    }, [currentQuestionIndex]);
+        if (!me?.disabledIndexes || me.disabledIndexes.length === 0) {
+            const timer = setTimeout(() => {
+                setDisabledIndexes([]);
+            }, 0);
+            return () => clearTimeout(timer);
+        }
+    }, [currentQuestionIndex, me?.disabledIndexes]);
 
     // Unselect any colors that are now disabled (cards that disappear)
     useEffect(() => {
@@ -200,7 +208,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            className="flex-1 flex flex-col gap-8 relative"
+            className="flex-1 flex flex-col gap-4 md:gap-8 relative"
         >
             <AnimatePresence>
                 {stealNotice && (
@@ -210,30 +218,30 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-110 flex items-center justify-center pointer-events-none p-6"
                     >
-                        {/* High-impact background flash */}
+                        {/* High-impact background flash & heavy blur */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: [0, 1, 0.4, 0.6] }}
                             transition={{ duration: 0.15 }}
-                            className="absolute inset-0 bg-color-pink/30 mix-blend-color-dodge"
+                            className="absolute inset-0 bg-color-pink/40 mix-blend-color-dodge backdrop-blur-xl"
                         />
 
                         <motion.div
-                            initial={{ scale: 5, rotate: -30, opacity: 0, filter: 'blur(20px)' }}
-                            animate={{ scale: 1, rotate: -10, opacity: 1, filter: 'blur(0px)' }}
+                            initial={{ scale: 3, rotate: -30, opacity: 0, filter: 'blur(20px)' }}
+                            animate={{ scale: 0.6, rotate: -10, opacity: 1, filter: 'blur(0px)' }}
                             transition={{
                                 type: "spring",
-                                damping: 12,
-                                stiffness: 250,
+                                damping: 14,
+                                stiffness: 200,
                             }}
                             className="relative"
                         >
-                            <div className="bg-color-pink border-10 md:border-16 border-white px-8 md:px-16 py-6 md:py-10 shadow-[0_30px_60px_rgba(248,58,123,0.8),0_0_60px_rgba(255,255,255,0.3)] flex flex-col items-center">
-                                <span className="text-4xl md:text-[6rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-                                    {stealNotice}
+                            <div className="bg-color-pink border-8 md:border-12 border-white px-6 md:px-12 py-5 md:py-8 shadow-[0_25px_50px_rgba(248,58,123,0.8),0_0_40px_rgba(255,255,255,0.3)] flex flex-col items-center">
+                                <span className="text-3xl md:text-[5rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_8px_15px_rgba(0,0,0,0.5)]">
+                                    {stealNotice.name}
                                 </span>
-                                <span className="text-6xl md:text-[10rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.6)] -mt-2 md:-mt-6">
-                                    HAS STOLEN!
+                                <span className="text-5xl md:text-[8rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] -mt-2 md:-mt-4">
+                                    STOLE {stealNotice.value} CARDS!
                                 </span>
                             </div>
                         </motion.div>
@@ -241,9 +249,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 )}
             </AnimatePresence>
 
-            <div className="text-center px-4">
+            <div className="text-center px-4 shrink-0">
                 <div
-                    className="inline-block px-6 py-2 rounded-2xl font-black uppercase text-[11px] tracking-[0.4em] mb-6 italic shadow-xl"
+                    className="inline-block px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-[0.4em] mb-3 md:mb-6 italic shadow-xl"
                     style={{
                         backgroundColor: `${avatarColor}20`,
                         border: `1px solid ${avatarColor}40`,
@@ -252,47 +260,35 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 >
                     Question {currentQuestionIndex + 1}
                 </div>
-                <h3 className="text-3xl md:text-5xl text-display text-display-gradient px-4">{currentQuestion.question}</h3>
+                <h3 className="text-2xl md:text-5xl text-display text-display-gradient px-2">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (
-                <div className="flex-1 flex flex-col gap-6 justify-center items-center min-h-0">
+                <div className="flex-1 flex flex-col gap-4 md:gap-6 justify-center items-center min-h-0">
                     <div
-                        className="flex-1 w-full flex justify-center items-center min-h-0"
-                        style={{ minHeight: '30vh' }}
+                        className="flex-1 w-full flex justify-center items-center min-h-0 py-2"
+                        style={{ minHeight: '25vh' }}
                     >
                         <div
-                            className="grid mx-auto"
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))',
-                                gap: '3vw',
-                                width: '100%',
-                                maxWidth: '420px',
-                                alignItems: 'center',
-                                justifyItems: 'center',
-                                margin: '0 auto',
-                            }}
+                            className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 lg:gap-5 w-full max-w-7xl px-2 md:px-6 mx-auto items-center justify-items-center"
                         >
                             {currentQuestion.options.map((color, i) =>
-                                disabledIndexes.includes(i)
-                                    ? (
-                                        <div
-                                            key={i}
-                                            style={{ width: '100%', aspectRatio: '3/4', maxWidth: '110px', minWidth: '70px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                        />
-                                    )
-                                    : (
-                                        <ColorCard
-                                            key={i}
-                                            color={color}
-                                            isSelected={selectedColors.includes(color)}
-                                            onClick={() => toggleColor(color)}
-                                            disabled={hasAnswered || timeLeft === 0}
-                                            size="responsive"
-                                            index={i}
-                                        />
-                                    )
+                                disabledIndexes.includes(i) ? (
+                                    <div
+                                        key={i}
+                                        className="w-full aspect-3/4 max-w-[clamp(120px,18vw,240px)] min-w-25 bg-transparent"
+                                    />
+                                ) : (
+                                    <ColorCard
+                                        key={i}
+                                        color={color}
+                                        isSelected={selectedColors.includes(color)}
+                                        onClick={() => toggleColor(color)}
+                                        disabled={hasAnswered || timeLeft === 0}
+                                        size="responsive"
+                                        index={i}
+                                    />
+                                )
                             )}
                             {/* STEAL card at the end */}
                             {me && !me.stealCardUsed && stealCardActiveThisQuestion && (
@@ -323,13 +319,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             whileTap={{ scale: 0.97 }}
                             onClick={e => submitAnswer(e)}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
-                            className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-3xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"
+                            className="btn btn-primary w-full py-4 md:py-12 text-xl md:text-3xl transition-all flex items-center justify-center gap-4 md:gap-8 rounded-2xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0"
                             style={{
-                                boxShadow: `0 40px 80px -20px ${avatarColor}60`,
+                                boxShadow: `0 20px 40px -10px ${avatarColor}60`,
                                 borderColor: `${avatarColor}80`
                             }}
                         >
-                            Submit <Send fill="currentColor" size={32} />
+                            Submit <Send fill="currentColor" size={24} className="md:w-8 md:h-8" />
                         </motion.button>
                     </div>
                 </div>
@@ -338,7 +334,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     key="selection"
                     initial={{ scale: 0.8, opacity: 0, y: 100 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
-                    className="text-center flex flex-col items-center justify-center gap-6 w-full max-w-lg mx-auto px-2"
+                    className="text-center flex-1 flex flex-col items-center justify-center gap-6 w-full max-w-3xl mx-auto px-4"
                 >
                     <div className="w-full space-y-3">
                         <div className="glass p-4 md:p-5 rounded-4xl md:rounded-4xl border-white/10 space-y-3 mt-6">

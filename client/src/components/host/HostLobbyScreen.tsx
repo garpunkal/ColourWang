@@ -52,7 +52,6 @@ export function HostLobbyScreen({ players, onStartGame }: Props) {
                                     >
                                         {player.name}
                                     </span>
-                                    <div className="w-2 h-2 rounded-full animate-pulse mt-1" style={{ backgroundColor: avatarColor }} />
                                 </div>
                             </motion.div>
                         );

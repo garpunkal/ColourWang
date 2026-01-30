@@ -48,7 +48,20 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 }
             }, 1000);
 
-            return () => clearInterval(interval);
+            // Speed up if all players answered
+            const answerHandler = (players: { id: string; hasAnswered: boolean }[]) => {
+                if (players.length > 0 && players.every(p => p.hasAnswered)) {
+                    clearInterval(interval);
+                    setTimeLeft(0);
+                    socket.emit('time-up', gameState.code);
+                }
+            };
+            socket.on('player-answered', answerHandler);
+
+            return () => {
+                clearInterval(interval);
+                socket.off('player-answered', answerHandler);
+            };
         }
     }, [gameState?.status, gameState?.currentQuestionIndex, gameState?.timerDuration, gameState?.code, socket]);
 

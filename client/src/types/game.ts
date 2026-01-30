@@ -8,6 +8,8 @@ export interface Player {
     isCorrect: boolean;
     stealCardValue: number;
     stealCardUsed: boolean;
+    disabledIndexes?: number[];
+
 }
 
 export interface Question {

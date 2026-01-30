@@ -1,21 +1,21 @@
-// Avatar colors matching our game's color palette
+// Avatar colors matching our game's color palette (PALETTE from gameConfig)
 export const AVATAR_COLORS = [
-    { id: 'cyber-blue', color: '#00e5ff', name: 'Cyber Blue' },
-    { id: 'neon-pink', color: '#f83a7b', name: 'Neon Pink' },
-    { id: 'electric-purple', color: '#9d50bb', name: 'Electric Purple' },
-    { id: 'solar-orange', color: '#ff9d00', name: 'Solar Orange' },
-    { id: 'matrix-green', color: '#00ffaa', name: 'Matrix Green' },
-    { id: 'crimson-red', color: '#ff3366', name: 'Crimson Red' },
-    { id: 'royal-violet', color: '#7b2cbf', name: 'Royal Violet' },
-    { id: 'golden-yellow', color: '#ffd700', name: 'Golden Yellow' },
-    { id: 'aqua-teal', color: '#00d9ff', name: 'Aqua Teal' },
-    { id: 'hot-magenta', color: '#ff006e', name: 'Hot Magenta' },
-    { id: 'lime-green', color: '#ccff00', name: 'Lime Green' },
-    { id: 'deep-indigo', color: '#4a148c', name: 'Deep Indigo' },
-    { id: 'coral-red', color: '#ff5252', name: 'Coral Red' },
-    { id: 'sky-cyan', color: '#00bcd4', name: 'Sky Cyan' },
-    { id: 'sunset-orange', color: '#ff6f00', name: 'Sunset Orange' },
-    { id: 'mint-green', color: '#69f0ae', name: 'Mint Green' },
+    { id: 'midnight-black', color: '#000000', name: 'MIDNIGHT BLACK' },
+    { id: 'iron-gray', color: '#808080', name: 'IRON GRAY' },
+    { id: 'cloud-white', color: '#ffffff', name: 'CLOUD WHITE' },
+    { id: 'crimson-red', color: '#ff0000', name: 'CRIMSON RED' },
+    { id: 'solar-orange', color: '#ff9d00', name: 'SOLAR ORANGE' },
+    { id: 'golden-yellow', color: '#ffff00', name: 'GOLDEN YELLOW' },
+    { id: 'matrix-green', color: '#00ff00', name: 'MATRIX GREEN' },
+    { id: 'cyber-blue', color: '#00e5ff', name: 'CYBER BLUE' },
+    { id: 'electric-purple', color: '#9d50bb', name: 'ELECTRIC PURPLE' },
+    { id: 'neon-pink', color: '#f83a7b', name: 'NEON PINK' },
+    { id: 'muddy-brown', color: '#8B4513', name: 'MUDDY BROWN' },
+    { id: 'aqua-teal', color: '#00ffcc', name: 'AQUA TEAL' },
+    { id: 'royal-violet', color: '#7b2cbf', name: 'ROYAL VIOLET' },
+    { id: 'hot-magenta', color: '#ff00ff', name: 'HOT MAGENTA' },
+    { id: 'lime-punch', color: '#ccff00', name: 'LIME PUNCH' },
+    { id: 'deep-indigo', color: '#3f51b5', name: 'DEEP INDIGO' },
 ];
 
 // Get avatar color by ID

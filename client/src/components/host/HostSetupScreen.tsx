@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { Question } from '../../types/game';
 import { motion } from 'framer-motion';
-import { Logo } from '../Logo';
 import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
 import { shuffleArray } from '../../utils/shuffleArray';
@@ -43,7 +42,7 @@ export function HostSetupScreen({ socket }: Props) {
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-12 overflow-y-auto">
-            <Logo className="w-auto max-w-75 md:max-w-150 lg:max-w-200 mb-8 md:mb-12" />
+            {/* Logo Removed */}
             <div className="glass-card p-8 md:p-16 rounded-4xl md:rounded-[4rem] border-white/10 shadow-2xl max-w-4xl w-full mx-auto md:mx-8">
                 <h2 className="text-4xl md:text-6xl font-black mb-8 md:mb-12 uppercase tracking-tight italic">Game Settings</h2>
                 {loadingQuestions && <div className="text-2xl text-color-blue font-bold mb-8">Loading questions...</div>}

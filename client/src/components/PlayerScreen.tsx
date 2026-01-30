@@ -29,6 +29,8 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     const { status, players, currentQuestionIndex, questions } = gameState;
     const currentQuestion = questions[currentQuestionIndex];
     const me = players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    const myRank = me ? sortedPlayers.findIndex(p => p.id === me.id) + 1 : undefined;
 
     return (
         <div className="flex flex-col p-4 h-full w-full max-w-2xl mx-auto relative z-10">
@@ -36,9 +38,10 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                 name={me?.name || name}
                 avatar={me?.avatar || 'cyber-blue'}
                 score={me?.score || 0}
+                rank={status === 'FINAL_SCORE' ? myRank : undefined}
             />
 
-            <div className="flex flex-col justify-center ">
+            <div className="flex-1 flex flex-col justify-start">
                 <AnimatePresence mode="wait">
                     {status === 'LOBBY' && <PlayerLobbyScreen gameState={gameState} />}
 

@@ -6,7 +6,6 @@ import { io, Socket } from 'socket.io-client';
 import type { GameState } from './types/game';
 import HostScreen from './components/HostScreen.tsx';
 import PlayerScreen from './components/PlayerScreen.tsx';
-import { Logo } from './components/Logo';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocketConnection } from './hooks/useSocketConnection';
@@ -82,14 +81,9 @@ function App() {
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="mb-4 md:mb-10 flex flex-col items-center"
+              className="mb-8 md:mb-16 flex flex-col items-center"
             >
-              <Logo />
-              <motion.div
-                animate={{ width: ['0%', '100%', '0%'] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1 bg-linear-to-r from-transparent via-white/50 to-transparent w-80"
-              />
+              {/* Logo Removed */}
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl px-4 md:px-0">

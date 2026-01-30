@@ -1,21 +1,17 @@
-import questionsData from './questions.generated.json';
+import questionsRaw from './questions.json';
+import paletteRaw from './palette.json';
 import type { Question } from '../types/game';
 
 interface QuestionData {
   id?: string;
   question: string;
-  options: string[];
-  correct: string[];
+  options?: string[];
+  correct?: string[];
   correctColors?: string[];
 
 }
 
-interface QuestionsJSON {
-  palette: { name: string; hex: string }[];
-  questions: QuestionData[];
-}
-
-export const PALETTE = (questionsData as QuestionsJSON).palette;
+export const PALETTE = paletteRaw.palette;
 
 const nameMap = new Map<string, string>(); // hex -> name
 const hexMap = new Map<string, string>(); // name -> hex
@@ -42,15 +38,12 @@ export async function fetchQuestions(): Promise<Question[]> {
   // Simulate async for consistency, but data is already loaded
   return new Promise((resolve) => {
     setTimeout(() => {
-      const data = questionsData as QuestionsJSON;
-
-      if (!data.questions || !data.palette) {
-        throw new Error('Invalid questions format');
-      }
+      const questionsData = questionsRaw as QuestionData[];
+      const paletteData = paletteRaw.palette;
 
       // Use palette for options universally
-      const paletteOptions = data.palette.map(p => p.hex);
-      const questions: Question[] = data.questions.map((q: QuestionData, index: number) => {
+      const paletteOptions = paletteData.map(p => p.hex);
+      const questions: Question[] = questionsData.map((q: QuestionData, index: number) => {
         const correctColors = (q.correct || q.correctColors || []).map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
         return {
           id: q.id || `q-${index}`,

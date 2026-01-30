@@ -25,8 +25,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 />
             </div>
             <h3 className="text-4xl md:text-5xl font-black mb-3 uppercase tracking-tighter italic z-10 relative">STAND BY</h3>
-            <p className="text-text-muted font-bold text-base md:text-lg mb-2 z-10 relative px-4 leading-relaxed opacity-80 italic">You're in!</p>
-            <p className="text-text-muted font-bold text-sm md:text-base mb-6 z-10 relative px-4 leading-relaxed opacity-80 italic">Please wait for the game to begin.</p>
+            <p className="text-text-muted font-bold text-base md:text-lg mb-2 z-10 relative px-4 leading-relaxed opacity-80 italic mt-8">You're in the game!</p>
 
             {/* Players List */}
             <div className="relative z-10">

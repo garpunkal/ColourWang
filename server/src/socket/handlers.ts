@@ -7,10 +7,10 @@ import { Player } from '../models/player';
 
 // Available avatar colors
 const AVATAR_IDS = [
-  'cyber-blue', 'neon-pink', 'electric-purple', 'solar-orange',
-  'matrix-green', 'crimson-red', 'royal-violet', 'golden-yellow',
-  'aqua-teal', 'hot-magenta', 'lime-green', 'deep-indigo',
-  'coral-red', 'sky-cyan', 'sunset-orange', 'mint-green'
+  'midnight-black', 'iron-gray', 'cloud-white', 'crimson-red',
+  'solar-orange', 'golden-yellow', 'matrix-green', 'cyber-blue',
+  'electric-purple', 'neon-pink', 'muddy-brown', 'aqua-teal',
+  'royal-violet', 'hot-magenta', 'lime-punch', 'deep-indigo'
 ];
 
 function getNextAvailableAvatar(takenAvatars: string[]): string {
@@ -68,6 +68,7 @@ export function registerSocketHandlers(io: Server) {
                 [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
               }
               disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
+              p.disabledIndexes = disabledMap[p.id];
             }
           });
           io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
@@ -91,7 +92,8 @@ export function registerSocketHandlers(io: Server) {
           lastAnswer: null,
           isCorrect: false,
           stealCardValue: Math.floor(Math.random() * 8) + 1, // 1-8
-          stealCardUsed: false
+          stealCardUsed: false,
+          disabledIndexes: []
         };
         game.players.push(player);
         socket.join(code.toUpperCase());
@@ -99,7 +101,8 @@ export function registerSocketHandlers(io: Server) {
         game.players = game.players.map(p => ({
           ...p,
           stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
-          stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false
+          stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+          disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : []
         }));
         // Debug: print all players before emitting joined-game
         console.log('[DEBUG] joined-game emit, players:', JSON.stringify(game.players, null, 2));
@@ -123,7 +126,8 @@ export function registerSocketHandlers(io: Server) {
           game.players = game.players.map(p => ({
             ...p,
             stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
-            stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false
+            stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+            disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : []
           }));
           // Debug: print all players before emitting joined-game
           console.log('[DEBUG] rejoin joined-game emit, players:', JSON.stringify(game.players, null, 2));
@@ -193,6 +197,7 @@ export function registerSocketHandlers(io: Server) {
                   [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
                 }
                 disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
+                p.disabledIndexes = disabledMap[p.id];
               }
             });
             io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
@@ -215,6 +220,7 @@ export function registerSocketHandlers(io: Server) {
         game.players.forEach(p => {
           p.lastAnswer = null;
           p.isCorrect = false;
+          p.disabledIndexes = [];
         });
         if (game.currentQuestionIndex >= game.questions.length) {
           game.status = 'FINAL_SCORE';
@@ -238,6 +244,7 @@ export function registerSocketHandlers(io: Server) {
           p.lastAnswer = null;
           p.isCorrect = false;
           p.stealCardUsed = false;
+          p.disabledIndexes = [];
           // Optionally randomize stealCardValue again
           p.stealCardValue = Math.floor(Math.random() * 8) + 1;
         });

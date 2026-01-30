@@ -55,107 +55,150 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
     return (
         <motion.div
             key="result"
-            initial={{ scale: 1.1, opacity: 0, filter: "blur(20px)" }}
+            initial={{ scale: 1.05, opacity: 0, filter: "blur(20px)" }}
             animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-            className="w-full max-w-7xl text-center"
+            className="w-full max-w-7xl relative"
         >
-            <div className="mb-4">
-                <h3 className="text-[clamp(2rem,5vw,4rem)] text-display mb-2 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-                    {currentQuestion.question}
-                </h3>
-                <div className="text-lg md:text-2xl font-black bg-white/10 inline-block px-4 md:px-6 py-1 md:py-2 rounded-2xl text-color-blue tracking-widest border border-white/10">
-                    CORRECT ANSWER
+            {/* Background Atmosphere */}
+            <div
+                className="absolute left-1/2 top-40 -translate-x-1/2 w-full h-150 blur-[160px] opacity-20 -z-10 bg-color-blue"
+            />
+
+            <div className="flex flex-col items-center text-center">
+                {/* Question Section */}
+                <div className="mb-12 max-w-5xl">
+                    <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] text-display mb-8 text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
+                        {currentQuestion.question}
+                    </h3>
+                    <div className="flex flex-col items-center gap-10">
+                        <div className="flex flex-col items-center">
+                            <span className="text-sm md:text-lg font-black text-color-blue tracking-[0.6em] uppercase italic mb-6 opacity-80">Correct Answer</span>
+                            <div className="flex justify-center gap-8 flex-wrap">
+                                {correctColors.map((color, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 + (i * 0.1) }}
+                                    >
+                                        <ColorCard
+                                            color={color}
+                                            isCorrect={true}
+                                            size="medium"
+                                            index={i}
+                                        />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="flex justify-center gap-6 flex-wrap flex-row">
-                    {correctColors.map((color, i) => (
-                        <ColorCard
-                            key={i}
-                            color={color}
-                            isCorrect={true}
-                            size="small"
-                            index={i}
-                        />
-                    ))}
-                </div>
+                {/* All Players Results Grid */}
+                <div className="w-full mb-16">
+                    <div className="flex items-center justify-center gap-6 mb-10">
+                        <div className="h-px w-20 bg-linear-to-r from-transparent to-white/20" />
+                        <span className="text-base md:text-xl font-black text-white/50 tracking-[0.4em] uppercase italic">Player Intel</span>
+                        <div className="h-px w-20 bg-linear-to-l from-transparent to-white/20" />
+                    </div>
 
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 px-4">
+                        {sortedPlayers.map((player, index) => {
+                            const playerColor = getAvatarColor(player.avatar);
+                            const playerAnswer = sortColors(player.lastAnswer || []);
 
-            </div>
-
-            {/* All Players Results */}
-            <div className="mb-4">
-                <div className="text-base md:text-xl font-black bg-white/10 inline-block px-4 md:px-6 py-1 md:py-2 rounded-xl md:rounded-2xl text-white tracking-wider border border-white/10 mb-3">
-                    PLAYER RESULTS
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-w-6xl mx-auto">
-                    {sortedPlayers.map((player) => {
-                        const playerColor = getAvatarColor(player.avatar);
-                        const playerAnswer = sortColors(player.lastAnswer || []);
-
-                        return (
-                            <motion.div
-                                key={player.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="glass p-2 rounded-2xl space-y-2"
-                                style={{
-                                    borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
-                                    backgroundColor: player.isCorrect ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)'
-                                }}
-                            >
-                                {/* Player header */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                            return (
+                                <motion.div
+                                    key={player.id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 + (index * 0.05) }}
+                                    className="glass-panel group relative flex flex-col p-4 rounded-[2.5rem] border-white/5 overflow-hidden transition-all duration-500 hover:scale-105"
+                                    style={{
+                                        background: player.isCorrect
+                                            ? `linear-gradient(180deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.02) 100%)`
+                                            : `linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.02) 100%)`,
+                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'
+                                    }}
+                                >
+                                    {/* Player Info */}
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white/5 shadow-lg">
                                             <Avatar seed={player.avatar} className="w-full h-full" />
                                         </div>
-                                        <span className="font-black text-sm" style={{ color: playerColor }}>
-                                            {player.name}
-                                        </span>
+                                        <div className="flex flex-col items-start min-w-0">
+                                            <span className="font-black text-xs uppercase italic tracking-wider truncate w-full" style={{ color: playerColor }}>
+                                                {player.name}
+                                            </span>
+                                            <div className="flex items-center gap-1">
+                                                <span className={`text-[10px] font-black italic ${player.isCorrect ? 'text-success' : 'text-error/60'}`}>
+                                                    {player.isCorrect ? '+10 POINTS' : '+0'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="ml-auto">
+                                            {player.isCorrect ? (
+                                                <div className="p-1 rounded-full bg-success/20">
+                                                    <Check size={14} className="text-success" strokeWidth={4} />
+                                                </div>
+                                            ) : (
+                                                <div className="p-1 rounded-full bg-error/20">
+                                                    <X size={14} className="text-error" strokeWidth={4} />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className={`text-xs font-black ${player.isCorrect ? 'text-success' : 'text-error'}`}>
-                                            {player.isCorrect ? '+10' : '+0'}
-                                        </span>
-                                        {player.isCorrect ? (
-                                            <Check size={14} className="text-success" strokeWidth={3} />
-                                        ) : (
-                                            <X size={14} className="text-error" strokeWidth={3} />
-                                        )}
-                                    </div>
-                                </div>
 
-                                {/* Player's answer */}
-                                <div className="flex gap-1 justify-center flex-wrap">
-                                    {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
-                                        <ColorCard
-                                            key={i}
-                                            color={color}
-                                            size="mini"
-                                            index={i}
-                                            disabled={true}
-                                        />
-                                    )) : (
-                                        <span className="text-xs text-white/30 italic">No answer</span>
-                                    )}
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                                    {/* Answer Display */}
+                                    <div className="flex-1 flex items-center justify-center min-h-20 py-2">
+                                        <div className="flex gap-1.5 justify-center flex-wrap">
+                                            {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
+                                                <ColorCard
+                                                    key={i}
+                                                    color={color}
+                                                    size="mini"
+                                                    index={i}
+                                                    disabled={true}
+                                                />
+                                            )) : (
+                                                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">No Answer</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Corner Accents */}
+                                    <div className={`absolute top-0 right-0 w-12 h-12 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity ${player.isCorrect ? 'bg-success' : 'bg-error'} blur-2xl`} />
+                                </motion.div>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
 
-            <div className="flex flex-col items-center gap-4 mt-8">
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    onClick={onNextQuestion}
-                    className="btn btn-primary mt-2 justify-self-center text-2xl md:text-5xl py-6 md:py-10 px-12 md:px-32 rounded-4xl md:rounded-[3.5rem] shadow-2xl uppercase font-black italic tracking-widest border-t-4 md:border-t-8 border-white/20 flex items-center gap-6"
-                >
-                    {isLastQuestion ? `Show Results in ${timeLeft}s` : `Next Question in ${timeLeft}s`}
-                    <Play fill="currentColor" className="inline-block ml-4 md:ml-6 w-8 h-8 md:w-12 md:h-12" />
-                </motion.button>
+                {/* Navigation Button */}
+                <div className="flex flex-col items-center gap-6 pb-20">
+                    <motion.button
+                        whileHover={{ scale: 1.05, y: -4 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={onNextQuestion}
+                        className="btn btn-primary relative group py-8 px-24 rounded-[3.5rem] shadow-[0_30px_60px_-15px_rgba(0,229,255,0.4)] overflow-hidden"
+                    >
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <div className="flex items-center gap-8 relative z-10">
+                            <div className="flex flex-col items-start leading-none">
+                                <span className="text-xs font-black uppercase tracking-[0.4em] opacity-60 mb-1">Coming up</span>
+                                <span className="text-3xl md:text-5xl font-black italic uppercase tracking-widest">
+                                    {isLastQuestion ? 'The Results' : 'Next Round'}
+                                </span>
+                            </div>
+                            <div className="w-px h-12 bg-white/20" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl font-black font-mono tracking-tighter tabular-nums">{timeLeft}</span>
+                                <span className="text-[10px] font-black uppercase opacity-40">SEC</span>
+                            </div>
+                            <Play fill="currentColor" size={40} className="ml-2 group-hover:translate-x-2 transition-transform" />
+                        </div>
+                    </motion.button>
+                </div>
             </div>
         </motion.div>
     );

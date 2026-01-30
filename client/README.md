@@ -1,73 +1,96 @@
-# React + TypeScript + Vite
+# 🎨 ColourWang
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**The Ultimate Multi-Screen Palette Challenge**
 
-Currently, two official plugins are available:
+ColourWang is a high-energy, real-time multiplayer party game where players compete to identify colors and patterns. Designed for a "Host + Mobile Controller" setup, it features a premium glassmorphic UI, high-impact animations, and intense "STEAL!" mechanics.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Multi-Screen Architecture**: One host screen (TV/Monitor) and multiple player controllers (Smartphones).
+- **Real-Time Sync**: Powered by Socket.IO for sub-100ms latency between screens.
+- **Premium Aesthetics**: A custom-built design system using Tailwind CSS v4, featuring glassmorphism, neon glows, and fluid motion.
+- **Steal Mechanics**: Players can use "Steal Cards" to disrupt opponents with high-impact "STAMP" announcements and randomly disabled options.
+- **Dynamic Avatars**: Unique, color-coded avatars for every player.
+- **QR Integration**: Seamless join flow via generated QR codes on the host screen.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Frontend**: React 18, Vite, Framer Motion, Lucide React, Socket.IO Client.
+- **Backend**: Node.js, Express, Socket.IO.
+- **Styling**: Tailwind CSS v4 (Modern Engine).
+- **Language**: TypeScript throughout for type-safe game logic.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🏁 Getting Started
+
+### Prerequisites
+
+- Node.js (Latest LTS recommended)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/garpunkal/ColourWang.git
+   cd ColourWang
+   ```
+
+2. **Install dependencies**:
+   Run this in the root directory to install both client and server dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the application**:
+   Start both the backend and frontend simultaneously with:
+   ```bash
+   npm run dev
+   ```
+
+The application will be available at:
+
+- **Host Screen**: `http://localhost:5173`
+- **Socket Server**: `http://localhost:3001`
+
+---
+
+## 🎮 How to Play
+
+1. **Launch the Host**: One person opens the application and selects **HOST**.
+2. **Players Join**: Participants scan the QR code or enter the 4-digit room code on their mobile devices after selecting **JOIN**.
+3. **Start the Game**: Once everyone is in, the host starts the session.
+4. **Answer Questions**: Select the correct color palette as quickly as possible.
+5. **Use Steal Cards**: If you're trailing, use your Steal Card to block other players' options for a round!
+
+---
+
+## 📁 Project Structure
+
+```text
+ColourWang/
+├── client/             # Vite + React Frontend
+│   ├── src/
+│   │   ├── components/ # Game screens (Host, Player, Lobby)
+│   │   ├── hooks/      # Socket and Game state management
+│   │   ├── constants/  # Avatars and color tokens
+│   │   └── types/      # Shared TypeScript interfaces
+├── server/             # Node.js + Socket.IO Backend
+│   ├── src/
+│   │   ├── socket/     # Game event handlers
+│   │    model/         # Backend game state logic
+└── package.json        # Root scripts for concurrent execution
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ⚖️ License
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT © [garpunkal](https://github.com/garpunkal)
