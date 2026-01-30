@@ -1,6 +1,6 @@
 import type { Player, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
-import { Trophy, Target, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 
 interface Props {
     player: Player;
@@ -29,38 +29,13 @@ export function PlayerFinalScreen({ player, gameState, setGameState }: Props) {
             />
 
             <div className="relative z-10 w-full flex flex-col items-center gap-12">
-                {/* Ranking Visual */}
+                {/* Ranking Visual - Text Only */}
                 <div className="flex flex-col items-center gap-4">
-                    <motion.div
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", bounce: 0.4, duration: 1 }}
-                        className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center border-4 shadow-2xl relative"
-                        style={{
-                            borderColor: themeColor,
-                            backgroundColor: `${themeColor}10`,
-                            boxShadow: `0 0 60px ${themeColor}40`
-                        }}
-                    >
-                        {isWinner ? (
-                            <Trophy size={80} className="text-color-gold" strokeWidth={1.5} />
-                        ) : (
-                            <Target size={80} className="text-color-blue" strokeWidth={1.5} />
-                        )}
-
-                        {/* Rotating ring */}
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="absolute -inset-4 border border-dashed border-white/10 rounded-full"
-                        />
-                    </motion.div>
-
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="text-center mt-4"
+                        transition={{ delay: 0.1 }}
+                        className="text-center"
                     >
                         <h3
                             className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-none"
