@@ -172,8 +172,8 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('submit-answer', ({ code, answers, useStealCard }) => {
-        // Debug: print payload received for submit-answer
-        console.log(`[DEBUG] submit-answer received: code=${code}, useStealCard=`, useStealCard, 'answers=', answers);
+      // Debug: print payload received for submit-answer
+      console.log(`[DEBUG] submit-answer received: code=${code}, useStealCard=`, useStealCard, 'answers=', answers);
       const game = games.get(code);
       if (game && game.status === 'QUESTION') {
         const player = game.players.find(p => p.socketId === socket.id);
@@ -196,30 +196,14 @@ export function registerSocketHandlers(io: Server) {
               }
             });
             io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
-                      // Debug: print sockets in the room before emitting
-                      const room = io.sockets.adapter.rooms.get(code);
-                      const socketsInRoom = room ? Array.from(room) : [];
-                      console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${code}, sockets:`, socketsInRoom);
-                      io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+            // Debug: print sockets in the room before emitting
+            const room = io.sockets.adapter.rooms.get(code);
+            const socketsInRoom = room ? Array.from(room) : [];
+            console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${code}, sockets:`, socketsInRoom);
+            io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
           }
-          const allAnswered = game.players.every(p => p.lastAnswer !== null);
-          if (allAnswered) {
-            game.status = 'RESULT';
-            const currentQuestion = game.questions[game.currentQuestionIndex];
-            let anyCorrect = false;
-            game.players.forEach(p => {
-              const correct = currentQuestion?.correctAnswers || currentQuestion?.correctColors;
-              const isCorrect = compareAnswers(p.lastAnswer, correct);
-              p.isCorrect = isCorrect;
-              if (isCorrect) {
-                p.score += 10;
-                anyCorrect = true;
-              }
-            });
-            io.to(code).emit('game-status-changed', game);
-          } else {
-            io.to(code).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
-          }
+          // Emit player-answered event to update UI
+          io.to(code).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
         }
       }
     });

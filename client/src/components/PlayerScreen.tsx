@@ -40,7 +40,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
 
             <div className="flex flex-col justify-center ">
                 <AnimatePresence mode="wait">
-                    {status === 'LOBBY' && <PlayerLobbyScreen />}
+                    {status === 'LOBBY' && <PlayerLobbyScreen gameState={gameState} />}
 
                     {status === 'QUESTION' && (
                         <PlayerQuestionScreen
@@ -66,7 +66,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                 </AnimatePresence>
             </div>
 
-          
+
         </div>
     );
 }
