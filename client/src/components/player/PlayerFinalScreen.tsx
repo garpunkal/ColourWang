@@ -77,7 +77,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                         </div>
                         <div className="flex flex-col items-end">
                             <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-black italic">Your Score</span>
-                            <span className="text-xl font-black font-mono text-white">{player.score}</span>
+                            <span className="text-xl font-black font-mono text-white">{player.score} PTS</span>
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                                         className="text-xl font-black font-mono tracking-tighter"
                                         style={{ color: pColor }}
                                     >
-                                        {p.score}
+                                        {p.score} PTS
                                     </span>
                                 </motion.div>
                             );

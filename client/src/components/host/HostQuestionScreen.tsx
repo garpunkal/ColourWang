@@ -40,7 +40,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             const stealer = gameState.players.find(p => p.id === playerId);
             if (stealer) {
                 setStealNotice({ name: stealer.name, value });
-                setTimeout(() => setStealNotice(null), 5000); // Host marquee stays longer
+                setTimeout(() => setStealNotice(null), 12000); // Host marquee stays for 12 seconds
             }
         };
         socket.on('steal-card-used', handler);
@@ -112,7 +112,6 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                                 </span>
                                                 {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
                                             </span>
-                                            <span className="text-color-yellow/40">///</span>
                                         </span>
                                     ))}
                                 </motion.div>
@@ -152,7 +151,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                        className="text-hero text-display text-display-gradient drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center"
+                        className="text-hero text-display text-display-gradient drop-shadow-[0_40px_100px_rgba(0,0,0,0.9)] px-8 max-w-[98vw] text-center pr-6"
                     >
                         {currentQuestion.question}
                     </motion.h1>

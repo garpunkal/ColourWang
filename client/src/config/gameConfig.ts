@@ -39,6 +39,7 @@ export async function fetchQuestions(): Promise<Question[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       const questionsData = questionsRaw as QuestionData[];
+      console.log('Loaded questions raw count:', questionsData.length);
       const paletteData = paletteRaw.palette;
 
       // Use palette for options universally

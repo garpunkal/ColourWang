@@ -2,28 +2,17 @@ import type { Socket } from 'socket.io-client';
 import type { Player } from '../../types/game';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMemo, useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
 
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
 
-// Generate firework particles - reduced for performance
-const FIREWORK_BURSTS = [...Array(3)].map((_, burstIndex) => ({
-    x: (burstIndex - 1) * 35, // Spread across screen
-    delay: burstIndex * 0.4,
-    particles: [...Array(8)].map((_, i) => ({
-        angle: (i / 8) * Math.PI * 2,
-        velocity: 150 + Math.random() * 100,
-        color: ['#FFD700', '#ff3366', '#00e5ff', '#ffffff', '#ff9900'][Math.floor(Math.random() * 5)]
-    }))
-}));
-
-// Floating golden particles - reduced for performance
-const GOLDEN_PARTICLES = [...Array(15)].map(() => ({
+// Optimized celebratory elements
+const GOLDEN_PARTICLES = [...Array(10)].map((_, i) => ({
+    id: i,
     x: Math.random() * 100,
     delay: Math.random() * 2,
-    duration: 3 + Math.random() * 2,
-    size: 4 + Math.random() * 8
+    duration: 4 + Math.random() * 2,
+    size: 4 + Math.random() * 6
 }));
 
 interface Props {
@@ -35,8 +24,7 @@ interface Props {
 }
 
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
-    const [showCelebration, setShowCelebration] = useState(true);
-    const [revealedPlayers, setRevealedPlayers] = useState(0);
+    const [showSupernova, setShowSupernova] = useState(false);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -45,257 +33,185 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const winner = sortedPlayers[0];
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
-    // Staggered reveal effect
     useEffect(() => {
-        const revealInterval = setInterval(() => {
-            setRevealedPlayers(prev => {
-                if (prev >= sortedPlayers.length) {
-                    clearInterval(revealInterval);
-                    return prev;
-                }
-                return prev + 1;
-            });
-        }, 400);
+        // Trigger supernova after a small delay for the winner reveal
+        const timer = setTimeout(() => setShowSupernova(true), 800);
+        return () => clearTimeout(timer);
+    }, []);
 
-        // Hide celebration after initial burst
-        const celebrationTimer = setTimeout(() => setShowCelebration(false), 4000);
+    // Container variants for clean staggered entrance
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.3
+            }
+        }
+    };
 
-        return () => {
-            clearInterval(revealInterval);
-            clearTimeout(celebrationTimer);
-        };
-    }, [sortedPlayers.length]);
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20, scale: 0.98 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                type: "spring",
+                stiffness: 120,
+                damping: 20,
+                mass: 0.8
+            }
+        }
+    };
 
     return (
         <motion.div
             key="final"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="w-full max-w-7xl relative"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="w-full max-w-5xl mx-auto py-8 px-4 md:py-12 md:px-6"
         >
-            {/* Epic Celebration Overlay */}
+            {/* High-Performance Supernova Effect */}
             <AnimatePresence>
-                {showCelebration && (
-                    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 100 }}>
-                        {/* Initial flash */}
+                {showSupernova && (
+                    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden flex items-center justify-center">
                         <motion.div
-                            initial={{ opacity: 1 }}
-                            animate={{ opacity: 0 }}
-                            transition={{ duration: 0.5 }}
-                            className="absolute inset-0"
-                            style={{ background: `radial-gradient(circle, ${winnerColor}60 0%, transparent 70%)` }}
+                            initial={{ scale: 0, opacity: 0.8 }}
+                            animate={{ scale: 60, opacity: 0 }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className="absolute w-10 h-10 rounded-full"
+                            style={{ background: `radial-gradient(circle, #fff 0%, ${winnerColor} 60%, transparent 100%)` }}
                         />
-
-                        {/* Spotlight beams on winner */}
-                        {[0, 1, 2].map((i) => (
-                            <motion.div
-                                key={`spotlight-${i}`}
-                                initial={{ opacity: 0, scaleY: 0 }}
-                                animate={{ opacity: [0, 0.6, 0.3], scaleY: 1 }}
-                                transition={{ duration: 1.5, delay: i * 0.2, ease: "easeOut" }}
-                                className="absolute top-0 left-1/2 h-full w-32"
-                                style={{
-                                    background: `linear-gradient(to bottom, ${winnerColor}40, transparent 80%)`,
-                                    transform: `translateX(-50%) rotate(${(i - 1) * 15}deg)`,
-                                    transformOrigin: 'top center',
-                                    filter: 'blur(20px)'
-                                }}
-                            />
-                        ))}
-
-                        {/* Firework bursts */}
-                        {FIREWORK_BURSTS.map((burst, burstIndex) => (
-                            <div
-                                key={`burst-${burstIndex}`}
-                                className="absolute top-1/4 left-1/2"
-                                style={{ transform: `translateX(${burst.x}%)` }}
-                            >
-                                {burst.particles.map((p, i) => (
-                                    <motion.div
-                                        key={`particle-${burstIndex}-${i}`}
-                                        initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
-                                        animate={{
-                                            x: Math.cos(p.angle) * p.velocity,
-                                            y: Math.sin(p.angle) * p.velocity,
-                                            scale: 0,
-                                            opacity: 0
-                                        }}
-                                        transition={{ duration: 1, delay: burst.delay, ease: "easeOut" }}
-                                        className="absolute w-3 h-3 rounded-full"
-                                        style={{ backgroundColor: p.color, boxShadow: `0 0 10px ${p.color}` }}
-                                    />
-                                ))}
-                            </div>
-                        ))}
-
-                        {/* Floating golden particles */}
-                        {GOLDEN_PARTICLES.map((p, i) => (
-                            <motion.div
-                                key={`gold-${i}`}
-                                initial={{ y: '100vh', opacity: 0 }}
-                                animate={{ y: '-20vh', opacity: [0, 1, 1, 0] }}
-                                transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
-                                className="absolute rounded-full"
-                                style={{
-                                    left: `${p.x}%`,
-                                    width: p.size,
-                                    height: p.size,
-                                    background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-                                    boxShadow: '0 0 8px #FFD700',
-                                    willChange: 'transform, opacity'
-                                }}
-                            />
-                        ))}
-
-                        {/* Pulsing glow around edges */}
                         <motion.div
-                            animate={{ opacity: [0.3, 0.5, 0.3] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                            className="absolute inset-0"
-                            style={{ boxShadow: `inset 0 0 150px 50px ${winnerColor}30`, willChange: 'opacity' }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.4, 0] }}
+                            transition={{ duration: 0.3 }}
+                            className="absolute inset-0 bg-white"
                         />
                     </div>
                 )}
             </AnimatePresence>
 
-            {/* Title with sparkles */}
-            <div className="text-center mb-10 md:mb-20 relative">
-                <h1 className="mt-24 text-hero text-display mb-8 md:mb-16 text-center drop-shadow-2xl">
-                    <motion.span
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 0.8, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="block text-xl md:text-4xl mb-2 md:mb-4 tracking-[0.4em] md:tracking-[0.6em] text-color-blue"
-                    >
-                        the
-                    </motion.span>
-                    <motion.span
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ type: "spring", delay: 0.7, stiffness: 150 }}
-                        className="text-display-gradient pr-10 relative inline-block"
-                    >
-                        {/* Sparkles around Results text */}
-                        <motion.span
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: [0, 1, 0], scale: [0.5, 1, 0.5], rotate: [0, 10, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 0.8 }}
-                            className="absolute -top-6 -left-4 md:-top-10 md:-left-8"
-                        >
-                            <Sparkles className="w-6 h-6 md:w-10 md:h-10 text-yellow-400" style={{ filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.8))' }} />
-                        </motion.span>
-                        <motion.span
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: [0, 1, 0], scale: [0.5, 1, 0.5], rotate: [0, -10, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 1.2 }}
-                            className="absolute -top-4 -right-2 md:-top-8 md:-right-4"
-                        >
-                            <Sparkles className="w-5 h-5 md:w-8 md:h-8 text-yellow-300" style={{ filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.8))' }} />
-                        </motion.span>
-                        <motion.span
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: [0, 1, 0], scale: [0.5, 1, 0.5], rotate: [0, 15, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 1.6 }}
-                            className="absolute -bottom-2 left-1/4 md:-bottom-4"
-                        >
-                            <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-yellow-200" style={{ filter: 'drop-shadow(0 0 8px rgba(255,215,0,0.6))' }} />
-                        </motion.span>
-                        Results
-                    </motion.span>
-                </h1>
+            {/* Background Decoration */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+                {GOLDEN_PARTICLES.map((p) => (
+                    <motion.div
+                        key={p.id}
+                        initial={{ y: '110vh', opacity: 0 }}
+                        animate={{ y: '-10vh', opacity: [0, 0.5, 0.5, 0] }}
+                        transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
+                        className="absolute rounded-full bg-linear-to-b from-yellow-300 to-yellow-600"
+                        style={{
+                            left: `${p.x}%`,
+                            width: p.size,
+                            height: p.size,
+                            boxShadow: '0 0 10px rgba(255, 215, 0, 0.2)',
+                        }}
+                    />
+                ))}
             </div>
 
-            <div className="flex flex-col gap-6">
+            {/* Title Section */}
+            <div className="text-center mb-12 relative px-4">
+                <motion.div
+                    variants={itemVariants}
+                    className="flex flex-col items-center"
+                >
+                    <h1 className="text-display-gradient text-4xl md:text-8xl font-black italic uppercase tracking-tighter mb-2 pr-5">
+                        Results
+                    </h1>
+                    <p className="text-color-blue text-lg md:text-2xl font-black uppercase tracking-[0.3em] opacity-80">
+                        Final Standings
+                    </p>
+                </motion.div>
+            </div>
+
+            {/* Players List */}
+            <div className="flex flex-col gap-3 md:gap-4 mb-16">
                 {sortedPlayers.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const isWinner = i === 0;
-                    const isRevealed = i < revealedPlayers;
 
                     return (
                         <motion.div
                             key={player.id}
-                            initial={{ x: -100, opacity: 0, scale: 0.8 }}
-                            animate={isRevealed ? {
-                                x: 0,
-                                opacity: 1,
-                                scale: isWinner ? 1.05 : 1
-                            } : {}}
-                            transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 15
-                            }}
-                            className={`glass p-4 md:p-8 rounded-3xl md:rounded-[3rem] flex items-center justify-between border-white/10 flex-col md:flex-row gap-4 md:gap-0 relative overflow-hidden ${isWinner ? 'z-10' : ''}`}
+                            variants={itemVariants}
+                            className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
+                                    ? 'bg-linear-to-r from-white/10 to-transparent border-yellow-500/50'
+                                    : 'border-white/5 hover:border-white/10'
+                                }`}
                             style={{
-                                border: `2px solid ${avatarColor}${isWinner ? '60' : '30'}`,
-                                background: isWinner ? `linear-gradient(to right, ${avatarColor}30, transparent)` : undefined,
-                                boxShadow: isWinner ? `0 0 60px -10px ${avatarColor}50` : undefined
+                                boxShadow: isWinner ? `0 20px 60px -15px ${avatarColor}30` : 'none'
                             }}
                         >
+                            {/* Rank Indicator */}
+                            <div className={`text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center ${isWinner ? 'text-yellow-400' : 'text-white/20'
+                                }`}>
+                                #{i + 1}
+                            </div>
 
+                            {/* Avatar */}
+                            <div className={`relative w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden border-2 md:border-4 ${isWinner ? 'border-yellow-500' : 'border-white/10'
+                                }`}>
+                                <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                            </div>
 
-                            {/* Winner shine effect */}
-                            {isWinner && isRevealed && (
-                                <motion.div
-                                    initial={{ x: '-100%' }}
-                                    animate={{ x: '200%' }}
-                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12"
-                                />
-                            )}
-
-                            <div className="flex items-center gap-4 md:gap-10 pl-0 md:pl-8 w-full md:w-auto relative z-10">
-                                <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={isRevealed ? { scale: 1 } : {}}
-                                    transition={{ type: "spring", delay: 0.2 }}
-                                    className="text-3xl md:text-6xl font-black font-mono w-12 md:w-24"
-                                    style={{ color: isWinner ? avatarColor : 'rgba(160,160,192,1)' }}
-                                >
-                                    #{i + 1}
-                                </motion.span>
-                                <div
-                                    className="w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-4xl flex items-center justify-center border-2 md:border-4 border-white/10 shadow-lg overflow-hidden shrink-0"
-                                    style={{
-                                        borderColor: `${avatarColor}40`,
-                                        backgroundColor: isWinner ? `${avatarColor}40` : 'rgba(255,255,255,0.05)',
-                                        boxShadow: isWinner ? `0 0 30px ${avatarColor}40` : undefined
-                                    }}
-                                >
-                                    <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
-                                </div>
-                                <span className={`text-2xl md:text-6xl font-black uppercase italic tracking-tight truncate pr-10 ${isWinner ? 'text-white' : 'text-white/80'}`}>
+                            {/* Name & Title */}
+                            <div className="flex-1 min-w-0 py-2">
+                                <h2 className={`text-xl md:text-5xl font-black uppercase italic tracking-tight leading-none wrap-break-word ${isWinner ? 'text-white' : 'text-white/90'
+                                    }`}>
                                     {player.name}
+                                </h2>
+                                {isWinner && (
+                                    <p className="text-yellow-500 font-black text-[8px] md:text-xs uppercase tracking-[0.15em] mt-1 md:mt-2">
+                                        The Undisputed Legend
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Score */}
+                            <div className="text-right shrink-0 px-2 md:px-8">
+                                <span className={`text-2xl md:text-6xl font-mono font-black ${isWinner ? 'text-yellow-400 glow-text' : 'text-white/60'
+                                    }`}>
+                                    {player.score}
+                                    <span className="text-[10px] md:text-xl ml-1 md:ml-2 opacity-40 font-sans tracking-widest uppercase">pts</span>
                                 </span>
                             </div>
-                            <div className="pr-0 md:pr-12 relative z-10">
-                                <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={isRevealed ? { scale: 1 } : {}}
-                                    transition={{ type: "spring", delay: 0.3 }}
-                                    className={`text-4xl md:text-7xl font-mono font-black block ${isWinner ? 'glow-text' : ''}`}
-                                    style={{ color: isWinner ? avatarColor : 'rgba(255,255,255,0.6)' }}
-                                >
-                                    {player.score}
-                                </motion.span>
-                            </div>
+
+                            {/* Decorative Shine for Winner */}
+                            {isWinner && (
+                                <motion.div
+                                    animate={{ left: ['-100%', '200%'] }}
+                                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
+                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
+                                />
+                            )}
                         </motion.div>
                     );
                 })}
             </div>
 
-            <div className="text-center mt-10 md:mt-20">
-                <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: sortedPlayers.length * 0.4 + 0.5 }}
-                    whileHover={{ scale: 1.05 }}
+            {/* Footer / Restart */}
+            <motion.div
+                variants={itemVariants}
+                className="flex flex-col items-center gap-6"
+            >
+                <button
                     onClick={() => socket.emit('restart-game', { code, rounds, timer })}
-                    className="btn btn-secondary justify-self-center text-2xl md:text-4xl py-6 md:py-8 px-12 md:px-20 rounded-[3rem] opacity-80 hover:opacity-100"
+                    className="btn btn-primary text-xl md:text-4xl py-6 md:py-8 px-12 md:px-20 rounded-full group shadow-2xl scale-90 md:scale-100"
                 >
-                    Restart Game
-                </motion.button>
-            </div>
+                    <span className="relative z-10">Start New Battle</span>
+                    <motion.div
+                        className="absolute inset-0 bg-linear-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                </button>
+                <p className="text-white/10 font-black uppercase tracking-widest text-xs">
+                    Room Code: {code}
+                </p>
+            </motion.div>
         </motion.div>
     );
 }

@@ -1,6 +1,7 @@
 
+import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Play } from 'lucide-react';
+import { Play, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 
@@ -8,8 +9,8 @@ import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 import { Avatar } from '../GameAvatars';
 
-
 interface Props {
+    socket: Socket;
     gameState: GameState;
     currentQuestion: Question;
     currentQuestionIndex: number;
@@ -17,10 +18,11 @@ interface Props {
     onNextQuestion: () => void;
 }
 
-export function HostResultScreen({ gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
+export function HostResultScreen({ socket, gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
     const [timeLeft, setTimeLeft] = useState(30);
     const [autoProceed, setAutoProceed] = useState(false);
+    const [isRemoving, setIsRemoving] = useState(false);
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
     const sortedPlayers = useMemo(() => {
@@ -51,6 +53,21 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
         }
     }, [autoProceed, onNextQuestion]);
 
+    const handleRemoveQuestion = () => {
+        if (window.confirm('Are you sure you want to PERMANENTLY delete this question from the game pool?')) {
+            setIsRemoving(true);
+            if (gameState.code) {
+                socket.emit('remove-question', { code: gameState.code });
+            }
+
+            // Give visual feedback and then proceed to next question
+            setTimeout(() => {
+                onNextQuestion();
+                setIsRemoving(false);
+            }, 1000);
+        }
+    };
+
     return (
         <motion.div
             key="result"
@@ -65,7 +82,22 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
 
             <div className="flex flex-col items-center text-center">
                 {/* Question Section */}
-                <div className="mb-12 max-w-5xl">
+                <div className="mb-12 max-w-5xl relative group/question">
+                    {/* Remove Question Option */}
+                    <div className="absolute -top-6 -right-6 md:right-0 z-50">
+                        <motion.button
+                            whileHover={{ scale: 1.1, color: '#ff3366' }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={handleRemoveQuestion}
+                            disabled={isRemoving}
+                            className="p-3 text-white/10 hover:text-error transition-all duration-300 cursor-pointer bg-white/5 hover:bg-white/10 rounded-full backdrop-blur-md border border-white/5 hover:border-error/30"
+                            title="Permanently remove this question"
+                        >
+                            <Trash2 size={24} className={isRemoving ? 'animate-bounce' : ''} />
+                            <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/question:opacity-40 transition-opacity pointer-events-none">Remove Forever</span>
+                        </motion.button>
+                    </div>
+
                     <h1 className="text-hero text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
                         {currentQuestion.question}
                     </h1>
@@ -94,7 +126,7 @@ export function HostResultScreen({ gameState, currentQuestion, currentQuestionIn
                 </div>
 
                 {/* All Players Results Grid */}
-                <div className="w-full mb-16">
+                <div className="w-full mb-16 px-4">
                     <div className="flex items-center justify-center gap-6 mb-10">
                         <div className="h-px w-20 bg-linear-to-r from-transparent to-white/20" />
                         <span className="text-base md:text-xl font-black text-white/50 tracking-[0.4em] uppercase italic">Player Intel</span>

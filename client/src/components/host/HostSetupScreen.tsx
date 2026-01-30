@@ -4,7 +4,6 @@ import type { Question } from '../../types/game';
 import { motion } from 'framer-motion';
 import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
-import { shuffleArray } from '../../utils/shuffleArray';
 
 interface Props {
     socket: Socket;
@@ -32,12 +31,9 @@ export function HostSetupScreen({ socket }: Props) {
     }, []);
 
     const createGame = () => {
-        if (!allQuestions.length) return;
-        // Use Fisher-Yates shuffle for proper randomization
-        const shuffled = shuffleArray(allQuestions);
-        const selectedQuestions = shuffled.slice(0, rounds);
-        console.log('Client creating game with:', { questions: selectedQuestions, timer });
-        socket.emit('create-game', { questions: selectedQuestions, timer });
+        // We now let the server handle the question picking for better variety and consistency
+        console.log('Initialising lobby with:', { rounds, timer });
+        socket.emit('create-game', { rounds, timer });
     };
 
     return (

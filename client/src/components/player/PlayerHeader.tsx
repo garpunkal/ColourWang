@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
-import { LogOut } from 'lucide-react';
 
 interface Props {
     name: string;
@@ -8,10 +7,9 @@ interface Props {
     avatarStyle?: string;
     score: number;
     rank?: number;
-    onLeave?: () => void;
 }
 
-export function PlayerHeader({ name, avatar, avatarStyle, score, rank, onLeave }: Props) {
+export function PlayerHeader({ name, avatar, avatarStyle, score, rank }: Props) {
     return (
         <motion.div
             initial={{ y: -20, opacity: 0 }}
@@ -37,16 +35,7 @@ export function PlayerHeader({ name, avatar, avatarStyle, score, rank, onLeave }
                 </span>
             </div>
 
-            {onLeave && (
-                <motion.button
-                    whileHover={{ scale: 1.1, color: '#ff3366' }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={onLeave}
-                    className="p-3 text-white/30 hover:text-error transition-colors ml-2"
-                >
-                    <LogOut size={24} />
-                </motion.button>
-            )}
+
         </motion.div >
     );
 }

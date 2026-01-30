@@ -61,12 +61,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
     const myRank = me ? sortedPlayers.findIndex(p => p.id === me.id) + 1 : undefined;
 
-    const handleLeaveGame = () => {
-        localStorage.removeItem('cw_playerId');
-        localStorage.removeItem('cw_gameCode');
-        socket.disconnect();
-        setGameState(null);
-    };
+
 
     return (
         <div className="flex flex-col p-4 h-full w-full max-w-2xl mx-auto relative z-10">
@@ -76,7 +71,6 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                 avatarStyle={me?.avatarStyle || 'avataaars'}
                 score={me?.score || 0}
                 rank={status === 'FINAL_SCORE' ? myRank : undefined}
-                onLeave={handleLeaveGame}
             />
 
             <div className="flex-1 flex flex-col justify-start">

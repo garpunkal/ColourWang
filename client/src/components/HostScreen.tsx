@@ -48,16 +48,21 @@ const HostScreen = ({ socket, gameState }: Props) => {
         // Create a unique key for this result state
         const resultKey = `${gameState?.status}-${gameState?.currentQuestionIndex}`;
 
-        if (gameState?.status === 'RESULT' && lastResultKey.current !== resultKey) {
+        // Trigger explosion ONLY when entering RESULT state
+        const isExplosionState = gameState?.status === 'RESULT';
+
+        if (isExplosionState && lastResultKey.current !== resultKey) {
             lastResultKey.current = resultKey;
-            // Use requestAnimationFrame to defer setState
-            const rafId = requestAnimationFrame(() => setShowExplosion(true));
-            const timer = setTimeout(() => setShowExplosion(false), 2500);
-            return () => {
-                cancelAnimationFrame(rafId);
-                clearTimeout(timer);
-            };
-        } else if (gameState?.status !== 'RESULT') {
+
+            // Trigger explosion after a tiny delay to ensure the reset happens correctly
+            const timer = setTimeout(() => {
+                setShowExplosion(true);
+                // Hide explosion after its sequence
+                setTimeout(() => setShowExplosion(false), 2500);
+            }, 100);
+
+            return () => clearTimeout(timer);
+        } else if (!isExplosionState) {
             // Reset when leaving RESULT state so it can trigger again
             lastResultKey.current = null;
         }
@@ -130,18 +135,12 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     const { code, players, status, currentQuestionIndex, questions } = gameState;
+    const currentQuestion = questions ? questions[currentQuestionIndex] : null;
+    const isSyncing = (status === 'QUESTION' || status === 'RESULT') && (!questions || !currentQuestion);
 
-    // Safety check for questions
-    if ((status === 'QUESTION' || status === 'RESULT') && (!questions || !questions[currentQuestionIndex])) {
-        return (
-            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                <h2 className="text-4xl font-bold text-white mb-4">Synchronizing Wang Network...</h2>
-                <p className="text-xl text-white/60">Phase Data: {currentQuestionIndex + 1}/{questions?.length || 0}</p>
-            </div>
-        );
+    if (status === 'QUESTION' || status === 'RESULT') {
+        console.log(`[HOST DEBUG] State: ${status}, Index: ${currentQuestionIndex}, Question: ${currentQuestion?.question}`);
     }
-
-    const currentQuestion = questions[currentQuestionIndex];
 
     return (
         <motion.div
@@ -274,6 +273,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     </div>
                 )}
             </AnimatePresence>
+
             {status === 'LOBBY' && (
                 <HostHeader
                     code={code}
@@ -283,51 +283,51 @@ const HostScreen = ({ socket, gameState }: Props) => {
             )}
 
             <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
-                <AnimatePresence mode="wait">
-                    {status === 'LOBBY' && (
+                <AnimatePresence>
+                    {isSyncing ? (
+                        <div key="syncing" className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+                            <h2 className="text-4xl font-bold text-white mb-4">Synchronizing Wang Network...</h2>
+                            <p className="text-xl text-white/60">Phase Data: {currentQuestionIndex + 1}/{questions?.length || 0}</p>
+                        </div>
+                    ) : status === 'LOBBY' ? (
                         <HostLobbyScreen
+                            key="lobby"
                             players={players}
                             onStartGame={startGame}
                             onRemovePlayer={removePlayer}
                         />
-                    )}
-
-                    {status === 'COUNTDOWN' && (
-                        <CountdownScreen />
-                    )}
-
-                    {status === 'QUESTION' && (
+                    ) : status === 'COUNTDOWN' ? (
+                        <CountdownScreen key="countdown" />
+                    ) : status === 'QUESTION' && currentQuestion ? (
                         <HostQuestionScreen
-                            key={currentQuestionIndex}
+                            key={`question-${currentQuestionIndex}`}
                             socket={socket}
                             gameState={gameState}
                             currentQuestion={currentQuestion}
                             currentQuestionIndex={currentQuestionIndex}
                             timeLeft={timeLeft}
                         />
-                    )}
-
-                    {status === 'RESULT' && (
+                    ) : status === 'RESULT' && currentQuestion ? (
                         <HostResultScreen
+                            key={`result-${currentQuestionIndex}`}
+                            socket={socket}
                             gameState={gameState}
                             currentQuestion={currentQuestion}
                             currentQuestionIndex={currentQuestionIndex}
                             totalQuestions={questions.length}
                             onNextQuestion={nextQuestion}
                         />
-                    )}
-
-                    {status === 'FINAL_SCORE' && (
+                    ) : status === 'FINAL_SCORE' ? (
                         <HostFinalScreen
+                            key="final"
                             socket={socket}
                             players={players}
                             rounds={questions.length}
                             timer={gameState.timerDuration || 15}
                             code={code}
                         />
-                    )}
+                    ) : null}
                 </AnimatePresence>
-
             </div>
         </motion.div>
     );

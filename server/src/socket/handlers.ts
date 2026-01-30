@@ -1,6 +1,8 @@
 import { Server, Socket } from 'socket.io';
 import { randomUUID } from 'crypto';
 import { games } from '../game/gamesMap';
+import { getShuffledQuestions, removeQuestionByText } from '../utils/questionLoader';
+
 import { generateCode } from '../utils/generateCode';
 import { GameState } from '../models/gameState';
 import { Player } from '../models/player';
@@ -29,27 +31,52 @@ export function registerSocketHandlers(io: Server) {
   io.on('connection', (socket: Socket) => {
     console.log('User connected:', socket.id);
 
+    socket.on('remove-question', (payload: { code: string }) => {
+      const { code } = payload;
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
+
+      if (game && game.hostSocketId === socket.id) {
+        const currentQuestion = game.questions[game.currentQuestionIndex];
+        if (currentQuestion) {
+          console.log(`[SERVER] Host requested removal of: "${currentQuestion.question}"`);
+          const success = removeQuestionByText(currentQuestion.question);
+          if (success) {
+            // Logic to skip the question if we are in result or question state
+            // Actually, usually they do this on the result screen.
+            // We can just emit a "question-removed" event so the host can show a toast or just skip.
+            socket.emit('question-removed', { success: true });
+          }
+        }
+      }
+    });
+
     socket.on('create-game', (payload) => {
-      const { questions, timer } = payload;
-      const code = generateCode();
+      const { rounds, timer } = payload;
+      const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+
+      // Use server-side shuffling for maximum variety
+      const finalQuestions = getShuffledQuestions(rounds || 10);
+
       const game: GameState = {
         code,
         players: [],
         status: 'LOBBY',
         currentQuestionIndex: 0,
-        questions,
+        questions: finalQuestions,
         timerDuration: timer,
         hostSocketId: socket.id
       };
       games.set(code, game);
       socket.join(code);
       socket.emit('game-created', game);
-      console.log(`Game created: ${code}`);
+      console.log(`Game created: ${code} with ${finalQuestions.length} questions. First question: ${finalQuestions[0]?.question}`);
     });
 
     socket.on('use-steal-card', (payload: { code: string }) => {
       const { code } = payload;
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game && game.status === 'QUESTION') {
         const player = game.players.find((p: Player) => p.socketId === socket.id);
         if (player && !player.stealCardUsed) {
@@ -69,7 +96,7 @@ export function registerSocketHandlers(io: Server) {
               p.disabledIndexes = disabledMap[p.id];
             }
           });
-          io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+          io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
         }
       }
     });
@@ -161,25 +188,29 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('start-game', (code) => {
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game) {
+        console.log(`Starting game: ${normalizedCode}`);
         // Start with a countdown
         game.status = 'COUNTDOWN';
-        io.to(code).emit('game-status-changed', game);
+        io.to(normalizedCode).emit('game-status-changed', game);
 
-        // Transition to QUESTION after 5 seconds
+        // Transition to QUESTION after 4.8 seconds
         setTimeout(() => {
-          const currentGame = games.get(code);
+          const currentGame = games.get(normalizedCode);
           if (currentGame && currentGame.status === 'COUNTDOWN') {
+            console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
             currentGame.status = 'QUESTION';
-            io.to(code).emit('game-status-changed', currentGame);
+            io.to(normalizedCode).emit('game-status-changed', currentGame);
           }
-        }, 5000);
+        }, 4800);
       }
     });
 
     socket.on('time-up', (code) => {
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game && game.status === 'QUESTION') {
         game.status = 'RESULT';
         const currentQuestion = game.questions[game.currentQuestionIndex];
@@ -194,14 +225,15 @@ export function registerSocketHandlers(io: Server) {
           }
         });
         // No pot logic
-        io.to(code).emit('game-status-changed', game);
+        io.to(normalizedCode).emit('game-status-changed', game);
       }
     });
 
     socket.on('submit-answer', ({ code, answers, useStealCard }) => {
+      const normalizedCode = code.toUpperCase();
       // Debug: print payload received for submit-answer
-      console.log(`[DEBUG] submit-answer received: code=${code}, useStealCard=`, useStealCard, 'answers=', answers);
-      const game = games.get(code);
+      console.log(`[DEBUG] submit-answer received: code=${normalizedCode}, useStealCard=`, useStealCard, 'answers=', answers);
+      const game = games.get(normalizedCode);
       if (game && game.status === 'QUESTION') {
         const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
@@ -223,23 +255,25 @@ export function registerSocketHandlers(io: Server) {
                 p.disabledIndexes = disabledMap[p.id];
               }
             });
-            io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+            io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
             // Debug: print sockets in the room before emitting
-            const room = io.sockets.adapter.rooms.get(code);
+            const room = io.sockets.adapter.rooms.get(normalizedCode);
             const socketsInRoom = room ? Array.from(room) : [];
-            console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${code}, sockets:`, socketsInRoom);
-            io.to(code).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
+            console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${normalizedCode}, sockets:`, socketsInRoom);
+            io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
           }
           // Emit player-answered event to update UI
-          io.to(code).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
+          io.to(normalizedCode).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
         }
       }
     });
 
     socket.on('next-question', (code) => {
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game && game.status === 'RESULT') {
         game.currentQuestionIndex++;
+        console.log(`Advancing to next question. New index: ${game.currentQuestionIndex} for game ${normalizedCode}`);
         game.players.forEach(p => {
           p.lastAnswer = null;
           p.isCorrect = false;
@@ -248,31 +282,41 @@ export function registerSocketHandlers(io: Server) {
 
         if (game.currentQuestionIndex >= game.questions.length) {
           game.status = 'FINAL_SCORE';
-          io.to(code).emit('game-status-changed', game);
+          io.to(normalizedCode).emit('game-status-changed', game);
         } else {
+          console.log(`Transitioning to question ${game.currentQuestionIndex + 1} for ${normalizedCode}`);
           // Transition to COUNTDOWN first
           game.status = 'COUNTDOWN';
-          io.to(code).emit('game-status-changed', game);
+          io.to(normalizedCode).emit('game-status-changed', game);
 
-          // Transition to QUESTION after 5 seconds
+          // Transition to QUESTION after 4.8 seconds
           setTimeout(() => {
-            const currentGame = games.get(code);
+            const currentGame = games.get(normalizedCode);
             if (currentGame && currentGame.status === 'COUNTDOWN') {
+              console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
               currentGame.status = 'QUESTION';
-              io.to(code).emit('game-status-changed', currentGame);
+              io.to(normalizedCode).emit('game-status-changed', currentGame);
             }
-          }, 5000);
+          }, 4800);
         }
       }
     });
 
     socket.on('restart-game', ({ code, rounds, timer }) => {
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game) {
         // Reset game state for a new game
         game.status = 'LOBBY';
         game.currentQuestionIndex = 0;
         game.timerDuration = timer;
+
+        // CRITICAL FIX: Get a fresh batch of questions from the FULL pool, 
+        // don't just reshuffle the previous small set.
+        const freshQuestions = getShuffledQuestions(rounds || game.questions.length);
+        game.questions = freshQuestions;
+
+        console.log(`Restarting game ${normalizedCode}. Questions refreshed from pool. First question: ${game.questions[0]?.question}`);
         // Optionally, you may want to reset player scores and answers
         game.players.forEach(p => {
           p.score = 0;
@@ -284,7 +328,7 @@ export function registerSocketHandlers(io: Server) {
           p.stealCardValue = Math.floor(Math.random() * 8) + 1;
         });
         // Optionally, you may want to reshuffle or reload questions if needed
-        io.to(code).emit('game-status-changed', game);
+        io.to(normalizedCode).emit('game-status-changed', game);
       } else {
         socket.emit('error', 'Game not found');
       }
@@ -300,7 +344,8 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('remove-player', ({ code, playerId }) => {
-      const game = games.get(code);
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
       if (game && game.status === 'LOBBY') {
         const playerIndex = game.players.findIndex(p => p.id === playerId);
         if (playerIndex !== -1) {
@@ -308,14 +353,14 @@ export function registerSocketHandlers(io: Server) {
           game.players.splice(playerIndex, 1);
 
           // Notify the room (updates lobby list)
-          io.to(code).emit('player-joined', game.players);
+          io.to(normalizedCode).emit('player-joined', game.players);
 
           // Notify the specific player they were kicked
           if (removedPlayer.socketId) {
             io.to(removedPlayer.socketId).emit('game-ended'); // Forces them back to start
             io.to(removedPlayer.socketId).emit('error', 'You have been removed from the game');
           }
-          console.log(`Player ${removedPlayer.name} removed from game ${code}`);
+          console.log(`Player ${removedPlayer.name} removed from game ${normalizedCode}`);
         }
       }
     });
