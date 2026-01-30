@@ -18,5 +18,14 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    proxy: {
+      // Proxy Socket.IO requests to the backend server
+      '/socket.io': {
+        target: 'https://localhost:3001',
+        ws: true, // Enable WebSocket proxying
+        changeOrigin: true,
+        secure: false, // Allow self-signed certificates
+      }
+    }
   },
 })

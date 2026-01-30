@@ -115,17 +115,26 @@ button {
 	width: 600px;
 	height: 600px;
 	border-radius: 50%;
-	filter: blur(100px);
-	opacity: 0.5;
+	filter: blur(80px);
+	opacity: 0.4;
 	animation: move 20s infinite alternate;
 	will-change: transform;
+	transform: translate3d(0, 0, 0);
 }
 
 @media (max-width: 768px) {
 	.blob {
-		width: 300px;
-		height: 300px;
-		filter: blur(50px);
+		width: 200px;
+		height: 200px;
+		filter: blur(40px);
+		opacity: 0.25;
+	}
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.blob {
+		animation: none;
 	}
 }
 
@@ -166,19 +175,27 @@ button {
 
 @keyframes move {
 	0% {
-		transform: translate(0, 0) scale(1) rotate(0deg);
-	}
-	25% {
-		transform: translate(120px, 80px) scale(1.15) rotate(90deg);
+		transform: translate3d(0, 0, 0) scale(1);
 	}
 	50% {
-		transform: translate(80px, -60px) scale(0.95) rotate(180deg);
-	}
-	75% {
-		transform: translate(-100px, 120px) scale(1.05) rotate(270deg);
+		transform: translate3d(80px, 60px, 0) scale(1.1);
 	}
 	100% {
-		transform: translate(0, 0) scale(1) rotate(360deg);
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+}
+
+@media (max-width: 768px) {
+	@keyframes move {
+		0% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		50% {
+			transform: translate3d(20px, 15px, 0) scale(1.02);
+		}
+		100% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
 	}
 }
 
@@ -219,6 +236,13 @@ button {
 	background: white;
 	opacity: 0.3;
 	animation: float-particle 20s infinite;
+	will-change: transform;
+}
+
+@media (max-width: 768px) {
+	.particle:nth-child(n+7) {
+		display: none;
+	}
 }
 
 .particle:nth-child(1) {
@@ -274,7 +298,7 @@ button {
 
 @keyframes float-particle {
 	0% {
-		transform: translateY(100vh) translateX(0) scale(0);
+		transform: translate3d(0, 100vh, 0) scale(0);
 		opacity: 0;
 	}
 	10% {
@@ -284,7 +308,7 @@ button {
 		opacity: 0.3;
 	}
 	100% {
-		transform: translateY(-100px) translateX(100px) scale(1);
+		transform: translate3d(100px, -100px, 0) scale(1);
 		opacity: 0;
 	}
 }
@@ -301,6 +325,14 @@ button {
 		inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+@media (max-width: 768px) {
+	.glass {
+		backdrop-filter: blur(8px) saturate(140%);
+		-webkit-backdrop-filter: blur(8px) saturate(140%);
+		box-shadow: 0 10px 25px -6px rgba(0, 0, 0, 0.35);
+	}
+}
+
 .glass-card {
 	background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
 	backdrop-filter: blur(12px);
@@ -309,6 +341,14 @@ button {
 	box-shadow:
 		0 4px 20px rgba(0, 0, 0, 0.3),
 		inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+	.glass-card {
+		backdrop-filter: blur(6px);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
 }
 
 .glass-card:hover {
@@ -351,11 +391,26 @@ button {
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+	.glass-panel {
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+	}
+}
+
 .glass-panel-lighter {
 	background: rgba(255, 255, 255, 0.05);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+	.glass-panel-lighter {
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
 }
 
 /* --- Logo Styling --- */

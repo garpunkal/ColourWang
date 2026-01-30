@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Logo } from '../Logo';
 import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
+import { shuffleArray } from '../../utils/shuffleArray';
 
 interface Props {
     socket: Socket;
@@ -33,8 +34,8 @@ export function HostSetupScreen({ socket }: Props) {
 
     const createGame = () => {
         if (!allQuestions.length) return;
-        // Shuffle and slice questions
-        const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+        // Use Fisher-Yates shuffle for proper randomization
+        const shuffled = shuffleArray(allQuestions);
         const selectedQuestions = shuffled.slice(0, rounds);
         console.log('Client creating game with:', { questions: selectedQuestions, timer });
         socket.emit('create-game', { questions: selectedQuestions, timer });
@@ -72,8 +73,8 @@ export function HostSetupScreen({ socket }: Props) {
                     </div>
                 </div>
                 <motion.button
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02, y: -3 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={createGame}
                     className="btn btn-primary text-2xl md:text-5xl py-6 md:py-12 px-12 md:px-24 w-full rounded-3xl md:rounded-[3rem] shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20"
                     disabled={loadingQuestions || !!error || !allQuestions.length || !isConnected}

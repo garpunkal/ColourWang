@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { getColorName } from '../config/gameConfig';
+import { memo } from 'react';
 
 interface ColorCardProps {
     color: string;
@@ -14,7 +15,7 @@ interface ColorCardProps {
     stealValue?: number;
 }
 
-export function ColorCard({
+export const ColorCard = memo(function ColorCard({
     color,
     isSelected = false,
     isCorrect = false,
@@ -42,18 +43,20 @@ export function ColorCard({
         return '1rem';
     };
 
+    // Detect touch devices to disable hover animations
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window);
+
     return (
         <motion.div
-            initial={{ y: 50, opacity: 0, rotateY: -15 }}
+            initial={{ y: 50, opacity: 0 }}
             animate={{
                 y: 0,
                 opacity: 1,
-                rotateY: 0,
                 scale: isSelected ? 1.05 : 1,
                 rotateZ: isSelected ? (index % 2 === 0 ? -2 : 2) : 0
             }}
             exit={{ opacity: 0, scale: 0.5, y: 50 }}
-            whileHover={!disabled ? {
+            whileHover={!disabled && !isTouchDevice ? {
                 y: -10,
                 rotateZ: index % 2 === 0 ? -3 : 3,
                 transition: { duration: 0.2 }
@@ -65,7 +68,7 @@ export function ColorCard({
             transition={{
                 delay: index * 0.1,
                 type: "spring",
-                stiffness: 300,
+                stiffness: 120,
                 damping: 20
             }}
             onClick={!disabled ? onClick : undefined}
@@ -75,23 +78,23 @@ export function ColorCard({
             `}
             style={{ ...cardStyle, perspective: '1000px' }}
         >
-            {/* Card container with 3D effect */}
-            <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+            {/* Card container */}
+            <div className="relative w-full h-full">
 
-                {/* Card shadow */}
+                {/* Card shadow - simplified for mobile */}
                 <div
-                    className="absolute inset-0 rounded-2xl blur-xl opacity-40"
+                    className="absolute inset-0 rounded-2xl opacity-40"
                     style={
                         isStealCard
                             ? {
                                 background: 'black',
                                 transform: 'translateZ(-10px) scale(0.95)',
-                                filter: 'blur(20px)'
+                                filter: 'blur(10px)'
                             }
                             : {
                                 backgroundColor: color,
                                 transform: 'translateZ(-10px) scale(0.95)',
-                                filter: 'blur(20px)'
+                                filter: 'blur(10px)'
                             }
                     }
                 />
@@ -102,8 +105,8 @@ export function ColorCard({
                         absolute inset-0 rounded-2xl overflow-hidden
                         border transition-all duration-300
                         ${isSelected
-                            ? 'border-white ring-4 shadow-[0_0_40px_rgba(0,229,255,0.6)]'
-                            : 'border-white/20 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)]'
+                            ? 'border-white ring-4 shadow-[0_0_30px_rgba(0,229,255,0.5)]'
+                            : 'border-white/20 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.3)]'
                         }
                         ${isCorrect ? 'ring-4 border-white' : ''}
                     `}
@@ -161,7 +164,7 @@ export function ColorCard({
                         </div>
                     )}
 
-                         
+
 
                     {/* Selection indicator */}
                     {isSelected && (
@@ -193,4 +196,4 @@ export function ColorCard({
             </div>
         </motion.div>
     );
-}
+});

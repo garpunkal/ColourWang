@@ -39,8 +39,9 @@ if (existsSync(keyPath) && existsSync(certFilePath)) {
 
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "*", // Allow all origins (needed for ngrok tunnels)
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 

@@ -252,8 +252,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     <div className="flex flex-col gap-4 w-full">
                         {/* Normal submit button */}
                         <motion.button
-                            whileHover={{ y: -8 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ y: -4 }}
+                            whileTap={{ scale: 0.97 }}
                             onClick={e => submitAnswer(e)}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
                             className="btn btn-primary w-full py-6 md:py-12 text-2xl md:text-3xl transition-all flex items-center justify-center gap-6 md:gap-8 rounded-3xl md:rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-4 border-white/30 uppercase font-black tracking-widest"

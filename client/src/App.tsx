@@ -13,7 +13,19 @@ import { useSocketConnection } from './hooks/useSocketConnection';
 import { Monitor, Smartphone } from 'lucide-react';
 
 
-const socket: Socket = io('https://localhost:3001');
+// Socket.IO connection - uses relative path to leverage Vite proxy
+// In production/ngrok: connects through the same origin (proxied to backend)
+// In local dev: Vite proxy forwards to localhost:3001
+const socket: Socket = io({
+  path: '/socket.io',
+  transports: ['websocket', 'polling'],
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionAttempts: 5
+});
+
+console.log('Socket.IO connecting via proxy to backend server');
+
 
 
 function App() {
