@@ -376,6 +376,85 @@ class AudioManager {
             osc.stop(start + 3.0);
         });
     }
+
+    public playFinalResults() {
+        if (this.isMutedSFX) return;
+        this.init();
+        if (!this.audioContext) return;
+
+        const t = this.audioContext.currentTime;
+        
+        // Triumphant fanfare: Build up with drums, then big chord resolution
+        
+        // 1. Drum roll build-up
+        const drumRollLength = 1.2;
+        for (let i = 0; i < 20; i++) {
+            const drumTime = t + (i * drumRollLength / 20);
+            const drumOsc = this.audioContext!.createOscillator();
+            const drumGain = this.audioContext!.createGain();
+            
+            drumOsc.type = 'square';
+            drumOsc.frequency.setValueAtTime(80, drumTime);
+            drumOsc.frequency.exponentialRampToValueAtTime(40, drumTime + 0.05);
+            
+            drumGain.gain.setValueAtTime(0, drumTime);
+            drumGain.gain.linearRampToValueAtTime(0.3, drumTime + 0.01);
+            drumGain.gain.exponentialRampToValueAtTime(0.001, drumTime + 0.08);
+            
+            drumOsc.connect(drumGain);
+            drumGain.connect(this.audioContext!.destination);
+            
+            drumOsc.start(drumTime);
+            drumOsc.stop(drumTime + 0.08);
+        }
+        
+        // 2. Big triumphant chord at the peak (C Major with octaves)
+        const chordTime = t + drumRollLength;
+        const triumphantFreqs = [131.25, 261.63, 329.63, 392.00, 523.25, 659.25, 783.99]; // C2, C4, E4, G4, C5, E5, G5
+        
+        triumphantFreqs.forEach((f, i) => {
+            const osc = this.audioContext!.createOscillator();
+            const gain = this.audioContext!.createGain();
+            
+            osc.type = i < 2 ? 'triangle' : 'sine'; // Lower notes with more body
+            osc.frequency.value = f;
+            
+            osc.connect(gain);
+            gain.connect(this.audioContext!.destination);
+            
+            // Simultaneous big impact
+            gain.gain.setValueAtTime(0, chordTime);
+            gain.gain.linearRampToValueAtTime(0.2, chordTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, chordTime + 4.0);
+            
+            osc.start(chordTime);
+            osc.stop(chordTime + 4.0);
+        });
+        
+        // 3. Ascending flourish (victory arpeggio)
+        const flourishTime = chordTime + 0.3;
+        const flourishFreqs = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+        
+        flourishFreqs.forEach((f, i) => {
+            const osc = this.audioContext!.createOscillator();
+            const gain = this.audioContext!.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = f;
+            
+            osc.connect(gain);
+            gain.connect(this.audioContext!.destination);
+            
+            const noteStart = flourishTime + (i * 0.1);
+            
+            gain.gain.setValueAtTime(0, noteStart);
+            gain.gain.linearRampToValueAtTime(0.15, noteStart + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, noteStart + 1.5);
+            
+            osc.start(noteStart);
+            osc.stop(noteStart + 1.5);
+        });
+    }
 }
 
 export const audioManager = new AudioManager();

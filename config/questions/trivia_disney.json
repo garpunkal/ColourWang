@@ -1,0 +1,91 @@
+[
+    {
+        "question": "What color is Snow White's dress?",
+        "answer": [
+            "blue",
+            "yellow"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Mickey Mouse primarily?",
+        "answer": [
+            "black",
+            "red"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Ariel's hair in The Little Mermaid?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Elsa's dress in Frozen?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Simba in The Lion King?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Belle's dress in Beauty and the Beast?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Tinker Bell?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color are Donald Duck's clothes?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Rapunzel's hair?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Minnie Mouse's dress?",
+        "answer": [
+            "red",
+            "pink"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is Pocahontas's dress?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What color is the Evil Queen's cape?",
+        "answer": [
+            "black",
+            "purple"
+        ],
+        "roundId": "disney"
+    }
+]

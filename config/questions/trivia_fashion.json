@@ -1,0 +1,95 @@
+[
+    {
+        "question": "What color is a classic little black dress?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are wedding dresses traditionally?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colors are in a tuxedo?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are blue jeans?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are most high-heel pumps?",
+        "answer": [
+            "black",
+            "red"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color is associated with formal evening wear?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are tennis shoes typically?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colors are in plaid patterns commonly?",
+        "answer": [
+            "red",
+            "green",
+            "blue"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are most leather jackets?",
+        "answer": [
+            "black",
+            "brown"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color lipstick is considered classic?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colors are associated with punk fashion?",
+        "answer": [
+            "black",
+            "purple",
+            "pink"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What color are most business suits?",
+        "answer": [
+            "grey",
+            "black",
+            "blue"
+        ],
+        "roundId": "fashion"
+    }
+]

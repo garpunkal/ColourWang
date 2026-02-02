@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import paletteRaw from '../../../config/palette.json';
 
@@ -48,13 +48,28 @@ function mapQuestion(q: QuestionData, index: number): Question {
     };
 }
 
-export function generateGameRounds(numRounds: number = 4, questionsPerRound: number = 10): Round[] {
+export function generateGameRounds(numRounds: number = 4, questionsPerRound: number = 10, selectedTopics?: string[]): Round[] {
     try {
-        const questionsPath = join(__dirname, '../../../config/questions.json');
+        const questionsDir = join(__dirname, '../../../config/questions');
         const roundsPath = join(__dirname, '../../../config/rounds.json');
 
-        const questionsRaw = JSON.parse(readFileSync(questionsPath, 'utf8')) as QuestionData[];
+        // Load all question files from the questions directory
+        const questionFiles = readdirSync(questionsDir).filter(file => file.endsWith('.json'));
+        let questionsRaw: QuestionData[] = [];
+        
+        // Combine all question files into one array
+        for (const file of questionFiles) {
+            const filePath = join(questionsDir, file);
+            const fileQuestions = JSON.parse(readFileSync(filePath, 'utf8')) as QuestionData[];
+            questionsRaw.push(...fileQuestions);
+        }
+
         const roundsDefinitions = JSON.parse(readFileSync(roundsPath, 'utf8')) as RoundDefinition[];
+        
+        // Filter rounds definitions to only include selected topics if provided
+        const availableRounds = selectedTopics && selectedTopics.length > 0 
+            ? roundsDefinitions.filter(rd => selectedTopics.includes(rd.id))
+            : roundsDefinitions;
 
         // Helper to shuffle array
         const shuffle = <T>(array: T[]): T[] => {
@@ -93,23 +108,26 @@ export function generateGameRounds(numRounds: number = 4, questionsPerRound: num
 
         const rounds: Round[] = [];
 
-        // Strategy: Shuffle ALL available categories (including General) to ensure truly random selection.
+        // Strategy: Shuffle available categories to ensure truly random selection.
         // We ensure a category is not used again until we have cycled through all available valid categories.
-        let candidates = shuffle([...roundsDefinitions]);
+        let candidates = shuffle([...availableRounds]);
         let consecutiveFailures = 0;
         let roundsGenerated = 0;
 
-        console.log(`[GameGen] Generating ${numRounds} rounds from pool of ${candidates.length} topics...`);
+        const topicsInfo = selectedTopics && selectedTopics.length > 0 
+            ? `${selectedTopics.length} selected topics: [${selectedTopics.join(', ')}]`
+            : `${candidates.length} available topics (all)`;
+        console.log(`[GameGen] Generating ${numRounds} rounds from pool of ${topicsInfo}...`);
 
         while (roundsGenerated < numRounds) {
             // Refill candidates if we exhausted the unique list but need more rounds
             if (candidates.length === 0) {
                 console.log('[GameGen] Exhausted unique topics, recycling pool...');
-                candidates = shuffle([...roundsDefinitions]);
+                candidates = shuffle([...availableRounds]);
             }
 
             // Safety break to prevent infinite loops if no rounds are valid (e.g. no questions at all)
-            if (consecutiveFailures >= roundsDefinitions.length * 2) {
+            if (consecutiveFailures >= availableRounds.length * 2) {
                 console.warn(`[GameGen] Could not generate full ${numRounds} rounds request. Generated ${roundsGenerated}.`);
                 break;
             }
@@ -151,28 +169,38 @@ export function getShuffledQuestions(count: number): Question[] {
 
 export function removeQuestionByText(questionText: string): boolean {
     try {
-        const questionsPath = join(__dirname, '../config/questions.json');
-        const questionsRaw = JSON.parse(readFileSync(questionsPath, 'utf8')) as QuestionData[];
+        const questionsDir = join(__dirname, '../../../config/questions');
+        const questionFiles = readdirSync(questionsDir).filter(file => file.endsWith('.json'));
+        
+        let questionFound = false;
+        let totalOriginalCount = 0;
+        let totalNewCount = 0;
 
-        const originalCount = questionsRaw.length;
-        const filtered = questionsRaw.filter(q => q.question !== questionText);
+        // Search through all topic files
+        for (const file of questionFiles) {
+            const filePath = join(questionsDir, file);
+            const questionsInFile = JSON.parse(readFileSync(filePath, 'utf8')) as QuestionData[];
+            totalOriginalCount += questionsInFile.length;
+            
+            const filtered = questionsInFile.filter(q => q.question !== questionText);
+            totalNewCount += filtered.length;
+            
+            // If this file had the question, update it
+            if (filtered.length < questionsInFile.length) {
+                writeFileSync(filePath, JSON.stringify(filtered, null, 4), 'utf8');
+                console.log(`[SERVER] Removed question from ${file}. File reduced from ${questionsInFile.length} to ${filtered.length} questions.`);
+                questionFound = true;
+            } else {
+                totalNewCount += questionsInFile.length;
+            }
+        }
 
-        if (filtered.length === originalCount) {
+        if (!questionFound) {
             console.warn(`[SERVER] No matches found for removal: "${questionText}"`);
             return false;
         }
 
-        writeFileSync(questionsPath, JSON.stringify(filtered, null, 4), 'utf8');
-        console.log(`[SERVER] Permanently removed question. Pool size reduced from ${originalCount} to ${filtered.length}.`);
-
-        // Also try to sync to client for dev consistency
-        try {
-            const clientQuestionsPath = join(__dirname, '../../../config/questions.json');
-            writeFileSync(clientQuestionsPath, JSON.stringify(filtered, null, 4), 'utf8');
-        } catch (e) {
-            // Ignore if client path doesn't exist
-        }
-
+        console.log(`[SERVER] Question permanently removed. Total pool size reduced from ${totalOriginalCount} to ${totalNewCount}.`);
         return true;
     } catch (error) {
         console.error('[SERVER] Failed to remove question from disk!', error);

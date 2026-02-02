@@ -112,10 +112,24 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </div>
                 </motion.div>
 
-                <div className="flex-1 flex items-center justify-center my-16">
+                <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6">
                     <motion.h1 className="text-5xl md:text-7xl font-black text-display text-display-gradient px-8 max-w-5xl">
                         {currentQuestion.question}
                     </motion.h1>
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="px-6 py-3 rounded-full glass-panel"
+                    >
+                        <span className="text-base md:text-lg font-black uppercase tracking-widest italic">
+                            {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length === 1 ? (
+                                <span className="text-color-blue">💡 Single Color Answer</span>
+                            ) : (
+                                <span className="text-color-yellow">💡 {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length} Colors Required</span>
+                            )}
+                        </span>
+                    </motion.div>
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-6 w-full max-w-7xl px-4 mx-auto pb-12">

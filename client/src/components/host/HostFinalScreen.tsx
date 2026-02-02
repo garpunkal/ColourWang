@@ -37,8 +37,8 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
 
     useEffect(() => {
         // Trigger supernova after a small delay for the winner reveal
-        audioManager.playChime(); // Play celebration chime
-        const timer = setTimeout(() => setShowSupernova(true), 800);
+        audioManager.playFinalResults(); // Play triumphant finale sound
+        const timer = setTimeout(() => setShowSupernova(true), 1200); // Slightly longer delay for the new sound
         return () => clearTimeout(timer);
     }, []);
 

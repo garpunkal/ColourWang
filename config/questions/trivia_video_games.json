@@ -1,0 +1,94 @@
+[
+    {
+        "question": "What color is Mario's outfit in video games?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is Luigi's outfit?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colors are Pac-Man?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is Sonic the Hedgehog?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colors are the ghosts in Pac-Man?",
+        "answer": [
+            "red",
+            "pink",
+            "blue",
+            "orange"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is Pikachu?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is Link's tunic in Zelda?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color rings does Sonic collect?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is the Master Chief's armor in Halo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color are the blocks in Tetris primarily?",
+        "answer": [
+            "blue",
+            "red",
+            "yellow",
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is Bowser primarily?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What color is the PlayStation logo?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    }
+]

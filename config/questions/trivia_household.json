@@ -1,0 +1,91 @@
+[
+    {
+        "question": "What color are most toilet paper rolls?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most kitchen appliances traditionally?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most cleaning sponges?",
+        "answer": [
+            "yellow",
+            "green"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are rubber gloves commonly?",
+        "answer": [
+            "yellow",
+            "pink"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most garbage bags?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color is bleach?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most cutting boards?",
+        "answer": [
+            "white",
+            "brown"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most light bulbs when off?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colors are common for towels?",
+        "answer": [
+            "white",
+            "blue",
+            "green"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most electrical outlets?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most wooden floors?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What color are most refrigerators?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    }
+]

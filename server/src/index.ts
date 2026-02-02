@@ -9,9 +9,11 @@ import { join } from 'path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
+import serverConfig from '../../config/server.json';
+import environmentConfig from '../../config/environment.json';
 
 const app = express();
-app.use(cors());
+app.use(cors(serverConfig.server.cors));
 
 // List all mp3 files in client/public/bgm for the frontend to consume
 app.get('/api/bgm-list', (req, res) => {
@@ -30,9 +32,9 @@ app.get('/api/bgm-list', (req, res) => {
 });
 
 // Check if SSL certificates exist
-const certPath = join(__dirname, '../../certs');
-const keyPath = join(certPath, 'localhost-key.pem');
-const certFilePath = join(certPath, 'localhost.pem');
+const certPath = join(__dirname, serverConfig.server.ssl.certPath);
+const keyPath = join(certPath, serverConfig.server.ssl.keyFileName);
+const certFilePath = join(certPath, serverConfig.server.ssl.certFileName);
 
 let server;
 let protocol = 'http';
@@ -54,17 +56,13 @@ if (existsSync(keyPath) && existsSync(certFilePath)) {
 }
 
 const io = new Server(server, {
-    cors: {
-        origin: "*", // Allow all origins (needed for ngrok tunnels)
-        methods: ["GET", "POST"],
-        credentials: true
-    }
+    cors: serverConfig.server.cors
 });
 
 console.log('Registering socket handlers...');
 registerSocketHandlers(io);
 
-const PORT = 3001;
+const PORT = process.env.PORT || serverConfig.server.port;
 server.listen(PORT, () => {
     console.log(`Server running on ${protocol}://localhost:${PORT}`);
 });

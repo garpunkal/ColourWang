@@ -1,0 +1,89 @@
+[
+    {
+        "question": "What colors are associated with blues music?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color vinyl records are most common?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color are most piano keys (the majority)?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color are the sharp/flat keys on a piano?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color is associated with the album 'Purple Rain'?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color submarine is in The Beatles song?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colors are in the Jamaican flag (reggae culture)?",
+        "answer": [
+            "green",
+            "yellow",
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color roses are mentioned in country music often?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color is commonly associated with jazz clubs?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color are most violins?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color is associated with Pink Floyd?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What color are most guitar picks?",
+        "answer": [
+            "white",
+            "black"
+        ],
+        "roundId": "music"
+    }
+]

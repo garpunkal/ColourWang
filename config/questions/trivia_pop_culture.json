@@ -1,0 +1,93 @@
+[
+    {
+        "question": "What color carpet is famous at award shows?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color hair is Kim Kardashian known for?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color are Instagram's logo colors?",
+        "answer": [
+            "pink",
+            "purple",
+            "orange"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color is associated with environmental movements?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color heart emoji represents jealousy?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color is the TikTok logo?",
+        "answer": [
+            "black",
+            "red",
+            "blue"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color represents sadness in pop culture?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color is associated with Halloween?",
+        "answer": [
+            "orange",
+            "black"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color is the Snapchat ghost?",
+        "answer": [
+            "white",
+            "yellow"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color is associated with Christmas?",
+        "answer": [
+            "red",
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color represents luxury brands often?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What color are most influencer ring lights?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "pop_culture"
+    }
+]

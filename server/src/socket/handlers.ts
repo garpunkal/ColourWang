@@ -2,8 +2,8 @@ import { Server, Socket } from 'socket.io';
 import { randomUUID } from 'crypto';
 import { games } from '../game/gamesMap';
 import { getShuffledQuestions, removeQuestionByText, generateGameRounds } from '../utils/questionLoader';
-
 import { generateCode } from '../utils/generateCode';
+import serverConfig from '../../../config/server.json';
 interface GameState {
   code: string;
   players: Player[];
@@ -31,7 +31,7 @@ interface GameState {
 import { Player } from '../models/player';
 
 // Available avatar colors
-import avatarsData from '../constants/avatars.json';
+import avatarsData from '../../../config/avatars.json';
 
 // Available avatar colors
 const AVATAR_IDS = avatarsData.colors.map(c => c.id);
@@ -75,11 +75,11 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds: numRounds, questionsPerRound, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels } = payload;
+      const { rounds: numRounds, questionsPerRound, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
-      // Generate Rounds
-      const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10);
+      // Generate Rounds with selected topics
+      const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10, selectedTopics);
 
       const game: GameState = {
         code,
@@ -250,14 +250,14 @@ export function registerSocketHandlers(io: Server) {
         game.status = 'ROUND_INTRO';
         io.to(normalizedCode).emit('game-status-changed', game);
 
-        // Transition to COUNTDOWN after 5 seconds
+        // Transition to COUNTDOWN after configured delay
         setTimeout(() => {
           const currentGame = games.get(normalizedCode);
           if (currentGame && currentGame.status === 'ROUND_INTRO') {
             currentGame.status = 'COUNTDOWN';
             io.to(normalizedCode).emit('game-status-changed', currentGame);
 
-            // Transition to QUESTION after 4.8 seconds
+            // Transition to QUESTION after countdown delay
             setTimeout(() => {
               const nextGame = games.get(normalizedCode);
               if (nextGame && nextGame.status === 'COUNTDOWN') {
@@ -265,9 +265,9 @@ export function registerSocketHandlers(io: Server) {
                 nextGame.status = 'QUESTION';
                 io.to(normalizedCode).emit('game-status-changed', nextGame);
               }
-            }, 4800);
+            }, serverConfig.timings.countdownDelay);
           }
-        }, 5000);
+        }, serverConfig.timings.roundIntroDelay);
 
       }
     });
@@ -383,7 +383,7 @@ export function registerSocketHandlers(io: Server) {
             console.log(`Starting Round ${game.currentRoundIndex + 1}: ${game.rounds[game.currentRoundIndex].title}`);
             io.to(normalizedCode).emit('game-status-changed', game);
 
-            // Auto-progress from ROUND_INTRO -> COUNTDOWN after 5s
+            // Auto-progress from ROUND_INTRO -> COUNTDOWN with configured delay
             setTimeout(() => {
               const currentGame = games.get(normalizedCode);
               if (currentGame && currentGame.status === 'ROUND_INTRO') {
@@ -396,9 +396,9 @@ export function registerSocketHandlers(io: Server) {
                     nextGame.status = 'QUESTION';
                     io.to(normalizedCode).emit('game-status-changed', nextGame);
                   }
-                }, 4800);
+                }, serverConfig.timings.countdownDelay);
               }
-            }, 5000);
+            }, serverConfig.timings.roundIntroDelay);
 
             // Reset player state for new round
             game.players.forEach(p => {
@@ -445,13 +445,13 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('restart-game', ({ code, rounds, questionsPerRound, timer }) => {
+    socket.on('restart-game', ({ code, rounds, questionsPerRound, timer, selectedTopics }) => {
       const normalizedCode = code.toUpperCase();
       const game = games.get(normalizedCode);
       if (game) {
 
-        // Regenerate rounds
-        const gameRounds = generateGameRounds(rounds || 4, questionsPerRound || 10);
+        // Regenerate rounds with selected topics
+        const gameRounds = generateGameRounds(rounds || 4, questionsPerRound || 10, selectedTopics);
 
         // Reset game state for a new game
         game.status = 'LOBBY';

@@ -1,0 +1,13 @@
+{
+    "ngrok": {
+        "enabled": false,
+        "serverUrl": "",
+        "clientUrl": ""
+    },
+    "deployment": {
+        "environment": "production",
+        "ssl": true,
+        "compression": true,
+        "minify": true
+    }
+}

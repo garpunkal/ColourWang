@@ -736,3 +736,44 @@ button {
 	background: linear-gradient(180deg, var(--color-blue), var(--color-purple));
 	box-shadow: 0 0 10px var(--primary-glow);
 }
+
+/* Topic Selection Animations */
+.pulse-glow {
+	animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+	0%, 100% {
+		transform: scale(1);
+		box-shadow: 0 0 15px rgba(248, 58, 123, 0.4);
+	}
+	50% {
+		transform: scale(1.1);
+		box-shadow: 0 0 25px rgba(248, 58, 123, 0.6);
+	}
+}
+
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-blue) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: linear-gradient(180deg, var(--color-blue), var(--color-purple));
+	border-radius: 10px;
+	border: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: linear-gradient(180deg, var(--color-purple), var(--color-pink));
+	box-shadow: 0 0 8px var(--color-blue);
+}

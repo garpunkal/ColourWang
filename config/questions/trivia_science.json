@@ -1,0 +1,86 @@
+[
+    {
+        "question": "What color are test tubes commonly in science labs?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color represents oxygen on the periodic table?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color is copper when oxidized?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color flame does sodium produce?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color are most lab coats?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color light has the shortest wavelength?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color represents carbon in molecular models?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colors appear when litmus paper tests acid?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color represents hydrogen in molecular models?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color is associated with plant chlorophyll?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color represents nitrogen in molecular models?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What color light has the longest wavelength?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    }
+]

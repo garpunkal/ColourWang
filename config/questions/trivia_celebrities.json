@@ -1,0 +1,93 @@
+[
+    {
+        "question": "What color dress did Marilyn Monroe wear in 'The Seven Year Itch'?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color hair is Elvis Presley famous for?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color is associated with Prince's music?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color outfit did Michael Jackson often wear?",
+        "answer": [
+            "black",
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color hair does Dolly Parton have?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color are Madonna's naturally dark roots?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colors are in Lady Gaga's most famous outfits?",
+        "answer": [
+            "black",
+            "white",
+            "red",
+            "pink"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color jumpsuit did Elvis wear in his later career?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color hair is Jennifer Aniston known for?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color are Elton John's famous glasses often?",
+        "answer": [
+            "pink",
+            "yellow",
+            "purple"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color suit does James Bond typically wear?",
+        "answer": [
+            "black",
+            "grey"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What color lipstick is Taylor Swift known for?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    }
+]

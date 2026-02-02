@@ -6,6 +6,14 @@ import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
 import { audioManager } from '../../utils/audioManager';
 import defaults from '../../../../config/gameDefaults.json';
+import roundsData from '../../../../config/rounds.json';
+
+interface TopicOption {
+    id: string;
+    title: string;
+    description: string;
+    sortOrder: number;
+}
 
 interface Props {
     socket: Socket;
@@ -27,6 +35,10 @@ export function HostSetupScreen({ socket }: Props) {
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
     const [error] = useState<string | null>(null);
+    const [availableTopics] = useState<TopicOption[]>((roundsData as TopicOption[]).sort((a, b) => a.sortOrder - b.sortOrder));
+    const [selectedTopics, setSelectedTopics] = useState<string[]>(
+        (roundsData as TopicOption[]).map(topic => topic.id)
+    );
     const isConnected = useSocketConnection(socket);
 
 
@@ -75,7 +87,7 @@ export function HostSetupScreen({ socket }: Props) {
 
     const createGame = () => {
         // We now let the server handle the question picking for better variety and consistency
-        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, lobbyDuration, jokers, playSounds });
+        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, lobbyDuration, jokers, playSounds, selectedTopics });
         socket.emit('create-game', {
             rounds,
             questionsPerRound,
@@ -88,9 +100,30 @@ export function HostSetupScreen({ socket }: Props) {
             bgmTrack: selectedBgm,
             streaksEnabled,
             fastestFingerEnabled,
-            accessibleLabels
+            accessibleLabels,
+            selectedTopics: selectedTopics.length === availableTopics.length ? undefined : selectedTopics
         });
     };
+
+    const toggleTopic = (topicId: string) => {
+        setSelectedTopics(prev => 
+            prev.includes(topicId) 
+                ? prev.filter(id => id !== topicId)
+                : [...prev, topicId]
+        );
+    };
+
+    const selectAllTopics = () => {
+        setSelectedTopics(availableTopics.map(topic => topic.id));
+    };
+
+    const deselectAllTopics = () => {
+        setSelectedTopics([]);
+    };
+
+    // Validation: ensure enough topics are selected for the number of rounds
+    const hasEnoughTopics = selectedTopics.length >= rounds;
+    const topicsDeficit = Math.max(0, rounds - selectedTopics.length);
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-2 w-full h-full min-h-0 overflow-hidden">
@@ -106,11 +139,11 @@ export function HostSetupScreen({ socket }: Props) {
                             <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60">Rounds</label>
                             <span className="text-xl md:text-5xl font-mono font-black text-color-blue drop-shadow-[0_0_10px_rgba(0,229,255,0.5)]">{rounds}</span>
                         </div>
-                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
                             <input
                                 type="range" min="1" max="10"
                                 value={rounds} onChange={e => setRounds(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-blue hover:bg-white/20 transition-colors"
+                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-blue hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>
@@ -121,11 +154,11 @@ export function HostSetupScreen({ socket }: Props) {
                             <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60">Questions</label>
                             <span className="text-xl md:text-5xl font-mono font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">{questionsPerRound}</span>
                         </div>
-                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
                             <input
                                 type="range" min="3" max="20" step="1"
                                 value={questionsPerRound} onChange={e => setQuestionsPerRound(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-white hover:bg-white/20 transition-colors"
+                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-white hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>
@@ -138,11 +171,11 @@ export function HostSetupScreen({ socket }: Props) {
                                 {timer}<span className="text-xs md:text-2xl opacity-50 ml-0.5">s</span>
                             </span>
                         </div>
-                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
                             <input
                                 type="range" min="15" max="60" step="5"
                                 value={timer} onChange={e => setTimer(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-pink hover:bg-white/20 transition-colors"
+                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-pink hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>
@@ -155,11 +188,11 @@ export function HostSetupScreen({ socket }: Props) {
                                 {lobbyDuration}<span className="text-xs md:text-2xl opacity-50 ml-0.5">s</span>
                             </span>
                         </div>
-                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
                             <input
                                 type="range" min="10" max="120" step="5"
                                 value={lobbyDuration} onChange={e => setLobbyDuration(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-purple hover:bg-white/20 transition-colors"
+                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-purple hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>
@@ -172,11 +205,11 @@ export function HostSetupScreen({ socket }: Props) {
                                 {resultTimer}<span className="text-xs md:text-2xl opacity-50 ml-0.5">s</span>
                             </span>
                         </div>
-                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
                             <input
                                 type="range" min="10" max="60" step="5"
                                 value={resultTimer} onChange={e => setResultTimer(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-yellow hover:bg-white/20 transition-colors"
+                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-yellow hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>
@@ -185,7 +218,7 @@ export function HostSetupScreen({ socket }: Props) {
                     <div className="col-span-2 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
 
                         {/* Sound FX */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
                             onClick={() => setPlaySounds(!playSounds)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -194,17 +227,17 @@ export function HostSetupScreen({ socket }: Props) {
                                         {playSounds ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${playSounds ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${playSounds ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: playSounds ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Music */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative min-h-[50px] md:min-h-[100px]"
                             onClick={() => setMusicEnabled(!musicEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left w-full">
@@ -214,16 +247,16 @@ export function HostSetupScreen({ socket }: Props) {
                                     </span>
 
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${musicEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'} shrink-0 ml-2 md:ml-0`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${musicEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'} shrink-0 ml-2 md:ml-0`}>
                                     <motion.div
                                         animate={{ x: musicEnabled ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
                         </div>
                         {/* Accessible Labels */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
                             onClick={() => setAccessibleLabels(!accessibleLabels)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -232,16 +265,16 @@ export function HostSetupScreen({ socket }: Props) {
                                         {accessibleLabels ? 'FOR ALL' : 'OPTIONAL'}
                                     </span>
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${accessibleLabels ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${accessibleLabels ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: accessibleLabels ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
                         </div>
                         {/* Steals */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
                             onClick={() => setJokers(!jokers)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -250,17 +283,17 @@ export function HostSetupScreen({ socket }: Props) {
                                         {jokers ? 'ENABLED' : 'DISABLED'}
                                     </span>
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: jokers ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Streaks */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
                             onClick={() => setStreaksEnabled(!streaksEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -269,10 +302,10 @@ export function HostSetupScreen({ socket }: Props) {
                                         {streaksEnabled ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${streaksEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${streaksEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: streaksEnabled ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
@@ -280,7 +313,7 @@ export function HostSetupScreen({ socket }: Props) {
 
 
                         {/* Fastest Finger */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
                             onClick={() => setFastestFingerEnabled(!fastestFingerEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -289,10 +322,10 @@ export function HostSetupScreen({ socket }: Props) {
                                         {fastestFingerEnabled ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${fastestFingerEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${fastestFingerEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: fastestFingerEnabled ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
                             </div>
@@ -302,14 +335,90 @@ export function HostSetupScreen({ socket }: Props) {
                     </div>
                 </div>
 
+                {/* Trivia Topics Selection */}
+                <div className="mb-4 md:mb-6">
+                    <div className="flex justify-between items-center mb-3 md:mb-4">
+                        <h3 className="text-lg md:text-2xl font-black uppercase tracking-widest text-white drop-shadow-lg">Topics</h3>
+                        <div className="flex items-center gap-2 md:gap-3">
+                            <div className={`text-sm md:text-lg font-mono font-black px-2 md:px-3 py-1 rounded-lg border-2 ${
+                                hasEnoughTopics 
+                                    ? 'text-color-blue border-color-blue/50 bg-color-blue/10'
+                                    : 'text-color-pink border-color-pink/50 bg-color-pink/10 animate-pulse'
+                            }`}>
+                                {selectedTopics.length}/{availableTopics.length}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex gap-2 md:gap-3 mb-3 md:mb-4">
+                        <button
+                            onClick={selectAllTopics}
+                            className="text-xs md:text-sm px-3 md:px-4 py-2 bg-color-blue/20 hover:bg-color-blue/30 rounded-lg transition-all font-bold text-white border border-color-blue/40 hover:border-color-blue/60 uppercase tracking-wide"
+                        >
+                            All
+                        </button>
+                        <button
+                            onClick={deselectAllTopics}
+                            className="text-xs md:text-sm px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all font-bold text-white border border-white/30 hover:border-white/50 uppercase tracking-wide"
+                        >
+                            None
+                        </button>
+                    </div>
+                    <div className="bg-black/20 p-3 md:p-4 rounded-xl border border-white/10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {availableTopics.map((topic) => {
+                                const isSelected = selectedTopics.includes(topic.id);
+                                const canDeselect = !isSelected || selectedTopics.length > rounds;
+                                return (
+                                    <button
+                                        key={topic.id}
+                                        onClick={() => canDeselect && toggleTopic(topic.id)}
+                                        className={`flex items-center justify-between w-full px-3 py-2 rounded-lg font-bold text-left transition-all ${
+                                            isSelected 
+                                                ? 'bg-success/20 text-white'
+                                                : 'bg-white/5 border-2 border-white/20 text-white/70 hover:bg-white/10 hover:border-white/40 hover:text-white'
+                                        } ${
+                                            !canDeselect ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                                        }`}
+                                        disabled={!canDeselect}
+                                    >
+                                        <span className="text-xs md:text-sm uppercase tracking-wider">
+                                            {topic.title}
+                                        </span>
+                                        <div className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${
+                                            isSelected 
+                                                ? 'bg-success shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
+                                                : 'bg-white/20'
+                                        }`}>
+                                            <motion.div
+                                                animate={{ x: isSelected ? '100%' : '0%' }}
+                                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                className="w-4 h-4 bg-white rounded-full shadow-md"
+                                            />
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {!hasEnoughTopics && (
+                            <div className="text-xs md:text-sm text-color-pink font-bold mt-2 text-center">
+                                Select {topicsDeficit} more topic{topicsDeficit > 1 ? 's' : ''} for {rounds} rounds
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 <motion.button
-                    whileHover={{ scale: 1.02, y: -3 }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: hasEnoughTopics ? 1.02 : 1, y: hasEnoughTopics ? -3 : 0 }}
+                    whileTap={{ scale: hasEnoughTopics ? 0.97 : 1 }}
                     onClick={createGame}
-                    className="btn btn-primary text-xl md:text-5xl py-4 md:py-12 px-6 md:px-24 w-full rounded-2xl md:rounded-[3rem] shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20 shrink-0"
-                    disabled={loadingQuestions || !!error || !allQuestions.length || !isConnected}
+                    className={`btn text-xl md:text-5xl py-4 md:py-12 px-6 md:px-24 w-full rounded-2xl md:rounded-[3rem] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20 shrink-0 transition-all duration-300 ${
+                        hasEnoughTopics 
+                            ? 'btn-primary shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] hover:shadow-[0_25px_80px_-10px_rgba(0,229,255,0.6)]' 
+                            : 'bg-white/5 border-white/10 text-white/40 cursor-not-allowed shadow-none'
+                    }`}
+                    disabled={loadingQuestions || !!error || !allQuestions.length || !isConnected || !hasEnoughTopics}
                 >
-                    {isConnected ? 'Initialise Lobby' : 'Connecting...'}
+                    {!isConnected ? 'Connecting...' : !hasEnoughTopics ? 'Select More Topics' : 'Initialise Lobby'}
                 </motion.button>
             </div>
         </div >

@@ -1,0 +1,38 @@
+{
+    "server": {
+        "port": 3001,
+        "protocol": "auto",
+        "cors": {
+            "origin": "*",
+            "methods": ["GET", "POST"],
+            "credentials": true
+        },
+        "ssl": {
+            "certPath": "../../certs",
+            "keyFileName": "localhost-key.pem",
+            "certFileName": "localhost.pem"
+        }
+    },
+    "client": {
+        "port": 5173,
+        "host": true,
+        "proxy": {
+            "socketTarget": "https://localhost:3001",
+            "apiTarget": "https://localhost:3001"
+        }
+    },
+    "socket": {
+        "transports": ["websocket", "polling"],
+        "reconnection": true,
+        "reconnectionDelay": 1000,
+        "reconnectionAttempts": 5
+    },
+    "timings": {
+        "roundIntroDelay": 5000,
+        "countdownDelay": 4800,
+        "autoStartTimer": 30,
+        "stealNoticeDelay": 3500,
+        "joinTimeout": 5000,
+        "resultCountdownInterval": 1000
+    }
+}

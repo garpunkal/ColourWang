@@ -187,6 +187,20 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     </div>
                 </div>
                 <h3 className="text-xl md:text-5xl text-display text-display-gradient px-4 md:px-8 leading-tight py-2">{currentQuestion.question}</h3>
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mt-2 md:mt-4 px-4 py-2 md:py-3 rounded-full glass-panel mx-auto w-fit"
+                >
+                    <span className="text-xs md:text-sm font-black uppercase tracking-widest italic">
+                        {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length === 1 ? (
+                            <span className="text-color-blue">💡 Select 1 color</span>
+                        ) : (
+                            <span className="text-color-yellow">💡 Select {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length} colors</span>
+                        )}
+                    </span>
+                </motion.div>
             </div>
 
             {!hasAnswered ? (

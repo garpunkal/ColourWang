@@ -1,0 +1,19 @@
+{
+    "environment": "development",
+    "server": {
+        "host": "localhost",
+        "port": 3001,
+        "protocol": "https"
+    },
+    "client": {
+        "host": "localhost", 
+        "port": 5173,
+        "protocol": "https"
+    },
+    "features": {
+        "development": true,
+        "logging": true,
+        "hotReload": true,
+        "debugMode": true
+    }
+}

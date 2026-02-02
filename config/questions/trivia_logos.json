@@ -1,0 +1,96 @@
+[
+    {
+        "question": "What colors are in the McDonald's logo?",
+        "answer": [
+            "red",
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Coca-Cola logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colors are in the Google logo?",
+        "answer": [
+            "blue",
+            "red",
+            "yellow",
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Facebook logo?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Nike swoosh?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colors are in the Pepsi logo?",
+        "answer": [
+            "blue",
+            "red",
+            "white"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Starbucks logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Twitter/X logo?",
+        "answer": [
+            "blue",
+            "black"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colors are in the FedEx logo?",
+        "answer": [
+            "purple",
+            "orange"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the Apple logo?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colors are in the KFC logo?",
+        "answer": [
+            "red",
+            "white"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What color is the YouTube logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "logos"
+    }
+]

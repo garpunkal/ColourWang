@@ -1,0 +1,90 @@
+[
+    {
+        "question": "What color are stop signs?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color is the night sky?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color are clouds typically?",
+        "answer": [
+            "white",
+            "grey"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color are dollar bills?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color are most pencils?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color is associated with royalty?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color are traffic cones?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colors are chess pieces?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color is associated with love?",
+        "answer": [
+            "red",
+            "pink"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color are most school blackboards?",
+        "answer": [
+            "black",
+            "green"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color is coal?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What color is gold?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    }
+]

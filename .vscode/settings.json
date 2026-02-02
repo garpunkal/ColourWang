@@ -7,6 +7,14 @@
         "/^Copy-Item \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\client\\\\src\\\\config\\\\questions\\.json\" \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\.json\"$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^Get-Content \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\\\trivia_animals_new\\.json\" \\| Set-Content \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\\\trivia_animals\\.json\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Get-ChildItem \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\\\\\*_new\\.json\" \\| ForEach-Object \\{\n    \\$originalName = \\$_\\.Name -replace '_new\\.json', '\\.json'\n    \\$destinationPath = Join-Path \\$_\\.Directory \\$originalName\n    Copy-Item \\$_\\.FullName \\$destinationPath -Force\n    Write-Host \"Copied \\$\\(\\$_\\.Name\\) to \\$originalName\"\n\\}$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

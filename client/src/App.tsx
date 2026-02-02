@@ -9,6 +9,7 @@ import { useSocketConnection } from './hooks/useSocketConnection';
 import { Monitor, Smartphone, WifiOff } from 'lucide-react';
 import { audioManager } from './utils/audioManager';
 import { getNextTrack } from './config/musicConfig';
+import socketConfig from './config/socketConfig.json';
 
 // Lazy load role-specific screens to optimize bundle size
 const HostScreen = lazy(() => import('./components/HostScreen.tsx'));
@@ -16,13 +17,13 @@ const PlayerScreen = lazy(() => import('./components/PlayerScreen.tsx'));
 
 // Socket.IO connection - uses relative path to leverage Vite proxy
 // In production/ngrok: connects through the same origin (proxied to backend)
-// In local dev: Vite proxy forwards to localhost:3001
+// In local dev: Vite proxy forwards to configured server
 const socket: Socket = io({
   path: '/socket.io',
-  transports: ['websocket', 'polling'],
-  reconnection: true,
-  reconnectionDelay: 1000,
-  reconnectionAttempts: 5
+  transports: socketConfig.socket.transports as ('websocket' | 'polling')[],
+  reconnection: socketConfig.socket.reconnection,
+  reconnectionDelay: socketConfig.socket.reconnectionDelay,
+  reconnectionAttempts: socketConfig.socket.reconnectionAttempts
 });
 
 console.log('Socket.IO connecting via proxy to backend server');

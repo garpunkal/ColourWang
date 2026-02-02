@@ -1,0 +1,90 @@
+[
+    {
+        "question": "What color is Superman's cape?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is the Hulk?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colors are in Wonder Woman's outfit?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is Batman's cape?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colors are in Spider-Man's costume?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is Iron Man's suit primarily?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is the Flash's costume?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is Green Lantern's costume?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colors are in Captain America's shield?",
+        "answer": [
+            "red",
+            "white",
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is Black Widow's outfit?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is Thor's cape?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What color is the Punisher's skull logo?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "superheroes"
+    }
+]

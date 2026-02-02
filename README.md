@@ -12,6 +12,8 @@ ColourWang is a high-energy, real-time multiplayer party game where players comp
 - **Real-Time Sync**: Powered by Socket.IO for sub-100ms latency between screens.
 - **Premium Aesthetics**: Custom-built design system using Tailwind CSS v4, featuring glassmorphism, neon glows, fluid motion, and animated mesh backgrounds.
 - **Performance Optimized**: Fine-tuned animations and rendering for smooth gameplay even on older mobile devices.
+- **Centralized Configuration**: Single source of truth for all game settings, timing, and content.
+- **Responsive Design**: Adapts seamlessly from mobile controllers to large host screens.
 - **Synchronized Countdowns**: Full-screen countdowns keep all players in sync before every question.
 - **Steal Mechanics**: Players can trigger "STEAL!" events that disrupt opponents by randomly disabling their options and announcing the theft with scrolling banners.
 - **Streak Rewards**: Earn a **1.5x score multiplier** by getting 3 or more answers correct in a row.
@@ -106,19 +108,59 @@ To play with friends over the internet, you can use [ngrok](https://ngrok.com/):
 
 ```text
 ColourWang/
+├── config/             # 🆕 Centralized Configuration
+│   ├── questions.json  # Game questions database
+│   ├── palette.json    # Color definitions
+│   ├── avatars.json    # Player avatar settings
+│   ├── rounds.json     # Round metadata
+│   ├── gameDefaults.json # Default game settings
+│   ├── music.json      # Background music tracks
+│   ├── server.json     # Server/network configuration
+│   ├── environment.json # Environment settings
+│   ├── deployment.json # Deployment configuration
+│   └── README.md       # Configuration guide
 ├── client/             # Vite + React Frontend
 │   ├── src/
 │   │   ├── components/ # Game screens (Host, Player, Lobby)
 │   │   ├── hooks/      # Socket and Game state management
-│   │   ├── store/      # Global state for game logic
+│   │   ├── config/     # Configuration wrappers
 │   │   └── types/      # Shared TypeScript interfaces
 ├── server/             # Node.js + Socket.IO Backend
 │   ├── src/
 │   │   ├── socket/     # Event handlers for game rooms
-│   │   ├── config/     # Questions and game settings
-│   │   └── models/     # Persistence and room logic
+│   │   ├── models/     # Persistence and room logic
+│   │   └── utils/      # Game logic utilities
 └── package.json        # Root scripts for monorepo management
 ```
+
+---
+
+## ⚙️ Configuration Management
+
+ColourWang features a **centralized configuration system** where all settings are managed from the `/config` directory. This eliminates duplicate configuration files and makes customization much easier.
+
+### Key Configuration Files:
+
+- **`server.json`**: Network settings (ports, SSL, CORS), socket configuration, and all timing values
+- **`gameDefaults.json`**: Default game settings (rounds, questions per round, timers, features)
+- **`questions.json`**: Complete questions database with answers and round assignments
+- **`palette.json`**: Color palette definitions used throughout the game
+- **`environment.json`**: Development vs production settings
+- **`deployment.json`**: ngrok and deployment configuration
+
+### Easy Customization:
+```json
+// config/server.json - Adjust game timing
+{
+  "timings": {
+    "roundIntroDelay": 5000,    // Time before countdown starts
+    "countdownDelay": 4800,     // Countdown duration
+    "autoStartTimer": 30        // Lobby auto-start timer
+  }
+}
+```
+
+See [`/config/README.md`](config/README.md) for complete configuration documentation.
 
 ---
 

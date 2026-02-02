@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "host": true,
+        "port": 5173,
+        "proxy": {
+            "socketTarget": "https://localhost:3001",
+            "apiTarget": "https://localhost:3001"
+        }
+    }
+}
