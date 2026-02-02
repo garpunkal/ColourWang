@@ -27,7 +27,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of France?",
+        "question": "What colours are in the flag of France?",
         "answer": [
             "blue",
             "white",
@@ -36,7 +36,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Japan?",
+        "question": "What colours are in the flag of Japan?",
         "answer": [
             "red",
             "white"
@@ -44,7 +44,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of the United Kingdom?",
+        "question": "What colours are in the flag of the United Kingdom?",
         "answer": [
             "red",
             "white",
@@ -53,7 +53,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Canada?",
+        "question": "What colours are in the flag of Canada?",
         "answer": [
             "red",
             "white"
@@ -61,7 +61,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Ireland?",
+        "question": "What colours are in the flag of Ireland?",
         "answer": [
             "green",
             "white",
@@ -70,7 +70,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Spain?",
+        "question": "What colours are in the flag of Spain?",
         "answer": [
             "red",
             "yellow"
@@ -78,7 +78,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Switzerland?",
+        "question": "What colours are in the flag of Switzerland?",
         "answer": [
             "red",
             "white"
@@ -86,7 +86,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Brazil?",
+        "question": "What colours are in the flag of Brazil?",
         "answer": [
             "green",
             "yellow",
@@ -95,7 +95,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Australia?",
+        "question": "What colours are in the flag of Australia?",
         "answer": [
             "blue",
             "red",

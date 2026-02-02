@@ -75,89 +75,8 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('override-answer', (payload: { code: string; newAnswer: string[] }) => {
-      const { code, newAnswer } = payload;
-      const normalizedCode = code.toUpperCase();
-      const game = games.get(normalizedCode);
-
-      if (game && game.hostSocketId === socket.id && game.status === 'RESULT') {
-        const currentQuestion = game.questions[game.currentQuestionIndex];
-        if (currentQuestion) {
-          logger.info(`[SERVER] Host overriding answer for: "${currentQuestion.question}"`);
-          logger.info(`[SERVER] Original answer: ${JSON.stringify(currentQuestion.correctAnswers || currentQuestion.correctColours)}`);
-          logger.info(`[SERVER] New answer: ${JSON.stringify(newAnswer)}`);
-
-          // Update the question's correct answer
-          if (currentQuestion.correctAnswers) {
-            currentQuestion.correctAnswers = newAnswer;
-          } else {
-            currentQuestion.correctColours = newAnswer;
-          }
-
-          // Clear per-round scoring before recalculation
-          game.players.forEach(p => {
-            p.roundScore = 0;
-            p.streakPoints = 0;
-            p.fastestFingerPoints = 0;
-          });
-
-          // Recalculate scores for all players based on the new answer
-          let anyCorrect = false;
-          game.players.forEach(p => {
-            const correct = currentQuestion.correctAnswers || currentQuestion.correctColours;
-            const wasCorrectBefore = p.isCorrect;
-            const isCorrectNow = compareAnswers(p.lastAnswer, correct);
-            p.isCorrect = isCorrectNow;
-
-            // Adjust player's total score
-            if (wasCorrectBefore && !isCorrectNow) {
-              // Player was correct before, now wrong - subtract points
-              const pointsToSubtract = 10 + (p.streak >= 3 ? 5 : 0) + (p.isFastestFinger ? 5 : 0);
-              p.score = Math.max(0, p.score - pointsToSubtract);
-              p.streak = 0; // Reset streak
-            } else if (!wasCorrectBefore && isCorrectNow) {
-              // Player was wrong before, now correct - add points
-              let points = 10;
-              if (game.streaksEnabled !== false) {
-                // We need to recalculate streak properly, but for simplicity, don't add streak bonus on overrides
-                p.streak = 1; // Start fresh
-              }
-              p.roundScore = points;
-              p.score += points;
-              anyCorrect = true;
-            }
-
-            // Reset fastest finger status
-            p.isFastestFinger = false;
-          });
-
-          // Recalculate Fastest Finger Bonus
-          if (game.fastestFingerEnabled !== false && anyCorrect) {
-            const correctPlayers = game.players.filter(p => p.isCorrect && p.answeredAt !== null);
-            if (correctPlayers.length > 0) {
-              const fastest = correctPlayers.reduce((prev, curr) =>
-                (prev.answeredAt! < curr.answeredAt!) ? prev : curr
-              );
-              fastest.fastestFingerPoints = 5;
-              fastest.roundScore += 5;
-              fastest.score += 5;
-              fastest.isFastestFinger = true;
-              logger.info(`[OVERRIDE BONUS] ${fastest.name} got the Fastest Finger Bonus! (+5)`);
-            }
-          }
-
-          // Emit the updated game state
-          io.to(normalizedCode).emit('answer-overridden', { 
-            newAnswer,
-            originalAnswer: currentQuestion.correctAnswers || currentQuestion.correctColours 
-          });
-          io.to(normalizedCode).emit('game-status-changed', game);
-        }
-      }
-    });
-
     socket.on('create-game', (payload) => {
-      const { rounds: numRounds, questionsPerRound, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
+      const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
       // Generate Rounds with selected topics
@@ -171,6 +90,7 @@ export function registerSocketHandlers(io: Server) {
         questions: gameRounds[0].questions,
         timerDuration: timer,
         resultDuration,
+        lobbyDuration,
         jokersEnabled,
         soundEnabled: soundEnabled ?? true,
         musicEnabled: musicEnabled ?? true,
@@ -209,6 +129,7 @@ export function registerSocketHandlers(io: Server) {
           // Generate random disabled indexes for each other player
           const disabledMap: Record<string, number[]> = {};
           const optionCount = game.questions[game.currentQuestionIndex]?.options?.length || 0;
+          const currentOptions = game.questions[game.currentQuestionIndex]?.options || [];
           game.players.forEach((p: Player) => {
             if (p.id !== player.id) {
               let indexes = Array.from({ length: optionCount }, (_, i) => i);
@@ -218,6 +139,22 @@ export function registerSocketHandlers(io: Server) {
               }
               disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
               p.disabledIndexes = disabledMap[p.id];
+              
+              // If player has already answered, filter out stolen cards from their answer
+              if (p.lastAnswer && p.lastAnswer.length > 0) {
+                const originalLength = p.lastAnswer.length;
+                p.lastAnswer = p.lastAnswer.filter(color => {
+                  const colorIndex = currentOptions.indexOf(color);
+                  return !disabledMap[p.id].includes(colorIndex);
+                });
+                if (p.lastAnswer.length !== originalLength) {
+                  logger.info(`[STEAL FILTER] Removed ${originalLength - p.lastAnswer.length} stolen cards from ${p.name}'s already-submitted answer.`);
+                }
+                // Update answeredAt if they now have no valid answers
+                if (p.lastAnswer.length === 0) {
+                  p.answeredAt = null;
+                }
+              }
             }
           });
           io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
@@ -301,11 +238,11 @@ export function registerSocketHandlers(io: Server) {
 
         const player = game.players.find(p => p.id === playerId);
         if (player) {
-          player.socketId = socket.id;
           socket.join(code.toUpperCase());
           // Patch the players array in the game object itself
           game.players = game.players.map(p => ({
             ...p,
+            socketId: p.id === playerId ? socket.id : p.socketId, // Update socketId for the rejoining player
             stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
             stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
             disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
@@ -429,14 +366,28 @@ export function registerSocketHandlers(io: Server) {
       if (game && game.status === 'QUESTION') {
         const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
-          player.lastAnswer = answers;
-          player.answeredAt = answers.length > 0 ? Date.now() : null;
+          // Filter out any colors that are at disabled indexes for this player
+          let filteredAnswers = answers;
+          if (player.disabledIndexes && player.disabledIndexes.length > 0) {
+            const currentOptions = game.questions[game.currentQuestionIndex]?.options || [];
+            filteredAnswers = answers.filter((color: string) => {
+              const colorIndex = currentOptions.indexOf(color);
+              return !player.disabledIndexes!.includes(colorIndex);
+            });
+            if (filteredAnswers.length !== answers.length) {
+              logger.info(`[STEAL FILTER] Player ${player.name} tried to submit disabled cards. Filtered from ${answers.length} to ${filteredAnswers.length} cards.`);
+            }
+          }
+          
+          player.lastAnswer = filteredAnswers;
+          player.answeredAt = filteredAnswers.length > 0 ? Date.now() : null;
           // Handle STEAL card usage
           if (useStealCard && !player.stealCardUsed) {
             player.stealCardUsed = true;
             // Generate random disabled indexes for each other player
             const disabledMap: Record<string, number[]> = {};
             const optionCount = game.questions[game.currentQuestionIndex]?.options?.length || 0;
+            const currentOptions = game.questions[game.currentQuestionIndex]?.options || [];
             game.players.forEach(p => {
               if (p.id !== player.id) {
                 let indexes = Array.from({ length: optionCount }, (_, i) => i);
@@ -446,6 +397,22 @@ export function registerSocketHandlers(io: Server) {
                 }
                 disabledMap[p.id] = indexes.slice(0, player.stealCardValue);
                 p.disabledIndexes = disabledMap[p.id];
+                
+                // If player has already answered, filter out stolen cards from their answer
+                if (p.lastAnswer && p.lastAnswer.length > 0) {
+                  const originalLength = p.lastAnswer.length;
+                  p.lastAnswer = p.lastAnswer.filter(color => {
+                    const colorIndex = currentOptions.indexOf(color);
+                    return !disabledMap[p.id].includes(colorIndex);
+                  });
+                  if (p.lastAnswer.length !== originalLength) {
+                    logger.info(`[STEAL FILTER] Removed ${originalLength - p.lastAnswer.length} stolen cards from ${p.name}'s already-submitted answer.`);
+                  }
+                  // Update answeredAt if they now have no valid answers
+                  if (p.lastAnswer.length === 0) {
+                    p.answeredAt = null;
+                  }
+                }
               }
             });
             io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });

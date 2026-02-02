@@ -1,9 +1,9 @@
 {
     "rounds": 4,
-    "questionsPerRound": 4,
+    "questionsPerRound": 6,
     "questionTimer": 30,
-    "resultDuration": 15,
-    "lobbyDuration": 15,
+    "resultDuration": 30,
+    "lobbyDuration": 30,
     "jokersEnabled": true,
     "soundEnabled": true,
     "musicEnabled": true,

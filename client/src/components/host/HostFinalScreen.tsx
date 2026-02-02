@@ -5,7 +5,6 @@ import { useMemo, useState, useEffect, useRef } from 'react';
 
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
-import { useSparkle } from '../../hooks/useSparkle';
 import { audioManager } from '../../utils/audioManager';
 
 // Optimized celebratory elements
@@ -27,6 +26,7 @@ interface Props {
 
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
     const [showSupernova, setShowSupernova] = useState(false);
+    const hasPlayedAudio = useRef(false);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -36,8 +36,13 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
     useEffect(() => {
+        // Only play audio once, even if component remounts
+        if (!hasPlayedAudio.current) {
+            hasPlayedAudio.current = true;
+            audioManager.playFinalResults(); // Play triumphant finale sound
+        }
+        
         // Trigger supernova after a small delay for the winner reveal
-        audioManager.playFinalResults(); // Play triumphant finale sound
         const timer = setTimeout(() => setShowSupernova(true), 1200); // Slightly longer delay for the new sound
         return () => clearTimeout(timer);
     }, []);
@@ -69,20 +74,6 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
         }
     };
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const { spawnConfetti } = useSparkle(canvasRef);
-
-    useEffect(() => {
-        if (showSupernova) {
-            spawnConfetti(window.innerWidth / 2, window.innerHeight * 0.3);
-            // Keep spawning for a bit
-            const interval = setInterval(() => {
-                spawnConfetti(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.5);
-            }, 300);
-            return () => clearInterval(interval);
-        }
-    }, [showSupernova, spawnConfetti]);
-
     return (
         <motion.div
             key="final"
@@ -91,8 +82,6 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
             variants={containerVariants}
             className="w-full max-w-5xl mx-auto py-8 px-4 md:py-12 md:px-6 relative"
         >
-            <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-50" />
-
             {/* High-Performance Supernova Effect */}
             <AnimatePresence>
                 {showSupernova && (

@@ -14,7 +14,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What colors are in a tuxedo?",
+        "question": "What colours are in a tuxedo?",
         "answer": [
             "black",
             "white"
@@ -51,7 +51,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What colors are in plaid patterns commonly?",
+        "question": "What colours are in plaid patterns commonly?",
         "answer": [
             "red",
             "green",
@@ -75,7 +75,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What colors are associated with punk fashion?",
+        "question": "What colours are associated with punk fashion?",
         "answer": [
             "black",
             "purple",

@@ -24,7 +24,6 @@ export function HostSetupScreen({ socket }: Props) {
     const [questionsPerRound, setQuestionsPerRound] = useState(defaults.questionsPerRound);
     const [timer, setTimer] = useState(defaults.questionTimer);
     const [resultTimer, setResultTimer] = useState(defaults.resultDuration);
-    const [lobbyDuration, setLobbyDuration] = useState(defaults.lobbyDuration);
     const [jokers, setJokers] = useState(defaults.jokersEnabled);
     const [playSounds, setPlaySounds] = useState(defaults.soundEnabled);
     const [musicEnabled, setMusicEnabled] = useState(defaults.musicEnabled);
@@ -87,13 +86,13 @@ export function HostSetupScreen({ socket }: Props) {
 
     const createGame = () => {
         // We now let the server handle the question picking for better variety and consistency
-        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, lobbyDuration, jokers, playSounds, selectedTopics });
+        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, jokers, playSounds, selectedTopics });
         socket.emit('create-game', {
             rounds,
             questionsPerRound,
             timer,
             resultDuration: resultTimer,
-            lobbyDuration,
+            lobbyDuration: 30,
             jokersEnabled: jokers,
             soundEnabled: playSounds,
             musicEnabled,
@@ -176,23 +175,6 @@ export function HostSetupScreen({ socket }: Props) {
                                 type="range" min="15" max="60" step="5"
                                 value={timer} onChange={e => setTimer(parseInt(e.target.value))}
                                 className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-pink hover:bg-white/20 transition-colors"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Lobby Timer Slider */}
-                    <div className="space-y-1 md:space-y-4 text-left col-span-1">
-                        <div className="flex justify-between items-end ml-1 md:ml-2">
-                            <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60">Lobby</label>
-                            <span className="text-xl md:text-5xl font-mono font-black text-color-purple drop-shadow-[0_0_10px_rgba(147,51,234,0.5)]">
-                                {lobbyDuration}<span className="text-xs md:text-2xl opacity-50 ml-0.5">s</span>
-                            </span>
-                        </div>
-                        <div className="flex items-center bg-black/20 p-1 md:p-2 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-8 md:h-12">
-                            <input
-                                type="range" min="10" max="120" step="5"
-                                value={lobbyDuration} onChange={e => setLobbyDuration(parseInt(e.target.value))}
-                                className="w-full h-2 md:h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-purple hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>

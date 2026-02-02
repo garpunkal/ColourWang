@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
 
-export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetStateAction<GameState | null>>, onAnswerOverridden?: (data: { newAnswer: string[], originalAnswer: string[] }) => void) {
+export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetStateAction<GameState | null>>) {
   useEffect(() => {
     socket.on('game-created', (state: GameState) => {
       setGameState(state);
@@ -25,12 +25,6 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
     socket.on('player-joined', (players: GameState['players']) =>
       setGameState((prev: GameState | null) => prev ? { ...prev, players } : null)
     );
-
-    socket.on('answer-overridden', (data: { newAnswer: string[], originalAnswer: string[] }) => {
-      if (onAnswerOverridden) {
-        onAnswerOverridden(data);
-      }
-    });
 
     socket.on('game-ended', () => {
       setGameState(null);
@@ -82,11 +76,10 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
       socket.off('joined-game');
       socket.off('game-status-changed');
       socket.off('player-joined');
-      socket.off('answer-overridden');
       socket.off('game-ended');
       socket.off('error');
       socket.off('connect', handleRejoin);
       socket.off('disconnect');
     };
-  }, [socket, setGameState, onAnswerOverridden]);
+  }, [socket, setGameState]);
 }

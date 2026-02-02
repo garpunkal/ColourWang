@@ -112,8 +112,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </div>
                 </motion.div>
 
-                <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6">
-                    <motion.h1 className="text-5xl md:text-7xl font-black text-display text-display-gradient px-8 max-w-5xl">
+                <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6 px-4">
+                    <motion.h1 className="text-5xl md:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-5xl text-center break-words w-full">
                         {currentQuestion.question}
                     </motion.h1>
                     <motion.div
@@ -141,13 +141,13 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         return (
                             <motion.div
                                 key={player.id}
-                                className={`relative flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-[240px] max-w-[320px] ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
+                                className={`relative flex items-center gap-2 py-4 pr-4 pl-2 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-[240px] max-w-[320px] ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
                                 style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
                             >
-                                <div className="w-16 h-16 rounded-xl overflow-hidden border-2" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
+                                <div className="w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
                                     <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                 </div>
-                                <div className="flex flex-col items-start">
+                                <div className="flex flex-col items-start min-w-0 flex-1">
                                     <span className="text-xl font-black uppercase italic truncate w-full" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
                                     <span className="text-xs font-bold uppercase tracking-widest opacity-60">{isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
                                 </div>

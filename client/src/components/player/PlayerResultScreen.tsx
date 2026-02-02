@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
 import { Check, X, Timer, ArrowDown } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { audioManager } from '../../utils/audioManager';
+import { useState, useEffect, useRef } from 'react';
 
 interface Props {
     player: Player;
@@ -15,23 +14,9 @@ interface Props {
 export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
     const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
     const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
-    const [hasPlayedSound, setHasPlayedSound] = useState(false);
 
     const isCorrect = player.isCorrect;
     const themeColorHex = isCorrect ? '#22c55e' : '#ef4444';
-
-    // Play sound only once when component first mounts for this question
-    useEffect(() => {
-        if (!hasPlayedSound && isCorrect) {
-            audioManager.playSuccess();
-            setHasPlayedSound(true);
-        }
-    }, [gameState.currentQuestionIndex, hasPlayedSound, isCorrect]);
-
-    // Reset sound flag when question changes
-    useEffect(() => {
-        setHasPlayedSound(false);
-    }, [gameState.currentQuestionIndex]);
 
     // Timer logic
     useEffect(() => {
@@ -67,14 +52,6 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
             animate={{ opacity: 1 }}
             className="flex-1 flex flex-col items-center justify-start w-full max-w-lg mx-auto overflow-hidden relative pt-4 md:pt-6 gap-3 px-4"
         >
-            {/* Dynamic Background */}
-            <div
-                className="fixed inset-0 blur-[150px] opacity-30 pointer-events-none -z-10 transition-colors duration-1000"
-                style={{
-                    background: `radial-gradient(circle at 50% 30%, ${themeColorHex}, transparent 70%)`
-                }}
-            />
-
             {/* Status Header */}
             <div className="w-full flex flex-col items-center z-10 shrink-0">
                 <motion.div
@@ -112,7 +89,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border backdrop-blur-sm ${isCorrect ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}
                     >
                         <span className={`text-xs font-black tracking-widest uppercase ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
-                            {isCorrect ? `+${player.roundScore} Points` : '0 Points'}
+                            {isCorrect ? `+${player.roundScore || 0} Points` : '0 Points'}
                         </span>
                     </motion.div>
                 </motion.div>
@@ -176,10 +153,9 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="glass-panel p-3 rounded-2xl border-green-500/20 bg-green-500/5 relative overflow-hidden shrink-0"
+                    className="glass-panel p-3 rounded-2xl border-white/5 bg-black/20 relative overflow-hidden shrink-0"
                 >
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/10 blur-xl rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <span className="text-[10px] font-black text-green-500/60 uppercase tracking-[0.2em] block mb-2 pl-1">Correct Answer</span>
+                    <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] block mb-2 pl-1">Correct Answer</span>
                     <div className="flex gap-1.5 flex-wrap items-center">
                         {correctColours.map((color, i) => (
                             <ColorCard

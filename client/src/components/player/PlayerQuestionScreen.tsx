@@ -67,7 +67,16 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     setTimeout(() => setStealNotice(null), 3500);
                 }
                 if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
-                    setDisabledIndexes(disabledMap[myId]);
+                    const newDisabledIndexes = disabledMap[myId];
+                    setDisabledIndexes(newDisabledIndexes);
+                    
+                    // Remove any selected colors that are now disabled
+                    setSelectedColors(prev => {
+                        return prev.filter(color => {
+                            const colorIndex = currentQuestion.options.indexOf(color);
+                            return !newDisabledIndexes.includes(colorIndex);
+                        });
+                    });
                 }
             }
             setStealCardActiveThisQuestion(false);
@@ -213,7 +222,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         key={i}
                                         color={color}
                                         isSelected={selectedColors.includes(color)}
-                                        onClick={() => toggleColour(colour)}}
+                                        onClick={() => toggleColour(color)}
                                         disabled={hasAnswered || timeLeft === 0}
                                         size="responsive"
                                         index={i}
@@ -245,8 +254,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             whileTap={{ scale: 0.97 }}
                             onClick={() => submitAnswer()}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
-                            className="w-full btn btn-primary py-3 md:py-8 text-xl md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic border-t-2 md:border-t-4 border-white/30 uppercase font-black tracking-widest shrink-0 shadow-lg"
-                            style={{ boxShadow: `0 20px 40px -10px ${avatarColor}60`, borderColor: `${avatarColor}80` }}
+                            className="w-full btn btn-primary py-3 md:py-8 text-xl md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic uppercase font-black tracking-widest shrink-0 shadow-lg"
+                            style={{ boxShadow: `0 20px 40px -10px ${avatarColor}60` }}
                         >
                             Submit
                         </motion.button>

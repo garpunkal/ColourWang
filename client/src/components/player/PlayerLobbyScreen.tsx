@@ -56,7 +56,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             if (autoStartTimer === null) {
                 // We are intentionally causing a side-effect here to start the timer
                 // We'll wrap in setTimeout to avoid 'synchronous' warning if problematic
-                const timeout = setTimeout(() => setAutoStartTimer(30), 0);
+                const timeout = setTimeout(() => setAutoStartTimer(gameState.lobbyDuration || 30), 0);
                 return () => clearTimeout(timeout);
             }
         } else {

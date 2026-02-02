@@ -2,7 +2,6 @@
     {
         "question": "What colour sand is found on most beaches?",
         "answer": [
-            "white",
             "yellow"
         ],
         "roundId": "geography"
