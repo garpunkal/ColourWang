@@ -114,16 +114,21 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                                         <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0">
                                             <Avatar seed={p.avatar} style={p.avatarStyle} className="w-full h-full" />
                                         </div>
-                                        <span className={`text-base font-black uppercase italic ${isMe ? 'text-white' : 'text-white/60'}`}>
+                                        <span className={`text-base font-black uppercase italic ${isMe ? 'text-white' : 'text-white/90'}`}>
                                             {p.name}
                                         </span>
                                     </div>
-                                    <span
-                                        className="text-xl font-black font-mono tracking-tighter"
-                                        style={{ color: pColor }}
-                                    >
-                                        {p.score} PTS
-                                    </span>
+                                    <div className="bg-black/40 px-3 py-1.5 rounded-xl border border-white/5 backdrop-blur-sm">
+                                        <span
+                                            className="text-xl font-black font-mono tracking-tighter"
+                                            style={{
+                                                color: pColor,
+                                                textShadow: `0 0 15px ${pColor}40`
+                                            }}
+                                        >
+                                            {p.score} <span className="text-[10px] opacity-40 ml-0.5">PTS</span>
+                                        </span>
+                                    </div>
                                 </motion.div>
                             );
                         })}

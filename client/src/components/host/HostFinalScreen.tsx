@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import type { Player } from '../../types/game';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { useMemo, useState, useEffect, useRef } from 'react';
 
 import { Avatar } from '../GameAvatars';
@@ -54,7 +54,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { opacity: 0, y: 20, scale: 0.98 },
         visible: {
             opacity: 1,
@@ -193,8 +193,10 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
 
                             {/* Score */}
                             <div className="text-right shrink-0 px-2 md:px-8">
-                                <span className={`text-2xl md:text-6xl font-mono font-black ${isWinner ? 'text-yellow-400 glow-text' : 'text-white/60'
-                                    }`}>
+                                <span className={`text-2xl md:text-6xl font-mono font-black ${isWinner ? 'text-yellow-400 glow-text' : 'text-white'
+                                    }`}
+                                    style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+                                >
                                     {player.score}
                                     <span className="text-[10px] md:text-xl ml-1 md:ml-2 opacity-40 font-sans tracking-widest uppercase">pts</span>
                                 </span>

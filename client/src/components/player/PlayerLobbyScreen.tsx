@@ -105,7 +105,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                             {countdown}
                         </span>
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-white/60 -mt-2 animate-pulse">
-                           Shuffling
+                            Shuffling
                         </span>
                     </motion.div>
                 ) : (
@@ -144,17 +144,21 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                     />
                                 </div>
                                 <span
-                                    className="font-black text-sm md:text-base uppercase tracking-wider flex-1 text-left truncate"
-                                    style={{ color: 'white' }}
+                                    className="font-black text-sm md:text-base uppercase tracking-wider flex-1 text-left truncate text-white/90"
                                 >
                                     {player.name}
                                 </span>
-                                <span
-                                    className="font-black text-sm md:text-base font-mono tabular-nums tracking-tighter"
-                                    style={{ color: playerColor }}
-                                >
-                                    {player.score} PTS
-                                </span>
+                                <div className="bg-black/40 px-3 py-1 rounded-xl border border-white/5 backdrop-blur-sm">
+                                    <span
+                                        className="font-black text-sm md:text-base font-mono tabular-nums tracking-tighter"
+                                        style={{
+                                            color: playerColor,
+                                            textShadow: `0 0 10px ${playerColor}30`
+                                        }}
+                                    >
+                                        {player.score} <span className="text-[10px] opacity-30 ml-0.5">PTS</span>
+                                    </span>
+                                </div>
                             </motion.div>
                         );
                     })}
