@@ -63,6 +63,6 @@ export async function fetchQuestions(): Promise<Question[]> {
 }
 
 export const GAME_CONFIG = {
-  rounds: 6,
+  rounds: 10,
   timerSeconds: 30,
 };

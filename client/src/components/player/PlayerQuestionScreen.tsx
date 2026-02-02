@@ -188,8 +188,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 <div className="flex-1 flex flex-col gap-2 md:gap-6 items-center min-h-0 w-full overflow-hidden">
                     <div className="flex-1 w-full overflow-y-auto min-h-0 py-1 md:py-8 px-1">
                         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 lg:gap-5 w-full max-w-7xl px-2 md:px-6 mx-auto items-center justify-items-center">
-                            {currentQuestion.options.map((color, i) =>
-                                disabledIndexes.includes(i) ? null : (
+                            {sortColors(currentQuestion.options).map((color, i) =>
+                                disabledIndexes.includes(currentQuestion.options.indexOf(color)) ? null : (
                                     <ColorCard
                                         key={i}
                                         color={color}

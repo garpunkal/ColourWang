@@ -14,7 +14,6 @@ ColourWang is a high-energy, real-time multiplayer party game where players comp
 - **Performance Optimized**: Fine-tuned animations and rendering for smooth gameplay even on older mobile devices.
 - **Synchronized Countdowns**: Full-screen countdowns keep all players in sync before every question.
 - **Steal Mechanics**: Players can trigger "STEAL!" events that disrupt opponents by randomly disabling their options and announcing the theft with scrolling banners.
-- **Defensive Shields**: Counter steals with **Shield Cards** that block disruption for a round.
 - **Streak Rewards**: Earn a **1.5x score multiplier** by getting 3 or more answers correct in a row.
 - **Fastest Finger Bonus**: Be the first to answer correctly for a **+5 point bonus**.
 - **Host Curation**: Hosts can remove questions from the rotation in real-time during the results screen.

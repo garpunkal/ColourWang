@@ -163,7 +163,7 @@ export const ColorCard = memo(function ColorCard({
                         <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4 ${(size === 'mini' && !colorblindMode) ? 'hidden' : ''}`}>
                             <span
                                 className={`
-                                    block font-black uppercase tracking-[0.2em] text-center px-1
+                                    block font-black uppercase tracking-widest text-center px-1
                                     ${colorblindMode
                                         ? 'bg-black/80 text-white rounded-sm py-0.5 px-2 shadow-2xl scale-90 md:scale-100'
                                         : 'text-white/90 drop-shadow-md'}
@@ -179,9 +179,7 @@ export const ColorCard = memo(function ColorCard({
                                         ? '0 2px 4px rgba(0,0,0,0.5)'
                                         : 'none'
                                 }}
-                            >
-                                {getColorName(color)}
-                            </span>
+                            >{getColorName(color)}</span>
                         </div>
                     )}
 
