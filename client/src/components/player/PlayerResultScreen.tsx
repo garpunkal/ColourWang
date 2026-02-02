@@ -78,9 +78,9 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                             className={`w-14 h-14 rounded-full flex items-center justify-center border-4 shadow-[0_0_30px_rgba(0,0,0,0.3)] backdrop-blur-md ${isCorrect ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500'}`}
                         >
                             {isCorrect ? (
-                                <Check size={32} className="text-green-400 stroke-[3]" />
+                                <Check size={32} className="text-green-400 stroke-3" />
                             ) : (
-                                <X size={32} className="text-red-400 stroke-[3]" />
+                                <X size={32} className="text-red-400 stroke-3" />
                             )}
                         </div>
                     </div>
@@ -211,4 +211,3 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
         </motion.div>
     );
 }
-

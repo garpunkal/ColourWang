@@ -1,0 +1,134 @@
+[
+    {
+        "id": "general",
+        "title": "General Knowledge",
+        "description": "A mix of everything to get us started!",
+        "sortOrder": 0
+    },
+    {
+        "id": "pop_culture",
+        "title": "Pop Culture",
+        "description": "Trends, memes, and viral moments.",
+        "sortOrder": 10
+    },
+    {
+        "id": "movies_tv",
+        "title": "Movies & TV",
+        "description": "Silver screen classics and box office hits.",
+        "sortOrder": 11
+    },
+    {
+        "id": "netflix",
+        "title": "Netflix & Chill",
+        "description": "Binge-worthy series and streaming favorites.",
+        "sortOrder": 12
+    },
+    {
+        "id": "superheroes",
+        "title": "Superheroes",
+        "description": "Capes, masks, and comic book legends.",
+        "sortOrder": 13
+    },
+    {
+        "id": "disney",
+        "title": "Disney & Pixar",
+        "description": "The magical world of animation.",
+        "sortOrder": 14
+    },
+    {
+        "id": "video_games",
+        "title": "Video Games",
+        "description": "From 8-bit classics to modern masterpieces.",
+        "sortOrder": 15
+    },
+    {
+        "id": "flags",
+        "title": "Flags of the World",
+        "description": "Test your vexillology skills.",
+        "sortOrder": 16
+    },
+    {
+        "id": "logos",
+        "title": "Brands & Logos",
+        "description": "Corporate identities and famous icons.",
+        "sortOrder": 17
+    },
+    {
+        "id": "sports",
+        "title": "Sports Teams",
+        "description": "Jerseys, kits, and team colors.",
+        "sortOrder": 18
+    },
+    {
+        "id": "celebrities",
+        "title": "Famous People",
+        "description": "Red carpet styles and signature looks.",
+        "sortOrder": 19
+    },
+    {
+        "id": "music",
+        "title": "Music",
+        "description": "Album covers, artists, and bands.",
+        "sortOrder": 20
+    },
+    {
+        "id": "food",
+        "title": "Food & Drink",
+        "description": "Delicious dishes and beverage brands.",
+        "sortOrder": 21
+    },
+    {
+        "id": "animals",
+        "title": "Animals",
+        "description": "Creatures great and small.",
+        "sortOrder": 22
+    },
+    {
+        "id": "nature",
+        "title": "Nature",
+        "description": "Plants, flowers, and natural wonders.",
+        "sortOrder": 23
+    },
+    {
+        "id": "geography",
+        "title": "Geography",
+        "description": "Landmarks, maps, and locations.",
+        "sortOrder": 24
+    },
+    {
+        "id": "history",
+        "title": "History",
+        "description": "Events, eras, and historical figures.",
+        "sortOrder": 25
+    },
+    {
+        "id": "science",
+        "title": "Science",
+        "description": "Physics, chemistry, and space.",
+        "sortOrder": 26
+    },
+    {
+        "id": "toys",
+        "title": "Toys",
+        "description": "Childhood favorites like Lego and Mr Men.",
+        "sortOrder": 27
+    },
+    {
+        "id": "fashion",
+        "title": "Fashion",
+        "description": "Clothing brands, styles, and trends.",
+        "sortOrder": 28
+    },
+    {
+        "id": "cars",
+        "title": "Cars & Vehicles",
+        "description": "Automotive brands and famous rides.",
+        "sortOrder": 29
+    },
+    {
+        "id": "household",
+        "title": "Household Objects",
+        "description": "Everyday items you see around the house.",
+        "sortOrder": 30
+    }
+]

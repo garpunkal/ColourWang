@@ -3,6 +3,10 @@
         "/^netstat -ano \\| findstr :3001$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^Copy-Item \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\client\\\\src\\\\config\\\\questions\\.json\" \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\.json\"$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

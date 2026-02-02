@@ -1,4 +1,4 @@
-import avatarsData from '../constants/avatars.json';
+import avatarsData from '../../../config/avatars.json';
 
 // Avatar configuration settings
 // Add more settings as needed

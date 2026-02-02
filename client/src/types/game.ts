@@ -28,10 +28,16 @@ export interface Question {
     options: string[];
 }
 
+export interface Round {
+    title: string;
+    description?: string;
+    questions: Question[];
+}
+
 export interface GameState {
     code: string;
     players: Player[];
-    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE' | 'ROUND_INTRO';
     currentQuestionIndex: number;
     questions: Question[];
     timerDuration?: number;
@@ -45,4 +51,6 @@ export interface GameState {
     streaksEnabled: boolean;
     fastestFingerEnabled: boolean;
     accessibleLabels?: boolean;
+    currentRoundIndex: number;
+    rounds: Round[];
 }

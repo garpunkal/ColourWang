@@ -1,5 +1,5 @@
-import questionsRaw from './questions.json';
-import paletteRaw from './palette.json';
+import questionsRaw from '../../../config/questions.json';
+import paletteRaw from '../../../config/palette.json';
 import type { Question } from '../types/game';
 
 interface QuestionData {
@@ -63,6 +63,6 @@ export async function fetchQuestions(): Promise<Question[]> {
 }
 
 export const GAME_CONFIG = {
-  rounds: 10,
+  rounds: 4,
   timerSeconds: 30,
 };

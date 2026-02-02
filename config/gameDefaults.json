@@ -1,0 +1,14 @@
+{
+    "rounds": 4,
+    "questionsPerRound": 4,
+    "questionTimer": 30,
+    "resultDuration": 15,
+    "lobbyDuration": 15,
+    "jokersEnabled": true,
+    "soundEnabled": true,
+    "musicEnabled": true,
+    "defaultBgmTrack": "Casino Royal.mp3",
+    "streaksEnabled": true,
+    "fastestFingerEnabled": true,
+    "accessibleLabels": false
+}

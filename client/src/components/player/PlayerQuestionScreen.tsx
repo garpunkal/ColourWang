@@ -169,6 +169,11 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             <div className="text-center px-4 shrink-0 py-2">
                 <div className="flex items-center justify-center gap-2 mb-4 md:mb-8 glass-panel px-4 py-1 rounded-2xl mx-auto w-fit">
                     <div className="flex flex-col items-center leading-none">
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Round</span>
+                        <span className="text-lg font-black italic tracking-tighter text-white">{gameState.currentRoundIndex + 1}</span>
+                    </div>
+                    <div className="w-px h-6 bg-white/10" />
+                    <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Question</span>
                         <span className="text-lg font-black italic tracking-tighter text-white">{currentQuestionIndex + 1}</span>
                     </div>
@@ -181,7 +186,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         </div>
                     </div>
                 </div>
-                <h3 className="text-xl md:text-5xl text-display text-display-gradient px-1 leading-tight">{currentQuestion.question}</h3>
+                <h3 className="text-xl md:text-5xl text-display text-display-gradient px-4 md:px-8 leading-tight py-2">{currentQuestion.question}</h3>
             </div>
 
             {!hasAnswered ? (

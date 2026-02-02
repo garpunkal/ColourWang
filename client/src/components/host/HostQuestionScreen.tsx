@@ -97,13 +97,18 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     className="glass-panel px-8 py-4 rounded-3xl flex items-center gap-8 mx-auto"
                 >
                     <div className="flex flex-col items-start leading-none">
-                        <span className="text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Question</span>
-                        <span className="text-4xl font-black italic">{currentQuestionIndex + 1}</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Round</span>
+                        <span className="text-2xl md:text-4xl font-black italic text-white/90">{gameState.currentRoundIndex + 1}</span>
+                    </div>
+                    <div className="w-px h-12 bg-white/10" />
+                    <div className="flex flex-col items-center leading-none">
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Question</span>
+                        <span className="text-2xl md:text-4xl font-black italic">{currentQuestionIndex + 1}</span>
                     </div>
                     <div className="w-px h-12 bg-white/10" />
                     <div className="flex flex-col items-end leading-none">
-                        <span className="text-sm font-black uppercase tracking-widest text-color-blue mb-1">Remaining</span>
-                        <span className={`text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}s</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue mb-1">Time</span>
+                        <span className={`text-2xl md:text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}s</span>
                     </div>
                 </motion.div>
 

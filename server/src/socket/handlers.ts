@@ -1,13 +1,13 @@
 import { Server, Socket } from 'socket.io';
 import { randomUUID } from 'crypto';
 import { games } from '../game/gamesMap';
-import { getShuffledQuestions, removeQuestionByText } from '../utils/questionLoader';
+import { getShuffledQuestions, removeQuestionByText, generateGameRounds } from '../utils/questionLoader';
 
 import { generateCode } from '../utils/generateCode';
 interface GameState {
   code: string;
   players: Player[];
-  status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+  status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE' | 'ROUND_INTRO';
   currentQuestionIndex: number;
   questions: any[];
   timerDuration?: number;
@@ -21,6 +21,12 @@ interface GameState {
   streaksEnabled?: boolean;
   fastestFingerEnabled?: boolean;
   accessibleLabels?: boolean;
+  currentRoundIndex: number;
+  rounds: {
+    title: string;
+    description?: string;
+    questions: any[];
+  }[];
 }
 import { Player } from '../models/player';
 
@@ -69,18 +75,18 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels } = payload;
+      const { rounds: numRounds, questionsPerRound, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
-      // Use server-side shuffling for maximum variety
-      const finalQuestions = getShuffledQuestions(rounds || 10);
+      // Generate Rounds
+      const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10);
 
       const game: GameState = {
         code,
         players: [],
         status: 'LOBBY',
         currentQuestionIndex: 0,
-        questions: finalQuestions,
+        questions: gameRounds[0].questions,
         timerDuration: timer,
         resultDuration,
         jokersEnabled,
@@ -90,11 +96,13 @@ export function registerSocketHandlers(io: Server) {
         streaksEnabled: streaksEnabled ?? true,
         fastestFingerEnabled: fastestFingerEnabled ?? true,
         accessibleLabels: accessibleLabels ?? false,
+        currentRoundIndex: 0,
+        rounds: gameRounds
       };
       games.set(code, game);
       socket.join(code);
       socket.emit('game-created', game);
-      console.log(`Game created: ${code} with ${finalQuestions.length} questions. First question: ${finalQuestions[0]?.question}`);
+      console.log(`Game created: ${code} with ${gameRounds.length} rounds. Round 1: ${gameRounds[0].title}`);
     });
 
     socket.on('update-bgm', ({ code, track }) => {
@@ -238,19 +246,29 @@ export function registerSocketHandlers(io: Server) {
       const game = games.get(normalizedCode);
       if (game) {
         console.log(`Starting game: ${normalizedCode}`);
-        // Start with a countdown
-        game.status = 'COUNTDOWN';
+        // Start with ROUND_INTRO
+        game.status = 'ROUND_INTRO';
         io.to(normalizedCode).emit('game-status-changed', game);
 
-        // Transition to QUESTION after 4.8 seconds
+        // Transition to COUNTDOWN after 5 seconds
         setTimeout(() => {
           const currentGame = games.get(normalizedCode);
-          if (currentGame && currentGame.status === 'COUNTDOWN') {
-            console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
-            currentGame.status = 'QUESTION';
+          if (currentGame && currentGame.status === 'ROUND_INTRO') {
+            currentGame.status = 'COUNTDOWN';
             io.to(normalizedCode).emit('game-status-changed', currentGame);
+
+            // Transition to QUESTION after 4.8 seconds
+            setTimeout(() => {
+              const nextGame = games.get(normalizedCode);
+              if (nextGame && nextGame.status === 'COUNTDOWN') {
+                console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
+                nextGame.status = 'QUESTION';
+                io.to(normalizedCode).emit('game-status-changed', nextGame);
+              }
+            }, 4800);
           }
-        }, 4800);
+        }, 5000);
+
       }
     });
 
@@ -353,6 +371,54 @@ export function registerSocketHandlers(io: Server) {
       if (game && game.status === 'RESULT') {
         game.currentQuestionIndex++;
         console.log(`Advancing to next question. New index: ${game.currentQuestionIndex} for game ${normalizedCode}`);
+
+        // Check if we need to change rounds
+        if (game.currentQuestionIndex >= game.questions.length) {
+          if (game.currentRoundIndex < game.rounds.length - 1) {
+            // Next Round
+            game.currentRoundIndex++;
+            game.currentQuestionIndex = 0;
+            game.questions = game.rounds[game.currentRoundIndex].questions;
+            game.status = 'ROUND_INTRO';
+            console.log(`Starting Round ${game.currentRoundIndex + 1}: ${game.rounds[game.currentRoundIndex].title}`);
+            io.to(normalizedCode).emit('game-status-changed', game);
+
+            // Auto-progress from ROUND_INTRO -> COUNTDOWN after 5s
+            setTimeout(() => {
+              const currentGame = games.get(normalizedCode);
+              if (currentGame && currentGame.status === 'ROUND_INTRO') {
+                currentGame.status = 'COUNTDOWN';
+                io.to(normalizedCode).emit('game-status-changed', currentGame);
+
+                setTimeout(() => {
+                  const nextGame = games.get(normalizedCode);
+                  if (nextGame && nextGame.status === 'COUNTDOWN') {
+                    nextGame.status = 'QUESTION';
+                    io.to(normalizedCode).emit('game-status-changed', nextGame);
+                  }
+                }, 4800);
+              }
+            }, 5000);
+
+            // Reset player state for new round
+            game.players.forEach(p => {
+              p.lastAnswer = null;
+              p.isCorrect = false;
+              p.disabledIndexes = [];
+              p.answeredAt = null;
+              p.isFastestFinger = false;
+            });
+
+            return;
+          } else {
+            // Game Over
+            game.status = 'FINAL_SCORE';
+            io.to(normalizedCode).emit('game-status-changed', game);
+            return;
+          }
+        }
+
+        // Normal next question logic (same round)
         game.players.forEach(p => {
           p.lastAnswer = null;
           p.isCorrect = false;
@@ -361,43 +427,42 @@ export function registerSocketHandlers(io: Server) {
           p.isFastestFinger = false;
         });
 
-        if (game.currentQuestionIndex >= game.questions.length) {
-          game.status = 'FINAL_SCORE';
-          io.to(normalizedCode).emit('game-status-changed', game);
-        } else {
-          console.log(`Transitioning to question ${game.currentQuestionIndex + 1} for ${normalizedCode}`);
-          // Transition to COUNTDOWN first
-          game.status = 'COUNTDOWN';
-          io.to(normalizedCode).emit('game-status-changed', game);
+        console.log(`Transitioning to question ${game.currentQuestionIndex + 1} for ${normalizedCode}`);
+        // Transition to COUNTDOWN first
+        game.status = 'COUNTDOWN';
+        io.to(normalizedCode).emit('game-status-changed', game);
 
-          // Transition to QUESTION after 4.8 seconds
-          setTimeout(() => {
-            const currentGame = games.get(normalizedCode);
-            if (currentGame && currentGame.status === 'COUNTDOWN') {
-              console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
-              currentGame.status = 'QUESTION';
-              io.to(normalizedCode).emit('game-status-changed', currentGame);
-            }
-          }, 4800);
-        }
+        // Transition to QUESTION after 4.8 seconds
+        setTimeout(() => {
+          const currentGame = games.get(normalizedCode);
+          if (currentGame && currentGame.status === 'COUNTDOWN') {
+            console.log(`Countdown finished for ${normalizedCode}, transitioning to QUESTION`);
+            currentGame.status = 'QUESTION';
+            io.to(normalizedCode).emit('game-status-changed', currentGame);
+          }
+        }, 4800);
+
       }
     });
 
-    socket.on('restart-game', ({ code, rounds, timer }) => {
+    socket.on('restart-game', ({ code, rounds, questionsPerRound, timer }) => {
       const normalizedCode = code.toUpperCase();
       const game = games.get(normalizedCode);
       if (game) {
+
+        // Regenerate rounds
+        const gameRounds = generateGameRounds(rounds || 4, questionsPerRound || 10);
+
         // Reset game state for a new game
         game.status = 'LOBBY';
         game.currentQuestionIndex = 0;
         game.timerDuration = timer;
+        game.rounds = gameRounds;
+        game.currentRoundIndex = 0;
+        game.questions = gameRounds[0].questions;
 
-        // CRITICAL FIX: Get a fresh batch of questions from the FULL pool, 
-        // don't just reshuffle the previous small set.
-        const freshQuestions = getShuffledQuestions(rounds || game.questions.length);
-        game.questions = freshQuestions;
 
-        console.log(`Restarting game ${normalizedCode}. Questions refreshed from pool. First question: ${game.questions[0]?.question}`);
+        console.log(`Restarting game ${normalizedCode}. Rounds refreshed.`);
         // Optionally, you may want to reset player scores and answers
         game.players.forEach(p => {
           p.score = 0;

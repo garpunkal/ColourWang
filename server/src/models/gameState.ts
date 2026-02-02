@@ -3,7 +3,7 @@ import { Player } from './player';
 export interface GameState {
     code: string;
     players: Player[];
-    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+    status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE' | 'ROUND_INTRO';
     currentQuestionIndex: number;
     questions: any[];
     timerDuration?: number;
@@ -17,4 +17,10 @@ export interface GameState {
     streaksEnabled?: boolean;
     fastestFingerEnabled?: boolean;
     accessibleLabels?: boolean;
+    currentRoundIndex: number;
+    rounds: {
+        title: string;
+        description?: string;
+        questions: any[];
+    }[];
 }

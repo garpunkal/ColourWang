@@ -9,6 +9,7 @@ import { HostQuestionScreen } from './host/HostQuestionScreen';
 import { HostResultScreen } from './host/HostResultScreen';
 import { HostFinalScreen } from './host/HostFinalScreen';
 import { CountdownScreen } from './shared/CountdownScreen';
+import { RoundIntroScreen } from './RoundIntroScreen';
 import { audioManager } from '../utils/audioManager';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
@@ -298,6 +299,26 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     currentBgm={gameState.bgmTrack}
                 />
             )}
+
+            {/* Round Intro Overlay - Full Screen excluding header if we wanted, but user asked for full screen.
+                RoundIntroScreen component has h-screen w-full.
+                To make it truly full screen and cover padding, we render it outside the padded container. */}
+            <AnimatePresence>
+                {status === 'ROUND_INTRO' && gameState.rounds && gameState.rounds[gameState.currentRoundIndex] && (
+                    <motion.div
+                        className="fixed inset-0 z-50 bg-gray-900"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <RoundIntroScreen
+                            roundNumber={gameState.currentRoundIndex + 1}
+                            title={gameState.rounds[gameState.currentRoundIndex].title}
+                            description={gameState.rounds[gameState.currentRoundIndex].description}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
                 <AnimatePresence>

@@ -1,4 +1,4 @@
-import musicData from './music.json';
+import musicData from '../../../config/music.json';
 
 export interface BgmTrack {
     label: string;

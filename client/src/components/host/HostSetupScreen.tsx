@@ -5,23 +5,25 @@ import { motion } from 'framer-motion';
 import { fetchQuestions } from '../../config/gameConfig';
 import { useSocketConnection } from '../../hooks/useSocketConnection';
 import { audioManager } from '../../utils/audioManager';
+import defaults from '../../../../config/gameDefaults.json';
 
 interface Props {
     socket: Socket;
 }
 
 export function HostSetupScreen({ socket }: Props) {
-    const [rounds, setRounds] = useState(6);
-    const [timer, setTimer] = useState(30);
-    const [resultTimer, setResultTimer] = useState(30);
-    const [lobbyDuration, setLobbyDuration] = useState(30);
-    const [jokers, setJokers] = useState(true);
-    const [playSounds, setPlaySounds] = useState(true);
-    const [musicEnabled, setMusicEnabled] = useState(true);
-    const [streaksEnabled, setStreaksEnabled] = useState(true);
-    const [fastestFingerEnabled, setFastestFingerEnabled] = useState(true);
-    const [accessibleLabels, setAccessibleLabels] = useState(false);
-    const selectedBgm = 'Casino Royal.mp3';
+    const [rounds, setRounds] = useState(defaults.rounds);
+    const [questionsPerRound, setQuestionsPerRound] = useState(defaults.questionsPerRound);
+    const [timer, setTimer] = useState(defaults.questionTimer);
+    const [resultTimer, setResultTimer] = useState(defaults.resultDuration);
+    const [lobbyDuration, setLobbyDuration] = useState(defaults.lobbyDuration);
+    const [jokers, setJokers] = useState(defaults.jokersEnabled);
+    const [playSounds, setPlaySounds] = useState(defaults.soundEnabled);
+    const [musicEnabled, setMusicEnabled] = useState(defaults.musicEnabled);
+    const [streaksEnabled, setStreaksEnabled] = useState(defaults.streaksEnabled);
+    const [fastestFingerEnabled, setFastestFingerEnabled] = useState(defaults.fastestFingerEnabled);
+    const [accessibleLabels, setAccessibleLabels] = useState(defaults.accessibleLabels);
+    const [selectedBgm, setSelectedBgm] = useState(defaults.defaultBgmTrack);
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
     const [error] = useState<string | null>(null);
@@ -73,9 +75,10 @@ export function HostSetupScreen({ socket }: Props) {
 
     const createGame = () => {
         // We now let the server handle the question picking for better variety and consistency
-        console.log('Initialising lobby with:', { rounds, timer, resultTimer, lobbyDuration, jokers, playSounds });
+        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, lobbyDuration, jokers, playSounds });
         socket.emit('create-game', {
             rounds,
+            questionsPerRound,
             timer,
             resultDuration: resultTimer,
             lobbyDuration,
@@ -105,9 +108,24 @@ export function HostSetupScreen({ socket }: Props) {
                         </div>
                         <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
                             <input
-                                type="range" min="4" max="24"
+                                type="range" min="1" max="10"
                                 value={rounds} onChange={e => setRounds(parseInt(e.target.value))}
                                 className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-color-blue hover:bg-white/20 transition-colors"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Questions Per Round Slider */}
+                    <div className="space-y-1 md:space-y-4 text-left col-span-1">
+                        <div className="flex justify-between items-end ml-1 md:ml-2">
+                            <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60">Questions</label>
+                            <span className="text-xl md:text-5xl font-mono font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">{questionsPerRound}</span>
+                        </div>
+                        <div className="flex items-center bg-black/20 p-2 md:p-3 rounded-xl md:rounded-2xl backdrop-blur-sm border border-white/5 h-10 md:h-16">
+                            <input
+                                type="range" min="3" max="20" step="1"
+                                value={questionsPerRound} onChange={e => setQuestionsPerRound(parseInt(e.target.value))}
+                                className="w-full h-2 md:h-4 bg-white/10 rounded-full appearance-none cursor-pointer accent-white hover:bg-white/20 transition-colors"
                             />
                         </div>
                     </div>

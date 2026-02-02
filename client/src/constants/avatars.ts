@@ -1,4 +1,4 @@
-import avatarsData from './avatars.json';
+import avatarsData from '../../../config/avatars.json';
 
 // Avatar colors matching our game's color palette (PALETTE from gameConfig)
 export const AVATAR_COLORS = avatarsData.colors;

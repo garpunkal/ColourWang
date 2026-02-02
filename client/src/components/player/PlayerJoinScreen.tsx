@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
-import { Hash, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
 import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
 import { avatarConfig } from '../../config/avatarConfig';
@@ -77,15 +77,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<string[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
-
-    const [error, setError] = useState<string | null>(null);
-
-    // Clear error when user types
-    useEffect(() => {
-        if (error) {
-            setTimeout(() => setError(null), 0);
-        }
-    }, [name, code, error]);
+    const [modalError, setModalError] = useState<string | null>(null);
 
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
@@ -101,7 +93,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
         const handleError = (msg: string) => {
             console.error('Socket error received:', msg);
-            setError(msg);
+            setModalError(msg);
         };
 
         socket.on('room-checked', handleRoomChecked);
@@ -141,7 +133,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     const handleJoin = () => {
         if (!socket.connected) {
-            alert("Connection lost. Please wait for reconnection.");
+            setModalError("Connection lost. Please wait for reconnection.");
             return;
         }
         if (name && code.length === 4) {
@@ -158,13 +150,44 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     return (
         <div className="flex flex-col max-w-md mx-auto w-full overflow-y-auto overflow-x-hidden relative z-10 min-h-dvh p-4 justify-start">
+            <AnimatePresence>
+                {modalError && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                        onClick={() => setModalError(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-white rounded-[2rem] p-6 text-center max-w-sm w-full shadow-2xl space-y-4"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <AlertTriangle size={32} strokeWidth={2.5} />
+                            </div>
+                            <h3 className="text-2xl font-black uppercase text-black italic tracking-wide">Oops!</h3>
+                            <p className="text-black/60 font-bold text-lg leading-tight">{modalError}</p>
+                            <button
+                                onClick={() => setModalError(null)}
+                                className="w-full btn bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl"
+                            >
+                                OK
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col gap-4 md:gap-6 pb-4 w-full"
             >
                 <div className="glass-card p-4 md:p-6 rounded-3xl shadow-xl space-y-6 md:space-y-6 m-2 md:m-4">
-
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Name</label>
@@ -173,7 +196,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 placeholder="ENTER NAME"
                                 maxLength={10}
                                 value={name}
-                                onChange={e => setName(e.target.value.toUpperCase())}
+                                onChange={e => name.length < 10 ? setName(e.target.value.toUpperCase()) : null}
                             />
                         </div>
 
@@ -267,29 +290,17 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         </div>
                     </div>
 
-                    {/* {
-                        error && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="mx-4 mb-2 p-4 bg-red-500/20 border border-red-500/50 rounded-2xl text-red-100 text-center font-bold"
-                            >
-                                {error}
-                            </motion.div>
-                        )
-                    } */}
-
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => {
                             if (isJoining) return;
                             if (!name) {
-                                setError("Please enter a codename!");
+                                setModalError("Please enter a codename!");
                                 return;
                             }
                             if (code.length !== 4) {
-                                setError("Please enter a valid 4-character room code!");
+                                setModalError("Please enter a valid 4-character room code!");
                                 return;
                             }
                             handleJoin();
@@ -305,9 +316,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         {isJoining ? 'CONNECTING...' : 'JOIN'}
                     </motion.button>
                 </div>
-
-
-
             </motion.div >
         </div >
     );

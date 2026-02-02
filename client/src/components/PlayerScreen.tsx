@@ -84,7 +84,8 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
             />
 
             <div className="flex-1 flex flex-col justify-start">
-                {(status === 'LOBBY' || status === 'COUNTDOWN') && <PlayerLobbyScreen gameState={gameState} />}
+                {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'ROUND_INTRO') && <PlayerLobbyScreen gameState={gameState} />}
+
 
                 {status === 'QUESTION' && (!currentQuestion ? (
                     <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-pulse">

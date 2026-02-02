@@ -14,6 +14,8 @@ export function PlayerLobbyScreen({ gameState }: Props) {
     const [countdown, setCountdown] = useState(5);
     const players = gameState.players;
     const isCountdownState = gameState.status === 'COUNTDOWN';
+    const isRoundIntro = gameState.status === 'ROUND_INTRO';
+    const currentRound = gameState.rounds ? gameState.rounds[gameState.currentRoundIndex] : null;
     const countdownInitRef = useRef(false);
 
     useEffect(() => {
@@ -35,7 +37,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
 
     // Tick logic for Auto-Start Timer
     useEffect(() => {
-        if (isCountdownState || autoStartTimer === null) return;
+        if (isCountdownState || isRoundIntro || autoStartTimer === null) return;
 
         const interval = setInterval(() => {
             setAutoStartTimer(prev => {
@@ -44,11 +46,11 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             });
         }, 1000);
         return () => clearInterval(interval);
-    }, [isCountdownState, autoStartTimer !== null]);
+    }, [isCountdownState, isRoundIntro, autoStartTimer !== null]);
 
     // Start/Stop Auto-Start Timer based on player count
     useEffect(() => {
-        if (isCountdownState) return;
+        if (isCountdownState || isRoundIntro) return;
 
         if (players.length >= 2) {
             if (autoStartTimer === null) {
@@ -63,7 +65,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 return () => clearTimeout(timeout);
             }
         }
-    }, [players.length, isCountdownState, autoStartTimer === null]);
+    }, [players.length, isCountdownState, isRoundIntro, autoStartTimer === null]);
 
     // Internal 5s countdown logic
     useEffect(() => {
@@ -88,15 +90,15 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 1.1, rotate: 2 }}
-            className={`text-center glass rounded-[4rem] p-8 md:p-8 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 ${isCountdownState ? 'ring-4 ring-color-blue/40 shadow-[0_0_100px_rgba(0,229,255,0.2)]' : ''}`}
+            className={`text-center glass rounded-[4rem] p-8 md:p-8 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 ${isCountdownState || isRoundIntro ? 'ring-4 ring-color-blue/40 shadow-[0_0_100px_rgba(0,229,255,0.2)]' : ''}`}
         >
-            <div className={`absolute inset-0 bg-linear-to-br opacity-50 transition-colors duration-1000 ${isCountdownState ? 'from-color-blue/30 via-color-purple/10 to-color-pink/30' : 'from-color-blue/15 via-transparent to-color-purple/15'}`} />
+            <div className={`absolute inset-0 bg-linear-to-br opacity-50 transition-colors duration-1000 ${isCountdownState || isRoundIntro ? 'from-color-blue/30 via-color-purple/10 to-color-pink/30' : 'from-color-blue/15 via-transparent to-color-purple/15'}`} />
 
             <div className="mb-6 relative inline-block z-10 w-full">
                 <motion.div
-                    animate={isCountdownState ? { scale: [1, 1.3, 1], rotate: [0, 5, -5, 0] } : { scale: [1, 1.6, 1], rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: isCountdownState ? 2 : 5, repeat: Infinity }}
-                    className={`absolute inset-0 blur-[60px] rounded-full transition-colors ${isCountdownState ? 'bg-color-pink/30' : 'bg-color-blue/20'}`}
+                    animate={isCountdownState || isRoundIntro ? { scale: [1, 1.3, 1], rotate: [0, 5, -5, 0] } : { scale: [1, 1.6, 1], rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: isCountdownState || isRoundIntro ? 2 : 5, repeat: Infinity }}
+                    className={`absolute inset-0 blur-[60px] rounded-full transition-colors ${isCountdownState || isRoundIntro ? 'bg-color-pink/30' : 'bg-color-blue/20'}`}
                 />
 
                 {isCountdownState ? (
@@ -110,9 +112,26 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                             {countdown}
                         </span>
                         <span className="text-xl font-black uppercase tracking-[0.5em] text-white/60 -mt-2 animate-pulse">
-                            Shuffling
+                            Next Question
                         </span>
                     </motion.div>
+                ) : isRoundIntro && currentRound ? (
+                    <div className="relative z-20 flex flex-col items-center text-center space-y-4 animate-fade-in p-4">
+                        <p className="text-white/60 font-bold text-xs md:text-sm uppercase tracking-[0.3em]">Next Round</p>
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/70 drop-shadow-xl w-full max-w-full break-words px-2 pb-1">
+                            {currentRound.title}
+                        </h1>
+                        {currentRound.description && (
+                            <p className="text-white/80 font-light text-sm md:text-lg italic max-w-xs mx-auto leading-tight">
+                                "{currentRound.description}"
+                            </p>
+                        )}
+                    </div>
+                ) : isRoundIntro ? (
+                    <div className="relative z-20 animate-pulse">
+                        <h1 className="text-4xl md:text-5xl font-black mb-1 uppercase tracking-tighter italic text-yellow-500">NEXT ROUND</h1>
+                        <p className="text-white font-bold text-sm md:text-base opacity-80 uppercase tracking-widest italic">Prepare yourself...</p>
+                    </div>
                 ) : (
                     <div className="relative z-20">
                         <h1 className="text-4xl md:text-5xl font-black mb-1 uppercase tracking-tighter italic">STAND BY</h1>
