@@ -8,7 +8,7 @@ import { avatarConfig } from '../../config/avatarConfig';
 
 interface Props {
     socket: Socket;
-    takenAvatars?: string[];
+    takenAvatars?: { avatar: string; avatarStyle: string; }[];
 }
 
 export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
@@ -22,10 +22,12 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     // Try to restore avatar from localStorage if available and not taken
     const [avatar, setAvatar] = useState(() => {
         const storedAvatar = localStorage.getItem('playerAvatar');
-        if (storedAvatar && AVATAR_IDS.includes(storedAvatar) && !takenAvatars.includes(storedAvatar)) {
+        const storedAvatarStyle = localStorage.getItem('playerAvatarStyle') || avatarConfig.defaultStyle;
+        if (storedAvatar && AVATAR_IDS.includes(storedAvatar) && 
+            !takenAvatars.some(taken => taken.avatar === storedAvatar && taken.avatarStyle === storedAvatarStyle)) {
             return storedAvatar;
         }
-        return AVATAR_IDS.find(id => !takenAvatars.includes(id)) || AVATAR_IDS[0];
+        return AVATAR_IDS.find(id => !takenAvatars.some(taken => taken.avatar === id && taken.avatarStyle === storedAvatarStyle)) || AVATAR_IDS[0];
     });
 
     const [code, setCode] = useState(() => {
@@ -75,20 +77,20 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         setAvatarStyle(styles[nextIndex]);
     };
 
-    const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<string[]>(takenAvatars);
+    const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<{ avatar: string; avatarStyle: string; }[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
     const [modalError, setModalError] = useState<string | null>(null);
 
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
-        const handleRoomChecked = (data: { exists: boolean, takenAvatars?: string[] }) => {
+        const handleRoomChecked = (data: { exists: boolean, takenAvatars?: { avatar: string; avatarStyle: string; }[] }) => {
             if (data.exists && data.takenAvatars) {
                 setDynamicTakenAvatars(data.takenAvatars);
             }
         };
 
-        const handlePlayerJoined = (players: { avatar: string }[]) => {
-            setDynamicTakenAvatars(players.map(p => p.avatar));
+        const handlePlayerJoined = (players: { avatar: string; avatarStyle: string; }[]) => {
+            setDynamicTakenAvatars(players.map(p => ({ avatar: p.avatar, avatarStyle: p.avatarStyle })));
         };
 
         const handleError = (msg: string) => {
@@ -123,13 +125,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     // Update avatar if current one becomes taken (cascading render is fine here as it's a correction)
     useEffect(() => {
-        if (dynamicTakenAvatars.includes(avatar)) {
-            const available = AVATAR_IDS.find(id => !dynamicTakenAvatars.includes(id));
+        if (dynamicTakenAvatars.some(taken => taken.avatar === avatar && taken.avatarStyle === avatarStyle)) {
+            const available = AVATAR_IDS.find(id => !dynamicTakenAvatars.some(taken => taken.avatar === id && taken.avatarStyle === avatarStyle));
             if (available) {
                 setTimeout(() => setAvatar(available), 0);
             }
         }
-    }, [dynamicTakenAvatars, avatar]);
+    }, [dynamicTakenAvatars, avatar, avatarStyle]);
 
     const handleJoin = () => {
         if (!socket.connected) {
@@ -146,7 +148,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         }
     };
 
-    const isAvatarTaken = (avatarId: string) => dynamicTakenAvatars.includes(avatarId);
+    const isAvatarTaken = (avatarId: string) => dynamicTakenAvatars.some(taken => taken.avatar === avatarId && taken.avatarStyle === avatarStyle);
 
     return (
         <div className="flex flex-col max-w-md mx-auto w-full overflow-y-auto overflow-x-hidden relative z-10 min-h-dvh p-4 justify-start">
@@ -163,7 +165,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-white rounded-[2rem] p-6 text-center max-w-sm w-full shadow-2xl space-y-4"
+                            className="bg-white rounded-4xl p-6 text-center max-w-sm w-full shadow-2xl space-y-4"
                             onClick={e => e.stopPropagation()}
                         >
                             <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -173,7 +175,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <p className="text-black/60 font-bold text-lg leading-tight">{modalError}</p>
                             <button
                                 onClick={() => setModalError(null)}
-                                className="w-full btn bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl"
+                                className="w-full btn bg-red-500 hover:bg-red-600 text-black py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl"
                             >
                                 OK
                             </button>

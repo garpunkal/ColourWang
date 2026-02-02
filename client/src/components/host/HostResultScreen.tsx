@@ -9,6 +9,8 @@ import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
 import { Avatar } from '../GameAvatars';
 import { audioManager } from '../../utils/audioManager';
+import { shouldSuggestOverride, getMostCommonAnswer } from '../../utils/answerAnalysis';
+import { ConfirmModal } from '../shared/ConfirmModal';
 
 interface Props {
     socket: Socket;
@@ -20,19 +22,49 @@ interface Props {
 }
 
 export function HostResultScreen({ socket, gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
-    const correctColors = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColors);
+    const correctColours = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColours);
     const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
     const [autoProceed, setAutoProceed] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
+    const [isOverriding, setIsOverriding] = useState(false);
+    const [overrideMessage, setOverrideMessage] = useState<string | null>(null);
+    const [hasPlayedSound, setHasPlayedSound] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [modalConfig, setModalConfig] = useState<{
+        title: string;
+        message: string;
+        confirmText: string;
+        variant: 'default' | 'danger' | 'warning';
+        onConfirm: () => void;
+    } | null>(null);
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
 
-    useEffect(() => {
-        audioManager.playSwoosh();
+    // Analyze player answers to suggest override  
+    const overrideAnalysis = useMemo(() => {
+        return shouldSuggestOverride(gameState.players, correctColours);
+    }, [gameState.players, correctColours]);
 
+    const mostCommonAnswer = getMostCommonAnswer(gameState.players);
+
+    // Play sound only once when component first mounts for this question
+    useEffect(() => {
+        if (!hasPlayedSound) {
+            audioManager.playSwoosh();
+            setHasPlayedSound(true);
+        }
+    }, [currentQuestionIndex, hasPlayedSound]);
+
+    // Reset sound flag when question changes
+    useEffect(() => {
+        setHasPlayedSound(false);
+    }, [currentQuestionIndex]);
+
+    // Timer logic
+    useEffect(() => {
         setTimeout(() => {
             setTimeLeft(gameState.resultDuration || 30);
             setAutoProceed(false);
@@ -48,7 +80,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             });
         }, 1000);
         return () => clearInterval(interval);
-    }, [currentQuestion, gameState.resultDuration]);
+    }, [currentQuestionIndex, gameState.resultDuration]);
 
     useEffect(() => {
         if (autoProceed) {
@@ -57,18 +89,64 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     }, [autoProceed, onNextQuestion]);
 
     const handleRemoveQuestion = () => {
-        if (window.confirm('Are you sure you want to PERMANENTLY delete this question from the game pool?')) {
-            setIsRemoving(true);
-            if (gameState.code) {
-                socket.emit('remove-question', { code: gameState.code });
-            }
+        setModalConfig({
+            title: 'Remove Question',
+            message: 'Are you sure you want to PERMANENTLY delete this question from the game pool?',
+            confirmText: 'Delete Forever',
+            variant: 'danger',
+            onConfirm: () => {
+                setIsRemoving(true);
+                if (gameState.code) {
+                    socket.emit('remove-question', { code: gameState.code });
+                }
 
-            // Give visual feedback and then proceed to next question
-            setTimeout(() => {
-                onNextQuestion();
-                setIsRemoving(false);
-            }, 1000);
-        }
+                // Give visual feedback and then proceed to next question
+                setTimeout(() => {
+                    onNextQuestion();
+                    setIsRemoving(false);
+                }, 1000);
+                setShowConfirmModal(false);
+            }
+        });
+        setShowConfirmModal(true);
+    };
+
+    const handleOverrideAnswer = () => {
+        if (!mostCommonAnswer) return;
+
+        const playerList = mostCommonAnswer.players.map(p => p.name).join(', ');
+        const confirmMessage = `Change the correct answer to "${mostCommonAnswer.answer.join(' and ')}"?\n\n` +
+                              `${mostCommonAnswer.count} players (${mostCommonAnswer.percentage}%) answered this way:\n${playerList}\n\n` +
+                              `This will recalculate all scores.`;
+
+        setModalConfig({
+            title: 'Override Answer',
+            message: confirmMessage,
+            confirmText: 'Change Answer',
+            variant: 'warning',
+            onConfirm: () => {
+                setIsOverriding(true);
+                setOverrideMessage(`Changing answer to "${mostCommonAnswer.answer.join(' and ')}"...`);
+                
+                if (gameState.code) {
+                    socket.emit('override-answer', { 
+                        code: gameState.code, 
+                        newAnswer: mostCommonAnswer.answer 
+                    });
+                }
+
+                // Clear message after delay
+                setTimeout(() => {
+                    setOverrideMessage('Answer changed! Scores have been recalculated.');
+                    setTimeout(() => {
+                        setOverrideMessage(null);
+                        setIsOverriding(false);
+                    }, 2000);
+                }, 1000);
+                setShowConfirmModal(false);
+            }
+        });
+        setShowConfirmModal(true);
     };
 
     return (
@@ -89,8 +167,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             <div className="flex flex-col items-center text-center">
                 {/* Question Section */}
                 <div className="mb-12 max-w-5xl relative group/question">
-                    {/* Remove Question Option */}
-                    <div className="absolute -top-6 -right-6 md:right-0 z-50">
+                    {/* Host Controls - Remove Question Only */}
+                    <div className="absolute -top-6 -right-6 md:right-0 z-50 flex gap-3">
+                        {/* Remove Question Button */}
                         <motion.button
                             whileHover={{ scale: 1.1, color: '#ff3366' }}
                             whileTap={{ scale: 0.9 }}
@@ -104,6 +183,19 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         </motion.button>
                     </div>
 
+                    {/* Override Message */}
+                    {overrideMessage && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-orange-500/20 border border-orange-400/40 rounded-xl px-6 py-3 backdrop-blur-md"
+                        >
+                            <div className="text-orange-400 text-sm font-bold text-center">
+                                {overrideMessage}
+                            </div>
+                        </motion.div>
+                    )}
+
                     <h1 className="text-hero text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
                         {currentQuestion.question}
                     </h1>
@@ -111,7 +203,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         <div className="flex flex-col items-center">
                             <span className="text-sm md:text-lg font-black text-color-blue tracking-[0.6em] uppercase italic mb-6 opacity-80">Correct Answer</span>
                             <div className="flex justify-center gap-8 flex-wrap">
-                                {correctColors.map((color, i) => (
+                                {correctColours.map((color, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ y: 20, opacity: 0 }}
@@ -129,6 +221,62 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 ))}
                             </div>
                         </div>
+
+                        {/* Majority Answer Section - Clickable to Override */}
+                        {overrideAnalysis.shouldSuggest && mostCommonAnswer && (
+                            <motion.button
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.02, y: -5 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={handleOverrideAnswer}
+                                disabled={isOverriding}
+                                className="flex flex-col items-center p-6 rounded-2xl bg-orange-400/5 hover:bg-orange-400/15 border-2 border-orange-400/20 hover:border-orange-400/50 transition-all duration-300 cursor-pointer backdrop-blur-sm group/majority relative"
+                                title={`Click to change answer to "${mostCommonAnswer.answer.join(' and ')}" (${mostCommonAnswer.count} players agreed)`}
+                            >
+                                {/* Glow effect on hover */}
+                                <div className="absolute inset-0 rounded-2xl bg-orange-400/10 opacity-0 group-hover/majority:opacity-100 transition-opacity duration-300 blur-xl" />
+                                
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <span className="text-sm md:text-base font-black text-orange-400 tracking-[0.4em] uppercase italic opacity-80 group-hover/majority:opacity-100 transition-opacity">
+                                            Majority Answered
+                                        </span>
+                                        <span className="text-xs font-bold bg-orange-400/20 group-hover/majority:bg-orange-400/40 text-orange-400 px-2 py-1 rounded-full transition-colors">
+                                            {mostCommonAnswer.count}/{overrideAnalysis.totalAnswered} ({mostCommonAnswer.percentage}%)
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-center gap-6 flex-wrap">
+                                        {sortColors(mostCommonAnswer.answer).map((color, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ y: 20, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                transition={{ delay: 0.4 + (i * 0.1) }}
+                                                className="group-hover/majority:scale-105 transition-transform duration-200"
+                                            >
+                                                <ColorCard
+                                                    color={color}
+                                                    isCorrect={false}
+                                                    size="small"
+                                                    index={i}
+                                                    showLabel={gameState.accessibleLabels}
+                                                />
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Click hint */}
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="mt-3 text-xs font-bold text-orange-400/60 group-hover/majority:text-orange-400 uppercase tracking-widest transition-colors"
+                                    >
+                                        {isOverriding ? 'Changing Answer...' : 'Click to Use This Answer'}
+                                    </motion.div>
+                                </div>
+                            </motion.button>
+                        )}
                     </div>
                 </div>
 
@@ -251,6 +399,19 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     </motion.button>
                 </div>
             </div>
+
+            {/* Confirm Modal */}
+            {modalConfig && (
+                <ConfirmModal
+                    isOpen={showConfirmModal}
+                    title={modalConfig.title}
+                    message={modalConfig.message}
+                    confirmText={modalConfig.confirmText}
+                    variant={modalConfig.variant}
+                    onConfirm={modalConfig.onConfirm}
+                    onCancel={() => setShowConfirmModal(false)}
+                />
+            )}
         </motion.div>
     );
 }

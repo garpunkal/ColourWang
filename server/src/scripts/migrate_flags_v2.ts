@@ -1,6 +1,7 @@
 
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { logger } from '../utils/logger';
 
 // Adjust paths based on where script is run (server root assumed)
 // Read from CLIENT as source of truth
@@ -39,5 +40,5 @@ try {
     console.log('Synced to Server config.');
 
 } catch (e) {
-    console.error('Migration failed:', e);
+    logger.error('Migration failed:', e);
 }

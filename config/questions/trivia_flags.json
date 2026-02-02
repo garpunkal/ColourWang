@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colors are in the flag of the United States?",
+        "question": "What colours are in the flag of the United States?",
         "answer": [
             "red",
             "white",
@@ -9,7 +9,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Germany?",
+        "question": "What colours are in the flag of Germany?",
         "answer": [
             "black",
             "red",
@@ -18,7 +18,7 @@
         "roundId": "flags"
     },
     {
-        "question": "What colors are in the flag of Italy?",
+        "question": "What colours are in the flag of Italy?",
         "answer": [
             "green",
             "white",

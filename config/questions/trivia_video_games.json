@@ -1,6 +1,6 @@
 [
     {
-        "question": "What color is Mario's outfit in video games?",
+        "question": "What colour is Mario's outfit in video games?",
         "answer": [
             "red",
             "blue"
@@ -8,28 +8,28 @@
         "roundId": "video_games"
     },
     {
-        "question": "What color is Luigi's outfit?",
+        "question": "What colour is Luigi's outfit?",
         "answer": [
             "green"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What colors are Pac-Man?",
+        "question": "What colours are Pac-Man?",
         "answer": [
             "yellow"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What color is Sonic the Hedgehog?",
+        "question": "What colour is Sonic the Hedgehog?",
         "answer": [
             "blue"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What colors are the ghosts in Pac-Man?",
+        "question": "What colours are the ghosts in Pac-Man?",
         "answer": [
             "red",
             "pink",
@@ -39,35 +39,35 @@
         "roundId": "video_games"
     },
     {
-        "question": "What color is Pikachu?",
+        "question": "What colour is Pikachu?",
         "answer": [
             "yellow"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What color is Link's tunic in Zelda?",
+        "question": "What colour is Link's tunic in Zelda?",
         "answer": [
             "green"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What color rings does Sonic collect?",
+        "question": "What colour rings does Sonic collect?",
         "answer": [
             "yellow"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What color is the Master Chief's armor in Halo?",
+        "question": "What colour is the Master Chief's armor in Halo?",
         "answer": [
             "green"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What color are the blocks in Tetris primarily?",
+        "question": "What colour are the blocks in Tetris primarily?",
         "answer": [
             "blue",
             "red",
@@ -77,7 +77,7 @@
         "roundId": "video_games"
     },
     {
-        "question": "What color is Bowser primarily?",
+        "question": "What colour is Bowser primarily?",
         "answer": [
             "green",
             "yellow"
@@ -85,7 +85,7 @@
         "roundId": "video_games"
     },
     {
-        "question": "What color is the PlayStation logo?",
+        "question": "What colour is the PlayStation logo?",
         "answer": [
             "blue"
         ],

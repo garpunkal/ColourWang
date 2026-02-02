@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { logger } from './logger';
 import paletteRaw from '../../../config/palette.json';
 
 interface QuestionData {
@@ -11,7 +12,7 @@ interface QuestionData {
 interface Question {
     id: string;
     question: string;
-    correctColors: string[];
+    correctColours: string[];
     options: string[];
 }
 
@@ -38,12 +39,12 @@ export interface Round {
 }
 
 function mapQuestion(q: QuestionData, index: number): Question {
-    const correctColors = q.answer.map(name => hexMap.get(name.toLowerCase()) || name);
+    const correctColours = q.answer.map(name => hexMap.get(name.toLowerCase()) || name);
     const randomToken = Math.random().toString(36).substring(7);
     return {
         id: `q-${randomToken}-${index}`,
         question: q.question,
-        correctColors: correctColors,
+        correctColours: correctColours,
         options: paletteOptions
     };
 }
@@ -117,18 +118,18 @@ export function generateGameRounds(numRounds: number = 4, questionsPerRound: num
         const topicsInfo = selectedTopics && selectedTopics.length > 0 
             ? `${selectedTopics.length} selected topics: [${selectedTopics.join(', ')}]`
             : `${candidates.length} available topics (all)`;
-        console.log(`[GameGen] Generating ${numRounds} rounds from pool of ${topicsInfo}...`);
+        logger.info(`[GameGen] Generating ${numRounds} rounds from pool of ${topicsInfo}...`);
 
         while (roundsGenerated < numRounds) {
             // Refill candidates if we exhausted the unique list but need more rounds
             if (candidates.length === 0) {
-                console.log('[GameGen] Exhausted unique topics, recycling pool...');
+                logger.debug('[GameGen] Exhausted unique topics, recycling pool...');
                 candidates = shuffle([...availableRounds]);
             }
 
             // Safety break to prevent infinite loops if no rounds are valid (e.g. no questions at all)
             if (consecutiveFailures >= availableRounds.length * 2) {
-                console.warn(`[GameGen] Could not generate full ${numRounds} rounds request. Generated ${roundsGenerated}.`);
+                logger.warn(`[GameGen] Could not generate full ${numRounds} rounds request. Generated ${roundsGenerated}.`);
                 break;
             }
 
@@ -144,7 +145,7 @@ export function generateGameRounds(numRounds: number = 4, questionsPerRound: num
 
             consecutiveFailures = 0; // Reset failure counter on success
 
-            console.log(`[GameGen] Added Round ${roundsGenerated + 1}: ${roundDef.title}`);
+            logger.info(`[GameGen] Added Round ${roundsGenerated + 1}: ${roundDef.title}`);
             rounds.push({
                 title: roundDef.title,
                 description: roundDef.description,
@@ -156,7 +157,7 @@ export function generateGameRounds(numRounds: number = 4, questionsPerRound: num
         return rounds;
 
     } catch (error) {
-        console.error('[SERVER] CRITICAL: Failed to generate rounds!', error);
+        logger.error('[SERVER] CRITICAL: Failed to generate rounds!', error);
         return [];
     }
 }
@@ -188,7 +189,7 @@ export function removeQuestionByText(questionText: string): boolean {
             // If this file had the question, update it
             if (filtered.length < questionsInFile.length) {
                 writeFileSync(filePath, JSON.stringify(filtered, null, 4), 'utf8');
-                console.log(`[SERVER] Removed question from ${file}. File reduced from ${questionsInFile.length} to ${filtered.length} questions.`);
+                logger.info(`[SERVER] Removed question from ${file}. File reduced from ${questionsInFile.length} to ${filtered.length} questions.`);
                 questionFound = true;
             } else {
                 totalNewCount += questionsInFile.length;
@@ -196,14 +197,14 @@ export function removeQuestionByText(questionText: string): boolean {
         }
 
         if (!questionFound) {
-            console.warn(`[SERVER] No matches found for removal: "${questionText}"`);
+            logger.warn(`[SERVER] No matches found for removal: "${questionText}"`);
             return false;
         }
 
-        console.log(`[SERVER] Question permanently removed. Total pool size reduced from ${totalOriginalCount} to ${totalNewCount}.`);
+        logger.info(`[SERVER] Question permanently removed. Total pool size reduced from ${totalOriginalCount} to ${totalNewCount}.`);
         return true;
     } catch (error) {
-        console.error('[SERVER] Failed to remove question from disk!', error);
+        logger.error('[SERVER] Failed to remove question from disk!', error);
         return false;
     }
 }

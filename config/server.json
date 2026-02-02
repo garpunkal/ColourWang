@@ -34,5 +34,14 @@
         "stealNoticeDelay": 3500,
         "joinTimeout": 5000,
         "resultCountdownInterval": 1000
+    },
+    "logging": {
+        "enabled": false,
+        "levels": {
+            "info": true,
+            "warn": true,
+            "error": true,
+            "debug": false
+        }
     }
 }

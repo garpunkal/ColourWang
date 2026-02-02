@@ -40,13 +40,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         }
     }, [gameState, selectedColors, socket]);
 
-    const toggleColor = (color: string) => {
+    const toggleColour = (colour: string) => {
         if (hasAnswered) return;
         audioManager.playSelect();
         setSelectedColors(prev =>
-            prev.includes(color)
-                ? prev.filter(c => c !== color)
-                : [...prev, color]
+            prev.includes(colour)
+                ? prev.filter(c => c !== colour)
+                : [...prev, colour]
         );
     };
 
@@ -189,15 +189,15 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 <h3 className="text-xl md:text-5xl text-display text-display-gradient px-4 md:px-8 leading-tight py-2">{currentQuestion.question}</h3>
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: 0.4, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mt-2 md:mt-4 px-4 py-2 md:py-3 rounded-full glass-panel mx-auto w-fit"
+                    className="mt-2 md:mt-4 px-3 py-1 md:py-2 rounded-full glass-panel mx-auto w-fit opacity-60"
                 >
-                    <span className="text-xs md:text-sm font-black uppercase tracking-widest italic">
-                        {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length === 1 ? (
-                            <span className="text-color-blue">💡 Select 1 color</span>
+                    <span className="text-[10px] md:text-xs font-medium uppercase tracking-wider italic">
+                        {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length === 1 ? (
+                            <span className="text-white/50">💡 Select 1 colour</span>
                         ) : (
-                            <span className="text-color-yellow">💡 Select {(currentQuestion.correctColors || currentQuestion.correctAnswers || []).length} colors</span>
+                            <span className="text-white/50">💡 Select {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length} colours</span>
                         )}
                     </span>
                 </motion.div>
@@ -213,7 +213,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         key={i}
                                         color={color}
                                         isSelected={selectedColors.includes(color)}
-                                        onClick={() => toggleColor(color)}
+                                        onClick={() => toggleColour(colour)}}
                                         disabled={hasAnswered || timeLeft === 0}
                                         size="responsive"
                                         index={i}

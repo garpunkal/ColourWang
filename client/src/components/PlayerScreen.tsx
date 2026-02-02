@@ -8,6 +8,7 @@ import { PlayerQuestionScreen } from './player/PlayerQuestionScreen';
 import { PlayerResultScreen } from './player/PlayerResultScreen';
 import { PlayerFinalScreen } from './player/PlayerFinalScreen';
 import { PlayerFooter } from './player/PlayerFooter';
+import { ConfirmModal } from './shared/ConfirmModal';
 
 interface Props {
     socket: Socket;
@@ -17,6 +18,7 @@ interface Props {
 
 export default function PlayerScreen({ socket, gameState, setGameState }: Props) {
     const [name] = useState(localStorage.getItem('playerName') || '');
+    const [showLeaveModal, setShowLeaveModal] = useState(false);
 
     // Debug logging for blank screen issue
     useEffect(() => {
@@ -42,7 +44,10 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     }, [gameState, socket.id]);
 
     // Get list of taken avatars from current players
-    const takenAvatars = gameState?.players.map(p => p.avatar) || [];
+    const takenAvatars = gameState?.players.map(p => ({ 
+        avatar: p.avatar, 
+        avatarStyle: p.avatarStyle || 'avataaars' 
+    })) || [];
 
     // If not in a game, show join screen
     if (!gameState) {
@@ -62,15 +67,18 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     const myRank = me ? sortedPlayers.findIndex(p => p.id === me.id) + 1 : undefined;
 
     const leaveGame = () => {
-        if (window.confirm("Are you sure you want to leave the game completely?")) {
-            if (gameState) {
-                const pid = me?.id || localStorage.getItem('cw_playerId');
-                socket.emit('leave-game', { code: gameState.code, playerId: pid });
-            }
-            localStorage.removeItem('cw_playerId');
-            localStorage.removeItem('cw_gameCode');
-            setGameState(null);
+        setShowLeaveModal(true);
+    };
+
+    const handleLeaveConfirm = () => {
+        if (gameState) {
+            const pid = me?.id || localStorage.getItem('cw_playerId');
+            socket.emit('leave-game', { code: gameState.code, playerId: pid });
         }
+        localStorage.removeItem('cw_playerId');
+        localStorage.removeItem('cw_gameCode');
+        setGameState(null);
+        setShowLeaveModal(false);
     };
 
     return (
@@ -129,6 +137,17 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
             </div>
 
             <PlayerFooter onLeave={leaveGame} />
+
+            {/* Leave Game Confirmation Modal */}
+            <ConfirmModal
+                isOpen={showLeaveModal}
+                title="Leave Game"
+                message="Are you sure you want to leave the game completely?"
+                confirmText="Leave Game"
+                variant="danger"
+                onConfirm={handleLeaveConfirm}
+                onCancel={() => setShowLeaveModal(false)}
+            />
         </div>
     );
 }

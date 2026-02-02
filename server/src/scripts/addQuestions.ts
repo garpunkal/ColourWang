@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { logger } from '../utils/logger';
 
 interface QuestionData {
     question: string;

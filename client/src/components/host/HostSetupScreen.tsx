@@ -31,7 +31,7 @@ export function HostSetupScreen({ socket }: Props) {
     const [streaksEnabled, setStreaksEnabled] = useState(defaults.streaksEnabled);
     const [fastestFingerEnabled, setFastestFingerEnabled] = useState(defaults.fastestFingerEnabled);
     const [accessibleLabels, setAccessibleLabels] = useState(defaults.accessibleLabels);
-    const [selectedBgm, setSelectedBgm] = useState(defaults.defaultBgmTrack);
+    const [selectedBgm] = useState(defaults.defaultBgmTrack);
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
     const [error] = useState<string | null>(null);
@@ -372,7 +372,7 @@ export function HostSetupScreen({ socket }: Props) {
                                     <button
                                         key={topic.id}
                                         onClick={() => canDeselect && toggleTopic(topic.id)}
-                                        className={`flex items-center justify-between w-full px-3 py-2 rounded-lg font-bold text-left transition-all ${
+                                        className={`flex items-center justify-between w-full pl-3 pr-1 py-2 rounded-lg font-bold text-left transition-all ${
                                             isSelected 
                                                 ? 'bg-success/20 text-white'
                                                 : 'bg-white/5 border-2 border-white/20 text-white/70 hover:bg-white/10 hover:border-white/40 hover:text-white'

@@ -15,21 +15,31 @@ interface Props {
 export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
     const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
     const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
+    const [hasPlayedSound, setHasPlayedSound] = useState(false);
 
     const isCorrect = player.isCorrect;
     const themeColorHex = isCorrect ? '#22c55e' : '#ef4444';
 
+    // Play sound only once when component first mounts for this question
     useEffect(() => {
-        // Play success sound if correct
-        if (isCorrect) {
+        if (!hasPlayedSound && isCorrect) {
             audioManager.playSuccess();
+            setHasPlayedSound(true);
         }
+    }, [gameState.currentQuestionIndex, hasPlayedSound, isCorrect]);
 
+    // Reset sound flag when question changes
+    useEffect(() => {
+        setHasPlayedSound(false);
+    }, [gameState.currentQuestionIndex]);
+
+    // Timer logic
+    useEffect(() => {
         const interval = setInterval(() => {
             setTimeLeft((prev) => (prev <= 0 ? 0 : prev - 1));
         }, 1000);
         return () => clearInterval(interval);
-    }, [isCorrect]);
+    }, [gameState.currentQuestionIndex]);
 
     // Debug render
     if (typeof window !== 'undefined') {
@@ -45,8 +55,8 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
         );
     }
 
-    const rawCorrectColors = question.correctAnswers || question.correctColors || [];
-    const correctColors = sortColors(rawCorrectColors);
+    const rawCorrectColours = question.correctAnswers || question.correctColours || [];
+    const correctColours = sortColors(rawCorrectColours);
     const lastAnswerRaw = player.lastAnswer || [];
     const lastAnswer = sortColors(lastAnswerRaw);
 
@@ -171,7 +181,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                     <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/10 blur-xl rounded-full -translate-y-1/2 translate-x-1/2" />
                     <span className="text-[10px] font-black text-green-500/60 uppercase tracking-[0.2em] block mb-2 pl-1">Correct Answer</span>
                     <div className="flex gap-1.5 flex-wrap items-center">
-                        {correctColors.map((color, i) => (
+                        {correctColours.map((color, i) => (
                             <ColorCard
                                 key={`correct-${i}`}
                                 color={color}
@@ -198,7 +208,9 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         <div className={`p-2 rounded-xl ${timeLeft <= 5 ? 'bg-red-500/20 text-red-500' : 'bg-blue-500/20 text-blue-400'}`}>
                             <Timer size={18} />
                         </div>
-                        <span className="text-xs font-bold text-white/50 uppercase tracking-wider">Next Round</span>
+                        <span className="text-xs font-bold text-white/50 uppercase tracking-wider">
+                            {gameState.currentQuestionIndex === gameState.questions.length - 1 ? 'Final Results' : 'Next Round'}
+                        </span>
                     </div>
                     <div className="flex items-baseline gap-1">
                         <span className="text-2xl font-black font-mono tabular-nums text-white">

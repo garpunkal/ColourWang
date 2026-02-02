@@ -146,7 +146,12 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     // If no game state, show setup screen
     if (!gameState) {
-        return <HostSetupScreen socket={socket} />;
+        console.log('[HOST] No gameState - showing HostSetupScreen');
+        return (
+            <div className="flex-1 flex flex-col p-12 overflow-hidden relative w-full min-h-screen">
+                <HostSetupScreen socket={socket} />
+            </div>
+        );
     }
 
     const { code, players, status, currentQuestionIndex, questions } = gameState;

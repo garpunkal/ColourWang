@@ -14,7 +14,7 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
     const particles = useRef<Particle[]>([]);
     const animationFrameId = useRef<number>(0);
 
-    const spawnSparkles = (x: number, y: number, color: string = '#ffd700', count: number = 20) => {
+    const spawnSparkles = (x: number, y: number, colour: string = '#ffd700', count: number = 20) => {
         for (let i = 0; i < count; i++) {
             const angle = Math.random() * Math.PI * 2;
             const speed = Math.random() * 4 + 2;
@@ -23,7 +23,7 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
                 y,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                color,
+                colour,
                 life: 1.0,
                 size: Math.random() * 3 + 1
             });
@@ -31,8 +31,8 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
     };
 
     const spawnConfetti = (x: number, y: number) => {
-        const colors = ['#FFD700', '#FF3366', '#00E5FF', '#FFFFFF'];
-        spawnSparkles(x, y, colors[Math.floor(Math.random() * colors.length)], 30);
+        const colours = ['#FFD700', '#FF3366', '#00E5FF', '#FFFFFF'];
+        spawnSparkles(x, y, colours[Math.floor(Math.random() * colours.length)], 30);
     };
 
     useEffect(() => {
@@ -59,7 +59,7 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
                 }
 
                 ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
+                ctx.fillStyle = p.colour;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();

@@ -18,7 +18,7 @@ import { BGM_TRACKS } from '../../config/musicConfig';
 
 
 export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '' }: Props) {
-    const { colorblindMode, setColorblindMode } = useSettings();
+    const { colourblindMode: colorblindMode, setColourblindMode: setColorblindMode } = useSettings();
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBGM, setSelectedBGM] = useState(currentBgm);
 
@@ -107,12 +107,12 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     <button
                         onClick={() => setColorblindMode(!colorblindMode)}
                         className={`
-                            px-4 py-2 flex items-center gap-2 rounded-full transition-all border
+                            flex items-center gap-2 rounded-full transition-all border
                             ${colorblindMode
-                                ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)] scale-105'
-                                : 'bg-black/30 text-white/40 border-white/10 hover:text-white hover:border-white/30 backdrop-blur-md'}
+                                ? 'px-6 py-3 bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)] scale-105'
+                                : 'px-4 py-2 bg-black/30 text-white/40 border-white/10 hover:text-white hover:border-white/30 backdrop-blur-md'}
                         `}
-                        title={colorblindMode ? "Disable Colorblind Mode" : "Enable Colorblind Mode"}
+                        title={colorblindMode ? "Disable Colourblind Mode" : "Enable Colourblind Mode"}
                     >
                         {colorblindMode ? <Eye size={18} strokeWidth={2.5} /> : <EyeOff size={18} strokeWidth={2.5} />}
                         <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">CB Mode</span>

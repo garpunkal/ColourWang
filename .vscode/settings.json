@@ -15,6 +15,11 @@
         "/^Get-ChildItem \"j:\\\\git\\\\github\\.com\\\\garpunkal\\\\ColourWang\\\\config\\\\questions\\\\\\*_new\\.json\" \\| ForEach-Object \\{\n    \\$originalName = \\$_\\.Name -replace '_new\\.json', '\\.json'\n    \\$destinationPath = Join-Path \\$_\\.Directory \\$originalName\n    Copy-Item \\$_\\.FullName \\$destinationPath -Force\n    Write-Host \"Copied \\$\\(\\$_\\.Name\\) to \\$originalName\"\n\\}$/": {
             "approve": true,
             "matchCommandLine": true
-        }
+        },
+        "/^echo \"Checking if both servers are running\\.\\.\\.\" ; Get-Process -Name \"node\" -ErrorAction SilentlyContinue \\| Select-Object Name, Id, CPU$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "npm run build": true
     }
 }

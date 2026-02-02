@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { logger } from '../utils/logger';
 
 interface QuestionData {
     question: string;
@@ -36,7 +37,7 @@ const processedQuestions = questionsRaw.map(q => {
 });
 
 writeFileSync(questionsPath, JSON.stringify(processedQuestions, null, 4), 'utf8');
-console.log(`Migrated ${processedQuestions.length} questions.`);
+logger.info(`Migrated ${processedQuestions.length} questions.`);
 
 // Also update client config if it exists
 try {

@@ -29,8 +29,8 @@ export const ColorCard = memo(function ColorCard({
     stealValue,
     showLabel = false
 }: ColorCardProps) {
-    const { colorblindMode: localColorblind } = useSettings();
-    const colorblindMode = localColorblind || showLabel;
+    const { colourblindMode: localColourblind } = useSettings();
+    const colourblindMode = localColourblind || showLabel;
 
     const sizeStyles = {
         mini: { width: '3.5rem', height: '4.5rem' },
@@ -160,7 +160,7 @@ export const ColorCard = memo(function ColorCard({
                             <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
                         </div>
                     ) : (
-                        colorblindMode ? (
+                        colourblindMode ? (
                             <div className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4">
                                 <span
                                     className="block font-black uppercase tracking-widest text-center bg-black/80 text-white rounded-sm py-0.5 px-2 shadow-2xl scale-90 md:scale-100"

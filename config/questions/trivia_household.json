@@ -1,20 +1,20 @@
 [
     {
-        "question": "What color are most toilet paper rolls?",
+        "question": "What colour are most toilet paper rolls?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color are most kitchen appliances traditionally?",
+        "question": "What colour are most kitchen appliances traditionally?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color are most cleaning sponges?",
+        "question": "What colour are most cleaning sponges?",
         "answer": [
             "yellow",
             "green"
@@ -22,7 +22,7 @@
         "roundId": "household"
     },
     {
-        "question": "What color are rubber gloves commonly?",
+        "question": "What colour are rubber gloves commonly?",
         "answer": [
             "yellow",
             "pink"
@@ -30,21 +30,21 @@
         "roundId": "household"
     },
     {
-        "question": "What color are most garbage bags?",
+        "question": "What colour are most garbage bags?",
         "answer": [
             "black"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color is bleach?",
+        "question": "What colour is bleach?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color are most cutting boards?",
+        "question": "What colour are most cutting boards?",
         "answer": [
             "white",
             "brown"
@@ -52,14 +52,14 @@
         "roundId": "household"
     },
     {
-        "question": "What color are most light bulbs when off?",
+        "question": "What colour are most light bulbs when off?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colors are common for towels?",
+        "question": "What colours are common for towels?",
         "answer": [
             "white",
             "blue",
@@ -68,21 +68,21 @@
         "roundId": "household"
     },
     {
-        "question": "What color are most electrical outlets?",
+        "question": "What colour are most electrical outlets?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color are most wooden floors?",
+        "question": "What colour are most wooden floors?",
         "answer": [
             "brown"
         ],
         "roundId": "household"
     },
     {
-        "question": "What color are most refrigerators?",
+        "question": "What colour are most refrigerators?",
         "answer": [
             "white"
         ],

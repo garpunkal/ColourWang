@@ -1,6 +1,6 @@
 [
     {
-        "question": "What color sand is found on most beaches?",
+        "question": "What colour sand is found on most beaches?",
         "answer": [
             "white",
             "yellow"
@@ -8,28 +8,28 @@
         "roundId": "geography"
     },
     {
-        "question": "What color is the Red Sea known for?",
+        "question": "What colour is the Red Sea known for?",
         "answer": [
             "red"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color represents water on maps?",
+        "question": "What colour represents water on maps?",
         "answer": [
             "blue"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color represents forests on maps?",
+        "question": "What colour represents forests on maps?",
         "answer": [
             "green"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color represents deserts on maps?",
+        "question": "What colour represents deserts on maps?",
         "answer": [
             "yellow",
             "brown"
@@ -37,14 +37,14 @@
         "roundId": "geography"
     },
     {
-        "question": "What color is volcanic rock typically?",
+        "question": "What colour is volcanic rock typically?",
         "answer": [
             "black"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color are icebergs?",
+        "question": "What colour are icebergs?",
         "answer": [
             "white",
             "blue"
@@ -52,14 +52,14 @@
         "roundId": "geography"
     },
     {
-        "question": "What color represents mountains on topographic maps?",
+        "question": "What colour represents mountains on topographic maps?",
         "answer": [
             "brown"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color is limestone typically?",
+        "question": "What colour is limestone typically?",
         "answer": [
             "white",
             "grey"
@@ -67,14 +67,14 @@
         "roundId": "geography"
     },
     {
-        "question": "What color are most road signs for highways?",
+        "question": "What colour are most road signs for highways?",
         "answer": [
             "green"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What color represents tundra regions?",
+        "question": "What colour represents tundra regions?",
         "answer": [
             "white",
             "grey"
@@ -82,7 +82,7 @@
         "roundId": "geography"
     },
     {
-        "question": "What color is coral when it's healthy?",
+        "question": "What colour is coral when it's healthy?",
         "answer": [
             "pink",
             "red"

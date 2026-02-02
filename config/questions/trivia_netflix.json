@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colors dominate Stranger Things' aesthetic?",
+        "question": "What colours dominate Stranger Things' aesthetic?",
         "answer": [
             "red",
             "black"
@@ -8,42 +8,35 @@
         "roundId": "netflix"
     },
     {
-        "question": "What color is the House of Cards logo?",
+        "question": "What colour is the House of Cards logo?",
         "answer": [
             "red"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color are the jumpsuits in Orange Is the New Black?",
+        "question": "What colour are the jumpsuits in Orange Is the New Black?",
         "answer": [
             "orange"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color is associated with The Crown series?",
+        "question": "What colour is associated with The Crown series?",
         "answer": [
             "yellow"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color is the main character's hair in Anne with an E?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "netflix"
-    },
-    {
-        "question": "What colors are in the Squid Game tracksuits?",
+        "question": "What colours are in the Squid Game tracksuits?",
         "answer": [
             "green"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color dominates the aesthetic of Dark?",
+        "question": "What colour dominates the aesthetic of Dark?",
         "answer": [
             "black",
             "yellow"
@@ -51,14 +44,14 @@
         "roundId": "netflix"
     },
     {
-        "question": "What color are the Netflix loading bars?",
+        "question": "What colour are the Netflix loading bars?",
         "answer": [
             "red"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What colors are prominent in Bridgerton's costumes?",
+        "question": "What colours are prominent in Bridgerton's costumes?",
         "answer": [
             "blue",
             "pink",
@@ -67,21 +60,21 @@
         "roundId": "netflix"
     },
     {
-        "question": "What color is the Money Heist mask?",
+        "question": "What colour is the Money Heist mask?",
         "answer": [
             "red"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color dominates the Ozark series aesthetic?",
+        "question": "What colour dominates the Ozark series aesthetic?",
         "answer": [
             "blue"
         ],
         "roundId": "netflix"
     },
     {
-        "question": "What color is associated with Black Mirror episodes?",
+        "question": "What colour is associated with Black Mirror episodes?",
         "answer": [
             "black"
         ],

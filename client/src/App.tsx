@@ -10,6 +10,7 @@ import { Monitor, Smartphone, WifiOff } from 'lucide-react';
 import { audioManager } from './utils/audioManager';
 import { getNextTrack } from './config/musicConfig';
 import socketConfig from './config/socketConfig.json';
+import { Logo } from './components/Logo';
 
 // Lazy load role-specific screens to optimize bundle size
 const HostScreen = lazy(() => import('./components/HostScreen.tsx'));
@@ -37,9 +38,21 @@ function App() {
 
   const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>(initialRole)
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const [answerOverrideMessage, setAnswerOverrideMessage] = useState<string | null>(null);
   const isConnected = useSocketConnection(socket);
 
-  useSocketGameState(socket, setGameState);
+  // Handle answer override notifications
+  const handleAnswerOverridden = (data: { newAnswer: string[], originalAnswer: string[] }) => {
+    const message = `Answer changed from "${data.originalAnswer.join(' and ')}" to "${data.newAnswer.join(' and ')}"`;
+    setAnswerOverrideMessage(message);
+    
+    // Clear message after a few seconds
+    setTimeout(() => {
+      setAnswerOverrideMessage(null);
+    }, 4000);
+  };
+
+  useSocketGameState(socket, setGameState, handleAnswerOverridden);
 
   // Auto-restore role if we rejoin a session
   useEffect(() => {
@@ -122,7 +135,7 @@ function App() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
               className="mb-8 md:mb-16 flex flex-col items-center"
-            >
+            ><Logo />
               {/* Logo Removed */}
             </motion.div>
 
@@ -252,6 +265,29 @@ function App() {
                 <PlayerScreen socket={socket} gameState={gameState} setGameState={setGameState} />
               )}
             </Suspense>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Answer Override Notification */}
+      <AnimatePresence>
+        {answerOverrideMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -100, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -100, scale: 0.9 }}
+            className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 bg-orange-500/20 border-2 border-orange-400/60 rounded-2xl px-8 py-4 backdrop-blur-xl shadow-2xl"
+          >
+            <div className="flex items-center gap-3">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full"
+              />
+              <div className="text-orange-400 font-bold text-lg">
+                {answerOverrideMessage}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

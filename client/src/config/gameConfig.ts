@@ -7,7 +7,7 @@ interface QuestionData {
   options?: string[];
   answer?: string[]; // Renamed from correct
   correct?: string[]; // Legacy support
-  correctColors?: string[];
+  correctColours?: string[];
 }
 
 export const PALETTE = paletteRaw.palette;
@@ -83,17 +83,17 @@ export async function fetchQuestions(): Promise<Question[]> {
       // Use palette for options universally
       const paletteOptions = paletteData.map(p => p.hex);
       const questions: Question[] = allQuestionsData.map((q: QuestionData, index: number) => {
-        // Prioritize 'answer', fallback to 'correct' or 'correctColors'
-        const rawAnswers = q.answer || q.correct || q.correctColors || [];
-        const correctColors = rawAnswers.map((colorName: string) => hexMap.get(colorName.toLowerCase()) || colorName);
+        // Prioritize 'answer', fallback to 'correct' or 'correctColours'
+        const rawAnswers = q.answer || q.correct || q.correctColours || [];
+        const correctColours = rawAnswers.map((colourName: string) => hexMap.get(colourName.toLowerCase()) || colourName);
 
         const randomToken = Math.random().toString(36).substring(7);
         return {
           id: q.id || `q-${randomToken}-${index}`,
           question: q.question,
           options: paletteOptions,
-          correctColors: correctColors,
-          correctAnswers: correctColors // Alias for compatibility
+          correctColours: correctColours,
+          correctAnswers: correctColours // Alias for compatibility
         };
       });
 

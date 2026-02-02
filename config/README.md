@@ -6,8 +6,8 @@ This directory contains all shared configuration files for the ColourWang projec
 
 ### Core Game Configuration
 - **`questions.json`** - Game questions database with answers and round assignments
-- **`palette.json`** - Color palette definitions with names and hex codes
-- **`avatars.json`** - Player avatar configurations (colors, styles, names)
+- **`palette.json`** - Colour palette definitions with names and hex codes
+- **`avatars.json`** - Player avatar configurations (colours, styles, names)
 - **`rounds.json`** - Round metadata (titles, descriptions, categories)
 - **`gameDefaults.json`** - Default game settings (rounds, questions per round, timers, features)
 - **`music.json`** - Background music track definitions
@@ -55,6 +55,30 @@ Edit `server.json` for different ports or SSL settings:
   }
 }
 ```
+
+### Logging Configuration
+Edit `server.json` to control server-side logging:
+```json
+{
+  "logging": {
+    "enabled": false,           // Master switch for all server logging
+    "levels": {
+      "info": true,             // General information messages
+      "warn": true,             // Warning messages
+      "error": true,            // Error messages
+      "debug": false            // Debug/verbose messages
+    }
+  }
+}
+```
+
+**Logging Levels:**
+- `info` - Server startup, game events, player actions
+- `warn` - Non-fatal issues, fallback scenarios  
+- `error` - Critical errors, failed operations
+- `debug` - Detailed debugging information, player state dumps
+
+**Important:** By default, all server logging is **disabled** (`enabled: false`) to reduce console noise in production. Set `enabled: true` to see server logs during development or debugging.
 
 ### Environment Settings
 Edit `environment.json` for development vs production:

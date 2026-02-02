@@ -1,6 +1,7 @@
 
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { logger } from '../utils/logger';
 
 // Adjust paths based on where script is run (server root assumed)
 // If run from j:\git\github.com\garpunkal\ColourWang\server
@@ -28,18 +29,18 @@ try {
         }
     });
 
-    console.log(`Migrated ${migratedCount} questions to 'flags' round.`);
+    logger.info(`Migrated ${migratedCount} questions to 'flags' round.`);
 
     const newData = JSON.stringify(questions, null, 4);
     writeFileSync(questionsPath, newData);
 
     try {
         writeFileSync(clientQuestionsPath, newData);
-        console.log('Synced to client config.');
+        logger.info('Synced to client config.');
     } catch (e) {
-        console.warn('Could not sync to client config (might not exist):', e);
+        logger.warn('Could not sync to client config (might not exist):', e);
     }
 
 } catch (e) {
-    console.error('Migration failed:', e);
+    logger.error('Migration failed:', e);
 }

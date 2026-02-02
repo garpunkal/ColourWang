@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colors are pandas?",
+        "question": "What colours are pandas?",
         "answer": [
             "black",
             "white"
@@ -8,7 +8,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colors are tigers?",
+        "question": "What colours are tigers?",
         "answer": [
             "orange",
             "black"
@@ -16,21 +16,21 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are polar bears?",
+        "question": "What colour are polar bears?",
         "answer": [
             "white"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What color are ravens?",
+        "question": "What colour are ravens?",
         "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are zebras?",
+        "question": "What colours are zebras?",
         "answer": [
             "black",
             "white"
@@ -38,21 +38,21 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are elephants?",
+        "question": "What colour are elephants?",
         "answer": [
             "grey"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are cardinals?",
+        "question": "What colours are cardinals?",
         "answer": [
             "red"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are flamingos?",
+        "question": "What colours are flamingos?",
         "answer": [
             "pink"
         ],
@@ -66,7 +66,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colors are frogs typically?",
+        "question": "What colours are frogs typically?",
         "answer": [
             "green",
             "brown"
@@ -74,14 +74,14 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are bluebirds?",
+        "question": "What colour are bluebirds?",
         "answer": [
             "blue"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are goldfish?",
+        "question": "What colours are goldfish?",
         "answer": [
             "orange",
             "yellow"
@@ -89,7 +89,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are penguins?",
+        "question": "What colour are penguins?",
         "answer": [
             "black",
             "white"
@@ -97,7 +97,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colors are leopards?",
+        "question": "What colours are leopards?",
         "answer": [
             "yellow",
             "black"
@@ -105,28 +105,28 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are black panthers?",
+        "question": "What colour are black panthers?",
         "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are deer?",
+        "question": "What colours are deer?",
         "answer": [
             "brown"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What color are white swans?",
+        "question": "What colour are white swans?",
         "answer": [
             "white"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are peacocks?",
+        "question": "What colours are peacocks?",
         "answer": [
             "blue",
             "green"
@@ -134,14 +134,14 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are black bears?",
+        "question": "What colour are black bears?",
         "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colors are giraffes?",
+        "question": "What colours are giraffes?",
         "answer": [
             "yellow",
             "brown"
@@ -149,7 +149,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What color are red foxes?",
+        "question": "What colour are red foxes?",
         "answer": [
             "red",
             "orange"

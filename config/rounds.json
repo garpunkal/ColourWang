@@ -2,7 +2,7 @@
     {
         "id": "general",
         "title": "General Knowledge",
-        "description": "A colorful mix of everything to get us started!",
+        "description": "A colourful mix of everything to get us started!",
         "sortOrder": 0
     },
     {
@@ -14,7 +14,7 @@
     {
         "id": "cars",
         "title": "Cars & Vehicles",
-        "description": "Automotive brands, racing colors, and famous rides.",
+        "description": "Automotive brands, racing colours, and famous rides.",
         "sortOrder": 15
     },
     {
@@ -32,43 +32,43 @@
     {
         "id": "fashion",
         "title": "Fashion",
-        "description": "Designer brands, runway colors, and style trends.",
+        "description": "Designer brands, runway colours, and style trends.",
         "sortOrder": 30
     },
     {
         "id": "flags",
         "title": "Flags of the World",
-        "description": "Test your vexillology skills with national colors.",
+        "description": "Test your vexillology skills with national colours.",
         "sortOrder": 35
     },
     {
         "id": "food",
         "title": "Food & Drink",
-        "description": "Delicious dishes, beverages, and culinary colors.",
+        "description": "Delicious dishes, beverages, and culinary colours.",
         "sortOrder": 40
     },
     {
         "id": "geography",
         "title": "Geography",
-        "description": "Landmarks, natural wonders, and location colors.",
+        "description": "Landmarks, natural wonders, and location colours.",
         "sortOrder": 45
     },
     {
         "id": "history",
         "title": "History",
-        "description": "Historical events, eras, and colorful past moments.",
+        "description": "Historical events, eras, and colourful past moments.",
         "sortOrder": 50
     },
     {
         "id": "household",
         "title": "Household Objects",
-        "description": "Everyday items and colors you see around the house.",
+        "description": "Everyday items and colours you see around the house.",
         "sortOrder": 55
     },
     {
         "id": "logos",
         "title": "Brands & Logos",
-        "description": "Corporate identities and iconic brand colors.",
+        "description": "Corporate identities and iconic brand colours.",
         "sortOrder": 60
     },
     {
@@ -80,7 +80,7 @@
     {
         "id": "music",
         "title": "Music",
-        "description": "Album covers, artists, bands, and musical colors.",
+        "description": "Album covers, artists, bands, and musical colours.",
         "sortOrder": 70
     },
     {
@@ -110,19 +110,19 @@
     {
         "id": "sports",
         "title": "Sports Teams",
-        "description": "Team jerseys, uniforms, and sporting colors.",
+        "description": "Team jerseys, uniforms, and sporting colours.",
         "sortOrder": 95
     },
     {
         "id": "superheroes",
         "title": "Superheroes",
-        "description": "Capes, masks, comic book heroes, and power colors.",
+        "description": "Capes, masks, comic book heroes, and power colours.",
         "sortOrder": 100
     },
     {
         "id": "toys",
         "title": "Toys & Games",
-        "description": "Childhood favorites, board games, and playful colors.",
+        "description": "Childhood favorites, board games, and playful colours.",
         "sortOrder": 105
     },
     {

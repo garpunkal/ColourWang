@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colors are typical of a rainbow?",
+        "question": "What colours are typical of a rainbow?",
         "answer": [
             "red",
             "orange",
@@ -12,14 +12,14 @@
         "roundId": "nature"
     },
     {
-        "question": "What color is the sun?",
+        "question": "What colour is the sun?",
         "answer": [
             "yellow"
         ],
         "roundId": "nature"
     },
     {
-        "question": "What colors make up autumn leaves?",
+        "question": "What colours make up autumn leaves?",
         "answer": [
             "red",
             "orange",
@@ -29,14 +29,14 @@
         "roundId": "nature"
     },
     {
-        "question": "What color is fresh snow?",
+        "question": "What colour is fresh snow?",
         "answer": [
             "white"
         ],
         "roundId": "nature"
     },
     {
-        "question": "What colors are common in flowers?",
+        "question": "What colours are common in flowers?",
         "answer": [
             "red",
             "pink",
@@ -47,21 +47,21 @@
         "roundId": "nature"
     },
     {
-        "question": "What color is grass?",
+        "question": "What colour is grass?",
         "answer": [
             "green"
         ],
         "roundId": "nature"
     },
     {
-        "question": "What color is coal?",
+        "question": "What colour is coal?",
         "answer": [
             "black"
         ],
         "roundId": "nature"
     },
     {
-        "question": "What colors can ocean water appear?",
+        "question": "What colours can ocean water appear?",
         "answer": [
             "blue",
             "green"
@@ -69,7 +69,7 @@
         "roundId": "nature"
     },
     {
-        "question": "What color are storm clouds?",
+        "question": "What colour are storm clouds?",
         "answer": [
             "grey",
             "black"
@@ -77,7 +77,7 @@
         "roundId": "nature"
     },
     {
-        "question": "What color is tree bark typically?",
+        "question": "What colour is tree bark typically?",
         "answer": [
             "brown",
             "grey"
@@ -85,7 +85,7 @@
         "roundId": "nature"
     },
     {
-        "question": "What colors appear in a sunset?",
+        "question": "What colours appear in a sunset?",
         "answer": [
             "orange",
             "red",
@@ -95,7 +95,7 @@
         "roundId": "nature"
     },
     {
-        "question": "What color are flamingos?",
+        "question": "What colour are flamingos?",
         "answer": [
             "pink"
         ],

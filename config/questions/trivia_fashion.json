@@ -1,13 +1,13 @@
 [
     {
-        "question": "What color is a classic little black dress?",
+        "question": "What colour is a classic little black dress?",
         "answer": [
             "black"
         ],
         "roundId": "fashion"
     },
     {
-        "question": "What color are wedding dresses traditionally?",
+        "question": "What colour are wedding dresses traditionally?",
         "answer": [
             "white"
         ],
@@ -22,14 +22,14 @@
         "roundId": "fashion"
     },
     {
-        "question": "What color are blue jeans?",
+        "question": "What colour are blue jeans?",
         "answer": [
             "blue"
         ],
         "roundId": "fashion"
     },
     {
-        "question": "What color are most high-heel pumps?",
+        "question": "What colour are most high-heel pumps?",
         "answer": [
             "black",
             "red"
@@ -37,14 +37,14 @@
         "roundId": "fashion"
     },
     {
-        "question": "What color is associated with formal evening wear?",
+        "question": "What colour is associated with formal evening wear?",
         "answer": [
             "black"
         ],
         "roundId": "fashion"
     },
     {
-        "question": "What color are tennis shoes typically?",
+        "question": "What colour are tennis shoes typically?",
         "answer": [
             "white"
         ],
@@ -60,7 +60,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What color are most leather jackets?",
+        "question": "What colour are most leather jackets?",
         "answer": [
             "black",
             "brown"
@@ -68,7 +68,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What color lipstick is considered classic?",
+        "question": "What colour lipstick is considered classic?",
         "answer": [
             "red"
         ],
@@ -84,7 +84,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What color are most business suits?",
+        "question": "What colour are most business suits?",
         "answer": [
             "grey",
             "black",

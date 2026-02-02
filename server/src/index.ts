@@ -1,7 +1,6 @@
 
-console.log('Starting ColourWang server...');
-
 import express from 'express';
+import { logger } from './utils/logger';
 import { createServer as createHttpsServer } from 'https';
 import { createServer as createHttpServer } from 'http';
 import { readFileSync, existsSync, readdirSync } from 'fs';
@@ -11,6 +10,8 @@ import cors from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
 import serverConfig from '../../config/server.json';
 import environmentConfig from '../../config/environment.json';
+
+logger.info('Starting ColourWang server...');
 
 const app = express();
 app.use(cors(serverConfig.server.cors));
@@ -26,7 +27,7 @@ app.get('/api/bgm-list', (req, res) => {
             res.json([]);
         }
     } catch (e) {
-        console.error('Error listing BGM files:', e);
+        logger.error('Error listing BGM files:', e);
         res.status(500).json([]);
     }
 });
@@ -47,22 +48,22 @@ if (existsSync(keyPath) && existsSync(certFilePath)) {
     };
     server = createHttpsServer(httpsOptions, app);
     protocol = 'https';
-    console.log('✓ SSL certificates found, using HTTPS');
+    logger.info('✓ SSL certificates found, using HTTPS');
 } else {
     // Fallback to HTTP if certificates don't exist yet
     server = createHttpServer(app);
-    console.log('⚠ SSL certificates not found, using HTTP');
-    console.log('  Run the client first to generate certificates, then restart the server');
+    logger.warn('⚠ SSL certificates not found, using HTTP');
+    logger.warn('  Run the client first to generate certificates, then restart the server');
 }
 
 const io = new Server(server, {
     cors: serverConfig.server.cors
 });
 
-console.log('Registering socket handlers...');
+logger.info('Registering socket handlers...');
 registerSocketHandlers(io);
 
 const PORT = process.env.PORT || serverConfig.server.port;
 server.listen(PORT, () => {
-    console.log(`Server running on ${protocol}://localhost:${PORT}`);
+    logger.info(`Server running on ${protocol}://localhost:${PORT}`);
 });

@@ -22,7 +22,7 @@ export interface Question {
     id: string;
     question: string;
 
-    correctColors: string[];
+    correctColours: string[];
     // Alias for frontend convenience or if backend sends it this way
     correctAnswers?: string[];
     options: string[];
