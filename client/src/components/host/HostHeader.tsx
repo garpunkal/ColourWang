@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { audioManager } from '../../utils/audioManager';
 import { QRCodeSVG } from 'qrcode.react';
-import { Users } from 'lucide-react';
+import { Users, Eye, EyeOff } from 'lucide-react';
+import { useSettings } from '../../contexts/SettingsContext';
 
 interface Props {
     code: string;
@@ -9,20 +10,23 @@ interface Props {
     compact?: boolean;
     pot?: number;
     musicEnabled?: boolean;
+    socket: any;
+    currentBgm?: string;
 }
 
-const BGM_TRACKS = [
-    { label: 'Casino Royal', value: 'Casino Royal.mp3' },
-    { label: 'Las Vegas', value: 'Las Vegas.mp3' },
-    { label: 'Move and Shake', value: 'Move and Shake.mp3' },
-    { label: 'Poker Player', value: 'Poker Player.mp3' },
-    { label: 'Robbery of the Century', value: 'Robbery of the Century.mp3' },
-];
+import { BGM_TRACKS } from '../../config/musicConfig';
 
 
-export function HostHeader({ code, playerCount, compact = false, musicEnabled = true }: Props) {
+export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '' }: Props) {
+    const { colorblindMode, setColorblindMode } = useSettings();
     const [showQrModal, setShowQrModal] = useState(false);
-    const [selectedBGM, setSelectedBGM] = useState('');
+    const [selectedBGM, setSelectedBGM] = useState(currentBgm);
+
+    useEffect(() => {
+        if (currentBgm) {
+            setSelectedBGM(currentBgm);
+        }
+    }, [currentBgm]);
     const joinUrl = `${window.location.origin}?code=${code}`;
 
     return (
@@ -35,7 +39,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     transition-all duration-500 w-fit
                     ${compact
                         ? 'gap-4 p-3 pr-8 md:rounded-4xl'
-                        : 'gap-6 md:gap-10 p-6 md:p-8 pr-6 md:pr-16 md:rounded-4xl'
+                        : 'gap-4 md:gap-8 p-4 md:p-6 pr-6 md:pr-10 md:rounded-4xl'
                     }
                 `}>
                     {/* QR Code */}
@@ -46,8 +50,8 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     >
                         <QRCodeSVG
                             value={joinUrl}
-                            size={compact ? 60 : 120}
-                            className={`rounded ${compact ? 'w-15 h-15' : 'w-30 h-30 md:w-40 md:h-40'}`}
+                            size={compact ? 60 : 80}
+                            className={`rounded ${compact ? 'w-15 h-15' : 'w-20 h-20 md:w-24 md:h-24'}`}
                             level="L"
                             marginSize={0}
                         />
@@ -57,7 +61,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     <div className="flex flex-col items-center md:items-start gap-0">
                         <div className={`
                             font-mono font-black tracking-widest text-white leading-none drop-shadow-[0_10px_30px_rgba(0,229,255,0.4)] transition-all duration-500
-                            ${compact ? 'text-4xl md:text-5xl' : 'text-[4rem] md:text-[7rem] lg:text-[10rem]'}
+                            ${compact ? 'text-4xl md:text-5xl' : 'text-4xl md:text-5xl'}
                         `}>
                             {code}
                         </div>
@@ -69,8 +73,16 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                                     id="bgm-select"
                                     value={selectedBGM}
                                     onChange={e => {
-                                        setSelectedBGM(e.target.value);
-                                        audioManager.playBGM(e.target.value);
+                                        const val = e.target.value;
+                                        setSelectedBGM(val);
+                                        // Emit to server to sync for everyone (and persistence)
+                                        socket.emit('update-bgm', { code, track: val });
+
+                                        if (val === 'off') {
+                                            audioManager.stopBGM();
+                                        } else {
+                                            audioManager.playBGM(val);
+                                        }
                                     }}
                                     className="rounded pr-2 py-1 text-white/35 text-xs"
                                 >
@@ -87,17 +99,32 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     {/* Logo Removed */}
                 </div>
 
-                {/* Count  */}
+                {/* Colorblind and Count  */}
                 <div className={`
-                        flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 w-fit md:justify-self-end
-                        ${compact ? 'gap-3 px-6 py-2' : 'hidden'}
+                        flex items-center gap-4 transition-all duration-500 w-fit md:justify-self-end
+                        ${compact ? '' : 'hidden'}
                     `}>
-                    <Users size={compact ? 20 : 32} className="text-color-blue animate-pulse transition-all duration-500" />
-                    <div className="flex items-baseline gap-3">
-                        <span className={`font-black font-mono text-white tabular-nums tracking-tighter transition-all duration-500 ${compact ? 'text-2xl' : 'text-5xl'}`}>
-                            {playerCount}
-                        </span>
+                    <button
+                        onClick={() => setColorblindMode(!colorblindMode)}
+                        className={`
+                            px-4 py-2 flex items-center gap-2 rounded-full transition-all border
+                            ${colorblindMode
+                                ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)] scale-105'
+                                : 'bg-black/30 text-white/40 border-white/10 hover:text-white hover:border-white/30 backdrop-blur-md'}
+                        `}
+                        title={colorblindMode ? "Disable Colorblind Mode" : "Enable Colorblind Mode"}
+                    >
+                        {colorblindMode ? <Eye size={18} strokeWidth={2.5} /> : <EyeOff size={18} strokeWidth={2.5} />}
+                        <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">CB Mode</span>
+                    </button>
 
+                    <div className="flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 px-6 py-2 gap-3">
+                        <Users size={20} className="text-color-blue animate-pulse transition-all duration-500" />
+                        <div className="flex items-baseline gap-3">
+                            <span className="font-black font-mono text-white tabular-nums tracking-tighter text-2xl">
+                                {playerCount}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

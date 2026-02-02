@@ -18,6 +18,9 @@ export function HostSetupScreen({ socket }: Props) {
     const [jokers, setJokers] = useState(true);
     const [playSounds, setPlaySounds] = useState(true);
     const [musicEnabled, setMusicEnabled] = useState(true);
+    const [streaksEnabled, setStreaksEnabled] = useState(true);
+    const [fastestFingerEnabled, setFastestFingerEnabled] = useState(true);
+    const [accessibleLabels, setAccessibleLabels] = useState(false);
     const selectedBgm = 'Casino Royal.mp3';
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
@@ -79,7 +82,10 @@ export function HostSetupScreen({ socket }: Props) {
             jokersEnabled: jokers,
             soundEnabled: playSounds,
             musicEnabled,
-            bgmTrack: selectedBgm
+            bgmTrack: selectedBgm,
+            streaksEnabled,
+            fastestFingerEnabled,
+            accessibleLabels
         });
     };
 
@@ -158,28 +164,10 @@ export function HostSetupScreen({ socket }: Props) {
                     </div>
 
                     {/* Toggles Container */}
-                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6">
-                        {/* Steals */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full"
-                            onClick={() => setJokers(!jokers)}>
-                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
-                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
-                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Steals</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
-                                        {jokers ? 'ENABLED' : 'DISABLED'}
-                                    </span>
-                                </div>
-                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
-                                    <motion.div
-                                        animate={{ x: jokers ? '100%' : '0%' }}
-                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="col-span-2 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
 
                         {/* Sound FX */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full"
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
                             onClick={() => setPlaySounds(!playSounds)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -198,7 +186,7 @@ export function HostSetupScreen({ socket }: Props) {
                         </div>
 
                         {/* Music */}
-                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative"
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative min-h-[70px] md:min-h-[140px]"
                             onClick={() => setMusicEnabled(!musicEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left w-full">
@@ -216,6 +204,83 @@ export function HostSetupScreen({ socket }: Props) {
                                 </div>
                             </div>
                         </div>
+                        {/* Accessible Labels */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                            onClick={() => setAccessibleLabels(!accessibleLabels)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Colorblind</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {accessibleLabels ? 'FOR ALL' : 'OPTIONAL'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${accessibleLabels ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: accessibleLabels ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        {/* Steals */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                            onClick={() => setJokers(!jokers)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Steals</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {jokers ? 'ENABLED' : 'DISABLED'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: jokers ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Streaks */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                            onClick={() => setStreaksEnabled(!streaksEnabled)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Streaks</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {streaksEnabled ? 'ON' : 'OFF'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${streaksEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: streaksEnabled ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {/* Fastest Finger */}
+                        <div className="bg-black/20 p-2 md:p-5 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[70px] md:min-h-[140px]"
+                            onClick={() => setFastestFingerEnabled(!fastestFingerEnabled)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Fastest Finger</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {fastestFingerEnabled ? 'ON' : 'OFF'}
+                                    </span>
+                                </div>
+                                <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${fastestFingerEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: fastestFingerEnabled ? '100%' : '0%' }}
+                                        className="w-4 h-4 md:w-6 md:h-6 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
 

@@ -173,7 +173,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                             </div>
 
                             {/* Avatar */}
-                            <div className={`relative w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden border-2 md:border-4 ${isWinner ? 'border-yellow-500' : 'border-white/10'
+                            <div className={`relative w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden ring-2 md:ring-4 ${isWinner ? 'ring-yellow-500' : 'ring-white/10'
                                 }`}>
                                 <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                             </div>

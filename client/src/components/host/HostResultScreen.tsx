@@ -123,6 +123,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             isCorrect={true}
                                             size="medium"
                                             index={i}
+                                            showLabel={gameState.accessibleLabels}
                                         />
                                     </motion.div>
                                 ))}
@@ -154,9 +155,12 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                         background: player.isCorrect
                                             ? `linear-gradient(180deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)`
                                             : `linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)`,
-                                        borderColor: player.isCorrect ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)',
-                                        borderWidth: '1px',
-                                        borderStyle: 'solid'
+                                        borderColor: player.isCorrect
+                                            ? (player.streak >= 3 ? 'rgba(249, 115, 22, 0.6)' : 'rgba(34, 197, 94, 0.3)')
+                                            : 'rgba(239, 68, 68, 0.3)',
+                                        borderWidth: player.streak >= 3 ? '2px' : '1px',
+                                        borderStyle: 'solid',
+                                        boxShadow: player.streak >= 3 ? '0 0 30px rgba(249, 115, 22, 0.2)' : 'none'
                                     }}
                                 >
                                     {/* Player Info */}
@@ -171,8 +175,26 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             </span>
                                             <div className="flex items-center gap-1">
                                                 <span className={`text-[16px] font-black italic tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
-                                                    {player.isCorrect ? '+10 PTS' : '+0 PTS'}
+                                                    {player.isCorrect ? `+${(player.streak >= 3 ? Math.round(10 * 1.5) : 10) + (player.isFastestFinger ? 5 : 0)} PTS` : '+0 PTS'}
                                                 </span>
+                                                {player.streak >= 3 && (
+                                                    <motion.div
+                                                        animate={{ scale: [1, 1.2, 1], rotate: [-10, 10, -10] }}
+                                                        transition={{ duration: 0.5, repeat: Infinity }}
+                                                        className="ml-2 bg-orange-500 rounded-full w-6 h-6 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.6)]"
+                                                    >
+                                                        <span className="text-xs">🔥</span>
+                                                    </motion.div>
+                                                )}
+                                                {player.isFastestFinger && (
+                                                    <motion.div
+                                                        animate={{ scale: [1, 1.2, 1], y: [0, -5, 0] }}
+                                                        transition={{ duration: 0.4, repeat: Infinity }}
+                                                        className={`${player.streak >= 3 ? 'ml-1' : 'ml-2'} bg-yellow-400 rounded-full w-6 h-6 flex items-center justify-center shadow-[0_0_15px_rgba(255,223,0,0.6)]`}
+                                                    >
+                                                        <span className="text-xs">⚡</span>
+                                                    </motion.div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -187,6 +209,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                                     size="mini"
                                                     index={i}
                                                     disabled={true}
+                                                    showLabel={gameState.accessibleLabels}
                                                 />
                                             )) : (
                                                 <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">No Answer</span>

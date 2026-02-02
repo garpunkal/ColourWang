@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { getColorName } from '../config/gameConfig';
 import { memo } from 'react';
+import { useSettings } from '../contexts/SettingsContext';
 
 interface ColorCardProps {
     color: string;
@@ -13,6 +14,7 @@ interface ColorCardProps {
     index?: number;
     isStealCard?: boolean;
     stealValue?: number;
+    showLabel?: boolean; // Renamed from forceColorblind for compatibility
 }
 
 export const ColorCard = memo(function ColorCard({
@@ -24,8 +26,12 @@ export const ColorCard = memo(function ColorCard({
     size = 'medium',
     index = 0,
     isStealCard = false,
-    stealValue
+    stealValue,
+    showLabel = false
 }: ColorCardProps) {
+    const { colorblindMode: localColorblind } = useSettings();
+    const colorblindMode = localColorblind || showLabel;
+
     const sizeStyles = {
         mini: { width: '3.5rem', height: '4.5rem' },
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
@@ -154,19 +160,24 @@ export const ColorCard = memo(function ColorCard({
                             <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
                         </div>
                     ) : (
-                        <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4 ${size === 'mini' ? 'opacity-0' : ''}`}>
+                        <div className={`absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4 ${(size === 'mini' && !colorblindMode) ? 'hidden' : ''}`}>
                             <span
-                                className="font-black uppercase tracking-wider text-center drop-shadow-lg px-2"
+                                className={`
+                                    block font-black uppercase tracking-[0.2em] text-center px-1
+                                    ${colorblindMode
+                                        ? 'bg-black/80 text-white rounded-sm py-0.5 px-2 shadow-2xl scale-90 md:scale-100'
+                                        : 'text-white/90 drop-shadow-md'}
+                                `}
                                 style={{
-                                    color: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'rgba(0,0,0,0.8)' : 'white',
-                                    fontSize: getFontSize(),
+                                    color: !colorblindMode && ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase()) ? 'rgba(0,0,0,0.8)' : 'white',
+                                    fontSize: colorblindMode && size === 'mini' ? '0.5rem' : getFontSize(),
                                     lineHeight: 1.1,
                                     wordBreak: 'break-word',
-                                    maxWidth: '95%',
-                                    whiteSpace: 'normal',
-                                    textShadow: ['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase())
-                                        ? 'none'
-                                        : '0 2px 4px rgba(0,0,0,0.5)'
+                                    maxWidth: colorblindMode ? '100%' : '95%',
+                                    whiteSpace: colorblindMode ? 'nowrap' : 'normal',
+                                    textShadow: !colorblindMode && !['blue', 'red', 'orange', 'green', 'white', 'yellow', 'cyan', 'lime'].includes(getColorName(color).toLowerCase())
+                                        ? '0 2px 4px rgba(0,0,0,0.5)'
+                                        : 'none'
                                 }}
                             >
                                 {getColorName(color)}

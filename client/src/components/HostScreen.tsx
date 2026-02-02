@@ -71,7 +71,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     // BGM Control
     useEffect(() => {
-        if (gameState?.musicEnabled) {
+        if (gameState?.musicEnabled && gameState.bgmTrack !== 'off') {
             audioManager.playBGM(gameState.bgmTrack);
         } else {
             audioManager.stopBGM();
@@ -288,12 +288,14 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            {status === 'LOBBY' && (
+            {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION' || status === 'RESULT') && (
                 <HostHeader
                     code={code}
                     playerCount={players.length}
-                    compact={true}
+                    compact={status !== 'LOBBY'}
                     musicEnabled={gameState.musicEnabled}
+                    socket={socket}
+                    currentBgm={gameState.bgmTrack}
                 />
             )}
 

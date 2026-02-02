@@ -1,17 +1,18 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 
 import { useSocketGameState } from './hooks/useSocketGameState';
 import { io, Socket } from 'socket.io-client';
 import type { GameState } from './types/game';
-import HostScreen from './components/HostScreen.tsx';
-import PlayerScreen from './components/PlayerScreen.tsx';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocketConnection } from './hooks/useSocketConnection';
 import { Monitor, Smartphone, WifiOff } from 'lucide-react';
 import { audioManager } from './utils/audioManager';
+import { getNextTrack } from './config/musicConfig';
 
+// Lazy load role-specific screens to optimize bundle size
+const HostScreen = lazy(() => import('./components/HostScreen.tsx'));
+const PlayerScreen = lazy(() => import('./components/PlayerScreen.tsx'));
 
 // Socket.IO connection - uses relative path to leverage Vite proxy
 // In production/ngrok: connects through the same origin (proxied to backend)
@@ -71,9 +72,30 @@ function App() {
   // Handle global sound setting from GameState
   useEffect(() => {
     if (gameState?.soundEnabled !== undefined) {
-      audioManager.setMute(!gameState.soundEnabled);
+      audioManager.setMuteSFX(!gameState.soundEnabled);
     }
   }, [gameState?.soundEnabled]);
+
+  useEffect(() => {
+    if (gameState?.musicEnabled !== undefined) {
+      audioManager.setMuteBGM(!gameState.musicEnabled);
+    }
+  }, [gameState?.musicEnabled]);
+
+  // Handle automatic playlist advancement
+  useEffect(() => {
+    audioManager.onTrackEnded = () => {
+      if (role === 'HOST' && gameState?.code && gameState?.bgmTrack && gameState?.bgmTrack !== 'off') {
+        const next = getNextTrack(gameState.bgmTrack);
+        console.log(`[AUDIO] Track ended. Advancing to: ${next}`);
+        socket.emit('update-bgm', { code: gameState.code, track: next });
+      }
+    };
+
+    return () => {
+      audioManager.onTrackEnded = null;
+    };
+  }, [role, gameState?.code, gameState?.bgmTrack]);
 
   return (
     <motion.div
@@ -213,11 +235,22 @@ function App() {
             animate={{ opacity: 1 }}
             className="w-full flex flex-col relative z-20 flex-1"
           >
-            {role === 'HOST' ? (
-              <HostScreen socket={socket} gameState={gameState} />
-            ) : (
-              <PlayerScreen socket={socket} gameState={gameState} setGameState={setGameState} />
-            )}
+            <Suspense fallback={
+              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="w-12 h-12 border-4 border-color-blue/30 border-t-color-blue rounded-full mb-4"
+                />
+                <h2 className="text-xl font-bold text-white uppercase tracking-widest opacity-40">Loading Screen...</h2>
+              </div>
+            }>
+              {role === 'HOST' ? (
+                <HostScreen socket={socket} gameState={gameState} />
+              ) : (
+                <PlayerScreen socket={socket} gameState={gameState} setGameState={setGameState} />
+              )}
+            </Suspense>
           </motion.div>
         )}
       </AnimatePresence>

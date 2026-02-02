@@ -17,6 +17,11 @@ export function PlayerLobbyScreen({ gameState }: Props) {
     const countdownInitRef = useRef(false);
 
     useEffect(() => {
+        // Preload and warm up audio context for mobile performance
+        audioManager.preload();
+    }, []);
+
+    useEffect(() => {
         if (isCountdownState) {
             if (!countdownInitRef.current) {
                 setCountdown(5);

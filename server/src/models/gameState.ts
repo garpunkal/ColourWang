@@ -14,4 +14,7 @@ export interface GameState {
     musicEnabled?: boolean;
     bgmTrack?: string;
     hostSocketId?: string;
+    streaksEnabled?: boolean;
+    fastestFingerEnabled?: boolean;
+    accessibleLabels?: boolean;
 }

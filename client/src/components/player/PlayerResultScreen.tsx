@@ -15,7 +15,7 @@ import { audioManager } from '../../utils/audioManager';
 
 export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
     const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
-    const [timeLeft, setTimeLeft] = useState(30);
+    const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
 
     useEffect(() => {
         // Play success sound if correct
@@ -55,7 +55,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
             key="result"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="flex-1 flex flex-col items-center justify-start w-full max-w-lg mx-auto overflow-hidden relative pt-4 md:pt-8 gap-8"
+            className="flex-1 flex flex-col items-center justify-start w-full max-w-lg mx-auto overflow-hidden relative pt-10 md:pt-16 gap-8"
         >
             {/* Background Glow */}
             <div
@@ -87,9 +87,30 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                             className="mt-2 inline-block px-4 py-1 rounded-full text-xs font-black tracking-[0.4em] uppercase opacity-60"
                             style={{ backgroundColor: `${themeColor}20`, color: themeColor }}
                         >
-                            {player.isCorrect ? '+10 POINTS' : '0 POINTS'}
+                            {player.isCorrect ? `+${player.roundScore} POINTS` : '0 POINTS'}
                         </div>
                     </motion.div>
+
+                    {/* Bonus Summary */}
+                    {(player.streakPoints > 0 || player.fastestFingerPoints > 0) && (
+                        <motion.div
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex gap-4 mt-2"
+                        >
+                            {player.streakPoints > 0 && (
+                                <div className="flex items-center gap-1.5 bg-orange-500/20 px-3 py-1 rounded-full border border-orange-500/30">
+                                    <span className="text-[10px] font-black text-orange-400 uppercase tracking-widest">🔥 STREAK +{player.streakPoints}</span>
+                                </div>
+                            )}
+                            {player.fastestFingerPoints > 0 && (
+                                <div className="flex items-center gap-1.5 bg-yellow-500/20 px-3 py-1 rounded-full border border-yellow-500/30">
+                                    <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest">⚡ FAST +{player.fastestFingerPoints}</span>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
                 </div>
 
                 {/* Comparison Section */}
@@ -111,6 +132,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                     size="mini"
                                     index={i}
                                     disabled={true}
+                                    showLabel={gameState.accessibleLabels}
                                 />
                             )) : (
                                 <span className="text-[14px] font-black text-white/20 uppercase tracking-widest italic my-4">No answer given</span>
@@ -142,6 +164,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                     size="mini"
                                     index={i}
                                     disabled={true}
+                                    showLabel={gameState.accessibleLabels}
                                 />
                             ))}
                         </div>

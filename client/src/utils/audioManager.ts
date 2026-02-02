@@ -1,7 +1,8 @@
 class AudioManager {
     private audioContext: AudioContext | null = null;
     private bgmAudio: HTMLAudioElement | null = null;
-    private isMuted: boolean = false;
+    private isMutedSFX: boolean = false;
+    private isMutedBGM: boolean = false;
     private proceduralNodes: any[] = [];
 
     constructor() {
@@ -19,19 +20,39 @@ class AudioManager {
         }
     }
 
-    public setMute(mute: boolean) {
-        this.isMuted = mute;
+    public setMuteSFX(mute: boolean) {
+        this.isMutedSFX = mute;
+    }
+
+    public setMuteBGM(mute: boolean) {
+        this.isMutedBGM = mute;
         if (this.bgmAudio) {
-            this.bgmAudio.muted = this.isMuted;
+            this.bgmAudio.muted = this.isMutedBGM;
         }
     }
 
-    public toggleMute() {
-        this.setMute(!this.isMuted);
+    /**
+     * Preload and "warm up" audio for mobile devices.
+     * Fetches common assets and resumes the context.
+     */
+    public async preload() {
+        this.init();
+        console.log('[AUDIO] Preloading and warming AudioContext...');
+
+        // Fetch common BGM list to trigger browser connection/caching
+        try {
+            const response = await fetch('/api/bgm-list');
+            if (response.ok) {
+                const tracks = await response.json();
+                console.log(`[AUDIO] Discovered ${tracks.length} BGM tracks for pre-caching.`);
+            }
+        } catch (e) {
+            console.warn('[AUDIO] Failed to preload BGM list');
+        }
     }
 
     public playTick(remaining?: number) {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 
@@ -59,7 +80,7 @@ class AudioManager {
     }
 
     public playSelect() {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 
@@ -113,32 +134,51 @@ class AudioManager {
     }
 
     public playSteal() {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 
+        const t = this.audioContext.currentTime;
+
+        // "Yoink" sound - quick upwards slide followed by a sharp drop and a metallic pluck
         const osc = this.audioContext.createOscillator();
         const gain = this.audioContext.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, t);
+        osc.frequency.exponentialRampToValueAtTime(600, t + 0.1);
+        osc.frequency.exponentialRampToValueAtTime(120, t + 0.25);
+
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.4, t + 0.05);
+        gain.gain.linearRampToValueAtTime(0.4, t + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.25);
 
         osc.connect(gain);
         gain.connect(this.audioContext.destination);
 
-        // Whoosh / Swipe sound (noise-like if possible, but using rapid frequency sweep for now)
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, this.audioContext.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(800, this.audioContext.currentTime + 0.1);
-        osc.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + 0.3);
+        // Add a "metallic" pluck at the start of the grab
+        const pluck = this.audioContext.createOscillator();
+        const pluckGain = this.audioContext.createGain();
+        pluck.type = 'sawtooth';
+        pluck.frequency.setValueAtTime(800, t + 0.1);
+        pluck.frequency.exponentialRampToValueAtTime(200, t + 0.2);
 
-        gain.gain.setValueAtTime(0, this.audioContext.currentTime);
-        gain.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+        pluckGain.gain.setValueAtTime(0, t + 0.1);
+        pluckGain.gain.linearRampToValueAtTime(0.2, t + 0.12);
+        pluckGain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
 
-        osc.start();
-        osc.stop(this.audioContext.currentTime + 0.3);
+        pluck.connect(pluckGain);
+        pluckGain.connect(this.audioContext.destination);
+
+        osc.start(t);
+        osc.stop(t + 0.3);
+        pluck.start(t + 0.1);
+        pluck.stop(t + 0.2);
     }
 
     public playSuccess() {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 
@@ -167,8 +207,10 @@ class AudioManager {
         });
     }
 
+    public onTrackEnded: (() => void) | null = null;
+
     public playBGM(track?: string) {
-        if (this.isMuted) return;
+        if (this.isMutedBGM) return;
 
         const path = track ? `/bgm/${track}` : '/bgm.mp3';
 
@@ -180,8 +222,14 @@ class AudioManager {
         this.stopBGM();
 
         this.bgmAudio = new Audio(path);
-        this.bgmAudio.loop = true;
+        this.bgmAudio.loop = false; // We handle sequencing manually
         this.bgmAudio.volume = 0.2;
+
+        this.bgmAudio.addEventListener('ended', () => {
+            if (this.onTrackEnded) {
+                this.onTrackEnded();
+            }
+        });
 
         this.bgmAudio.addEventListener('error', () => {
             console.log("BGM file missing:", path);
@@ -198,7 +246,7 @@ class AudioManager {
     }
 
     public playProceduralBGM() {
-        if (this.isMuted) return;
+        if (this.isMutedBGM) return;
         this.init();
         if (!this.audioContext) return;
         if (this.proceduralNodes.length > 0) return; // Already playing
@@ -259,7 +307,7 @@ class AudioManager {
     }
 
     public playSwoosh() {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 
@@ -299,7 +347,7 @@ class AudioManager {
     }
 
     public playChime() {
-        if (this.isMuted) return;
+        if (this.isMutedSFX) return;
         this.init();
         if (!this.audioContext) return;
 

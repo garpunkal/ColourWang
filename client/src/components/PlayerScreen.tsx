@@ -7,6 +7,7 @@ import { PlayerLobbyScreen } from './player/PlayerLobbyScreen';
 import { PlayerQuestionScreen } from './player/PlayerQuestionScreen';
 import { PlayerResultScreen } from './player/PlayerResultScreen';
 import { PlayerFinalScreen } from './player/PlayerFinalScreen';
+import { PlayerFooter } from './player/PlayerFooter';
 
 interface Props {
     socket: Socket;
@@ -73,14 +74,13 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     };
 
     return (
-        <div className="flex flex-col p-4 h-full w-full max-w-2xl mx-auto relative z-10">
+        <div className="flex flex-col p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10">
             <PlayerHeader
                 name={me?.name || name}
                 avatar={me?.avatar || 'cyber-blue'}
                 avatarStyle={me?.avatarStyle || 'avataaars'}
                 score={me?.score || 0}
                 rank={status === 'FINAL_SCORE' ? myRank : undefined}
-                onLeave={leaveGame}
             />
 
             <div className="flex-1 flex flex-col justify-start">
@@ -127,7 +127,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                 )}
             </div>
 
-
+            <PlayerFooter onLeave={leaveGame} />
         </div>
     );
 }

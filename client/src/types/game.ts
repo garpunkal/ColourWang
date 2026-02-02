@@ -10,6 +10,12 @@ export interface Player {
     stealCardUsed: boolean;
     disabledIndexes?: number[];
     avatarStyle?: string;
+    streak: number;
+    answeredAt: number | null;
+    isFastestFinger?: boolean;
+    roundScore: number;
+    streakPoints: number;
+    fastestFingerPoints: number;
 }
 
 export interface Question {
@@ -36,4 +42,7 @@ export interface GameState {
     soundEnabled?: boolean;
     musicEnabled?: boolean;
     bgmTrack?: string;
+    streaksEnabled: boolean;
+    fastestFingerEnabled: boolean;
+    accessibleLabels?: boolean;
 }

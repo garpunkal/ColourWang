@@ -4,7 +4,24 @@ import { games } from '../game/gamesMap';
 import { getShuffledQuestions, removeQuestionByText } from '../utils/questionLoader';
 
 import { generateCode } from '../utils/generateCode';
-import { GameState } from '../models/gameState';
+interface GameState {
+  code: string;
+  players: Player[];
+  status: 'LOBBY' | 'COUNTDOWN' | 'QUESTION' | 'RESULT' | 'FINAL_SCORE';
+  currentQuestionIndex: number;
+  questions: any[];
+  timerDuration?: number;
+  resultDuration?: number;
+  lobbyDuration?: number;
+  jokersEnabled?: boolean;
+  soundEnabled?: boolean;
+  musicEnabled?: boolean;
+  bgmTrack?: string;
+  hostSocketId?: string;
+  streaksEnabled?: boolean;
+  fastestFingerEnabled?: boolean;
+  accessibleLabels?: boolean;
+}
 import { Player } from '../models/player';
 
 // Available avatar colors
@@ -52,7 +69,7 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack } = payload;
+      const { rounds, timer, resultDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels } = payload;
       const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
       // Use server-side shuffling for maximum variety
@@ -67,15 +84,27 @@ export function registerSocketHandlers(io: Server) {
         timerDuration: timer,
         resultDuration,
         jokersEnabled,
-        soundEnabled,
-        musicEnabled,
-        bgmTrack,
-        hostSocketId: socket.id
+        soundEnabled: soundEnabled ?? true,
+        musicEnabled: musicEnabled ?? true,
+        bgmTrack: bgmTrack || 'Casino Royal.mp3',
+        streaksEnabled: streaksEnabled ?? true,
+        fastestFingerEnabled: fastestFingerEnabled ?? true,
+        accessibleLabels: accessibleLabels ?? false,
       };
       games.set(code, game);
       socket.join(code);
       socket.emit('game-created', game);
       console.log(`Game created: ${code} with ${finalQuestions.length} questions. First question: ${finalQuestions[0]?.question}`);
+    });
+
+    socket.on('update-bgm', ({ code, track }) => {
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
+      if (game) {
+        game.bgmTrack = track;
+        io.to(normalizedCode).emit('game-status-changed', game);
+        console.log(`[BGM] Game ${normalizedCode} BGM updated to: ${track}`);
+      }
     });
 
     socket.on('use-steal-card', (payload: { code: string }) => {
@@ -108,7 +137,7 @@ export function registerSocketHandlers(io: Server) {
 
     socket.on('join-game', ({ code, name, avatar, avatarStyle }) => {
       const game = games.get(code.toUpperCase());
-      if (game && game.status === 'LOBBY') {
+      if (game && game.status !== 'FINAL_SCORE') {
         // Check for maximum players
         if (game.players.length >= 10) {
           socket.emit('error', 'Game is full (maximum 10 players)');
@@ -130,7 +159,13 @@ export function registerSocketHandlers(io: Server) {
           isCorrect: false,
           stealCardValue: Math.floor(Math.random() * 8) + 1, // 1-8
           stealCardUsed: false,
-          disabledIndexes: []
+          disabledIndexes: [],
+          streak: 0,
+          answeredAt: null,
+          isFastestFinger: false,
+          roundScore: 0,
+          streakPoints: 0,
+          fastestFingerPoints: 0
         };
         game.players.push(player);
         socket.join(code.toUpperCase());
@@ -139,7 +174,8 @@ export function registerSocketHandlers(io: Server) {
           ...p,
           stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
           stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
-          disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : []
+          disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+          streak: typeof p.streak === 'number' ? p.streak : 0
         }));
         // Debug: print all players before emitting joined-game
         console.log('[DEBUG] joined-game emit, players:', JSON.stringify(game.players, null, 2));
@@ -172,7 +208,12 @@ export function registerSocketHandlers(io: Server) {
             ...p,
             stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
             stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
-            disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : []
+            disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+            streak: typeof p.streak === 'number' ? p.streak : 0,
+            answeredAt: typeof p.answeredAt === 'number' ? p.answeredAt : null,
+            roundScore: 0,
+            streakPoints: 0,
+            fastestFingerPoints: 0
           }));
           // Debug: print all players before emitting joined-game
           console.log('[DEBUG] rejoin joined-game emit, players:', JSON.stringify(game.players, null, 2));
@@ -220,16 +261,52 @@ export function registerSocketHandlers(io: Server) {
         game.status = 'RESULT';
         const currentQuestion = game.questions[game.currentQuestionIndex];
         let anyCorrect = false;
+
         game.players.forEach(p => {
+          // Reset per-round points
+          p.roundScore = 0;
+          p.streakPoints = 0;
+          p.fastestFingerPoints = 0;
+
           const correct = currentQuestion?.correctAnswers || currentQuestion?.correctColors;
           const isCorrect = compareAnswers(p.lastAnswer, correct);
           p.isCorrect = isCorrect;
+
           if (isCorrect) {
-            p.score += 10;
+            let points = 10;
+            if (game.streaksEnabled !== false) {
+              p.streak = (p.streak || 0) + 1;
+              if (p.streak >= 3) {
+                p.streakPoints = 5; // Fixed 1.5x of 10 is 5 bonus points
+                points += p.streakPoints;
+              }
+            } else {
+              p.streak = 0;
+            }
+            p.roundScore = points;
+            p.score += points;
             anyCorrect = true;
+          } else {
+            p.streak = 0;
           }
+          p.isFastestFinger = false;
         });
-        // No pot logic
+
+        // Award Fastest Finger Bonus
+        if (game.fastestFingerEnabled !== false && anyCorrect) {
+          const correctPlayers = game.players.filter(p => p.isCorrect && p.answeredAt !== null);
+          if (correctPlayers.length > 0) {
+            const fastest = correctPlayers.reduce((prev, curr) =>
+              (prev.answeredAt! < curr.answeredAt!) ? prev : curr
+            );
+            fastest.fastestFingerPoints = 5;
+            fastest.roundScore += 5;
+            fastest.score += 5;
+            fastest.isFastestFinger = true;
+            console.log(`[BONUS] ${fastest.name} got the Fastest Finger Bonus! (+5)`);
+          }
+        }
+
         io.to(normalizedCode).emit('game-status-changed', game);
       }
     });
@@ -243,6 +320,7 @@ export function registerSocketHandlers(io: Server) {
         const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
           player.lastAnswer = answers;
+          player.answeredAt = answers.length > 0 ? Date.now() : null;
           // Handle STEAL card usage
           if (useStealCard && !player.stealCardUsed) {
             player.stealCardUsed = true;
@@ -261,17 +339,13 @@ export function registerSocketHandlers(io: Server) {
               }
             });
             io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
-            // Debug: print sockets in the room before emitting
-            const room = io.sockets.adapter.rooms.get(normalizedCode);
-            const socketsInRoom = room ? Array.from(room) : [];
-            console.log(`[DEBUG] Emitting 'steal-card-used' to room: ${normalizedCode}, sockets:`, socketsInRoom);
-            io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
           }
           // Emit player-answered event to update UI
           io.to(normalizedCode).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
         }
       }
     });
+
 
     socket.on('next-question', (code) => {
       const normalizedCode = code.toUpperCase();
@@ -283,6 +357,8 @@ export function registerSocketHandlers(io: Server) {
           p.lastAnswer = null;
           p.isCorrect = false;
           p.disabledIndexes = [];
+          p.answeredAt = null;
+          p.isFastestFinger = false;
         });
 
         if (game.currentQuestionIndex >= game.questions.length) {
@@ -329,7 +405,7 @@ export function registerSocketHandlers(io: Server) {
           p.isCorrect = false;
           p.stealCardUsed = false;
           p.disabledIndexes = [];
-          // Optionally randomize stealCardValue again
+          p.streak = 0;
           p.stealCardValue = Math.floor(Math.random() * 8) + 1;
         });
         // Optionally, you may want to reshuffle or reload questions if needed
@@ -374,7 +450,7 @@ export function registerSocketHandlers(io: Server) {
       // Return list of active game codes in LOBBY status
       const activeGames: string[] = [];
       games.forEach((game, code) => {
-        if (game.status === 'LOBBY') {
+        if (game.status !== 'FINAL_SCORE') {
           activeGames.push(code);
         }
       });

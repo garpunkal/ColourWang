@@ -10,4 +10,10 @@ export interface Player {
     stealCardUsed: boolean; // Has the STEAL card been used?
     disabledIndexes?: number[]; // Indexes of options currently disabled for this player
     avatarStyle?: string;
+    streak: number;
+    answeredAt: number | null;
+    isFastestFinger?: boolean;
+    roundScore: number;
+    streakPoints: number;
+    fastestFingerPoints: number;
 }
