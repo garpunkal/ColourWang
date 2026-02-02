@@ -18,22 +18,12 @@ export function HostSetupScreen({ socket }: Props) {
     const [jokers, setJokers] = useState(true);
     const [playSounds, setPlaySounds] = useState(true);
     const [musicEnabled, setMusicEnabled] = useState(true);
-    const [bgmList, setBgmList] = useState<string[]>([]);
-    const [selectedBgm, setSelectedBgm] = useState<string>('');
+    const selectedBgm = 'Casino Royal.mp3';
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
     const isConnected = useSocketConnection(socket);
 
-    useEffect(() => {
-        fetch('/api/bgm-list')
-            .then(res => res.json())
-            .then((data: string[]) => {
-                setBgmList(data);
-                if (data.length > 0) setSelectedBgm(data[0]);
-            })
-            .catch(err => console.error("Failed to fetch BGM list", err));
-    }, []);
 
     useEffect(() => {
         setTimeout(() => setLoadingQuestions(true), 0);
@@ -217,20 +207,6 @@ export function HostSetupScreen({ socket }: Props) {
                                         {musicEnabled ? 'ON' : 'OFF'}
                                     </span>
 
-                                    {musicEnabled && bgmList.length > 0 && (
-                                        <div className="mt-3 md:mt-4 w-full flex items-center bg-black/40 rounded-2xl" style={{ margin: '12px 0' }} onClick={(e) => e.stopPropagation()}>
-                                            <select
-                                                value={selectedBgm}
-                                                onChange={(e) => setSelectedBgm(e.target.value)}
-                                                className="w-full bg-black/80 text-white text-xs md:text-sm px-4 py-2 md:px-5 md:py-3 rounded-xl border border-white/20 outline-none hover:bg-black transition-colors cursor-pointer shadow-sm focus:ring-2 focus:ring-cyan-400 appearance-none"
-                                                style={{ backgroundPosition: 'right 1rem center' }}
-                                            >
-                                                {bgmList.map(bgm => (
-                                                    <option key={bgm} value={bgm}>{bgm.replace('.mp3', '')}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
                                 </div>
                                 <div className={`w-10 h-6 md:w-14 md:h-8 rounded-full p-1 transition-colors duration-300 ${musicEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'} shrink-0 ml-2 md:ml-0`}>
                                     <motion.div

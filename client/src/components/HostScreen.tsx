@@ -293,6 +293,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     code={code}
                     playerCount={players.length}
                     compact={true}
+                    musicEnabled={gameState.musicEnabled}
                 />
             )}
 

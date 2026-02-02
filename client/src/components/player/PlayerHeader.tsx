@@ -7,9 +7,10 @@ interface Props {
     avatarStyle?: string;
     score: number;
     rank?: number;
+    onLeave?: () => void;
 }
 
-export function PlayerHeader({ name, avatar, avatarStyle, score, rank }: Props) {
+export function PlayerHeader({ name, avatar, avatarStyle, score, rank, onLeave }: Props) {
     return (
         <motion.div
             initial={{ y: -20, opacity: 0 }}
@@ -20,22 +21,41 @@ export function PlayerHeader({ name, avatar, avatarStyle, score, rank }: Props) 
                 <Avatar seed={avatar} style={avatarStyle} className="w-14! h-14!" />
                 <div className="flex flex-col min-w-0">
                     <span className="font-black text-2xl tracking-tight leading-none uppercase italic bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent truncate max-w-45 pr-4">{name}</span>
-
                 </div>
             </div>
-            <div className="flex flex-col items-end mr-4">
-                <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-1 opacity-50 italic">
-                    {rank ? 'Ranking' : 'Points'}
-                </span>
-                <span
-                    className="text-4xl font-black glow-text leading-none font-mono tracking-tighter text-white"
 
-                >
-                    {rank ? `#${rank}` : (score || 0)}
-                </span>
+            <div className="flex items-center gap-6">
+                <div className="flex flex-col items-end">
+                    <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-1 opacity-50 italic">
+                        {rank ? 'Ranking' : 'Points'}
+                    </span>
+                    <span className="text-4xl font-black glow-text leading-none font-mono tracking-tighter text-white">
+                        {rank ? `#${rank}` : (score || 0)}
+                    </span>
+                </div>
+
+                {onLeave && (
+                    <button
+                        onClick={onLeave}
+                        className="w-10 h-10 flex items-center justify-center glass-panel rounded-full text-white/40 hover:text-white hover:bg-error transition-all shadow-xl border border-white/10 active:scale-90 group"
+                        title="Leave Game"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20" height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="transition-transform group-hover:rotate-90"
+                        >
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                )}
             </div>
-
-
         </motion.div >
     );
 }

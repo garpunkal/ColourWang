@@ -11,16 +11,23 @@ interface Props {
     currentQuestion?: Question;
 }
 
+import { audioManager } from '../../utils/audioManager';
+
 export function PlayerResultScreen({ player, gameState, currentQuestion }: Props) {
     const question = currentQuestion || gameState.questions[gameState.currentQuestionIndex];
     const [timeLeft, setTimeLeft] = useState(30);
 
     useEffect(() => {
+        // Play success sound if correct
+        if (player.isCorrect) {
+            audioManager.playSuccess();
+        }
+
         const interval = setInterval(() => {
             setTimeLeft((prev) => (prev <= 0 ? 0 : prev - 1));
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [player.isCorrect]);
 
     // Debug render
     if (typeof window !== 'undefined') {
@@ -52,8 +59,10 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
         >
             {/* Background Glow */}
             <div
-                className="absolute inset-x-0 top-1/4 h-64 blur-[120px] opacity-20 transition-all duration-1000"
-                style={{ backgroundColor: themeColor }}
+                className="fixed inset-0 blur-[150px] opacity-20 pointer-events-none -z-10 transition-all duration-1000"
+                style={{
+                    background: `radial-gradient(circle at 50% 30%, ${themeColor}, transparent 70%)`
+                }}
             />
 
             <div className="relative z-10 w-full flex flex-col items-center gap-10">
@@ -137,7 +146,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                             ))}
                         </div>
                     </motion.div>
-                </div>           
+                </div>
 
                 {/* Next Question Timer Badge */}
                 <motion.div

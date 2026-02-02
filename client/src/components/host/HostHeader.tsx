@@ -8,6 +8,7 @@ interface Props {
     playerCount: number;
     compact?: boolean;
     pot?: number;
+    musicEnabled?: boolean;
 }
 
 const BGM_TRACKS = [
@@ -19,14 +20,14 @@ const BGM_TRACKS = [
 ];
 
 
-export function HostHeader({ code, playerCount, compact = false }: Props) {
+export function HostHeader({ code, playerCount, compact = false, musicEnabled = true }: Props) {
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBGM, setSelectedBGM] = useState('');
     const joinUrl = `${window.location.origin}?code=${code}`;
 
     return (
         <>
-            <div className={`flex flex-col md:grid grid-cols-3 items-center md:items-center relative z-10 gap-8 w-full transition-all duration-500 ${compact ? 'mb-8' : 'mb-8'}`}> 
+            <div className={`flex flex-col md:grid grid-cols-3 items-center md:items-center relative z-10 gap-8 w-full transition-all duration-500 ${compact ? 'mb-8' : 'mb-8'}`}>
 
                 {/* Join Info */}
                 <div className={`
@@ -60,24 +61,25 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
                         `}>
                             {code}
                         </div>
-                       
+
                         {/* BGM Selector */}
-                        <div className="">
-                            
-                            <select
-                                id="bgm-select"
-                                value={selectedBGM}
-                                onChange={e => {
-                                    setSelectedBGM(e.target.value);
-                                    audioManager.playBGM(e.target.value);
-                                }}
-                                className="rounded pr-2 py-1 text-white/35 text-xs"
-                            >
-                                {BGM_TRACKS.map(track => (
-                                    <option key={track.value} value={track.value} className="text-black">{track.label}</option>
-                                ))}
-                            </select>
-                        </div>
+                        {musicEnabled && (
+                            <div className="">
+                                <select
+                                    id="bgm-select"
+                                    value={selectedBGM}
+                                    onChange={e => {
+                                        setSelectedBGM(e.target.value);
+                                        audioManager.playBGM(e.target.value);
+                                    }}
+                                    className="rounded pr-2 py-1 text-white/35 text-xs"
+                                >
+                                    {BGM_TRACKS.map(track => (
+                                        <option key={track.value} value={track.value} className="text-black">{track.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -117,8 +119,8 @@ export function HostHeader({ code, playerCount, compact = false }: Props) {
                             className="rounded w-80 h-80"
                             level="L"
                             marginSize={2}
-                        />                     
-                        
+                        />
+
                     </div>
                 </div>
             )}

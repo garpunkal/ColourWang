@@ -43,8 +43,10 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
         >
             {/* Background Atmosphere */}
             <div
-                className="absolute inset-x-0 top-1/4 h-80 blur-[150px] opacity-20 transition-all duration-1000"
-                style={{ backgroundColor: themeColor }}
+                className="fixed inset-0 blur-[150px] opacity-20 pointer-events-none -z-10 transition-all duration-1000"
+                style={{
+                    background: `radial-gradient(circle at 50% 30%, ${themeColor}, transparent 70%)`
+                }}
             />
 
             <div className="relative z-10 w-full flex flex-col items-center gap-12">

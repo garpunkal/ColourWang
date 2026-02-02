@@ -37,38 +37,25 @@ class AudioManager {
 
         const t = this.audioContext.currentTime;
 
-        // Card Flip - Single crisp snap
-        const bufferSize = this.audioContext.sampleRate * 0.1; // 100ms
-        const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
-        const data = buffer.getChannelData(0);
-
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1);
-        }
-
-        const noise = this.audioContext.createBufferSource();
-        noise.buffer = buffer;
-
-        // Bandpass filter to create the "paper" snap tone
-        const filter = this.audioContext.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(2000, t);
-        filter.Q.value = 0.5;
-
-        // Slight frequency sweep
-        filter.frequency.linearRampToValueAtTime(1200, t + 0.08);
-
+        // Soft melodic ping instead of sharp snap
+        const osc = this.audioContext.createOscillator();
         const gain = this.audioContext.createGain();
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.8, t + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
 
-        noise.connect(filter);
-        filter.connect(gain);
+        osc.type = 'sine';
+        // Gentle frequency (330Hz = E4), slightly shifts up as time runs out (last 5s)
+        const freq = 330 + (remaining && remaining <= 5 ? (5 - remaining) * 20 : 0);
+        osc.frequency.setValueAtTime(freq, t);
+
+        // Quick but soft envelope
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.1, t + 0.01); // Toned down volume
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2); // Smooth decay
+
+        osc.connect(gain);
         gain.connect(this.audioContext.destination);
 
-        noise.start(t);
-        noise.stop(t + 0.1);
+        osc.start(t);
+        osc.stop(t + 0.2);
     }
 
     public playSelect() {
@@ -155,23 +142,29 @@ class AudioManager {
         this.init();
         if (!this.audioContext) return;
 
-        const osc = this.audioContext.createOscillator();
-        const gain = this.audioContext.createGain();
+        const t = this.audioContext.currentTime;
+        // F Major 7 chord: F4, A4, C5, E5 - soft and uplifting
+        const freqs = [349.23, 440.00, 523.25, 659.25];
 
-        osc.connect(gain);
-        gain.connect(this.audioContext.destination);
+        freqs.forEach((f, i) => {
+            const osc = this.audioContext!.createOscillator();
+            const gain = this.audioContext!.createGain();
 
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, this.audioContext.currentTime); // A4
-        osc.frequency.setValueAtTime(554.37, this.audioContext.currentTime + 0.1); // C#5
-        osc.frequency.setValueAtTime(659.25, this.audioContext.currentTime + 0.2); // E5
+            osc.type = 'sine';
+            osc.frequency.value = f;
 
-        gain.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-        gain.gain.linearRampToValueAtTime(0.2, this.audioContext.currentTime + 0.3);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(this.audioContext!.destination);
 
-        osc.start();
-        osc.stop(this.audioContext.currentTime + 0.6);
+            const start = t + (i * 0.02);
+
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.08, start + 0.05); // Very soft
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 1.0);
+
+            osc.start(start);
+            osc.stop(start + 1.0);
+        });
     }
 
     public playBGM(track?: string) {
@@ -199,7 +192,7 @@ class AudioManager {
             }
         });
 
-        this.bgmAudio.play().catch(e => {
+        this.bgmAudio.play().catch(() => {
             console.log("Autoplay blocked");
         });
     }
@@ -289,16 +282,16 @@ class AudioManager {
         filter.connect(gain);
         gain.connect(this.audioContext.destination);
 
-        // Filter sweep (Bandpass for "whoosh" air sound)
+        // Filter sweep (Bandpass for "whoosh" air sound) - Lowered frequency for "calmer" feel
         filter.type = 'bandpass';
-        filter.Q.value = 1;
-        filter.frequency.setValueAtTime(400, t);
-        filter.frequency.exponentialRampToValueAtTime(3000, t + 0.2); // Woosh up
-        filter.frequency.exponentialRampToValueAtTime(600, t + 0.4);
+        filter.Q.value = 0.8;
+        filter.frequency.setValueAtTime(300, t);
+        filter.frequency.exponentialRampToValueAtTime(1500, t + 0.2); // Woosh up - less piercing
+        filter.frequency.exponentialRampToValueAtTime(400, t + 0.4);
 
-        // Volume Envelope
+        // Volume Envelope - Toned down peak
         gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.4, t + 0.2); // Peak
+        gain.gain.linearRampToValueAtTime(0.2, t + 0.2); // Peak (was 0.4)
         gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5); // Tail
 
         noise.start(t);

@@ -80,7 +80,10 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
         >
             {/* Background Atmosphere */}
             <div
-                className="absolute left-1/2 top-40 -translate-x-1/2 w-full h-150 blur-[160px] opacity-20 -z-10 bg-color-blue"
+                className="fixed inset-0 blur-[160px] opacity-15 -z-10 pointer-events-none"
+                style={{
+                    background: `radial-gradient(circle at 50% 40%, var(--color-blue), transparent 70%)`
+                }}
             />
 
             <div className="flex flex-col items-center text-center">
@@ -202,25 +205,25 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 {/* Navigation Button */}
                 <div className="flex flex-col items-center gap-6 pb-20">
                     <motion.button
-                        whileHover={{ scale: 1.05, y: -4 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={onNextQuestion}
-                        className="btn btn-primary relative group py-8 px-24 rounded-[3.5rem] shadow-[0_30px_60px_-15px_rgba(0,229,255,0.4)] overflow-hidden"
+                        className="btn btn-primary relative group py-3 px-8 md:py-4 md:px-10 rounded-2xl shadow-xl overflow-hidden"
                     >
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <div className="flex items-center gap-8 relative z-10">
+                        <div className="flex items-center gap-4 md:gap-6 relative z-10">
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-xs font-black uppercase tracking-[0.4em] opacity-60 mb-1">Coming up</span>
-                                <span className="text-3xl md:text-5xl font-black italic uppercase tracking-widest">
+                                <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mb-0.5">Coming up</span>
+                                <span className="text-lg md:text-xl font-black italic uppercase tracking-wider">
                                     {isLastQuestion ? 'The Results' : 'Next Round'}
                                 </span>
                             </div>
-                            <div className="w-px h-12 bg-white/20" />
-                            <div className="flex flex-col items-center">
-                                <span className="text-4xl font-black font-mono tracking-tighter tabular-nums">{timeLeft}</span>
-                                <span className="text-[10px] font-black uppercase opacity-40">SEC</span>
+                            <div className="w-px h-6 bg-white/20" />
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl md:text-2xl font-black font-mono tracking-tighter tabular-nums">{timeLeft}</span>
+                                <span className="text-[10px] font-black uppercase opacity-40">S</span>
                             </div>
-                            <Play fill="currentColor" size={40} className="ml-2 group-hover:translate-x-2 transition-transform" />
+                            <Play fill="currentColor" size={20} className="ml-1 group-hover:translate-x-1 transition-transform" />
                         </div>
                     </motion.button>
                 </div>

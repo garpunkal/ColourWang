@@ -81,10 +81,12 @@
 
 	font-family: "Outfit", "Inter", system-ui, sans-serif;
 }
+
 .text-hero {
 	font-size: clamp(3rem, 7vw, 6rem);
 	line-height: 1.1;
 }
+
 .text-hero-sm {
 	font-size: clamp(2rem, 5vw, 4rem);
 	line-height: 1.2;
@@ -131,18 +133,22 @@ button {
 	right: 0;
 	bottom: 0;
 	z-index: -1;
-	overflow: hidden;
 	background: var(--background);
+	/* Removed overflow: hidden to prevent clipping of soft blur at edges */
 }
 
 .blob {
 	position: absolute;
-	width: 600px;
-	height: 600px;
+	width: 800px;
+	/* Larger */
+	height: 800px;
+	/* Larger */
 	border-radius: 50%;
-	filter: blur(80px);
-	opacity: 0.4;
-	animation: move 20s infinite alternate;
+	filter: blur(140px);
+	/* Much softer */
+	opacity: 0.3;
+	/* Subtle */
+	animation: move 25s infinite alternate;
 	will-change: transform;
 	transform: translate3d(0, 0, 0);
 }
@@ -202,9 +208,11 @@ button {
 	0% {
 		transform: translate3d(0, 0, 0) scale(1);
 	}
+
 	50% {
 		transform: translate3d(80px, 60px, 0) scale(1.1);
 	}
+
 	100% {
 		transform: translate3d(0, 0, 0) scale(1);
 	}
@@ -215,9 +223,11 @@ button {
 		0% {
 			transform: translate3d(0, 0, 0) scale(1);
 		}
+
 		50% {
 			transform: translate3d(20px, 15px, 0) scale(1.02);
 		}
+
 		100% {
 			transform: translate3d(0, 0, 0) scale(1);
 		}
@@ -228,18 +238,20 @@ button {
 	position: absolute;
 	inset: 0;
 	background-image:
-		radial-gradient(at 0% 0%, hsla(190, 100%, 50%, 0.15) 0, transparent 50%),
-		radial-gradient(at 100% 0%, hsla(280, 100%, 50%, 0.15) 0, transparent 50%),
-		radial-gradient(at 100% 100%, hsla(330, 100%, 50%, 0.15) 0, transparent 50%),
-		radial-gradient(at 0% 100%, hsla(30, 100%, 50%, 0.15) 0, transparent 50%);
+		radial-gradient(at 0% 0%, hsla(190, 100%, 50%, 0.15) 0, transparent 100%),
+		radial-gradient(at 100% 0%, hsla(280, 100%, 50%, 0.15) 0, transparent 100%),
+		radial-gradient(at 100% 100%, hsla(330, 100%, 50%, 0.15) 0, transparent 100%),
+		radial-gradient(at 0% 100%, hsla(30, 100%, 50%, 0.15) 0, transparent 100%);
 	animation: mesh-shift 15s ease-in-out infinite;
 }
 
 @keyframes mesh-shift {
+
 	0%,
 	100% {
 		opacity: 0.8;
 	}
+
 	50% {
 		opacity: 1;
 	}
@@ -275,46 +287,55 @@ button {
 	animation-delay: 0s;
 	animation-duration: 15s;
 }
+
 .particle:nth-child(2) {
 	left: 20%;
 	animation-delay: -2s;
 	animation-duration: 18s;
 }
+
 .particle:nth-child(3) {
 	left: 30%;
 	animation-delay: -4s;
 	animation-duration: 22s;
 }
+
 .particle:nth-child(4) {
 	left: 40%;
 	animation-delay: -6s;
 	animation-duration: 20s;
 }
+
 .particle:nth-child(5) {
 	left: 50%;
 	animation-delay: -8s;
 	animation-duration: 16s;
 }
+
 .particle:nth-child(6) {
 	left: 60%;
 	animation-delay: -10s;
 	animation-duration: 19s;
 }
+
 .particle:nth-child(7) {
 	left: 70%;
 	animation-delay: -12s;
 	animation-duration: 21s;
 }
+
 .particle:nth-child(8) {
 	left: 80%;
 	animation-delay: -14s;
 	animation-duration: 17s;
 }
+
 .particle:nth-child(9) {
 	left: 90%;
 	animation-delay: -16s;
 	animation-duration: 23s;
 }
+
 .particle:nth-child(10) {
 	left: 15%;
 	animation-delay: -18s;
@@ -326,12 +347,15 @@ button {
 		transform: translate3d(0, 100vh, 0) scale(0);
 		opacity: 0;
 	}
+
 	10% {
 		opacity: 0.3;
 	}
+
 	90% {
 		opacity: 0.3;
 	}
+
 	100% {
 		transform: translate3d(100px, -100px, 0) scale(1);
 		opacity: 0;
@@ -477,10 +501,12 @@ button {
 }
 
 @keyframes logo-float {
+
 	0%,
 	100% {
 		transform: translateY(0px);
 	}
+
 	50% {
 		transform: translateY(-10px);
 	}
@@ -496,6 +522,7 @@ button {
 }
 
 @keyframes glow-pulse {
+
 	0%,
 	100% {
 		text-shadow:
@@ -503,6 +530,7 @@ button {
 			0 0 20px currentColor,
 			0 0 30px currentColor;
 	}
+
 	50% {
 		text-shadow:
 			0 0 20px currentColor,
@@ -655,11 +683,13 @@ button {
 
 /* Animations */
 @keyframes pulse-glow {
+
 	0%,
 	100% {
 		opacity: 0.5;
 		filter: blur(30px);
 	}
+
 	50% {
 		opacity: 0.8;
 		filter: blur(50px);
@@ -674,6 +704,7 @@ button {
 	0% {
 		background-position: -1000px 0;
 	}
+
 	100% {
 		background-position: 1000px 0;
 	}
@@ -689,15 +720,18 @@ button {
 ::-webkit-scrollbar {
 	width: 12px;
 }
+
 ::-webkit-scrollbar-track {
 	background: var(--background);
 	border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
 	background: linear-gradient(180deg, var(--color-purple), var(--color-pink));
 	border-radius: 10px;
 	border: 2px solid var(--background);
 }
+
 ::-webkit-scrollbar-thumb:hover {
 	background: linear-gradient(180deg, var(--color-blue), var(--color-purple));
 	box-shadow: 0 0 10px var(--primary-glow);
