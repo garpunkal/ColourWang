@@ -5,12 +5,13 @@ import { io, Socket } from 'socket.io-client';
 import type { GameState } from './types/game';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSocketConnection } from './hooks/useSocketConnection';
+import { useSocketConnection, useReconnectionStatus } from './hooks/useSocketConnection';
 import { Monitor, Smartphone, WifiOff } from 'lucide-react';
 import { audioManager } from './utils/audioManager';
 import { getNextTrack } from './config/musicConfig';
 import socketConfig from './config/socketConfig.json';
 import { Logo } from './components/Logo';
+import { ReconnectionBanner } from './components/ReconnectionBanner';
 
 // Lazy load role-specific screens to optimize bundle size
 const HostScreen = lazy(() => import('./components/HostScreen.tsx'));
@@ -39,6 +40,7 @@ function App() {
   const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>(initialRole)
   const [gameState, setGameState] = useState<GameState | null>(null)
   const isConnected = useSocketConnection(socket);
+  const reconnectionStatus = useReconnectionStatus(socket);
 
   useSocketGameState(socket, setGameState);
 
@@ -107,6 +109,10 @@ function App() {
     >
 
       <AnimatedBackground />
+      <ReconnectionBanner 
+        isReconnecting={reconnectionStatus.isReconnecting} 
+        attempt={reconnectionStatus.attempt} 
+      />
 
       <AnimatePresence mode="wait">
         {role === 'NONE' ? (

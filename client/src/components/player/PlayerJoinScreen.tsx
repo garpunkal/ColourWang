@@ -141,6 +141,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         if (name && code.length === 4) {
             setIsJoining(true);
             console.log('Emitting join-game:', { name, avatar, avatarStyle, code: code.toUpperCase() });
+            
+            // Save player name for potential reconnection
+            localStorage.setItem('cw_playerName', name);
+            
             socket.emit('join-game', { name, avatar, avatarStyle, code: code.toUpperCase() });
 
             // Timeout to reset loading if no response

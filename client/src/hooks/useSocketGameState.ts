@@ -35,6 +35,7 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
     const handleRejoin = () => {
       const savedId = localStorage.getItem('cw_playerId');
       const savedCode = localStorage.getItem('cw_gameCode');
+      const savedName = localStorage.getItem('cw_playerName');
       const hostCode = localStorage.getItem('cw_hostCode');
 
       if (hostCode) {
@@ -42,7 +43,7 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
         socket.emit('rejoin-game', { code: hostCode, isHost: true });
       } else if (savedId && savedCode) {
         console.log('Attempting to rejoin session...', { savedCode, savedId });
-        socket.emit('rejoin-game', { code: savedCode, playerId: savedId });
+        socket.emit('rejoin-game', { code: savedCode, playerId: savedId, name: savedName });
       }
     };
 

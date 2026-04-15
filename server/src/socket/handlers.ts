@@ -225,48 +225,86 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('rejoin-game', ({ code, playerId, isHost }) => {
-      const game = games.get(code.toUpperCase());
-      if (game) {
-        if (isHost) {
-          game.hostSocketId = socket.id;
-          socket.join(code.toUpperCase());
-          socket.emit('joined-game', game);
-          logger.info(`Host rejoined game ${code}`);
-          return;
-        }
+    socket.on('rejoin-game', ({ code, playerId, name, isHost }) => {
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
+      
+      if (!game) {
+        socket.emit('error', 'Game not found');
+        logger.warn(`Rejoin failed: Game ${normalizedCode} not found`);
+        return;
+      }
 
-        const player = game.players.find(p => p.id === playerId);
-        if (player) {
-          socket.join(code.toUpperCase());
-          // Patch the players array in the game object itself
-          game.players = game.players.map(p => ({
-            ...p,
-            socketId: p.id === playerId ? socket.id : p.socketId, // Update socketId for the rejoining player
-            stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
-            stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
-            disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
-            streak: typeof p.streak === 'number' ? p.streak : 0,
-            answeredAt: typeof p.answeredAt === 'number' ? p.answeredAt : null,
+      if (isHost) {
+        game.hostSocketId = socket.id;
+        socket.join(normalizedCode);
+        socket.emit('joined-game', game);
+        logger.info(`Host rejoined game ${normalizedCode}`);
+        return;
+      }
+
+      // Try to find existing player by ID
+      let player = game.players.find(p => p.id === playerId);
+      
+      if (player) {
+        // Update socket ID for reconnecting player
+        player.socketId = socket.id;
+        socket.join(normalizedCode);
+        
+        // Patch the players array to ensure all fields exist
+        game.players = game.players.map(p => ({
+          ...p,
+          socketId: p.id === playerId ? socket.id : p.socketId,
+          stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
+          stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+          disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+          streak: typeof p.streak === 'number' ? p.streak : 0,
+          answeredAt: typeof p.answeredAt === 'number' ? p.answeredAt : null,
+          roundScore: 0,
+          streakPoints: 0,
+          fastestFingerPoints: 0
+        }));
+        
+        logger.info(`Player ${player.name} (${playerId}) rejoined game ${normalizedCode}`);
+        socket.emit('joined-game', { game, playerId });
+        
+        if (game.status === 'LOBBY') {
+          io.to(normalizedCode).emit('player-joined', game.players);
+        }
+      } else {
+        // Player not found - possibly session expired or game was reset
+        // Try to add them as a new player if game is still in lobby
+        if (game.status === 'LOBBY' && name) {
+          const takenCombinations = game.players.map(p => ({ avatar: p.avatar, avatarStyle: p.avatarStyle }));
+          const newAvatar = getNextAvailableAvatar(takenCombinations, 'avataaars');
+          
+          const newPlayer: Player = {
+            id: playerId || randomUUID(),
+            name: name,
+            score: 0,
+            avatar: newAvatar,
+            avatarStyle: 'avataaars',
+            socketId: socket.id,
+            currentAnswer: null,
+            answeredAt: null,
+            stealCardValue: Math.floor(Math.random() * 8) + 1,
+            stealCardUsed: false,
+            disabledIndexes: [],
+            streak: 0,
             roundScore: 0,
             streakPoints: 0,
             fastestFingerPoints: 0
-          }));
-          // Debug: print all players before emitting joined-game
-          logger.debug('[DEBUG] rejoin joined-game emit, players:', JSON.stringify(game.players, null, 2));
-          // Send current game state and confirm identity
-          socket.emit('joined-game', { game, playerId });
-          if (game.status === 'LOBBY') {
-            // Debug: print all players before emitting player-joined
-            logger.debug('[DEBUG] rejoin player-joined emit, players:', JSON.stringify(game.players, null, 2));
-            io.to(code.toUpperCase()).emit('player-joined', game.players);
-          }
-          logger.info(`Player ${player.name} (${playerId}) rejoined game ${code}`);
+          };
+          
+          game.players.push(newPlayer);
+          socket.join(normalizedCode);
+          socket.emit('joined-game', { game, playerId: newPlayer.id });
+          io.to(normalizedCode).emit('player-joined', game.players);
+          logger.info(`New player ${name} joined via rejoin (game ${normalizedCode})`);
         } else {
-          socket.emit('error', 'Player session not found');
+          socket.emit('error', 'Player session not found and game has already started');
+          logger.warn(`Rejoin failed: Player ${playerId} not found in ${normalizedCode}`);
         }
-      } else {
-        socket.emit('error', 'Game not found');
       }
     });
 
