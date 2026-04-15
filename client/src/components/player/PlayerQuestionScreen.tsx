@@ -225,6 +225,30 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             <span className={`text-[8px] font-black opacity-40 ${timeLeft <= 5 ? 'text-error' : ''}`}>S</span>
                         </div>
                     </div>
+                    {gameState.streaksEnabled && me && me.streak > 0 && (
+                        <>
+                            <div className="w-px h-6 bg-white/10" />
+                            <motion.div 
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                className="flex flex-col items-center leading-none"
+                            >
+                                <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Streak</span>
+                                <motion.div 
+                                    className="flex items-center gap-1"
+                                    animate={me.streak >= 3 ? { scale: [1, 1.1, 1] } : {}}
+                                    transition={{ duration: 0.5, repeat: Infinity }}
+                                >
+                                    <span className={`text-lg font-black italic tracking-tighter ${me.streak >= 3 ? 'text-color-yellow' : 'text-color-orange'}`}>
+                                        {me.streak >= 3 ? '🔥' : '⚡'} {me.streak}
+                                    </span>
+                                    {me.streak >= 3 && (
+                                        <span className="text-[8px] font-black text-color-yellow opacity-80">×1.5</span>
+                                    )}
+                                </motion.div>
+                            </motion.div>
+                        </>
+                    )}
                 </div>
                 <h3 
                     className="text-xl md:text-4xl lg:text-5xl text-display text-display-gradient px-4 md:px-8 py-2 text-center max-w-4xl mx-auto"
