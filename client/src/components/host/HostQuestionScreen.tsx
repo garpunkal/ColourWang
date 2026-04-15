@@ -159,8 +159,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                     <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
                                 </div>
                                 <div className="flex flex-col items-start min-w-0 flex-1">
-                                    <span className="text-xl font-black uppercase italic truncate w-full" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
-                                    <span className="text-xs font-bold uppercase tracking-widest opacity-60">{isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
+                                    <span className="text-xl font-black uppercase italic truncate w-full text-left" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest opacity-60 text-left">{isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
                                 </div>
                                 {isAnswered && (
                                     <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 bg-success text-black rounded-full p-1">
