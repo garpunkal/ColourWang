@@ -257,6 +257,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         wordBreak: 'break-word',
                         overflowWrap: 'break-word'
                     }}
+                    role="heading"
+                    aria-level={1}
+                    aria-live="polite"
                 >
                     {currentQuestion.question}
                 </h3>
@@ -320,6 +323,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             disabled={selectedColors.length === 0 || timeLeft === 0}
                             className="w-full btn btn-primary py-3 md:py-8 text-xl md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic uppercase font-black tracking-widest shrink-0 shadow-lg"
                             style={{ boxShadow: `0 20px 40px -10px ${avatarColor}60` }}
+                            aria-label={`Submit answer - ${selectedColors.length} color${selectedColors.length !== 1 ? 's' : ''} selected`}
                         >
                             Submit
                         </motion.button>

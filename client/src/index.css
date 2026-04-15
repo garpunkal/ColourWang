@@ -777,3 +777,16 @@ button {
 	background: linear-gradient(180deg, var(--color-purple), var(--color-pink));
 	box-shadow: 0 0 8px var(--color-blue);
 }
+
+/* Screen Reader Only (Accessibility) */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

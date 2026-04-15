@@ -121,6 +121,9 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                             overflowWrap: 'break-word',
                             hyphens: 'auto'
                         }}
+                        role="heading"
+                        aria-level={1}
+                        aria-live="polite"
                     >
                         {currentQuestion.question}
                     </motion.h1>

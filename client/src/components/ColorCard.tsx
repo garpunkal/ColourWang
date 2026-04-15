@@ -85,6 +85,20 @@ export const ColorCard = memo(function ColorCard({
                 ${disabled ? 'cursor-not-allowed opacity-50' : ''}
             `}
             style={{ ...cardStyle, perspective: '1000px', willChange: 'transform, opacity' }}
+            role="button"
+            tabIndex={disabled ? -1 : 0}
+            aria-label={isStealCard 
+                ? `Steal card with value ${stealValue}` 
+                : `${getColorName(color)} color card${isSelected ? ', selected' : ''}${isCorrect ? ', correct answer' : ''}`
+            }
+            aria-pressed={isSelected}
+            aria-disabled={disabled}
+            onKeyDown={(e) => {
+                if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    onClick?.();
+                }
+            }}
         >
             {/* Card container */}
             <div className="relative w-full h-full">
