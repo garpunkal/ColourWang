@@ -3,6 +3,7 @@ import { Check } from 'lucide-react';
 import { getColorName } from '../config/gameConfig';
 import { memo } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
+import { hapticFeedback } from '../utils/hapticFeedback';
 
 interface ColorCardProps {
     color: string;
@@ -96,7 +97,13 @@ export const ColorCard = memo(function ColorCard({
             onKeyDown={(e) => {
                 if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
                     e.preventDefault();
+                    hapticFeedback.light();
                     onClick?.();
+                }
+            }}
+            onTouchStart={() => {
+                if (!disabled) {
+                    hapticFeedback.light();
                 }
             }}
         >

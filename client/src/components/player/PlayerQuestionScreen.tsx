@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { audioManager } from '../../utils/audioManager';
+import { hapticFeedback } from '../../utils/hapticFeedback';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import type { Socket } from 'socket.io-client';
@@ -32,6 +33,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const submitAnswer = useCallback(() => {
         if (gameState && selectedColors.length > 0) {
             setHasAnswered(true);
+            hapticFeedback.medium();
             socket.emit('submit-answer', {
                 code: gameState.code,
                 answers: selectedColors,
@@ -43,6 +45,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const toggleColour = (colour: string) => {
         if (hasAnswered) return;
         audioManager.playSelect();
+        hapticFeedback.light();
         setSelectedColors(prev =>
             prev.includes(colour)
                 ? prev.filter(c => c !== colour)
