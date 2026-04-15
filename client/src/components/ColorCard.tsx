@@ -137,6 +137,63 @@ export const ColorCard = memo(function ColorCard({
                     {/* Diagonal shine */}
                     <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-transparent" />
 
+                    {/* Colorblind accessibility patterns */}
+                    {colourblindMode && !isStealCard && (
+                        <div className="absolute inset-0 opacity-30 pointer-events-none">
+                            {getColorName(color) === 'red' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 20px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'blue' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 15px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'green' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 15px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'yellow' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.4) 2px, transparent 2px)',
+                                    backgroundSize: '15px 15px'
+                                }} />
+                            )}
+                            {getColorName(color) === 'orange' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 20px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'purple' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.4) 45deg, transparent 90deg)',
+                                    backgroundSize: '20px 20px'
+                                }} />
+                            )}
+                            {getColorName(color) === 'pink' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.4) 50%, transparent 50%)',
+                                    backgroundSize: '20px 20px'
+                                }} />
+                            )}
+                            {(getColorName(color) === 'black' || getColorName(color) === 'grey') && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.5) 5px, rgba(255,255,255,0.5) 10px)',
+                                }} />
+                            )}
+                            {getColorName(color) === 'white' && (
+                                <div className="absolute inset-0 border-4 border-black/20 border-dashed rounded-2xl" />
+                            )}
+                            {getColorName(color) === 'brown' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(255,255,255,0.4) 8px, rgba(255,255,255,0.4) 12px), repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(255,255,255,0.4) 8px, rgba(255,255,255,0.4) 12px)'
+                                }} />
+                            )}
+                        </div>
+                    )}
+
                     {/* Bottom-aligned color name or STEAL card overlay */}
                     {isStealCard ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
