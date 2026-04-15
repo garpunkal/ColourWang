@@ -61,8 +61,16 @@ function App() {
 
   // Clear URL params if we are on landing page to prevent "remembering" old codes
   useEffect(() => {
-    if (role === 'NONE' && window.location.search) {
-      window.history.replaceState({}, '', window.location.pathname);
+    if (role === 'NONE') {
+      // Clear session data when returning to landing page
+      localStorage.removeItem('cw_playerId');
+      localStorage.removeItem('cw_gameCode');
+      localStorage.removeItem('cw_hostCode');
+      localStorage.removeItem('cw_playerName');
+      
+      if (window.location.search) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
     }
   }, [role]);
 

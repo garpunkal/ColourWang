@@ -86,7 +86,19 @@ export function HostSetupScreen({ socket }: Props) {
 
     const createGame = () => {
         // We now let the server handle the question picking for better variety and consistency
-        console.log('Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, jokers, playSounds, selectedTopics });
+        console.log('[HOST SETUP] Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, jokers, playSounds, selectedTopics, hasEnoughTopics: selectedTopics.length >= rounds, isConnected });
+        
+        if (!isConnected) {
+            console.error('[HOST SETUP] Cannot create game - not connected to server');
+            return;
+        }
+        
+        if (selectedTopics.length < rounds) {
+            console.error('[HOST SETUP] Cannot create game - not enough topics selected');
+            return;
+        }
+        
+        console.log('[HOST SETUP] Emitting create-game event...');
         socket.emit('create-game', {
             rounds,
             questionsPerRound,
@@ -102,6 +114,7 @@ export function HostSetupScreen({ socket }: Props) {
             accessibleLabels,
             selectedTopics: selectedTopics.length === availableTopics.length ? undefined : selectedTopics
         });
+        console.log('[HOST SETUP] create-game event emitted');
     };
 
     const toggleTopic = (topicId: string) => {
