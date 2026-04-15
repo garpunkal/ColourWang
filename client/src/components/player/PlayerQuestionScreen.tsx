@@ -138,7 +138,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     // Keyboard navigation support
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
-            if (hasAnswered || disabled) return;
+            if (hasAnswered || timeLeft === 0) return;
 
             const sortedOptions = sortColors(currentQuestion.options);
             
