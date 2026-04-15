@@ -132,6 +132,37 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         }
     }, [timeLeft, hasAnswered]);
 
+    // Keyboard navigation support
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (hasAnswered || disabled) return;
+
+            const sortedOptions = sortColors(currentQuestion.options);
+            
+            // Number keys 1-9 to select colors
+            if (e.key >= '1' && e.key <= '9') {
+                const index = parseInt(e.key) - 1;
+                if (index < sortedOptions.length && !disabledIndexes.includes(sortedOptions.indexOf(sortedOptions[index]))) {
+                    toggleColour(sortedOptions[index]);
+                }
+            }
+            
+            // Enter to submit answer
+            if (e.key === 'Enter' && selectedColors.length > 0) {
+                submitAnswer();
+            }
+            
+            // Escape to clear selection
+            if (e.key === 'Escape' && selectedColors.length > 0) {
+                audioManager.playSelect();
+                setSelectedColors([]);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [hasAnswered, disabled, disabledIndexes, selectedColors, currentQuestion.options, submitAnswer, toggleColour]);
+
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
 
     return (
@@ -257,7 +288,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             )}
                         </div>
                     </div>
-                    <div className="flex gap-2 w-full shrink-0 p-2 pt-0">
+                    <div className="flex flex-col gap-2 w-full shrink-0 p-2 pt-0">
                         <motion.button
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
@@ -268,6 +299,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         >
                             Submit
                         </motion.button>
+                        <div className="hidden md:flex items-center justify-center gap-3 text-[10px] uppercase tracking-wider text-white/30 font-medium">
+                            <span>⌨️ Press 1-9 to select</span>
+                            <span>•</span>
+                            <span>Enter to submit</span>
+                            <span>•</span>
+                            <span>Esc to clear</span>
+                        </div>
                     </div>
                 </div>
             ) : (
