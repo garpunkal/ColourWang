@@ -6,12 +6,15 @@ import '@fontsource/outfit/900.css'
 import './index.css'
 import App from './App.tsx'
 import { SettingsProvider } from './contexts/SettingsContext.tsx'
+import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SettingsProvider>
-      <App />
-    </SettingsProvider>
+    <ErrorBoundary>
+      <SettingsProvider>
+        <App />
+      </SettingsProvider>
+    </ErrorBoundary>
   </StrictMode>
 )
 
