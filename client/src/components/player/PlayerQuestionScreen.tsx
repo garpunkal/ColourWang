@@ -164,7 +164,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [hasAnswered, disabled, disabledIndexes, selectedColors, currentQuestion.options, submitAnswer, toggleColour]);
+    }, [hasAnswered, timeLeft, disabledIndexes, selectedColors, currentQuestion.options, submitAnswer, toggleColour]);
 
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
 
