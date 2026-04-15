@@ -76,35 +76,44 @@ export function registerSocketHandlers(io: Server) {
     });
 
     socket.on('create-game', (payload) => {
-      const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
-      const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+      try {
+        logger.info('[CREATE-GAME] Received create-game event with payload:', payload);
+        const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
+        const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
-      // Generate Rounds with selected topics
-      const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10, selectedTopics);
+        // Generate Rounds with selected topics
+        logger.info('[CREATE-GAME] Generating game rounds...', { numRounds, questionsPerRound, selectedTopics });
+        const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10, selectedTopics);
+        logger.info('[CREATE-GAME] Game rounds generated:', gameRounds.length);
 
-      const game: GameState = {
-        code,
-        players: [],
-        status: 'LOBBY',
-        currentQuestionIndex: 0,
-        questions: gameRounds[0].questions,
-        timerDuration: timer,
-        resultDuration,
-        lobbyDuration,
-        jokersEnabled,
-        soundEnabled: soundEnabled ?? true,
-        musicEnabled: musicEnabled ?? true,
-        bgmTrack: bgmTrack || 'Casino Royal.mp3',
-        streaksEnabled: streaksEnabled ?? true,
-        fastestFingerEnabled: fastestFingerEnabled ?? true,
-        accessibleLabels: accessibleLabels ?? false,
-        currentRoundIndex: 0,
-        rounds: gameRounds
-      };
-      games.set(code, game);
-      socket.join(code);
-      socket.emit('game-created', game);
-      logger.info(`Game created: ${code} with ${gameRounds.length} rounds. Round 1: ${gameRounds[0].title}`);
+        const game: GameState = {
+          code,
+          players: [],
+          status: 'LOBBY',
+          currentQuestionIndex: 0,
+          questions: gameRounds[0].questions,
+          timerDuration: timer,
+          resultDuration,
+          lobbyDuration,
+          jokersEnabled,
+          soundEnabled: soundEnabled ?? true,
+          musicEnabled: musicEnabled ?? true,
+          bgmTrack: bgmTrack || 'Casino Royal.mp3',
+          streaksEnabled: streaksEnabled ?? true,
+          fastestFingerEnabled: fastestFingerEnabled ?? true,
+          accessibleLabels: accessibleLabels ?? false,
+          currentRoundIndex: 0,
+          rounds: gameRounds
+        };
+        games.set(code, game);
+        socket.join(code);
+        logger.info(`[CREATE-GAME] Game created: ${code} with ${gameRounds.length} rounds. Round 1: ${gameRounds[0].title}`);
+        socket.emit('game-created', game);
+        logger.info(`[CREATE-GAME] game-created event emitted to socket ${socket.id}`);
+      } catch (error) {
+        logger.error('[CREATE-GAME] Error creating game:', error);
+        socket.emit('error', 'Failed to create game');
+      }
     });
 
     socket.on('update-bgm', ({ code, track }) => {
