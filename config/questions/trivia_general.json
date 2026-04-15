@@ -9,7 +9,8 @@
     {
         "question": "What colour is the night sky?",
         "answer": [
-            "black"
+            "black",
+            "blue"
         ],
         "roundId": "general"
     },
@@ -22,7 +23,7 @@
         "roundId": "general"
     },
     {
-        "question": "What colour are dollar bills?",
+        "question": "What colour are US dollar bills?",
         "answer": [
             "green"
         ],
@@ -50,26 +51,10 @@
         "roundId": "general"
     },
     {
-        "question": "What colours are chess pieces?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour is associated with love?",
+        "question": "What colour is associated with love and Valentine's Day?",
         "answer": [
             "red",
             "pink"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour are most school blackboards?",
-        "answer": [
-            "black",
-            "green"
         ],
         "roundId": "general"
     },
@@ -84,6 +69,80 @@
         "question": "What colour is gold?",
         "answer": [
             "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is silver?",
+        "answer": [
+            "silver",
+            "grey"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour are most taxis in New York?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour are fire trucks?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is associated with eco-friendly products?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour are most sticky notes?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is associated with mourning in Western culture?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is a yield sign?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour stripe represents recycling bins?",
+        "answer": [
+            "blue",
+            "green"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the sun?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour are most highlighter pens?",
+        "answer": [
+            "yellow",
+            "pink",
+            "green"
         ],
         "roundId": "general"
     }

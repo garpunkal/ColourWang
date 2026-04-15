@@ -1,8 +1,15 @@
 [
     {
-        "question": "What colours are associated with blues music?",
+        "question": "What colour submarine is in The Beatles song?",
         "answer": [
-            "blue"
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is associated with the album 'Purple Rain'?",
+        "answer": [
+            "purple"
         ],
         "roundId": "music"
     },
@@ -28,16 +35,66 @@
         "roundId": "music"
     },
     {
-        "question": "What colour is associated with the album 'Purple Rain'?",
+        "question": "What colour is in Billie Eilish's 'Ocean Eyes'?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is Taylor Swift's album named after?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is Olivia Rodrigo's signature aesthetic?",
         "answer": [
             "purple"
         ],
         "roundId": "music"
     },
     {
-        "question": "What colour submarine is in The Beatles song?",
+        "question": "What colour is associated with Pink Floyd?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour dress is mentioned in Chris de Burgh's song?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is mentioned in Coldplay's 'Yellow'?",
         "answer": [
             "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour moon is in the Elvis song?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is Frank Ocean's album cover?",
+        "answer": [
+            "blonde",
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour roses are mentioned in country music often?",
+        "answer": [
+            "red"
         ],
         "roundId": "music"
     },
@@ -51,38 +108,24 @@
         "roundId": "music"
     },
     {
-        "question": "What colour roses are mentioned in country music often?",
+        "question": "What colour is SZA's album cover?",
         "answer": [
-            "red"
+            "blue",
+            "green"
         ],
         "roundId": "music"
     },
     {
-        "question": "What colour is commonly associated with jazz clubs?",
+        "question": "What colour velvet is in the Led Zeppelin song?",
         "answer": [
-            "blue"
-        ],
-        "roundId": "music"
-    },
-    {
-        "question": "What colour are most violins?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "music"
-    },
-    {
-        "question": "What colour is associated with Pink Floyd?",
-        "answer": [
-            "pink"
-        ],
-        "roundId": "music"
-    },
-    {
-        "question": "What colour are most guitar picks?",
-        "answer": [
-            "white",
             "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is in Fleetwood Mac's 'Dreams'?",
+        "answer": [
+            "white"
         ],
         "roundId": "music"
     }

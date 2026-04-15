@@ -415,7 +415,7 @@ button {
 	font-style: italic;
 	text-transform: uppercase;
 	letter-spacing: -0.05em;
-	line-height: 0.85;
+	line-height: 1.0;
 }
 
 .text-display-gradient {

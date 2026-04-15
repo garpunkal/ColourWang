@@ -7,18 +7,19 @@
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour hair is Kim Kardashian known for?",
+        "question": "What colour is the Spotify logo?",
         "answer": [
-            "black"
+            "green"
         ],
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour are Instagram's logo colours?",
+        "question": "What colour are Instagram's logo gradient colours?",
         "answer": [
             "pink",
             "purple",
-            "orange"
+            "orange",
+            "yellow"
         ],
         "roundId": "pop_culture"
     },
@@ -37,16 +38,14 @@
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour is the TikTok logo?",
+        "question": "What colour is the TikTok logo background?",
         "answer": [
-            "black",
-            "red",
-            "blue"
+            "black"
         ],
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour represents sadness in pop culture?",
+        "question": "What colour represents sadness in Inside Out?",
         "answer": [
             "blue"
         ],
@@ -61,10 +60,10 @@
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour is the Snapchat ghost?",
+        "question": "What colour is the YouTube play button?",
         "answer": [
-            "white",
-            "yellow"
+            "red",
+            "white"
         ],
         "roundId": "pop_culture"
     },
@@ -77,16 +76,63 @@
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour represents luxury brands often?",
+        "question": "What colour is the Discord logo?",
         "answer": [
-            "black"
+            "purple",
+            "blue"
         ],
         "roundId": "pop_culture"
     },
     {
-        "question": "What colour are most influencer ring lights?",
+        "question": "What colour is Barbie associated with?",
         "answer": [
+            "pink"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour represents 'sus' in Among Us?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the Threads app logo?",
+        "answer": [
+            "black",
             "white"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the alien emoji?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is sage (Gen Z favorite)?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the Duolingo owl?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour was the dress in that viral 2015 debate?",
+        "answer": [
+            "blue",
+            "white",
+            "black",
+            "gold"
         ],
         "roundId": "pop_culture"
     }

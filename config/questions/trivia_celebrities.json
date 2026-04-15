@@ -7,70 +7,8 @@
         "roundId": "celebrities"
     },
     {
-        "question": "What colour hair is Elvis Presley famous for?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "celebrities"
-    },
-    {
         "question": "What colour is associated with Prince's music?",
         "answer": [
-            "purple"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour outfit did Michael Jackson often wear?",
-        "answer": [
-            "black",
-            "red"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour hair does Dolly Parton have?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour are Madonna's naturally dark roots?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colours are in Lady Gaga's most famous outfits?",
-        "answer": [
-            "black",
-            "white",
-            "red",
-            "pink"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour jumpsuit did Elvis wear in his later career?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour hair is Jennifer Aniston known for?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour are Elton John's famous glasses often?",
-        "answer": [
-            "pink",
-            "yellow",
             "purple"
         ],
         "roundId": "celebrities"
@@ -87,6 +25,95 @@
         "question": "What colour lipstick is Taylor Swift known for?",
         "answer": [
             "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Ariana Grande's Glinda wig?",
+        "answer": [
+            "pink",
+            "blonde",
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Billie Eilish's signature hair style?",
+        "answer": [
+            "green",
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour are Elton John's famous glasses often?",
+        "answer": [
+            "pink",
+            "yellow",
+            "purple",
+            "blue"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour was Zendaya's 2024 Met Gala gown?",
+        "answer": [
+            "green",
+            "blue"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Bad Bunny associated with?",
+        "answer": [
+            "yellow",
+            "pink"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour carpet did Timothée Chalamet arrive shirtless to?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is SZA's natural hair?",
+        "answer": [
+            "brown",
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Beyoncé's 'Single Ladies' outfit?",
+        "answer": [
+            "silver",
+            "grey",
+            "white"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour hair does Dolly Parton have?",
+        "answer": [
+            "blonde",
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour was J.Lo's iconic 2000 Grammys dress?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Dwayne 'The Rock' Johnson's famous turtleneck?",
+        "answer": [
+            "black"
         ],
         "roundId": "celebrities"
     }

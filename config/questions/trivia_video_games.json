@@ -15,7 +15,7 @@
         "roundId": "video_games"
     },
     {
-        "question": "What colours are Pac-Man?",
+        "question": "What colour is Pikachu?",
         "answer": [
             "yellow"
         ],
@@ -23,6 +23,79 @@
     },
     {
         "question": "What colour is Sonic the Hedgehog?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Link's tunic in Zelda?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colours are Pac-Man?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Master Chief's armor in Halo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the PlayStation logo?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Bowser primarily?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Fortnite default skin?",
+        "answer": [
+            "green",
+            "brown"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Kirby?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Yoshi?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour rings does Sonic collect?",
+        "answer": [
+            "yellow",
+            "gold"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Mega Man?",
         "answer": [
             "blue"
         ],
@@ -39,55 +112,76 @@
         "roundId": "video_games"
     },
     {
-        "question": "What colour is Pikachu?",
+        "question": "What colour is Crash Bandicoot?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Charizard?",
+        "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Jigglypuff?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Roblox's default avatar?",
         "answer": [
             "yellow"
         ],
         "roundId": "video_games"
     },
     {
-        "question": "What colour is Link's tunic in Zelda?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "video_games"
-    },
-    {
-        "question": "What colour rings does Sonic collect?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "video_games"
-    },
-    {
-        "question": "What colour is the Master Chief's armor in Halo?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "video_games"
-    },
-    {
-        "question": "What colour are the blocks in Tetris primarily?",
-        "answer": [
-            "blue",
-            "red",
-            "yellow",
-            "green"
-        ],
-        "roundId": "video_games"
-    },
-    {
-        "question": "What colour is Bowser primarily?",
-        "answer": [
-            "green",
-            "yellow"
-        ],
-        "roundId": "video_games"
-    },
-    {
-        "question": "What colour is the PlayStation logo?",
+        "question": "What colour is Steve's shirt in Minecraft?",
         "answer": [
             "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour are emeralds in Minecraft?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour are Minecraft diamonds?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Among Us crewmate most sus?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Sans from Undertale?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Fall Guys bean?",
+        "answer": [
+            "pink",
+            "blue",
+            "yellow",
+            "red"
         ],
         "roundId": "video_games"
     }

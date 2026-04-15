@@ -195,7 +195,16 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         </div>
                     </div>
                 </div>
-                <h3 className="text-xl md:text-5xl text-display text-display-gradient px-4 md:px-8 leading-tight py-2">{currentQuestion.question}</h3>
+                <h3 
+                    className="text-xl md:text-4xl lg:text-5xl text-display text-display-gradient px-4 md:px-8 py-2 text-center max-w-4xl mx-auto"
+                    style={{ 
+                        lineHeight: '1.1',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'break-word'
+                    }}
+                >
+                    {currentQuestion.question}
+                </h3>
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 0.4, y: 0 }}

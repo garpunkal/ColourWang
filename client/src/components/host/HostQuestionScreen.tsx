@@ -113,7 +113,15 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 </motion.div>
 
                 <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6 px-4">
-                    <motion.h1 className="text-5xl md:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-5xl text-center break-words w-full">
+                    <motion.h1 
+                        className="text-4xl md:text-6xl lg:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-6xl text-center break-words w-full"
+                        style={{ 
+                            lineHeight: '1.1',
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word',
+                            hyphens: 'auto'
+                        }}
+                    >
                         {currentQuestion.question}
                     </motion.h1>
                     <motion.div
