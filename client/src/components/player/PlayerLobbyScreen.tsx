@@ -118,7 +118,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 ) : isRoundIntro && currentRound ? (
                     <div className="relative z-20 flex flex-col items-center text-center space-y-4 animate-fade-in p-4">
                         <p className="text-white/60 font-bold text-xs md:text-sm uppercase tracking-[0.3em]">Next Round</p>
-                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/70 drop-shadow-xl w-full max-w-full break-words px-2 pb-1">
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/70 drop-shadow-xl w-full max-w-full wrap-break-word px-2 pb-1">
                             {currentRound.title}
                         </h1>
                         {currentRound.description && (

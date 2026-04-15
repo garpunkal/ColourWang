@@ -200,7 +200,7 @@ export function HostSetupScreen({ socket }: Props) {
                     <div className="col-span-2 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
 
                         {/* Sound FX */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
                             onClick={() => setPlaySounds(!playSounds)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -219,7 +219,7 @@ export function HostSetupScreen({ socket }: Props) {
                         </div>
 
                         {/* Music */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full relative min-h-12.5 md:min-h-25"
                             onClick={() => setMusicEnabled(!musicEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left w-full">
@@ -238,7 +238,7 @@ export function HostSetupScreen({ socket }: Props) {
                             </div>
                         </div>
                         {/* Accessible Labels */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
                             onClick={() => setAccessibleLabels(!accessibleLabels)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -256,7 +256,7 @@ export function HostSetupScreen({ socket }: Props) {
                             </div>
                         </div>
                         {/* Steals */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
                             onClick={() => setJokers(!jokers)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -275,7 +275,7 @@ export function HostSetupScreen({ socket }: Props) {
                         </div>
 
                         {/* Streaks */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
                             onClick={() => setStreaksEnabled(!streaksEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
@@ -295,7 +295,7 @@ export function HostSetupScreen({ socket }: Props) {
 
 
                         {/* Fastest Finger */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-[50px] md:min-h-[100px]"
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
                             onClick={() => setFastestFingerEnabled(!fastestFingerEnabled)}>
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">

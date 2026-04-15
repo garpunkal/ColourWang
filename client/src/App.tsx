@@ -319,7 +319,7 @@ function App() {
 
                 <div className="space-y-4">
                   <p className="text-xl md:text-4xl font-bold text-white tracking-[0.2em] uppercase italic">
-                    Reconnecting to Wang Network
+                    Reconnecting
                   </p>
                   <p className="text-base md:text-xl font-medium text-white/30 uppercase tracking-[0.4em]">
                     Hold tight... searching for host...
