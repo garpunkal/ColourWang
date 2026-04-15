@@ -285,36 +285,149 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             {!hasAnswered ? (
                 <div className="flex-1 flex flex-col gap-2 md:gap-6 items-center min-h-0 w-full overflow-hidden">
                     <div className="flex-1 w-full overflow-y-auto min-h-0 py-1 md:py-8 px-1">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-4xl px-2 md:px-6 mx-auto items-center justify-items-center">
-                            {sortColors(currentQuestion.options).map((color, i) =>
-                                disabledIndexes.includes(currentQuestion.options.indexOf(color)) ? null : (
-                                    <ColorCard
+                        {/* Scattered Artistic Layout */}
+                        <div className="relative w-full h-full min-h-[500px] md:min-h-[600px] max-w-5xl mx-auto px-4">
+                            {sortColors(currentQuestion.options).map((color, i) => {
+                                if (disabledIndexes.includes(currentQuestion.options.indexOf(color))) return null;
+                                
+                                // Predetermined artistic positions for 11 colors
+                                // Mobile positions (simpler, more spread out vertically)
+                                const mobilePositions = [
+                                    { top: '5%', left: '15%' },    // 0
+                                    { top: '8%', left: '65%' },    // 1
+                                    { top: '22%', left: '35%' },   // 2
+                                    { top: '28%', left: '75%' },   // 3
+                                    { top: '35%', left: '8%' },    // 4
+                                    { top: '48%', left: '55%' },   // 5
+                                    { top: '52%', left: '25%' },   // 6
+                                    { top: '65%', left: '70%' },   // 7
+                                    { top: '70%', left: '12%' },   // 8
+                                    { top: '82%', left: '45%' },   // 9
+                                    { top: '88%', left: '75%' },   // 10
+                                ];
+                                
+                                // Desktop positions (more artistic, clustered)
+                                const desktopPositions = [
+                                    { top: '12%', left: '8%' },    // 0 - top left
+                                    { top: '8%', left: '28%' },    // 1 - top center-left
+                                    { top: '15%', left: '50%' },   // 2 - top center
+                                    { top: '10%', left: '72%' },   // 3 - top right
+                                    { top: '18%', left: '88%' },   // 4 - top far right
+                                    { top: '42%', left: '15%' },   // 5 - middle left
+                                    { top: '45%', left: '45%' },   // 6 - center
+                                    { top: '38%', left: '75%' },   // 7 - middle right
+                                    { top: '68%', left: '10%' },   // 8 - bottom left
+                                    { top: '72%', left: '40%' },   // 9 - bottom center
+                                    { top: '65%', left: '70%' },   // 10 - bottom right
+                                ];
+                                
+                                const position = i < 11 ? { mobile: mobilePositions[i], desktop: desktopPositions[i] } : null;
+                                
+                                if (!position) return null;
+                                
+                                return (
+                                    <motion.div
                                         key={i}
-                                        color={color}
-                                        isSelected={selectedColors.includes(color)}
-                                        onClick={() => toggleColour(color)}
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: i * 0.05, type: 'spring', stiffness: 200 }}
+                                        className="absolute"
+                                        style={{
+                                            top: position.mobile.top,
+                                            left: position.mobile.left,
+                                            transform: 'translate(-50%, -50%)',
+                                        }}
+                                    >
+                                        <div className="md:hidden">
+                                            <ColorCard
+                                                color={color}
+                                                isSelected={selectedColors.includes(color)}
+                                                onClick={() => toggleColour(color)}
+                                                disabled={hasAnswered || timeLeft === 0}
+                                                size="responsive"
+                                                index={i}
+                                                showLabel={gameState.accessibleLabels}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                            
+                            {/* Desktop Layout (separate for different positions) */}
+                            {sortColors(currentQuestion.options).map((color, i) => {
+                                if (disabledIndexes.includes(currentQuestion.options.indexOf(color))) return null;
+                                
+                                const desktopPositions = [
+                                    { top: '12%', left: '8%' },
+                                    { top: '8%', left: '28%' },
+                                    { top: '15%', left: '50%' },
+                                    { top: '10%', left: '72%' },
+                                    { top: '18%', left: '88%' },
+                                    { top: '42%', left: '15%' },
+                                    { top: '45%', left: '45%' },
+                                    { top: '38%', left: '75%' },
+                                    { top: '68%', left: '10%' },
+                                    { top: '72%', left: '40%' },
+                                    { top: '65%', left: '70%' },
+                                ];
+                                
+                                const position = i < 11 ? desktopPositions[i] : null;
+                                if (!position) return null;
+                                
+                                return (
+                                    <motion.div
+                                        key={`desktop-${i}`}
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: i * 0.05, type: 'spring', stiffness: 200 }}
+                                        className="hidden md:block absolute"
+                                        style={{
+                                            top: position.top,
+                                            left: position.left,
+                                            transform: 'translate(-50%, -50%)',
+                                        }}
+                                    >
+                                        <ColorCard
+                                            color={color}
+                                            isSelected={selectedColors.includes(color)}
+                                            onClick={() => toggleColour(color)}
+                                            disabled={hasAnswered || timeLeft === 0}
+                                            size="responsive"
+                                            index={i}
+                                            showLabel={gameState.accessibleLabels}
+                                        />
+                                    </motion.div>
+                                );
+                            })}
+                            
+                            {/* Steal Card - positioned separately */}
+                            {gameState.jokersEnabled !== false && me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                    transition={{ delay: 0.6, type: 'spring', stiffness: 150 }}
+                                    className="absolute"
+                                    style={{
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        zIndex: 10,
+                                    }}
+                                >
+                                    <ColorCard
+                                        color="#FFD700"
+                                        isSelected={false}
+                                        onClick={() => {
+                                            setStealCardActiveThisQuestion(false);
+                                            socket.emit('use-steal-card', { code: gameState.code });
+                                        }}
                                         disabled={hasAnswered || timeLeft === 0}
                                         size="responsive"
-                                        index={i}
-                                        showLabel={gameState.accessibleLabels}
+                                        index={currentQuestion.options.length}
+                                        isStealCard={true}
+                                        stealValue={me.stealCardValue}
                                     />
-                                )
-                            )}
-                            {gameState.jokersEnabled !== false && me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
-                                <ColorCard
-                                    key="steal"
-                                    color="#FFD700"
-                                    isSelected={false}
-                                    onClick={() => {
-                                        setStealCardActiveThisQuestion(false);
-                                        socket.emit('use-steal-card', { code: gameState.code });
-                                    }}
-                                    disabled={hasAnswered || timeLeft === 0}
-                                    size="responsive"
-                                    index={currentQuestion.options.length}
-                                    isStealCard={true}
-                                    stealValue={me.stealCardValue}
-                                />
+                                </motion.div>
                             )}
                         </div>
                     </div>
