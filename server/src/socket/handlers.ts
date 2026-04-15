@@ -275,7 +275,9 @@ export function registerSocketHandlers(io: Server) {
         // Player not found - possibly session expired or game was reset
         // Try to add them as a new player if game is still in lobby
         if (game.status === 'LOBBY' && name) {
-          const takenCombinations = game.players.map(p => ({ avatar: p.avatar, avatarStyle: p.avatarStyle }));
+          const takenCombinations = game.players
+            .filter(p => p.avatarStyle !== undefined)
+            .map(p => ({ avatar: p.avatar, avatarStyle: p.avatarStyle as string }));
           const newAvatar = getNextAvailableAvatar(takenCombinations, 'avataaars');
           
           const newPlayer: Player = {
@@ -285,7 +287,8 @@ export function registerSocketHandlers(io: Server) {
             avatar: newAvatar,
             avatarStyle: 'avataaars',
             socketId: socket.id,
-            currentAnswer: null,
+            lastAnswer: null,
+            isCorrect: false,
             answeredAt: null,
             stealCardValue: Math.floor(Math.random() * 8) + 1,
             stealCardUsed: false,
