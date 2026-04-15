@@ -114,7 +114,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
 
                 <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6 px-4">
                     <motion.h1 
-                        className="text-4xl md:text-6xl lg:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-6xl text-center break-words w-full"
+                        className="text-4xl md:text-6xl lg:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
                         style={{ 
                             lineHeight: '1.1',
                             wordBreak: 'break-word',
@@ -149,7 +149,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         return (
                             <motion.div
                                 key={player.id}
-                                className={`relative flex items-center gap-2 py-4 pr-4 pl-2 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-[240px] max-w-[320px] ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
+                                className={`relative flex items-center gap-2 py-4 pr-4 pl-2 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-60 max-w-80 ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
                                 style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
                             >
                                 <div className="w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
