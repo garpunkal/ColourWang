@@ -61,6 +61,16 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
             <h1 className="mt-12 md:mt-16 text-hero text-display mb-4 text-center drop-shadow-2xl">
                 <span className="block text-xl md:text-3xl mb-1 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80 uppercase">Player</span>
                 <span className="text-display-gradient pr-10">Lobby</span>
+                <motion.div 
+                    className="mt-3 px-6 py-2 rounded-full glass-panel mx-auto w-fit"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3, type: 'spring' }}
+                >
+                    <span className="text-2xl md:text-4xl font-black font-mono text-white">
+                        {players.length} {players.length === 1 ? 'Player' : 'Players'}
+                    </span>
+                </motion.div>
             </h1>
 
             {/* Game Settings Display */}

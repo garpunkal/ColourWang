@@ -136,6 +136,16 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                     <div className="relative z-20">
                         <h1 className="text-4xl md:text-5xl font-black mb-1 uppercase tracking-tighter italic">STAND BY</h1>
                         <p className="text-text-muted font-bold text-sm md:text-base opacity-60 uppercase tracking-widest italic">You're in the game!</p>
+                        <motion.div 
+                            className="mt-4 px-4 py-2 rounded-full glass-panel mx-auto w-fit"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, type: 'spring' }}
+                        >
+                            <span className="text-lg md:text-2xl font-black font-mono text-white">
+                                {players.length} {players.length === 1 ? 'Player' : 'Players'}
+                            </span>
+                        </motion.div>
                     </div>
                 )}
             </div>
