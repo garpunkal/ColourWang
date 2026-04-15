@@ -174,13 +174,12 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                 </span>
                                 <div className="bg-black/40 px-3 py-1 rounded-xl border border-white/5 backdrop-blur-sm">
                                     <span
-                                        className="font-black text-sm md:text-base font-mono tabular-nums tracking-tighter"
+                                        className="font-black text-sm md:text-base font-mono tabular-nums tracking-tighter text-white"
                                         style={{
-                                            color: playerColor,
-                                            textShadow: `0 0 10px ${playerColor}30`
+                                            textShadow: `0 0 10px rgba(255,255,255,0.5)`
                                         }}
                                     >
-                                        {player.score} <span className="text-[10px] opacity-30 ml-0.5">PTS</span>
+                                        {player.score} <span className="text-[10px] opacity-60 ml-0.5">PTS</span>
                                     </span>
                                 </div>
                             </motion.div>
