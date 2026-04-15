@@ -16,6 +16,21 @@ logger.info('Starting ColourWang server...');
 const app = express();
 app.use(cors(serverConfig.server.cors));
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        memory: {
+            used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+            total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+            unit: 'MB'
+        },
+        version: process.env.npm_package_version || '1.0.0'
+    });
+});
+
 // List all mp3 files in client/public/bgm for the frontend to consume
 app.get('/api/bgm-list', (req, res) => {
     try {
