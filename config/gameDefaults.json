@@ -9,6 +9,5 @@
     "musicEnabled": true,
     "defaultBgmTrack": "Casino Royal.mp3",
     "streaksEnabled": true,
-    "fastestFingerEnabled": true,
-    "accessibleLabels": false
+    "fastestFingerEnabled": true
 }

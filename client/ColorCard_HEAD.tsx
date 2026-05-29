@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { getColorName } from '../config/gameConfig';
 import { memo } from 'react';
+import { useSettings } from '../contexts/SettingsContext';
 import { hapticFeedback } from '../utils/hapticFeedback';
 
 interface ColorCardProps {
@@ -14,6 +15,7 @@ interface ColorCardProps {
     index?: number;
     isStealCard?: boolean;
     stealValue?: number;
+    showLabel?: boolean; // Renamed from forceColorblind for compatibility
 }
 
 export const ColorCard = memo(function ColorCard({
@@ -25,15 +27,18 @@ export const ColorCard = memo(function ColorCard({
     size = 'medium',
     index = 0,
     isStealCard = false,
-    stealValue
+    stealValue,
+    showLabel = false
 }: ColorCardProps) {
+    const { colourblindMode: localColourblind } = useSettings();
+    const colourblindMode = localColourblind || showLabel;
 
     const sizeStyles = {
         mini: { width: '3.5rem', height: '4.5rem' },
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
         large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' },
-        responsive: { width: '100%', aspectRatio: '4/5', maxWidth: 'clamp(85px, 26vw, 300px)', minWidth: '65px' }
+        responsive: { width: '100%', aspectRatio: '4/5', maxWidth: 'clamp(70px, 22vw, 300px)', minWidth: '60px' }
     };
 
     const cardStyle = sizeStyles[size] || sizeStyles.medium;
@@ -41,7 +46,7 @@ export const ColorCard = memo(function ColorCard({
     // Responsive font size for color name
     const getFontSize = () => {
         if (size === 'mini') return '0.5rem';
-        if (size === 'responsive') return 'clamp(0.65rem, 1.5vw, 1rem)'; // Better mobile scaling
+        if (size === 'responsive') return 'clamp(0.6rem, 1.2vw, 1rem)'; // Adjusted scaling
         if (size === 'small') return '0.85rem';
         if (size === 'large') return '1.3rem';
         return '1rem';
@@ -148,12 +153,70 @@ export const ColorCard = memo(function ColorCard({
                     }
                 >
                     {/* Top shine gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-black/20" />
+                    <div className="absolute inset-0 bg-linear-to-b from-white/40 via-transparent to-black/20" />
 
                     {/* Diagonal shine */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-transparent" />
 
-                    {isStealCard && (
+                    {/* Colorblind accessibility patterns */}
+                    {colourblindMode && !isStealCard && (
+                        <div className="absolute inset-0 opacity-30 pointer-events-none">
+                            {getColorName(color) === 'red' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 20px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'blue' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 15px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'green' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 15px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'yellow' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.4) 2px, transparent 2px)',
+                                    backgroundSize: '15px 15px'
+                                }} />
+                            )}
+                            {getColorName(color) === 'orange' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(255,255,255,0.4) 10px, rgba(255,255,255,0.4) 20px)'
+                                }} />
+                            )}
+                            {getColorName(color) === 'purple' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.4) 45deg, transparent 90deg)',
+                                    backgroundSize: '20px 20px'
+                                }} />
+                            )}
+                            {getColorName(color) === 'pink' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.4) 50%, transparent 50%)',
+                                    backgroundSize: '20px 20px'
+                                }} />
+                            )}
+                            {(getColorName(color) === 'black' || getColorName(color) === 'grey') && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.5) 5px, rgba(255,255,255,0.5) 10px)',
+                                }} />
+                            )}
+                            {getColorName(color) === 'white' && (
+                                <div className="absolute inset-0 border-4 border-black/20 border-dashed rounded-2xl" />
+                            )}
+                            {getColorName(color) === 'brown' && (
+                                <div className="absolute inset-0" style={{
+                                    backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(255,255,255,0.4) 8px, rgba(255,255,255,0.4) 12px), repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(255,255,255,0.4) 8px, rgba(255,255,255,0.4) 12px)'
+                                }} />
+                            )}
+                        </div>
+                    )}
+
+                    {/* Bottom-aligned color name or STEAL card overlay */}
+                    {isStealCard ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                             {/* Steal card design */}
                             <div className="text-center">
@@ -171,9 +234,24 @@ export const ColorCard = memo(function ColorCard({
                                 </span>
                             </div>
                             {/* Decorative lines */}
-                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
+                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
                         </div>
+                    ) : (
+                        colourblindMode ? (
+                            <div className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4">
+                                <span
+                                    className="block font-black uppercase tracking-widest text-center bg-black/80 text-white rounded-sm py-0.5 px-2 shadow-2xl scale-90 md:scale-100"
+                                    style={{
+                                        fontSize: getFontSize(),
+                                        lineHeight: 1.1,
+                                        wordBreak: 'break-word',
+                                        maxWidth: '100%',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >{getColorName(color)}</span>
+                            </div>
+                        ) : null
                     )}
 
                     {/* Selection indicator */}
@@ -209,7 +287,7 @@ export const ColorCard = memo(function ColorCard({
                     <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20" />
 
                     {/* Bottom edge shadow for depth */}
-                    <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/30 to-transparent rounded-b-2xl" />
+                    <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-black/30 to-transparent rounded-b-2xl" />
                 </div>
             </div>
         </motion.div>

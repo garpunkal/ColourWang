@@ -101,10 +101,6 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                             <span className={`text-xs md:text-sm font-black uppercase ${gameState.musicEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.musicEnabled ? 'ON' : 'OFF'}</span>
                         </div>
                         <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Colorblind</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.accessibleLabels ? 'text-success' : 'text-white/30'}`}>{gameState.accessibleLabels ? 'FORCED' : 'OPTIONAL'}</span>
-                        </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
                             <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Steals</span>
                             <span className={`text-xs md:text-sm font-black uppercase ${gameState.jokersEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.jokersEnabled ? 'ON' : 'OFF'}</span>
                         </div>

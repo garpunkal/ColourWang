@@ -82,7 +82,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     };
 
     return (
-        <div className="flex flex-col p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10">
+        <div className="flex flex-col p-2 md:p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10">
             <PlayerHeader
                 name={me?.name || name}
                 avatar={me?.avatar || 'cyber-blue'}

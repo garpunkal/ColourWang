@@ -1,25 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 
 interface SettingsContextType {
-    colourblindMode: boolean;
-    setColourblindMode: (enabled: boolean) => void;
+    // Settings context - reserved for future use
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [colourblindMode, setColourblindModeState] = useState<boolean>(() => {
-        const saved = localStorage.getItem('cw_colourblindMode');
-        return saved === 'true';
-    });
-
-    const setColourblindMode = (enabled: boolean) => {
-        setColourblindModeState(enabled);
-        localStorage.setItem('cw_colourblindMode', String(enabled));
-    };
-
     return (
-        <SettingsContext.Provider value={{ colourblindMode, setColourblindMode }}>
+        <SettingsContext.Provider value={{}}>
             {children}
         </SettingsContext.Provider>
     );

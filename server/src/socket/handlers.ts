@@ -21,7 +21,6 @@ interface GameState {
   hostSocketId?: string;
   streaksEnabled?: boolean;
   fastestFingerEnabled?: boolean;
-  accessibleLabels?: boolean;
   currentRoundIndex: number;
   rounds: {
     title: string;
@@ -78,7 +77,7 @@ export function registerSocketHandlers(io: Server) {
     socket.on('create-game', (payload) => {
       try {
         logger.info('[CREATE-GAME] Received create-game event with payload:', payload);
-        const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, accessibleLabels, selectedTopics } = payload;
+        const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, selectedTopics } = payload;
         const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
         // Generate Rounds with selected topics
@@ -101,7 +100,6 @@ export function registerSocketHandlers(io: Server) {
           bgmTrack: bgmTrack || 'Casino Royal.mp3',
           streaksEnabled: streaksEnabled ?? true,
           fastestFingerEnabled: fastestFingerEnabled ?? true,
-          accessibleLabels: accessibleLabels ?? false,
           currentRoundIndex: 0,
           rounds: gameRounds
         };

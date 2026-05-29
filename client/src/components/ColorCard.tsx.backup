@@ -153,6 +153,7 @@ export const ColorCard = memo(function ColorCard({
                     {/* Diagonal shine */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent" />
 
+                    {/* Bottom-aligned color name or STEAL card overlay */}
                     {isStealCard && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                             {/* Steal card design */}

@@ -123,7 +123,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             isCorrect={true}
                                             size="medium"
                                             index={i}
-                                            showLabel={gameState.accessibleLabels}
                                         />
                                     </motion.div>
                                 ))}
@@ -135,9 +134,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 {/* All Players Results Grid */}
                 <div className="w-full mb-16 px-4">
                     <div className="flex items-center justify-center gap-6 mb-10">
-                        <div className="h-px w-20 bg-linear-to-r from-transparent to-white/20" />
+                        <div className="h-px w-20 bg-gradient-to-r from-transparent to-white/20" />
                         <span className="text-base md:text-xl font-black text-white/50 tracking-[0.4em] uppercase italic">Player Intel</span>
-                        <div className="h-px w-20 bg-linear-to-l from-transparent to-white/20" />
+                        <div className="h-px w-20 bg-gradient-to-l from-transparent to-white/20" />
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-4 md:gap-6 px-4 w-full">
@@ -209,7 +208,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                                     size="mini"
                                                     index={i}
                                                     disabled={true}
-                                                    showLabel={gameState.accessibleLabels}
                                                 />
                                             )) : (
                                                 <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">No Answer</span>
@@ -233,7 +231,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         onClick={onNextQuestion}
                         className="btn btn-primary relative group py-3 px-8 md:py-4 md:px-10 rounded-2xl shadow-xl overflow-hidden"
                     >
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                         <div className="flex items-center gap-4 md:gap-6 relative z-10">
                             <div className="flex flex-col items-start leading-none">
                                 <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mb-0.5">Coming up</span>

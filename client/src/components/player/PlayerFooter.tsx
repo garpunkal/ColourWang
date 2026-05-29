@@ -13,7 +13,7 @@ export function PlayerFooter({ onLeave }: Props) {
         <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="mt-auto pt-12 pb-6 flex items-center justify-center gap-6 z-50 pointer-events-auto"
+            className="mt-auto pt-4 md:pt-12 pb-2 md:pb-6 flex items-center justify-center gap-6 z-50 pointer-events-auto"
         >
             <button
                 onClick={() => setColorblindMode(!colorblindMode)}

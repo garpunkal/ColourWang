@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { audioManager } from '../../utils/audioManager';
 import { QRCodeSVG } from 'qrcode.react';
-import { Users, Eye, EyeOff } from 'lucide-react';
-import { useSettings } from '../../contexts/SettingsContext';
+import { Users } from 'lucide-react';
 
 interface Props {
     code: string;
@@ -18,7 +17,6 @@ import { BGM_TRACKS } from '../../config/musicConfig';
 
 
 export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '' }: Props) {
-    const { colourblindMode: colorblindMode, setColourblindMode: setColorblindMode } = useSettings();
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBGM, setSelectedBGM] = useState(currentBgm);
 
@@ -99,25 +97,11 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     {/* Logo Removed */}
                 </div>
 
-                {/* Colorblind and Count  */}
+                {/* Player Count */}
                 <div className={`
                         flex items-center gap-4 transition-all duration-500 w-fit md:justify-self-end
                         ${compact ? '' : 'hidden'}
                     `}>
-                    <button
-                        onClick={() => setColorblindMode(!colorblindMode)}
-                        className={`
-                            flex items-center gap-2 rounded-full transition-all border
-                            ${colorblindMode
-                                ? 'px-6 py-3 bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.5)] scale-105'
-                                : 'px-4 py-2 bg-black/30 text-white/40 border-white/10 hover:text-white hover:border-white/30 backdrop-blur-md'}
-                        `}
-                        title={colorblindMode ? "Disable Colourblind Mode" : "Enable Colourblind Mode"}
-                    >
-                        {colorblindMode ? <Eye size={18} strokeWidth={2.5} /> : <EyeOff size={18} strokeWidth={2.5} />}
-                        <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">CB Mode</span>
-                    </button>
-
                     <div className="flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 px-6 py-2 gap-3">
                         <Users size={20} className="text-color-blue animate-pulse transition-all duration-500" />
                         <div className="flex items-baseline gap-3">

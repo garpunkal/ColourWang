@@ -7,21 +7,187 @@
         "roundId": "cars"
     },
     {
-        "question": "What colours are taxi cabs in New York?",
+        "question": "What colour are New York taxi cabs?",
         "answer": [
             "yellow"
         ],
         "roundId": "cars"
     },
     {
-        "question": "What colour are most tire treads?",
+        "question": "What colour are London's famous buses?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are school buses in the US?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are UPS delivery trucks?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are FedEx trucks?",
+        "answer": [
+            "purple",
+            "orange",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are John Deere tractors?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the Batmobile?",
         "answer": [
             "black"
         ],
         "roundId": "cars"
     },
     {
-        "question": "What colours are police cars commonly?",
+        "question": "What colour is Herbie the Love Bug?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is Lightning McQueen from Cars?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the Mystery Machine from Scooby-Doo?",
+        "answer": [
+            "blue",
+            "green"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are the checkered flags in racing?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are brake lights on cars?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are reverse lights on cars?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are turn signals typically?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is KITT from Knight Rider?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the DeLorean time machine in Back to the Future?",
+        "answer": [
+            "grey",
+            "silver"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are most Lamborghinis associated with?",
+        "answer": [
+            "yellow",
+            "orange",
+            "green"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour stripe is on the Ford Mustang GT?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is traditionally associated with Tiffany & Co. boxes?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are Amazon delivery vans?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour was the original Ford Model T famously available in?\",
+        "answer": [
+            "black"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the stripe on a skunk?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are Ghostbusters' jumpsuits?",
+        "answer": [
+            "grey",
+            "brown"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are hazard lights when flashing?",
+        "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "cars"
+    }
+]
         "answer": [
             "black",
             "white",

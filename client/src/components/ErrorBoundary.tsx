@@ -36,7 +36,7 @@ export class ErrorBoundary extends Component<Props, State> {
             }
 
             return (
-                <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#22223b] via-[#4a4e69] to-[#22223b] p-4">
+                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#22223b] via-[#4a4e69] to-[#22223b] p-4">
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -75,7 +75,7 @@ export class ErrorBoundary extends Component<Props, State> {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={this.handleReset}
-                            className="px-8 py-4 bg-linear-to-r from-color-blue to-color-purple text-white font-black text-lg rounded-2xl uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="px-8 py-4 bg-gradient-to-r from-color-blue to-color-purple text-white font-black text-lg rounded-2xl uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
                         >
                             Reload Game
                         </motion.button>

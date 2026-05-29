@@ -135,7 +135,6 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                 size="mini"
                                 index={i}
                                 disabled={true}
-                                showLabel={gameState.accessibleLabels}
                             />
                         )) : (
                             <span className="text-xs font-bold text-white/20 italic">No Answer</span>
@@ -164,7 +163,6 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                 size="mini"
                                 index={i}
                                 disabled={true}
-                                showLabel={gameState.accessibleLabels}
                                 isCorrect={true}
                             />
                         ))}

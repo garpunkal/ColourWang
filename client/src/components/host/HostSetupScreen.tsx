@@ -29,7 +29,6 @@ export function HostSetupScreen({ socket }: Props) {
     const [musicEnabled, setMusicEnabled] = useState(defaults.musicEnabled);
     const [streaksEnabled, setStreaksEnabled] = useState(defaults.streaksEnabled);
     const [fastestFingerEnabled, setFastestFingerEnabled] = useState(defaults.fastestFingerEnabled);
-    const [accessibleLabels, setAccessibleLabels] = useState(defaults.accessibleLabels);
     const [selectedBgm] = useState(defaults.defaultBgmTrack);
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
@@ -85,6 +84,17 @@ export function HostSetupScreen({ socket }: Props) {
     }, [selectedBgm, musicEnabled]);
 
     const createGame = () => {
+        console.log('[HOST SETUP] createGame function called');
+        console.log('[HOST SETUP] Button state check:', { 
+            loadingQuestions, 
+            error, 
+            hasQuestions: !!allQuestions.length, 
+            isConnected, 
+            hasEnoughTopics,
+            selectedTopicsCount: selectedTopics.length,
+            requiredRounds: rounds
+        });
+        
         // We now let the server handle the question picking for better variety and consistency
         console.log('[HOST SETUP] Initialising lobby with:', { rounds, questionsPerRound, timer, resultTimer, jokers, playSounds, selectedTopics, hasEnoughTopics: selectedTopics.length >= rounds, isConnected });
         
@@ -111,7 +121,6 @@ export function HostSetupScreen({ socket }: Props) {
             bgmTrack: selectedBgm,
             streaksEnabled,
             fastestFingerEnabled,
-            accessibleLabels,
             selectedTopics: selectedTopics.length === availableTopics.length ? undefined : selectedTopics
         });
         console.log('[HOST SETUP] create-game event emitted');
@@ -245,24 +254,6 @@ export function HostSetupScreen({ socket }: Props) {
                                 <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${musicEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'} shrink-0 ml-2 md:ml-0`}>
                                     <motion.div
                                         animate={{ x: musicEnabled ? '100%' : '0%' }}
-                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        {/* Accessible Labels */}
-                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
-                            onClick={() => setAccessibleLabels(!accessibleLabels)}>
-                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
-                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
-                                    <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Colorblind</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
-                                        {accessibleLabels ? 'FOR ALL' : 'OPTIONAL'}
-                                    </span>
-                                </div>
-                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${accessibleLabels ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
-                                    <motion.div
-                                        animate={{ x: accessibleLabels ? '100%' : '0%' }}
                                         className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>
@@ -403,11 +394,18 @@ export function HostSetupScreen({ socket }: Props) {
                 </div>
 
                 <motion.button
-                    whileHover={{ scale: hasEnoughTopics ? 1.02 : 1, y: hasEnoughTopics ? -3 : 0 }}
-                    whileTap={{ scale: hasEnoughTopics ? 0.97 : 1 }}
-                    onClick={createGame}
+                    whileHover={{ scale: hasEnoughTopics && isConnected && allQuestions.length > 0 ? 1.02 : 1, y: hasEnoughTopics && isConnected && allQuestions.length > 0 ? -3 : 0 }}
+                    whileTap={{ scale: hasEnoughTopics && isConnected && allQuestions.length > 0 ? 0.97 : 1 }}
+                    onClick={(e) => {
+                        console.log('[HOST SETUP] Button clicked!', e);
+                        if (!loadingQuestions && !error && allQuestions.length && isConnected && hasEnoughTopics) {
+                            createGame();
+                        } else {
+                            console.warn('[HOST SETUP] Button click blocked by disabled state');
+                        }
+                    }}
                     className={`btn text-xl md:text-5xl py-4 md:py-12 px-6 md:px-24 w-full rounded-2xl md:rounded-[3rem] uppercase font-black italic tracking-widest text-white border-t-4 md:border-t-8 border-white/20 shrink-0 transition-all duration-300 ${
-                        hasEnoughTopics 
+                        hasEnoughTopics && isConnected && allQuestions.length > 0
                             ? 'btn-primary shadow-[0_20px_60px_-10px_rgba(0,229,255,0.5)] hover:shadow-[0_25px_80px_-10px_rgba(0,229,255,0.6)]' 
                             : 'bg-white/5 border-white/10 text-white/40 cursor-not-allowed shadow-none'
                     }`}

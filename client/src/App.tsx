@@ -83,10 +83,12 @@ function App() {
 
   // Handle global sound setting from GameState
   useEffect(() => {
-    if (gameState?.soundEnabled !== undefined) {
-      audioManager.setMuteSFX(!gameState.soundEnabled);
+    if (gameState?.soundEnabled !== undefined && gameState?.musicEnabled !== undefined) {
+      // If music is off, sound effects should be off too
+      const shouldMuteSFX = !gameState.soundEnabled || !gameState.musicEnabled;
+      audioManager.setMuteSFX(shouldMuteSFX);
     }
-  }, [gameState?.soundEnabled]);
+  }, [gameState?.soundEnabled, gameState?.musicEnabled]);
 
   useEffect(() => {
     if (gameState?.musicEnabled !== undefined) {

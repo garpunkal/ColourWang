@@ -16,7 +16,6 @@ export interface GameState {
     hostSocketId?: string;
     streaksEnabled?: boolean;
     fastestFingerEnabled?: boolean;
-    accessibleLabels?: boolean;
     currentRoundIndex: number;
     rounds: {
         title: string;

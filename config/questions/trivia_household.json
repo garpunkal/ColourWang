@@ -1,90 +1,94 @@
 [
     {
-        "question": "What colour are most toilet paper rolls?",
+        "question": "What colour is the iconic Le Creuset Dutch oven?",
         "answer": [
-            "white"
+            "orange",
+            "red"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most kitchen appliances traditionally?",
+        "question": "What colour light does a UV sanitizer wand emit?",
         "answer": [
-            "white"
+            "blue",
+            "purple"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most cleaning sponges?",
-        "answer": [
-            "yellow",
-            "green"
-        ],
-        "roundId": "household"
-    },
-    {
-        "question": "What colour are rubber gloves commonly?",
-        "answer": [
-            "yellow",
-            "pink"
-        ],
-        "roundId": "household"
-    },
-    {
-        "question": "What colour are most garbage bags?",
+        "question": "What colour is the handle on most OXO Good Grips tools?",
         "answer": [
             "black"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour is bleach?",
+        "question": "What colour is a traditional copper kettle?",
         "answer": [
-            "white"
-        ],
-        "roundId": "household"
-    },
-    {
-        "question": "What colour are most cutting boards?",
-        "answer": [
-            "white",
+            "orange",
             "brown"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most light bulbs when off?",
+        "question": "What colour glow do blacklight bulbs create?",
         "answer": [
-            "white"
+            "purple",
+            "blue"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colours are common for towels?",
+        "question": "What colour flame indicates the hottest part of a gas stove?",
         "answer": [
-            "white",
-            "blue",
-            "green"
+            "blue"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most electrical outlets?",
+        "question": "What colour is the KitchenAid stand mixer most famous for?",
         "answer": [
-            "white"
+            "red"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most wooden floors?",
+        "question": "What colour are vintage Pyrex mixing bowls?",
         "answer": [
-            "brown"
+            "yellow",
+            "green",
+            "red",
+            "blue"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour are most refrigerators?",
+        "question": "What colour LED indicates a smoke detector battery is low?",
         "answer": [
-            "white"
+            "red",
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is Dyson's signature vacuum design?",
+        "answer": [
+            "purple",
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the cap on a bottle of Windex?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour are traditional cast iron skillets when seasoned?",
+        "answer": [
+            "black"
         ],
         "roundId": "household"
     }

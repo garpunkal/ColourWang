@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colours are typical of a rainbow?",
+        "question": "What colours appear in a natural rainbow?",
         "answer": [
             "red",
             "orange",
@@ -8,63 +8,6 @@
             "green",
             "blue",
             "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is the sun?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours make up autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is fresh snow?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are common in flowers?",
-        "answer": [
-            "red",
-            "pink",
-            "yellow",
-            "purple",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is grass?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is coal?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours can ocean water appear?",
-        "answer": [
-            "blue",
-            "green"
         ],
         "roundId": "nature"
     },
@@ -77,15 +20,7 @@
         "roundId": "nature"
     },
     {
-        "question": "What colour is tree bark typically?",
-        "answer": [
-            "brown",
-            "grey"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours appear in a sunset?",
+        "question": "What colours appear in a typical sunset?",
         "answer": [
             "orange",
             "red",
@@ -95,291 +30,99 @@
         "roundId": "nature"
     },
     {
-        "question": "What colour are flamingos?",
+        "question": "What colour is lava when it's molten?",
         "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are icebergs?",
+        "answer": [
+            "white",
+            "blue"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is the Aurora Borealis (Northern Lights) most commonly?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are most sand beaches?",
+        "answer": [
+            "yellow",
+            "white"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is volcanic rock?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are healthy coral reefs?",
+        "answer": [
+            "pink",
+            "red",
+            "orange"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is the sky during a clear day?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is moss?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are autumn leaves typically?",
+        "answer": [
+            "red",
+            "orange",
+            "yellow",
+            "brown"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is lightning?",
+        "answer": [
+            "white",
+            "blue",
+            "purple"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is the inside of a geode often?",
+        "answer": [
+            "purple",
+            "blue",
             "pink"
         ],
         "roundId": "nature"
     },
     {
-        "question": "What colours are characteristic of rainbow?",
+        "question": "What colour are redwood tree trunks?",
         "answer": [
             "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
             "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of rainbow?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of rainbow?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of rainbow?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of rainbow?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of rainbow?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sky (day)?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of sun?",
-        "answer": [
-            "yellow",
-            "white",
-            "orange"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of autumn leaves?",
-        "answer": [
-            "red",
-            "orange",
-            "yellow",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colours are characteristic of ocean?",
-        "answer": [
-            "blue",
-            "green"
         ],
         "roundId": "nature"
     }

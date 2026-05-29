@@ -1,7 +1,7 @@
 // This is a basic service worker for offline support
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open('colourwang-cache-v1').then(cache => {
+    caches.open('colourwang-cache-v2').then(cache => {
       return cache.addAll([
         '/',
         '/index.html',
@@ -15,7 +15,17 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== 'colourwang-cache-v2') {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', event => {

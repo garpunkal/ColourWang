@@ -66,7 +66,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         exit={{ y: 200, opacity: 0 }}
                         className="fixed bottom-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-t-8 border-color-yellow shadow-2xl"
                     >
-                        <div className="h-2 w-full bg-linear-to-r from-color-yellow via-white to-color-yellow animate-pulse" />
+                        <div className="h-2 w-full bg-gradient-to-r from-color-yellow via-white to-color-yellow animate-pulse" />
                         <div className="flex-1 flex items-center">
                             <div className="bg-color-yellow px-8 md:px-16 flex flex-col items-center justify-center shrink-0 border-r-4 border-black h-full">
                                 <span className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">BREAKING</span>

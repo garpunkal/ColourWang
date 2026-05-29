@@ -1,132 +1,39 @@
 [
     {
-        "question": "What colours are pandas?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are tigers?",
-        "answer": [
-            "orange",
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are polar bears?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are ravens?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are zebras?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are elephants?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are cardinals?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are flamingos?",
+        "question": "What colour are flamingos?",
         "answer": [
             "pink"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are brown bears?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are frogs typically?",
-        "answer": [
-            "green",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are bluebirds?",
+        "question": "What colour eyes do most huskies have?",
         "answer": [
             "blue"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are goldfish?",
+        "question": "What colour are poison dart frogs known for being?",
         "answer": [
-            "orange",
-            "yellow"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are penguins?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are leopards?",
-        "answer": [
+            "blue",
+            "red",
             "yellow",
+            "green"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour tongue does a giraffe have?",
+        "answer": [
+            "purple",
+            "blue",
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are black panthers?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are deer?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white swans?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are peacocks?",
+        "question": "What colour are a peacock's feathers?",
         "answer": [
             "blue",
             "green"
@@ -134,60 +41,15 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are black bears?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are giraffes?",
-        "answer": [
-            "yellow",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are red foxes?",
+        "question": "What colour is a mandrill's nose?",
         "answer": [
             "red",
-            "orange"
+            "blue"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are skunks?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are robins' breasts?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are Holstein cows?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are grey wolves?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are monarch butterflies?",
+        "question": "What colour are monarch butterflies?",
         "answer": [
             "orange",
             "black"
@@ -195,31 +57,19 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are white rabbits?",
+        "question": "What colour beak does a toucan have?",
         "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are cheetahs?",
-        "answer": [
+            "orange",
             "yellow",
-            "black"
+            "red",
+            "green"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are black cats?",
+        "question": "What colour are red pandas?",
         "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are orangutans?",
-        "answer": [
-            "orange",
+            "red",
             "brown"
         ],
         "roundId": "animals"
@@ -233,56 +83,69 @@
         "roundId": "animals"
     },
     {
-        "question": "What colours are red pandas?",
+        "question": "What colour ring is around a ring-tailed lemur's tail?",
         "answer": [
-            "red",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white horses?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are chipmunks?",
-        "answer": [
-            "brown",
             "black",
             "white"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are yellowfin tuna?",
+        "question": "What colour eyes do white tigers have?",
         "answer": [
-            "yellow"
+            "blue"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are raccoons?",
+        "question": "What colour are baby flamingos when they're born?",
         "answer": [
             "grey",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is an octopus's blood?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour are a Dalmatian's spots?",
+        "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are green sea turtles?",
+        "question": "What colour is the breast of a robin?",
         "answer": [
-            "green"
+            "red",
+            "orange"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are porcupines?",
+        "question": "What colour are Holstein cows?",
         "answer": [
-            "brown",
+            "black",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a panther?",
+        "answer": [
             "black"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour markings does a skunk have?",
+        "answer": [
+            "white"
         ],
         "roundId": "animals"
     },
@@ -294,465 +157,60 @@
         "roundId": "animals"
     },
     {
-        "question": "What colours are badgers?",
-        "answer": [
-            "black",
-            "white",
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are yellow canaries?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red squirrels?",
-        "answer": [
-            "red",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are grey seals?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are purple sea urchins?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are brown bats?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white-tailed deer tails?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are black widow spiders?",
-        "answer": [
-            "black",
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are green iguanas?",
+        "question": "What colour is a red-eyed tree frog's body?",
         "answer": [
             "green"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are red-winged blackbirds?",
+        "question": "What colour is a goldfish?",
         "answer": [
-            "black",
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are blue jays?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are guinea pigs typically?",
-        "answer": [
-            "brown",
-            "white",
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white tigers?",
-        "answer": [
-            "white",
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are brown bears?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are black mambas?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red deer?",
-        "answer": [
-            "red",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white sharks?",
-        "answer": [
-            "grey",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are golden retrievers?",
-        "answer": [
+            "orange",
             "yellow"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are black labs?",
+        "question": "What colour are penguin's bellies?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is the top of a killer whale?",
         "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are brown trout?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are pink flamingo eggs?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are ringtail cats?",
-        "answer": [
-            "grey",
-            "black",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are yellow-eyed penguins?",
-        "answer": [
-            "black",
-            "white",
-            "yellow"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red-eyed tree frogs?",
+        "question": "What colour are green sea turtles?",
         "answer": [
             "green",
-            "red"
+            "brown"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are grey herons?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are purple starfish?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white rhinos?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red ants?",
+        "question": "What colour is the main body of a ladybug?",
         "answer": [
             "red"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour are black ants?",
+        "question": "What colour is a polar bear's skin underneath its fur?",
         "answer": [
             "black"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colours are brown pelicans?",
+        "question": "What colour feathers does a blue jay have?",
         "answer": [
-            "brown",
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are green anacondas?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red kangaroos?",
-        "answer": [
-            "red",
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white polar bear cubs?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are grey squirrels?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are black sheep?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are white sheep?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are brown sheep?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red robins?",
-        "answer": [
-            "red",
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are blue herons?",
-        "answer": [
-            "blue",
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are green tree pythons?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are purple martins?",
-        "answer": [
-            "purple",
             "blue"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are pink pigs?",
-        "answer": [
-            "pink"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are yellow labs?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are grey cats?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are orange cats?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are white cats?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are brown cats?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are red cardinals?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are blue whales' skin?",
-        "answer": [
-            "blue",
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are green sea bass?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are purple sea anemones?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are pink salmon?",
-        "answer": [
-            "pink"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are black swans?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are grey dolphins?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are red-tailed hawks?",
-        "answer": [
-            "brown",
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are white doves?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are yellow butterflies?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are black horses?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are brown horses?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are grey horses?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are red roosters?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colours are white roosters?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "animals"
-    },
-    {
-        "question": "What colour are black roosters?",
-        "answer": [
-            "black"
         ],
         "roundId": "animals"
     }

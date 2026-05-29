@@ -50,7 +50,6 @@ export interface GameState {
     bgmTrack?: string;
     streaksEnabled: boolean;
     fastestFingerEnabled: boolean;
-    accessibleLabels?: boolean;
     currentRoundIndex: number;
     rounds: Round[];
 }

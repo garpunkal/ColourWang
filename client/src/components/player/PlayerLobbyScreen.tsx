@@ -92,7 +92,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             exit={{ opacity: 0, scale: 1.1, rotate: 2 }}
             className={`text-center glass rounded-[4rem] p-8 md:p-8 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 ${isCountdownState || isRoundIntro ? 'ring-4 ring-color-blue/40 shadow-[0_0_100px_rgba(0,229,255,0.2)]' : ''}`}
         >
-            <div className={`absolute inset-0 bg-linear-to-br opacity-50 transition-colors duration-1000 ${isCountdownState || isRoundIntro ? 'from-color-blue/30 via-color-purple/10 to-color-pink/30' : 'from-color-blue/15 via-transparent to-color-purple/15'}`} />
+            <div className={`absolute inset-0 bg-gradient-to-br opacity-50 transition-colors duration-1000 ${isCountdownState || isRoundIntro ? 'from-color-blue/30 via-color-purple/10 to-color-pink/30' : 'from-color-blue/15 via-transparent to-color-purple/15'}`} />
 
             <div className="mb-6 relative inline-block z-10 w-full">
                 <motion.div
@@ -118,7 +118,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 ) : isRoundIntro && currentRound ? (
                     <div className="relative z-20 flex flex-col items-center text-center space-y-4 animate-fade-in p-4">
                         <p className="text-white/60 font-bold text-xs md:text-sm uppercase tracking-[0.3em]">Next Round</p>
-                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/70 drop-shadow-xl w-full max-w-full wrap-break-word px-2 pb-1">
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight italic text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-xl w-full max-w-full wrap-break-word px-2 pb-1">
                             {currentRound.title}
                         </h1>
                         {currentRound.description && (

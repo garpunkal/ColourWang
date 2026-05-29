@@ -1,38 +1,16 @@
 [
     {
-        "question": "What colour are stop signs?",
+        "question": "What colour is the Golden Gate Bridge?",
         "answer": [
-            "red"
+            "red",
+            "orange"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is the night sky?",
-        "answer": [
-            "black",
-            "blue"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour are clouds typically?",
-        "answer": [
-            "white",
-            "grey"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour are US dollar bills?",
+        "question": "What colour is the Statue of Liberty?",
         "answer": [
             "green"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour are most pencils?",
-        "answer": [
-            "yellow"
         ],
         "roundId": "general"
     },
@@ -44,43 +22,6 @@
         "roundId": "general"
     },
     {
-        "question": "What colour are traffic cones?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour is associated with love and Valentine's Day?",
-        "answer": [
-            "red",
-            "pink"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour is coal?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour is gold?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour is silver?",
-        "answer": [
-            "silver",
-            "grey"
-        ],
-        "roundId": "general"
-    },
-    {
         "question": "What colour are most taxis in New York?",
         "answer": [
             "yellow"
@@ -88,61 +29,117 @@
         "roundId": "general"
     },
     {
-        "question": "What colour are fire trucks?",
+        "question": "What colour is the top stripe on a rainbow?",
         "answer": [
             "red"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is associated with eco-friendly products?",
+        "question": "What colour are London's famous telephone boxes?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour do you get when you mix red and blue?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour do you get when you mix yellow and blue?",
         "answer": [
             "green"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour are most sticky notes?",
+        "question": "What colour are the iconic London double-decker buses?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the hazmat (biohazard) symbol?",
+        "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the heart emoji?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour bricks make up the Yellow Brick Road in Oz?",
         "answer": [
             "yellow"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is associated with mourning in Western culture?",
+        "question": "What colour is mourning associated with in Western culture?",
         "answer": [
             "black"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is a yield sign?",
+        "question": "What colour is mourning associated with in China?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour flag is waved in racing to signal the winner?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the recycling symbol?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is a yield traffic sign?",
         "answer": [
             "yellow"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour stripe represents recycling bins?",
+        "question": "What colour smoke signals a new Pope has been elected?",
         "answer": [
-            "blue",
-            "green"
+            "white"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is the sun?",
+        "question": "What colour belt is the highest rank in karate?",
         "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour paint would you mix to make orange?",
+        "answer": [
+            "red",
             "yellow"
-        ],
-        "roundId": "general"
-    },
-    {
-        "question": "What colour are most highlighter pens?",
-        "answer": [
-            "yellow",
-            "pink",
-            "green"
         ],
         "roundId": "general"
     }

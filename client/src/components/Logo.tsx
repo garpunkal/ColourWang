@@ -51,7 +51,7 @@ export const Logo = ({ className = "" }: { className?: string }) => {
                                 }}
                             >
                                 {/* Glass Shine */}
-                                <div className="absolute inset-0 bg-linear-to-tr from-transparent to-white/30 opacity-50" />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/30 opacity-50" />
                             </div>
                         );
                     })}
@@ -63,7 +63,7 @@ export const Logo = ({ className = "" }: { className?: string }) => {
                         ColourWang
                     </h1>
                     {/* Subtle reflection below */}
-                    <div className="h-1 w-full bg-linear-to-r from-transparent via-white/20 to-transparent mt-2 rounded-full blur-[1px]" />
+                    <div className="h-1 w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mt-2 rounded-full blur-[1px]" />
                 </div>
             </div>
         </a>

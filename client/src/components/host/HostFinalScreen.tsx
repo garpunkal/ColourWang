@@ -26,7 +26,6 @@ interface Props {
 
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
     const [showSupernova, setShowSupernova] = useState(false);
-    const hasPlayedAudio = useRef(false);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -36,14 +35,8 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
     useEffect(() => {
-        // Only play audio once, even if component remounts
-        if (!hasPlayedAudio.current) {
-            hasPlayedAudio.current = true;
-            audioManager.playFinalResults(); // Play triumphant finale sound
-        }
-        
         // Trigger supernova after a small delay for the winner reveal
-        const timer = setTimeout(() => setShowSupernova(true), 1200); // Slightly longer delay for the new sound
+        const timer = setTimeout(() => setShowSupernova(true), 1200);
         return () => clearTimeout(timer);
     }, []);
 
@@ -111,7 +104,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                         initial={{ y: '110vh', opacity: 0 }}
                         animate={{ y: '-10vh', opacity: [0, 0.5, 0.5, 0] }}
                         transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
-                        className="absolute rounded-full bg-linear-to-b from-yellow-300 to-yellow-600"
+                        className="absolute rounded-full bg-gradient-to-b from-yellow-300 to-yellow-600"
                         style={{
                             left: `${p.x}%`,
                             width: p.size,
@@ -148,7 +141,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                             key={player.id}
                             variants={itemVariants}
                             className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
-                                ? 'bg-linear-to-r from-white/10 to-transparent border-yellow-500/50'
+                                ? 'bg-gradient-to-r from-white/10 to-transparent border-yellow-500/50'
                                 : 'border-white/5 hover:border-white/10'
                                 }`}
                             style={{
@@ -196,7 +189,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                 <motion.div
                                     animate={{ left: ['-100%', '200%'] }}
                                     transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
-                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
                                 />
                             )}
                         </motion.div>
@@ -215,7 +208,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                 >
                     <span className="relative z-10">Start New Battle</span>
                     <motion.div
-                        className="absolute inset-0 bg-linear-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
                     />
                 </button>
                 <p className="text-white/10 font-black uppercase tracking-widest text-xs">

@@ -209,8 +209,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 )}
             </AnimatePresence>
 
-            <div className="text-center px-4 shrink-0 py-2">
-                <div className="flex items-center justify-center gap-2 mb-4 md:mb-8 glass-panel px-4 py-1 rounded-2xl mx-auto w-fit">
+            <div className="text-center px-2 md:px-4 shrink-0 py-1 md:py-2">
+                <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-2 md:mb-8 glass-panel px-2 md:px-4 py-1 rounded-2xl mx-auto w-fit">
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Round</span>
                         <span className="text-lg font-black italic tracking-tighter text-white">{gameState.currentRoundIndex + 1}</span>
@@ -254,7 +254,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     )}
                 </div>
                 <h3 
-                    className="text-xl md:text-4xl lg:text-5xl text-display text-display-gradient px-4 md:px-8 py-2 text-center max-w-4xl mx-auto"
+                    className="text-lg md:text-4xl lg:text-5xl text-display text-display-gradient px-2 md:px-8 py-1 md:py-2 text-center max-w-4xl mx-auto"
                     style={{ 
                         lineHeight: '1.1',
                         wordBreak: 'break-word',
@@ -270,7 +270,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 0.4, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mt-2 md:mt-4 px-3 py-1 md:py-2 rounded-full glass-panel mx-auto w-fit opacity-60"
+                    className="mt-1 md:mt-4 px-2 md:px-3 py-0.5 md:py-2 rounded-full glass-panel mx-auto w-fit opacity-60"
                 >
                     <span className="text-[10px] md:text-xs font-medium uppercase tracking-wider italic">
                         {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length === 1 ? (
@@ -283,9 +283,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             </div>
 
             {!hasAnswered ? (
-                <div className="flex-1 flex flex-col gap-2 md:gap-6 items-center min-h-0 w-full overflow-hidden">
-                    <div className="flex-1 w-full overflow-y-auto min-h-0 py-1 md:py-8 px-1">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-4xl px-2 md:px-6 mx-auto items-center justify-items-center">
+                <div className="flex-1 flex flex-col gap-1 md:gap-6 items-center min-h-0 w-full overflow-hidden">
+                    <div className="flex-1 w-full overflow-y-auto min-h-0 py-1 md:py-8 px-1 md:px-2">
+                        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-4 lg:gap-5 w-full max-w-4xl px-2 md:px-6 mx-auto items-center justify-items-center">
                             {sortColors(currentQuestion.options).map((color, i) =>
                                 disabledIndexes.includes(currentQuestion.options.indexOf(color)) ? null : (
                                     <ColorCard
@@ -296,7 +296,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         disabled={hasAnswered || timeLeft === 0}
                                         size="responsive"
                                         index={i}
-                                        showLabel={gameState.accessibleLabels}
                                     />
                                 )
                             )}
@@ -318,13 +317,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             )}
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 w-full shrink-0 p-2 pt-0">
+                    <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-0">
                         <motion.button
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => submitAnswer()}
                             disabled={selectedColors.length === 0 || timeLeft === 0}
-                            className="w-full btn btn-primary py-3 md:py-8 text-xl md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic uppercase font-black tracking-widest shrink-0 shadow-lg"
+                            className="w-full btn btn-primary py-2.5 md:py-8 text-lg md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic uppercase font-black tracking-widest shrink-0 shadow-lg"
                             style={{ boxShadow: `0 20px 40px -10px ${avatarColor}60` }}
                             aria-label={`Submit answer - ${selectedColors.length} color${selectedColors.length !== 1 ? 's' : ''} selected`}
                         >
@@ -351,7 +350,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             <span className="text-xs uppercase tracking-[0.4em] text-color-blue font-black italic opacity-60">Your Selection</span>
                             <div className="flex gap-2 md:gap-3 justify-center flex-wrap mt-2">
                                 {selectedColors.length > 0 ? sortColors(selectedColors).map((color, i) => (
-                                    <ColorCard key={i} color={color} size="mini" index={i} disabled={true} showLabel={gameState.accessibleLabels} />
+                                    <ColorCard key={i} color={color} size="mini" index={i} disabled={true} />
                                 )) : (
                                     <span className="text-lg md:text-xl font-bold text-white/20 italic uppercase">Nothing selected</span>
                                 )}
