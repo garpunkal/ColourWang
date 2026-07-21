@@ -11,12 +11,13 @@ interface Props {
     musicEnabled?: boolean;
     socket: any;
     currentBgm?: string;
+    onAbandonGame?: () => void;
 }
 
 import { BGM_TRACKS } from '../../config/musicConfig';
 
 
-export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '' }: Props) {
+export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '', onAbandonGame }: Props) {
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBGM, setSelectedBGM] = useState(currentBgm);
 
@@ -99,9 +100,18 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
 
                 {/* Player Count */}
                 <div className={`
-                        flex items-center gap-4 transition-all duration-500 w-fit md:justify-self-end
+                        flex items-center gap-3 transition-all duration-500 w-fit md:justify-self-end
                         ${compact ? '' : 'hidden'}
                     `}>
+                    {compact && onAbandonGame && (
+                        <button
+                            onClick={onAbandonGame}
+                            className="px-3 py-2 text-[10px] md:text-xs uppercase font-black tracking-wider rounded-xl border border-red-400/40 bg-red-500/10 text-red-200 hover:bg-red-500/20 hover:border-red-300/60 transition-colors"
+                            title="Abandon current game and reset"
+                        >
+                            Abandon Game
+                        </button>
+                    )}
                     <div className="flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 px-6 py-2 gap-3">
                         <Users size={20} className="text-color-blue animate-pulse transition-all duration-500" />
                         <div className="flex items-baseline gap-3">

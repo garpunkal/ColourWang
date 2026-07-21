@@ -144,6 +144,13 @@ const HostScreen = ({ socket, gameState }: Props) => {
         }
     };
 
+    const abandonGame = () => {
+        if (!gameState?.code) return;
+        socket.emit('kill-game', gameState.code);
+        localStorage.removeItem('cw_hostCode');
+        window.location.reload();
+    };
+
     // If no game state, show setup screen
     if (!gameState) {
         console.log('[HOST] No gameState - showing HostSetupScreen');
@@ -302,6 +309,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     musicEnabled={gameState.musicEnabled}
                     socket={socket}
                     currentBgm={gameState.bgmTrack}
+                    onAbandonGame={abandonGame}
                 />
             )}
 
