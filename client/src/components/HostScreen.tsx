@@ -164,6 +164,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     const { code, players, status, currentQuestionIndex, questions } = gameState;
     const currentQuestion = questions ? questions[currentQuestionIndex] : null;
     const isSyncing = (status === 'QUESTION' || status === 'RESULT') && (!questions || !currentQuestion);
+    const isResultView = status === 'RESULT' && !!currentQuestion;
 
     if (status === 'QUESTION' || status === 'RESULT') {
         console.log(`[HOST DEBUG] State: ${status}, Index: ${currentQuestionIndex}, Question: ${currentQuestion?.question}`);
@@ -171,7 +172,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     return (
         <motion.div
-            className="flex-1 flex flex-col p-12 overflow-hidden relative w-full min-h-screen"
+            className={isResultView ? 'flex-1 flex flex-col overflow-hidden relative w-full min-h-screen' : 'flex-1 flex flex-col p-12 overflow-hidden relative w-full min-h-screen'}
             animate={showExplosion ? "shake" : ""}
             variants={shakeVariants}
         >
@@ -301,7 +302,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION' || status === 'RESULT') && (
+            {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION') && (
                 <HostHeader
                     code={code}
                     playerCount={players.length}
@@ -333,7 +334,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            <div className="flex-1 flex flex-col justify-center items-center relative z-10 w-full">
+            <div className={isResultView ? 'min-h-screen w-full relative z-10' : 'flex-1 flex flex-col justify-center items-center relative z-10 w-full'}>
                 <AnimatePresence>
                     {isSyncing ? (
                         <div key="syncing" className="flex-1 flex flex-col items-center justify-center p-12 text-center">

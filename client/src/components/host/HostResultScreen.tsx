@@ -1,9 +1,8 @@
-
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Play, Trash2 } from 'lucide-react';
+import { Play, Trash2, Users, Hash } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ColorCard } from '../ColorCard';
 import { sortColors } from '../../config/gameConfig';
@@ -22,7 +21,6 @@ interface Props {
 export function HostResultScreen({ socket, gameState, currentQuestion, currentQuestionIndex, totalQuestions, onNextQuestion }: Props) {
     const correctColours = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColours);
     const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
-    const [autoProceed, setAutoProceed] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
@@ -38,30 +36,24 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
 
-    // Timer logic
+    const leadPlayer = sortedPlayers[0];
+    const leadPlayerName = leadPlayer?.name || 'No leader yet';
+    const leadPlayerScore = leadPlayer?.score || 0;
+
     useEffect(() => {
-        setTimeout(() => {
-            setTimeLeft(gameState.resultDuration || 30);
-            setAutoProceed(false);
-        }, 0);
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
-                    setAutoProceed(true);
+                    onNextQuestion();
                     return 0;
                 }
                 return prev - 1;
             });
         }, 1000);
-        return () => clearInterval(interval);
-    }, [currentQuestionIndex, gameState.resultDuration]);
 
-    useEffect(() => {
-        if (autoProceed) {
-            onNextQuestion();
-        }
-    }, [autoProceed, onNextQuestion]);
+        return () => clearInterval(interval);
+    }, [currentQuestionIndex, gameState.resultDuration, onNextQuestion]);
 
     const handleRemoveQuestion = () => {
         setModalConfig({
@@ -75,7 +67,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     socket.emit('remove-question', { code: gameState.code });
                 }
 
-                // Give visual feedback and then proceed to next question
                 setTimeout(() => {
                     onNextQuestion();
                     setIsRemoving(false);
@@ -89,118 +80,127 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     return (
         <motion.div
             key="result"
-            initial={{ scale: 1.05, opacity: 0, filter: "blur(20px)" }}
-            animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-            className="w-full max-w-7xl relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="relative min-h-screen w-full overflow-hidden"
         >
-            {/* Background Atmosphere */}
-            <div
-                className="fixed inset-0 blur-[160px] opacity-15 -z-10 pointer-events-none"
+            <motion.div
+                initial={{ scale: 1.2, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.88 }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="absolute inset-0"
                 style={{
-                    background: `radial-gradient(circle at 50% 40%, var(--color-blue), transparent 70%)`
+                    background: 'radial-gradient(circle at 50% 22%, rgba(59,130,246,0.35) 0%, rgba(10,12,16,0.98) 58%)'
                 }}
             />
+            <motion.div
+                initial={{ scale: 0.2, opacity: 0.9 }}
+                animate={{ scale: 1.65, opacity: 0 }}
+                transition={{ duration: 1.1, ease: [0.2, 0.65, 0.2, 1] }}
+                className="pointer-events-none absolute left-1/2 top-[21%] h-72 w-72 -translate-x-1/2 rounded-full border border-blue-300/60"
+            />
 
-            <div className="flex flex-col items-center text-center">
-                {/* Question Section */}
-                <div className="mb-12 max-w-5xl relative">
-                    <h1 className="text-hero text-display mb-8 text-display-gradient drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] leading-[1.1]">
+            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center px-4 pb-28 pt-8 md:px-8 md:pt-10">
+                <div className="mb-5 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-7 md:px-4">
+                    <div className="flex items-center gap-2">
+                        <Hash size={14} className="text-blue-300" />
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">Code {gameState.code}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Users size={14} className="text-cyan-300" />
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">{gameState.players.length} Players</span>
+                    </div>
+                    <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">Lead {leadPlayerName} · {leadPlayerScore}</div>
+                </div>
+
+                <div className="w-full text-center">
+                    <motion.h1
+                        initial={{ y: 24, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.06 }}
+                        className="mx-auto mb-3 max-w-5xl text-3xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4 md:text-5xl"
+                    >
                         {currentQuestion.question}
-                    </h1>
-                    <div className="flex flex-col items-center gap-10">
-                        <div className="flex flex-col items-center">
-                            <span className="text-sm md:text-lg font-black text-color-blue tracking-[0.6em] uppercase italic mb-6 opacity-80">Correct Answer</span>
-                            <div className="flex justify-center gap-8 flex-wrap">
-                                {correctColours.map((color, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ y: 20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.2 + (i * 0.1) }}
-                                    >
-                                        <ColorCard
-                                            color={color}
-                                            isCorrect={true}
-                                            size="medium"
-                                            index={i}
-                                        />
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
+                    </motion.h1>
+
+                    <motion.div
+                        initial={{ y: 14, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.14 }}
+                        className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-300/40 bg-blue-500/15 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-blue-200 md:mb-6"
+                    >
+                        Correct Answer
+                    </motion.div>
+
+                    <div className="mb-7 flex flex-wrap justify-center gap-5 md:mb-8">
+                        {correctColours.map((color, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.18 + (i * 0.08) }}
+                            >
+                                <ColorCard
+                                    color={color}
+                                    isCorrect={true}
+                                    size="medium"
+                                    index={i}
+                                />
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
 
-                {/* All Players Results Grid */}
-                <div className="w-full mb-16 px-4">
-                    <div className="flex items-center justify-center gap-6 mb-10">
-                        <div className="h-px w-20 bg-gradient-to-r from-transparent to-white/20" />
-                        <span className="text-base md:text-xl font-black text-white/50 tracking-[0.4em] uppercase italic">Player Intel</span>
-                        <div className="h-px w-20 bg-gradient-to-l from-transparent to-white/20" />
+                <div className="w-full flex-1 overflow-hidden">
+                    <div className="mb-4 flex items-center justify-center gap-4 md:mb-5">
+                        <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30 md:w-20" />
+                        <span className="text-xs font-black uppercase tracking-[0.35em] text-white/60 md:text-sm">Player Intel</span>
+                        <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-4 md:gap-6 px-4 w-full">
+                    <div className="mx-auto grid max-h-[42vh] w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {sortedPlayers.map((player, index) => {
                             const playerAnswer = sortColors(player.lastAnswer || []);
 
                             return (
                                 <motion.div
                                     key={player.id}
-                                    initial={{ opacity: 0, y: 30 }}
+                                    initial={{ opacity: 0, y: 26 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.4 + (index * 0.05) }}
-                                    className="glass group relative flex flex-col flex-1 min-w-50 max-w-sm p-4 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+                                    transition={{ delay: 0.28 + (index * 0.04) }}
+                                    className="group relative flex min-h-44 flex-col overflow-hidden rounded-2xl border p-3 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
                                     style={{
                                         background: player.isCorrect
-                                            ? `linear-gradient(180deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)`
-                                            : `linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)`,
+                                            ? 'linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.05) 100%)'
+                                            : 'linear-gradient(180deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.05) 100%)',
                                         borderColor: player.isCorrect
-                                            ? (player.streak >= 3 ? 'rgba(249, 115, 22, 0.6)' : 'rgba(34, 197, 94, 0.3)')
-                                            : 'rgba(239, 68, 68, 0.3)',
+                                            ? (player.streak >= 3 ? 'rgba(249,115,22,0.65)' : 'rgba(34,197,94,0.35)')
+                                            : 'rgba(239,68,68,0.35)',
                                         borderWidth: player.streak >= 3 ? '2px' : '1px',
-                                        borderStyle: 'solid',
-                                        boxShadow: player.streak >= 3 ? '0 0 30px rgba(249, 115, 22, 0.2)' : 'none'
+                                        boxShadow: player.streak >= 3 ? '0 0 30px rgba(249,115,22,0.2)' : 'none'
                                     }}
                                 >
-                                    {/* Player Info */}
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white/5 shadow-lg relative">
-                                            <div className="absolute inset-0 bg-black/20" />
-                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full relative z-10" />
+                                    <div className="mb-3 flex items-center gap-3">
+                                        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-lg">
+                                            <div className="absolute inset-0 bg-black/15" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="relative z-10 h-full w-full" />
                                         </div>
-                                        <div className="flex flex-col items-start min-w-0">
-                                            <span className="font-black text-lg uppercase italic tracking-wider truncate w-full text-white drop-shadow-md pr-10">
+                                        <div className="min-w-0">
+                                            <span className="block w-full truncate pr-8 text-sm font-black uppercase tracking-wide text-white md:text-base">
                                                 {player.name}
                                             </span>
-                                            <div className="flex items-center gap-1">
-                                                <span className={`text-[16px] font-black italic tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
+                                            <div className="flex items-center gap-1.5">
+                                                <span className={`text-sm font-black tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
                                                     {player.isCorrect ? `+${player.roundScore || 0} PTS` : '+0 PTS'}
                                                 </span>
-                                                {player.streak >= 3 && (
-                                                    <motion.div
-                                                        animate={{ scale: [1, 1.2, 1], rotate: [-10, 10, -10] }}
-                                                        transition={{ duration: 0.5, repeat: Infinity }}
-                                                        className="ml-2 bg-orange-500 rounded-full w-6 h-6 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.6)]"
-                                                    >
-                                                        <span className="text-xs">🔥</span>
-                                                    </motion.div>
-                                                )}
-                                                {player.isFastestFinger && (
-                                                    <motion.div
-                                                        animate={{ scale: [1, 1.2, 1], y: [0, -5, 0] }}
-                                                        transition={{ duration: 0.4, repeat: Infinity }}
-                                                        className={`${player.streak >= 3 ? 'ml-1' : 'ml-2'} bg-yellow-400 rounded-full w-6 h-6 flex items-center justify-center shadow-[0_0_15px_rgba(255,223,0,0.6)]`}
-                                                    >
-                                                        <span className="text-xs">⚡</span>
-                                                    </motion.div>
-                                                )}
+                                                {player.streak >= 3 && <span className="text-sm">🔥</span>}
+                                                {player.isFastestFinger && <span className="text-sm">⚡</span>}
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Answer Display */}
-                                    <div className="flex-1 flex items-center justify-center min-h-20 py-2 bg-black/20 rounded-xl border border-white/5">
-                                        <div className="flex gap-1.5 justify-center flex-wrap">
+                                    <div className="flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 p-2">
+                                        <div className="flex flex-wrap justify-center gap-1.5">
                                             {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
                                                 <ColorCard
                                                     key={i}
@@ -210,62 +210,61 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                                     disabled={true}
                                                 />
                                             )) : (
-                                                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic">No Answer</span>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">No Answer</span>
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Corner Accents */}
-                                    <div className={`absolute top-0 right-0 w-20 h-20 opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity ${player.isCorrect ? 'bg-success' : 'bg-error'} blur-2xl`} />
+                                    <div className={`pointer-events-none absolute right-0 top-0 h-16 w-16 opacity-30 blur-2xl ${player.isCorrect ? 'bg-success' : 'bg-error'}`} />
                                 </motion.div>
                             );
                         })}
                     </div>
                 </div>
 
-                {/* Navigation Button */}
-                <div className="flex flex-col items-center gap-6 pb-20">
-                    <motion.button
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onNextQuestion}
-                        className="btn btn-primary relative group py-3 px-8 md:py-4 md:px-10 rounded-2xl shadow-xl overflow-hidden"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <div className="flex items-center gap-4 md:gap-6 relative z-10">
-                            <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mb-0.5">Coming up</span>
-                                <span className="text-lg md:text-xl font-black italic uppercase tracking-wider">
-                                    {isLastQuestion ? 'The Results' : 'Next Round'}
-                                </span>
+                <div className="absolute inset-x-0 bottom-6 z-20 px-4">
+                    <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3">
+                        <motion.button
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={onNextQuestion}
+                            className="btn btn-primary group relative w-full overflow-hidden rounded-2xl px-6 py-3 shadow-xl md:px-8 md:py-4"
+                        >
+                            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+                            <div className="relative z-10 flex items-center justify-between">
+                                <div className="flex flex-col items-start leading-none">
+                                    <span className="mb-0.5 text-[10px] font-black uppercase tracking-[0.3em] opacity-60">Coming up</span>
+                                    <span className="text-base font-black uppercase tracking-wide md:text-lg">
+                                        {isLastQuestion ? 'The Results' : 'Next Round'}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="font-mono text-2xl font-black tabular-nums">{timeLeft}</span>
+                                        <span className="text-[10px] font-black uppercase opacity-40">S</span>
+                                    </div>
+                                    <Play fill="currentColor" size={20} className="transition-transform group-hover:translate-x-1" />
+                                </div>
                             </div>
-                            <div className="w-px h-6 bg-white/20" />
-                            <div className="flex items-center gap-2">
-                                <span className="text-xl md:text-2xl font-black font-mono tracking-tighter tabular-nums">{timeLeft}</span>
-                                <span className="text-[10px] font-black uppercase opacity-40">S</span>
-                            </div>
-                            <Play fill="currentColor" size={20} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                    </motion.button>
+                        </motion.button>
 
-                    {/* Remove Question Button */}
-                    <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.4 }}
-                        transition={{ delay: 0.5 }}
-                        whileHover={{ scale: 1.02, opacity: 1 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleRemoveQuestion}
-                        disabled={isRemoving}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 hover:bg-red-500/10 hover:border-red-500/20 transition-all font-medium tracking-wide uppercase text-[10px] group disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                        <Trash2 size={14} className={`text-white/40 group-hover:text-red-400 transition-colors ${isRemoving ? 'animate-bounce' : ''}`} />
-                        <span className="text-white/40 group-hover:text-red-400">Remove Question</span>
-                    </motion.button>
+                        <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.52 }}
+                            transition={{ delay: 0.5 }}
+                            whileHover={{ scale: 1.02, opacity: 1 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleRemoveQuestion}
+                            disabled={isRemoving}
+                            className="group flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-[10px] font-medium uppercase tracking-wide transition-all hover:border-red-500/25 hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                            <Trash2 size={14} className={`text-white/40 transition-colors group-hover:text-red-400 ${isRemoving ? 'animate-bounce' : ''}`} />
+                            <span className="text-white/40 group-hover:text-red-400">Remove Question</span>
+                        </motion.button>
+                    </div>
                 </div>
             </div>
 
-            {/* Confirm Modal */}
             {modalConfig && (
                 <ConfirmModal
                     isOpen={showConfirmModal}

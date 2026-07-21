@@ -107,7 +107,7 @@ export function registerSocketHandlers(io: Server) {
           jokersEnabled,
           soundEnabled: soundEnabled ?? true,
           musicEnabled: musicEnabled ?? true,
-          bgmTrack: bgmTrack || 'Casino Royal.mp3',
+          bgmTrack: bgmTrack || 'Retro Arcade.mp3',
           streaksEnabled: streaksEnabled ?? true,
           fastestFingerEnabled: fastestFingerEnabled ?? true,
           currentRoundIndex: 0,

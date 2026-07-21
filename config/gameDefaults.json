@@ -1,13 +1,13 @@
 {
     "rounds": 4,
     "questionsPerRound": 6,
-    "questionTimer": 30,
-    "resultDuration": 30,
-    "lobbyDuration": 30,
+    "questionTimer": 10,
+    "resultDuration": 10,
+    "lobbyDuration": 10,
     "jokersEnabled": true,
     "soundEnabled": true,
     "musicEnabled": true,
-    "defaultBgmTrack": "Casino Royal.mp3",
+    "defaultBgmTrack": "Retro Arcade.mp3",
     "streaksEnabled": true,
     "fastestFingerEnabled": true
 }

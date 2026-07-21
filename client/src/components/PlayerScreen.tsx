@@ -57,6 +57,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     const { status, players, currentQuestionIndex, questions } = gameState;
     const currentQuestion = questions[currentQuestionIndex];
     const me = players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    const isResultView = status === 'RESULT' && !!me;
 
     // If player is not in the game (e.g. server restarted or kicked), show join screen
     if (!me) {
@@ -82,16 +83,18 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     };
 
     return (
-        <div className="flex flex-col p-2 md:p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10">
-            <PlayerHeader
-                name={me?.name || name}
-                avatar={me?.avatar || 'cyber-blue'}
-                avatarStyle={me?.avatarStyle || 'avataaars'}
-                score={me?.score || 0}
-                rank={status === 'FINAL_SCORE' ? myRank : undefined}
-            />
+        <div className={isResultView ? 'min-h-screen w-full relative z-10 overflow-hidden' : 'flex flex-col p-2 md:p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10'}>
+            {!isResultView && (
+                <PlayerHeader
+                    name={me?.name || name}
+                    avatar={me?.avatar || 'cyber-blue'}
+                    avatarStyle={me?.avatarStyle || 'avataaars'}
+                    score={me?.score || 0}
+                    rank={status === 'FINAL_SCORE' ? myRank : undefined}
+                />
+            )}
 
-            <div className="flex-1 flex flex-col justify-start">
+            <div className={isResultView ? 'min-h-screen w-full' : 'flex-1 flex flex-col justify-start'}>
                 {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'ROUND_INTRO') && <PlayerLobbyScreen gameState={gameState} />}
 
 
@@ -136,7 +139,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                 )}
             </div>
 
-            <PlayerFooter onLeave={leaveGame} />
+            {!isResultView && <PlayerFooter onLeave={leaveGame} />}
 
             {/* Leave Game Confirmation Modal */}
             <ConfirmModal
