@@ -235,9 +235,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     >
                         <motion.div
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 1, 0.4, 0.6] }}
+                            animate={{ opacity: 1 }}
                             transition={{ duration: 0.15 }}
-                            className="absolute inset-0 bg-color-pink/40 mix-blend-color-dodge backdrop-blur-xl"
+                            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ scale: 3, rotate: -30, opacity: 0, filter: 'blur(20px)' }}
@@ -410,21 +410,22 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                         {gameState.blocksEnabled !== false && me && !hasUsedBlockCard && !blockCardPending && !isBlockedThisQuestion && targetablePlayers.length > 0 && (
                             <div className="w-full max-w-4xl px-2 md:px-6 mx-auto mt-3 md:mt-5">
                                 <motion.button
-                                    whileHover={{ y: -2, boxShadow: '0 0 30px rgba(239,68,68,0.45)' }}
+                                    whileHover={{ y: -1 }}
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => setIsBlockTargetPickerOpen(true)}
+                                    onClick={() => {
+                                        if (targetablePlayers.length === 1) {
+                                            setBlockCardPending(true);
+                                            socket.emit('use-block-card', { code: gameState.code, targetPlayerId: targetablePlayers[0].id });
+                                        } else {
+                                            setIsBlockTargetPickerOpen(true);
+                                        }
+                                    }}
                                     disabled={hasAnswered || timeLeft === 0}
-                                    className="group relative w-full overflow-hidden rounded-3xl border-2 border-red-400/70 bg-gradient-to-r from-red-600/35 via-red-500/20 to-black/60 transition-all hover:from-red-600/45 hover:to-black/70 disabled:opacity-30 disabled:grayscale"
+                                    className="group relative w-full overflow-hidden rounded-2xl border border-red-400/30 bg-red-900/20 transition-all hover:bg-red-900/30 disabled:opacity-30 disabled:grayscale"
                                     aria-label="Choose a player to block"
                                 >
-                                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.18),transparent_55%)]" />
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-red-300/30 to-transparent" />
-                                    <div className="relative flex items-center justify-between gap-4 px-5 py-4 md:px-7 md:py-6">
-                                        <div className="flex flex-col items-start text-left">
-                                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-white/65">Danger Action</span>
-                                            <span className="text-xl md:text-3xl font-black uppercase tracking-[0.12em] text-white">Block A Player</span>
-                                        </div>
-                                        <span className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-red-100/85 group-hover:text-white transition-colors">Choose Target</span>
+                                    <div className="relative flex items-center justify-center px-5 py-3 md:px-7 md:py-4">
+                                        <span className="text-base md:text-xl font-bold uppercase tracking-wider text-red-200/70 group-hover:text-red-100 transition-colors">Block</span>
                                     </div>
                                 </motion.button>
                             </div>
