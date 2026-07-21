@@ -1,0 +1,13 @@
+services:
+  server:
+    image: colourwang-server:latest
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: colourwang-server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    restart: unless-stopped

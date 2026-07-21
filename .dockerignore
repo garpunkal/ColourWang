@@ -1,0 +1,19 @@
+# VCS and editor artifacts
+.git
+.gitignore
+.vscode
+
+# Dependency directories
+node_modules
+**/node_modules
+
+# Build output and logs
+**/dist
+**/*.log
+
+# Ignore local env files
+**/.env
+**/.env.*
+
+# Keep Docker files if added elsewhere
+!server/Dockerfile
