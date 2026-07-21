@@ -191,6 +191,32 @@ Deployment-oriented settings are in `config/deployment.json`:
 
 If you use tunnels for remote testing, optional ngrok fields are also defined in that file.
 
+## Security
+
+### Local Certificates
+
+Local HTTPS certificates are generated into the `certs` folder for development use.
+
+- Do not share or upload files from `certs`.
+- The repository ignore rules already exclude `certs/` from git tracking.
+- If certificate files were ever committed by mistake, rotate/regenerate them immediately.
+
+### Secrets and Environment Variables
+
+- Keep secrets out of source code and JSON config files.
+- Use environment variables for sensitive values.
+- Commit only templates (for example `.env.example`) with empty or placeholder values.
+
+### Pre-Commit Leak Check
+
+Before pushing changes, run a quick scan in the repo root:
+
+```bash
+git grep -nE "(AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{80,}|xox[baprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{35}|sk-[A-Za-z0-9]{20,}|-----BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY-----)"
+```
+
+If this returns results in first-party files, remove or rotate the exposed secret before commit.
+
 ## Troubleshooting
 
 Server port already in use:
