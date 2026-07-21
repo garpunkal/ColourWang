@@ -112,10 +112,10 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 {blockNotice && (
                     <motion.div
                         key="block-notice"
-                        initial={{ y: -200, opacity: 0 }}
+                        initial={{ y: 200, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -200, opacity: 0 }}
-                        className="fixed top-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-b-8 border-error shadow-2xl"
+                        exit={{ y: 200, opacity: 0 }}
+                        className="fixed bottom-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-t-8 border-error shadow-2xl"
                     >
                         <div className="h-2 w-full bg-gradient-to-r from-error via-white to-error animate-pulse" />
                         <div className="flex-1 flex items-center">
