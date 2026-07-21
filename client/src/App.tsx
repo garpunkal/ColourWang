@@ -65,10 +65,29 @@ function App() {
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [lastReconnectCheckAt, setLastReconnectCheckAt] = useState<number>(Date.now());
   const [secondsSinceReconnectCheck, setSecondsSinceReconnectCheck] = useState(0);
+  const [hasConnectedOnce, setHasConnectedOnce] = useState<boolean>(socket.connected);
+  const [showStartupConnectionIssue, setShowStartupConnectionIssue] = useState(false);
   const isConnected = useSocketConnection(socket);
   const reconnectionStatus = useReconnectionStatus(socket);
+  const shouldShowConnectionOverlay = !isConnected && (hasConnectedOnce || showStartupConnectionIssue);
 
   useSocketGameState(socket, setGameState);
+
+  useEffect(() => {
+    if (isConnected) {
+      setHasConnectedOnce(true);
+      setShowStartupConnectionIssue(false);
+      return;
+    }
+
+    if (hasConnectedOnce) return;
+
+    const startupGraceTimer = setTimeout(() => {
+      setShowStartupConnectionIssue(true);
+    }, 3000);
+
+    return () => clearTimeout(startupGraceTimer);
+  }, [isConnected, hasConnectedOnce]);
 
   // Auto-restore role if we rejoin a session
   useEffect(() => {
@@ -344,7 +363,7 @@ function App() {
 
       {/* Connection Status Overlay - Moved to bottom for maximum z-visibility */}
       <AnimatePresence>
-        {!isConnected && (
+        {shouldShowConnectionOverlay && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
