@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
 import { Check, X, Timer, ArrowDown } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
     player: Player;

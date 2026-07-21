@@ -1,18 +1,22 @@
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface SettingsContextType {
-    // Settings context - reserved for future use
+    colourblindMode: boolean;
+    setColourblindMode: (enabled: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
-export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function SettingsProvider({ children }: { children: ReactNode }) {
+    const [colourblindMode, setColourblindMode] = useState(false);
+
     return (
-        <SettingsContext.Provider value={{}}>
+        <SettingsContext.Provider value={{ colourblindMode, setColourblindMode }}>
             {children}
         </SettingsContext.Provider>
     );
-};
+}
 
 export const useSettings = () => {
     const context = useContext(SettingsContext);

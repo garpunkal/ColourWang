@@ -1,11 +1,10 @@
 import type { Socket } from 'socket.io-client';
 import type { Player } from '../../types/game';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import { Avatar } from '../GameAvatars';
 import { getAvatarColor } from '../../constants/avatars';
-import { audioManager } from '../../utils/audioManager';
 
 // Optimized celebratory elements
 const GOLDEN_PARTICLES = [...Array(10)].map((_, i) => ({

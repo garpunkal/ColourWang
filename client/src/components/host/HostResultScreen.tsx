@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 
 import { ColorCard } from '../ColorCard';
-import { sortColors, getColorName } from '../../config/gameConfig';
+import { sortColors } from '../../config/gameConfig';
 import { Avatar } from '../GameAvatars';
 import { ConfirmModal } from '../shared/ConfirmModal';
 

@@ -23,7 +23,7 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
                 y,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                colour,
+                color: colour,
                 life: 1.0,
                 size: Math.random() * 3 + 1
             });
@@ -59,7 +59,7 @@ export function useSparkle(canvasRef: React.RefObject<HTMLCanvasElement | null>)
                 }
 
                 ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.colour;
+                ctx.fillStyle = p.color;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();

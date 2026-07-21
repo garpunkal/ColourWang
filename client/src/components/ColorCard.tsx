@@ -38,15 +38,6 @@ export const ColorCard = memo(function ColorCard({
 
     const cardStyle = sizeStyles[size] || sizeStyles.medium;
 
-    // Responsive font size for color name
-    const getFontSize = () => {
-        if (size === 'mini') return '0.5rem';
-        if (size === 'responsive') return 'clamp(0.65rem, 1.5vw, 1rem)'; // Better mobile scaling
-        if (size === 'small') return '0.85rem';
-        if (size === 'large') return '1.3rem';
-        return '1rem';
-    };
-
     // Detect touch devices to disable hover animations
     const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window);
 
