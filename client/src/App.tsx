@@ -63,6 +63,8 @@ function App() {
 
   const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>(initialRole)
   const [gameState, setGameState] = useState<GameState | null>(null)
+  const [lastReconnectCheckAt, setLastReconnectCheckAt] = useState<number>(Date.now());
+  const [secondsSinceReconnectCheck, setSecondsSinceReconnectCheck] = useState(0);
   const isConnected = useSocketConnection(socket);
   const reconnectionStatus = useReconnectionStatus(socket);
 
@@ -104,6 +106,49 @@ function App() {
       audioManager.stopBGM();
     }
   }, [role]);
+
+  useEffect(() => {
+    if (isConnected) return;
+
+    const runReconnectCheck = () => {
+      wakeBackend();
+      if (socket.disconnected) {
+        socket.connect();
+      }
+      setLastReconnectCheckAt(Date.now());
+    };
+
+    // Trigger immediately, then keep checking while Signal Lost is shown.
+    runReconnectCheck();
+    const interval = setInterval(runReconnectCheck, 4000);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        runReconnectCheck();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (isConnected) {
+      setSecondsSinceReconnectCheck(0);
+      return;
+    }
+
+    const tick = () => {
+      setSecondsSinceReconnectCheck(Math.floor((Date.now() - lastReconnectCheckAt) / 1000));
+    };
+
+    tick();
+    const interval = setInterval(tick, 500);
+    return () => clearInterval(interval);
+  }, [isConnected, lastReconnectCheckAt]);
 
   // Handle global sound setting from GameState
   useEffect(() => {
@@ -357,6 +402,9 @@ function App() {
                   </p>
                   <p className="text-base md:text-xl font-medium text-white/30 uppercase tracking-[0.4em]">
                     Hold tight... searching for host...
+                  </p>
+                  <p className="text-xs md:text-sm font-mono text-white/45 uppercase tracking-[0.2em]">
+                    Last check: {secondsSinceReconnectCheck}s ago | Next check in {Math.max(0, 4 - (secondsSinceReconnectCheck % 4))}s
                   </p>
                 </div>
               </div>

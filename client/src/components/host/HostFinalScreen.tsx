@@ -25,6 +25,7 @@ interface Props {
 
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
     const [showSupernova, setShowSupernova] = useState(false);
+    const [showImpactFlash, setShowImpactFlash] = useState(true);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -34,22 +35,15 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
     useEffect(() => {
-        // Trigger supernova after a small delay for the winner reveal
-        const timer = setTimeout(() => setShowSupernova(true), 1200);
-        return () => clearTimeout(timer);
-    }, []);
+        // Front-load a hard impact pulse, then trigger the supernova winner reveal.
+        const flashTimer = setTimeout(() => setShowImpactFlash(false), 650);
+        const supernovaTimer = setTimeout(() => setShowSupernova(true), 900);
 
-    // Container variants for clean staggered entrance
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15,
-                delayChildren: 0.3
-            }
-        }
-    };
+        return () => {
+            clearTimeout(flashTimer);
+            clearTimeout(supernovaTimer);
+        };
+    }, []);
 
     const itemVariants: Variants = {
         hidden: { opacity: 0, y: 20, scale: 0.98 },
@@ -69,11 +63,26 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     return (
         <motion.div
             key="final"
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
+            initial={{ opacity: 0, scale: 0.94, filter: 'blur(16px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="w-full max-w-5xl mx-auto py-8 px-4 md:py-12 md:px-6 relative"
         >
+            <AnimatePresence>
+                {showImpactFlash && (
+                    <motion.div
+                        initial={{ opacity: 0.95, scale: 0.9 }}
+                        animate={{ opacity: 0, scale: 1.25 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.6, ease: 'easeOut' }}
+                        className="fixed inset-0 pointer-events-none z-[70]"
+                        style={{
+                            background: `radial-gradient(circle at 50% 45%, ${winnerColor}aa 0%, rgba(255,255,255,0.45) 25%, transparent 68%)`
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+
             {/* High-Performance Supernova Effect */}
             <AnimatePresence>
                 {showSupernova && (
@@ -117,15 +126,27 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
             {/* Title Section */}
             <div className="text-center mb-12 relative px-4">
                 <motion.div
-                    variants={itemVariants}
+                    initial={{ opacity: 0, y: 80, scale: 0.7, rotateX: -25 }}
+                    animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                    transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
                     className="flex flex-col items-center"
                 >
-                    <h1 className="text-display-gradient text-4xl md:text-8xl font-black italic uppercase tracking-tighter mb-2 pr-5">
+                    <motion.h1
+                        initial={{ letterSpacing: '-0.25em', opacity: 0.2 }}
+                        animate={{ letterSpacing: '-0.03em', opacity: 1 }}
+                        transition={{ duration: 0.85, delay: 0.1 }}
+                        className="text-display-gradient text-4xl md:text-8xl font-black italic uppercase tracking-tighter mb-2 pr-5"
+                    >
                         Results
-                    </h1>
-                    <p className="text-color-blue text-lg md:text-2xl font-black uppercase tracking-[0.3em] opacity-80">
+                    </motion.h1>
+                    <motion.p
+                        initial={{ y: 16, opacity: 0 }}
+                        animate={{ y: 0, opacity: 0.9 }}
+                        transition={{ duration: 0.5, delay: 0.25 }}
+                        className="text-color-blue text-lg md:text-2xl font-black uppercase tracking-[0.3em] opacity-80"
+                    >
                         Final Standings
-                    </p>
+                    </motion.p>
                 </motion.div>
             </div>
 
@@ -138,7 +159,14 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                     return (
                         <motion.div
                             key={player.id}
-                            variants={itemVariants}
+                            initial={{ opacity: 0, y: 80, scale: 0.88, rotateZ: i % 2 === 0 ? -2 : 2 }}
+                            animate={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
+                            transition={{
+                                delay: 0.22 + (i * 0.12),
+                                type: 'spring',
+                                stiffness: isWinner ? 200 : 150,
+                                damping: isWinner ? 17 : 21
+                            }}
                             className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
                                 ? 'bg-gradient-to-r from-white/10 to-transparent border-yellow-500/50'
                                 : 'border-white/5 hover:border-white/10'
