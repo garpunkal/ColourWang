@@ -179,14 +179,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <p className="text-black/60 font-bold text-lg leading-tight">{modalError}</p>
                             <button
                                 onClick={() => setModalError(null)}
-                                className="w-full py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl transition-colors"
-                                style={{ backgroundColor: '#dc2626', color: '#ffffff', border: '1px solid rgba(127, 29, 29, 0.45)' }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#b91c1c';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#dc2626';
-                                }}
+                                className="w-full py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl transition-colors bg-red-600 hover:bg-red-700 text-white border border-red-900/45 focus:outline-none focus:ring-2 focus:ring-red-300/70"
                             >
                                 OK
                             </button>
@@ -250,7 +243,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     style={avatarStyle}
                                     className="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                                 />
-                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 glass rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 glass rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap" >
                                     {avatarStyle.replace('-', ' ')}
                                 </div>
                             </motion.div>
@@ -258,7 +251,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <motion.button
                                 whileTap={{ scale: 0.8 }}
                                 onClick={() => cycleStyle('next')}
-                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors"
+                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors "
                             >
                                 <ChevronRight size={24} />
                             </motion.button>
