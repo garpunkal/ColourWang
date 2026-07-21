@@ -18,11 +18,27 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>
 )
 
-// Register service worker for PWA
+// Keep development builds fresh: unregister SW in dev, register only in production.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').catch((err) => {
-      console.error('Service worker registration failed:', err);
+  if (import.meta.env.DEV) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.unregister();
+      });
     });
-  });
+
+    if ('caches' in window) {
+      caches.keys().then((cacheNames) => {
+        cacheNames.forEach((cacheName) => {
+          caches.delete(cacheName);
+        });
+      });
+    }
+  } else {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js').catch((err) => {
+        console.error('Service worker registration failed:', err);
+      });
+    });
+  }
 }

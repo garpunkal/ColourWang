@@ -179,7 +179,14 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <p className="text-black/60 font-bold text-lg leading-tight">{modalError}</p>
                             <button
                                 onClick={() => setModalError(null)}
-                                className="w-full bg-red-600 hover:bg-red-700 text-white border border-red-900/40 py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl transition-colors"
+                                className="w-full py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl transition-colors"
+                                style={{ backgroundColor: '#dc2626', color: '#ffffff', border: '1px solid rgba(127, 29, 29, 0.45)' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#b91c1c';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#dc2626';
+                                }}
                             >
                                 OK
                             </button>
