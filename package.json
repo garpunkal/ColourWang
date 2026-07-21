@@ -6,14 +6,13 @@
         "dev:client": "npm run dev --prefix client",
         "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
         "install:all": "npm install && npm install --prefix server && npm install --prefix client",
-        "start:server": "npm run start --prefix server",  
+        "start:server": "npm run start --prefix server",
         "start:client": "npm run start --prefix client"
     },
     "devDependencies": {
-        "concurrently": "^9.2.1"
+        "concurrently": "^9.2.4"
     },
     "dependencies": {
-        "@types/socket.io": "^3.0.2",
         "socket.io": "^4.8.3"
     }
 }
