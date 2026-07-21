@@ -91,5 +91,70 @@
             "black"
         ],
         "roundId": "household"
+    },
+    {
+        "question": "What colour is a typical kitchen sponge?",
+        "answer": [
+            "yellow",
+            "green"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a typical fridge?",
+        "answer": [
+            "white",
+            "grey"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour are most bathroom tiles?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour are most washing-up gloves?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a wooden chopping board?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a Post-it note traditionally?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a typical non-stick frying pan?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a standard toilet?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a traditional London double-decker bus?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "household"
     }
 ]

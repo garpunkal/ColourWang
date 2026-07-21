@@ -7,7 +7,7 @@
         "roundId": "music"
     },
     {
-        "question": "What colour is associated with the album 'Purple Rain'?",
+        "question": "What colour is associated with Prince's iconic 1984 film and album?",
         "answer": [
             "purple"
         ],
@@ -56,7 +56,7 @@
         "roundId": "music"
     },
     {
-        "question": "What colour is associated with Pink Floyd?",
+        "question": "What colour is in the name of the legendary rock band behind 'The Wall'?",
         "answer": [
             "pink"
         ],
@@ -70,7 +70,7 @@
         "roundId": "music"
     },
     {
-        "question": "What colour is mentioned in Coldplay's 'Yellow'?",
+        "question": "What colour is the title of Coldplay's breakthrough 2000 single?",
         "answer": [
             "yellow"
         ],
@@ -118,6 +118,80 @@
         "question": "What colour velvet is in the Led Zeppelin song?",
         "answer": [
             "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour are the lips in the Rolling Stones logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is a classic acoustic guitar?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is Michael Jackson's Thriller jacket?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour are most guitar amplifiers?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour hair does P!nk have?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is the plain cover of The Beatles' 1968 self-titled double album?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour are the Grammy trophies?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is the lightning bolt in the AC/DC logo?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour are Coldplay's light-up wristbands at concerts?",
+        "answer": [
+            "red",
+            "green",
+            "blue",
+            "yellow"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour are Daft Punk's helmets?",
+        "answer": [
+            "grey",
+            "yellow"
         ],
         "roundId": "music"
     }

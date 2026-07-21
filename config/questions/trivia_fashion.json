@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colour is a classic little black dress?",
+        "question": "What colour is the iconic fashion staple known as the 'LBD'?",
         "answer": [
             "black"
         ],
@@ -22,7 +22,7 @@
         "roundId": "fashion"
     },
     {
-        "question": "What colour are blue jeans?",
+        "question": "What colour are classic denim jeans?",
         "answer": [
             "blue"
         ],
@@ -89,6 +89,75 @@
             "grey",
             "black",
             "blue"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are graduation gowns typically?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are most chefs' uniforms?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are surgical scrubs most often?",
+        "answer": [
+            "green",
+            "blue"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are military camouflage uniforms?",
+        "answer": [
+            "green",
+            "brown"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are most police uniforms in the UK?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a classic denim jacket?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are most nurses' scrubs?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a classic trench coat?",
+        "answer": [
+            "brown",
+            "yellow"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour are most firefighter jackets?",
+        "answer": [
+            "yellow",
+            "orange"
         ],
         "roundId": "fashion"
     }

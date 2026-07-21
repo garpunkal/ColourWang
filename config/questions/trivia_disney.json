@@ -1,6 +1,6 @@
 [
     {
-        "question": "What colour is Snow White's dress?",
+        "question": "What colour is the dress of the princess who ate a poisoned apple?",
         "answer": [
             "blue",
             "yellow"
@@ -85,6 +85,80 @@
         "answer": [
             "black",
             "purple"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Cinderella's ball gown?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Sleeping Beauty's dress?",
+        "answer": [
+            "pink",
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Dumbo?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Stitch from Lilo and Stitch?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Baymax from Big Hero 6?",
+        "answer": [
+            "white",
+            "red"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Bambi?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Winnie the Pooh?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Flounder's body in The Little Mermaid?",
+        "answer": [
+            "yellow",
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is the Magic Carpet in Aladdin?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Pinocchio's hat?",
+        "answer": [
+            "yellow"
         ],
         "roundId": "disney"
     }

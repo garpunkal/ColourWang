@@ -96,5 +96,64 @@
             "black"
         ],
         "roundId": "celebrities"
+    },
+    {
+        "question": "What colour jacket did Michael Jackson wear in Thriller?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour dress did Audrey Hepburn wear in Breakfast at Tiffany's?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour hair does Ed Sheeran have?",
+        "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour suit is Johnny Cash known for wearing?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour lipstick is Marilyn Monroe known for?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is the lightning bolt in David Bowie's Aladdin Sane photo?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Adele's hair?",
+        "answer": [
+            "black",
+            "brown"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour suit did Elvis Presley wear in his famous jumpsuit era?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "celebrities"
     }
 ]

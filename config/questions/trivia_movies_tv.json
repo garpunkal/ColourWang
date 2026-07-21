@@ -51,7 +51,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour suit do the Men in Black wear?",
+        "question": "What colour are the suits worn by the secret agents in the 1997 Will Smith sci-fi film?",
         "answer": [
             "black"
         ],
@@ -303,7 +303,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is the Pink Panther?",
+        "question": "What colour is the animated cartoon cat from the Henry Mancini-scored film series?",
         "answer": [
             "pink"
         ],
@@ -332,7 +332,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is Walter White's product in Breaking Bad?",
+        "question": "What colour is Heisenberg's meth in Breaking Bad?",
         "answer": [
             "blue"
         ],
@@ -411,6 +411,79 @@
             "pink",
             "blue",
             "orange"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Paddington Bear?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Peppa Pig?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is SpongeBob SquarePants?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Patrick Star from SpongeBob?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour are the Teletubbies?",
+        "answer": [
+            "red",
+            "green",
+            "purple",
+            "yellow"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Thomas the Tank Engine?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Postman Pat's van?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Dora the Explorer's backpack?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Bob the Builder's hat?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is Bluey from the TV show Bluey?",
+        "answer": [
+            "blue"
         ],
         "roundId": "movies_tv"
     }

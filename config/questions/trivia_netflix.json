@@ -15,7 +15,7 @@
         "roundId": "netflix"
     },
     {
-        "question": "What colour are the jumpsuits in Orange Is the New Black?",
+        "question": "What colour are the prison jumpsuits worn in the Netflix drama set at Litchfield Penitentiary?",
         "answer": [
             "orange"
         ],
@@ -62,7 +62,7 @@
     {
         "question": "What colour is the Money Heist mask?",
         "answer": [
-            "red"
+            "white"
         ],
         "roundId": "netflix"
     },
@@ -74,7 +74,57 @@
         "roundId": "netflix"
     },
     {
-        "question": "What colour is associated with Black Mirror episodes?",
+        "question": "What colour is the titular mirror in Charlie Brooker's dystopian anthology series?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Geralt's hair in The Witcher?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Wednesday Addams' dress in Wednesday?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is a chess board?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Emily in Paris associated with?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the Umbrella Academy suit?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour are Eleven's nosebleeds in Stranger Things?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the Night's Watch cloak in Game of Thrones?",
         "answer": [
             "black"
         ],

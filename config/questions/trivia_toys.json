@@ -94,5 +94,80 @@
             "yellow"
         ],
         "roundId": "toys"
+    },
+    {
+        "question": "What colour are most chess pieces?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is a classic Etch A Sketch?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colours are on an Uno deck?",
+        "answer": [
+            "red",
+            "yellow",
+            "blue",
+            "green"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are most Nerf guns?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are Lego minifigures' faces?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is a Slinky?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are classic Monopoly hotels?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are classic Monopoly houses?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is a Connect Four game frame?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are standard playing card suits (hearts/diamonds)?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "toys"
     }
 ]

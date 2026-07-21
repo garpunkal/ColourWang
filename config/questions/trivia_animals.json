@@ -67,7 +67,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are red pandas?",
+        "question": "What colour is a panda native to the Himalayas and southwestern China?",
         "answer": [
             "red",
             "brown"
@@ -75,7 +75,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are blue whales?",
+        "question": "What colour is the largest animal ever to have lived on Earth?",
         "answer": [
             "blue",
             "grey"
@@ -91,7 +91,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour eyes do white tigers have?",
+        "question": "What colour are the eyes of an albino tiger?",
         "answer": [
             "blue"
         ],
@@ -150,14 +150,14 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are pink dolphins?",
+        "question": "What colour is the Amazon river dolphin?",
         "answer": [
             "pink"
         ],
         "roundId": "animals"
     },
     {
-        "question": "What colour is a red-eyed tree frog's body?",
+        "question": "What colour is the body of a tree frog famous for its striking eyes?",
         "answer": [
             "green"
         ],
@@ -186,7 +186,7 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour are green sea turtles?",
+        "question": "What colour is the sea turtle that nests on tropical beaches worldwide?",
         "answer": [
             "green",
             "brown"
@@ -208,9 +208,85 @@
         "roundId": "animals"
     },
     {
-        "question": "What colour feathers does a blue jay have?",
+        "question": "What colour is a common North American crested songbird with a loud call?",
         "answer": [
             "blue"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour are zebra stripes?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a polar bear?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a bumblebee?",
+        "answer": [
+            "yellow",
+            "black"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a male cardinal bird?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a clownfish?",
+        "answer": [
+            "orange",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a giant panda?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is the ocean's largest predatory fish?",
+        "answer": [
+            "grey",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a popular family dog breed commonly used as a guide dog?",
+        "answer": [
+            "yellow",
+            "brown"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a swan?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is the most widespread bear species in the world?",
+        "answer": [
+            "brown"
         ],
         "roundId": "animals"
     }

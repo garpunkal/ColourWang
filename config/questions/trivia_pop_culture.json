@@ -135,5 +135,73 @@
             "yellow"
         ],
         "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour are NASA astronaut spacesuits?",
+        "answer": [
+            "white",
+            "orange"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour are Apple AirPods?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour are the fire emoji?",
+        "answer": [
+            "red",
+            "orange",
+            "yellow"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour are police lights in the UK?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour medal is awarded to the first-place finisher at the Olympics?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the Minecraft grass block on top?",
+        "answer": [
+            "green",
+            "brown"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is a typical Post-it note?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour are most road warning signs?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the 100 emoji?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "pop_culture"
     }
 ]

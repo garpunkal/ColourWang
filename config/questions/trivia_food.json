@@ -36,7 +36,7 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is a golden latte?",
+        "question": "What colour is a turmeric latte?",
         "answer": [
             "yellow",
             "orange"
@@ -52,7 +52,7 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is blue cheese?",
+        "question": "What colour are the veins running through Stilton or Roquefort?",
         "answer": [
             "white",
             "blue"
@@ -109,7 +109,7 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is a Starbucks pink drink?",
+        "question": "What colour is Starbucks' popular strawberry acai refresher?",
         "answer": [
             "pink"
         ],
@@ -204,6 +204,77 @@
     },
     {
         "question": "What colour are Takis?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a ripe banana?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is chocolate?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is ketchup?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is mustard?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour are blueberries?",
+        "answer": [
+            "blue",
+            "purple"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a lemon?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is the flesh of an avocado?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is milk?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a carrot?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a ripe strawberry?",
         "answer": [
             "red"
         ],

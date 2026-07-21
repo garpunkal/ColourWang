@@ -58,7 +58,7 @@
         "roundId": "history"
     },
     {
-        "question": "What colour was associated with the Blue and Gray in the Civil War?",
+        "question": "What colour did Union soldiers wear during the American Civil War?",
         "answer": [
             "blue",
             "grey"
@@ -77,6 +77,66 @@
         "answer": [
             "red",
             "blue"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour were the pyramids of Giza originally coated in?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour is associated with the Soviet Union?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour were Union soldiers' uniforms in the American Civil War?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour were Confederate soldiers' uniforms in the American Civil War?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour is bronze used in ancient weapons?",
+        "answer": [
+            "brown",
+            "orange"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colours are in the French Tricolour flag?",
+        "answer": [
+            "blue",
+            "white",
+            "red"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour are ancient Roman ruins typically?",
+        "answer": [
+            "brown",
+            "grey"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour was the flag of the Soviet Union?",
+        "answer": [
+            "red"
         ],
         "roundId": "history"
     }

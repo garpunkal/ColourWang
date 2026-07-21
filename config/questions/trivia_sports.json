@@ -149,7 +149,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is the Yellow Brick Road?",
+        "question": "What colour are the famous bricks in the road leading to the Emerald City?",
         "answer": [
             "yellow"
         ],
@@ -206,7 +206,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is Snow White's dress?",
+        "question": "What colour is the dress of the princess who lived with seven dwarfs?",
         "answer": [
             "blue",
             "yellow"
@@ -330,7 +330,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is Black Widow's hair?",
+        "question": "What colour hair does the Avenger played by Scarlett Johansson have?",
         "answer": [
             "red"
         ],
@@ -403,7 +403,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is Green Lantern's suit?",
+        "question": "What colour is the cosmic superhero whose power comes from a ring and a lantern?",
         "answer": [
             "green"
         ],
@@ -524,7 +524,7 @@
         "roundId": "movies_tv"
     },
     {
-        "question": "What colour is Pink Panther?",
+        "question": "What colour is the animated feline featured in the Inspector Clouseau film series?",
         "answer": [
             "pink"
         ],
@@ -774,5 +774,79 @@
             "orange"
         ],
         "roundId": "movies_tv"
+    },
+    {
+        "question": "What colour is a tennis ball?",
+        "answer": [
+            "yellow",
+            "green"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a cricket ball?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a traditional football (soccer ball)?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour jersey does the overall race leader wear in the Tour de France?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a typical basketball?",
+        "answer": [
+            "orange",
+            "brown"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour do Wimbledon players have to wear?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a baseball?",
+        "answer": [
+            "white",
+            "red"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the iconic jacket awarded to the winner at Augusta National?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a snooker table cloth?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour medal does an Olympic champion receive?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
     }
 ]

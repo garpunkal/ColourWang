@@ -51,7 +51,7 @@
         "roundId": "superheroes"
     },
     {
-        "question": "What colour is Green Lantern's costume?",
+        "question": "What colour is the cosmic superhero whose power ring must be charged at a lantern?",
         "answer": [
             "green"
         ],
@@ -67,7 +67,7 @@
         "roundId": "superheroes"
     },
     {
-        "question": "What colour is Black Widow's outfit?",
+        "question": "What colour is the outfit worn by Natasha Romanoff in the Marvel Cinematic Universe?",
         "answer": [
             "black"
         ],
@@ -84,6 +84,81 @@
         "question": "What colour is the Punisher's skull logo?",
         "answer": [
             "white"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Deadpool's suit?",
+        "answer": [
+            "red",
+            "black"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Thanos?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Doctor Strange's cloak?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Catwoman's suit?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Wolverine's classic suit?",
+        "answer": [
+            "yellow",
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Robin's suit?",
+        "answer": [
+            "red",
+            "green",
+            "yellow"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is the Marvel cosmic hero who surfs through space on a board?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is the vibranium suit worn by the king of Wakanda?",
+        "answer": [
+            "black",
+            "purple"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Cyclops's visor?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is the Scarlet Witch's outfit?",
+        "answer": [
+            "red"
         ],
         "roundId": "superheroes"
     }

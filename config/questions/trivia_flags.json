@@ -102,5 +102,88 @@
             "white"
         ],
         "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Sweden?",
+        "answer": [
+            "blue",
+            "yellow"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of China?",
+        "answer": [
+            "red",
+            "yellow"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Greece?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Ukraine?",
+        "answer": [
+            "blue",
+            "yellow"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Mexico?",
+        "answer": [
+            "green",
+            "white",
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Russia?",
+        "answer": [
+            "white",
+            "blue",
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Turkey?",
+        "answer": [
+            "red",
+            "white"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Norway?",
+        "answer": [
+            "red",
+            "white",
+            "blue"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Poland?",
+        "answer": [
+            "white",
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Argentina?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "flags"
     }
 ]

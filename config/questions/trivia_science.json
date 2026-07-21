@@ -75,5 +75,80 @@
             "red"
         ],
         "roundId": "science"
+    },
+    {
+        "question": "What colour are rubies?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour are sapphires?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is sulphur?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is rust?",
+        "answer": [
+            "orange",
+            "red",
+            "brown"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour are amethyst crystals?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does the sun appear in the sky?",
+        "answer": [
+            "yellow",
+            "white",
+            "orange"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour are glaciers?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is the planet Mars?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is dry ice fog?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does copper turn when it oxidises (verdigris)?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "science"
     }
 ]

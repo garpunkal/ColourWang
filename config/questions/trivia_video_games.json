@@ -183,5 +183,79 @@
             "red"
         ],
         "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Donkey Kong?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Princess Peach's dress?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Wario?",
+        "answer": [
+            "yellow",
+            "purple"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Samus Aran's suit in Metroid?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Minecraft creeper?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Gengar?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Squirtle?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour are the Nintendo Switch Joy-Con controllers?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Xbox logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Toad's mushroom cap in Mario?",
+        "answer": [
+            "white",
+            "red"
+        ],
+        "roundId": "video_games"
     }
 ]

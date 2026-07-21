@@ -819,5 +819,80 @@
             "white"
         ],
         "roundId": "cars"
+    },
+    {
+        "question": "What colour are London's iconic hackney cabs?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are UK police emergency lights?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are most UK police cars?",
+        "answer": [
+            "white",
+            "yellow"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are UK motorway signs?",
+        "answer": [
+            "blue",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are UK A-road direction signs?",
+        "answer": [
+            "green",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is a stop sign?",
+        "answer": [
+            "red",
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are the no-parking lines painted along UK road kerbs?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour are most road centre line markings?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the Ferrari prancing horse logo?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "cars"
+    },
+    {
+        "question": "What colour is the Lamborghini logo?",
+        "answer": [
+            "black",
+            "yellow"
+        ],
+        "roundId": "cars"
     }
 ]

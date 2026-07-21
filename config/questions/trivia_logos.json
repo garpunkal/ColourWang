@@ -92,5 +92,81 @@
             "red"
         ],
         "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Amazon logo arrow?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Netflix logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Snapchat logo?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the WhatsApp logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colours are in the Microsoft logo?",
+        "answer": [
+            "red",
+            "green",
+            "blue",
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the LinkedIn logo?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Pinterest logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Uber logo?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Shell petrol logo?",
+        "answer": [
+            "red",
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colours are in the BMW logo?",
+        "answer": [
+            "blue",
+            "white",
+            "black"
+        ],
+        "roundId": "logos"
     }
 ]

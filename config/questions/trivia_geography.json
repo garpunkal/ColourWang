@@ -7,14 +7,14 @@
         "roundId": "geography"
     },
     {
-        "question": "What colour is the Red Sea known for?",
+        "question": "What colour does the sea between Africa and the Arabian Peninsula turn due to seasonal algae?",
         "answer": [
             "red"
         ],
         "roundId": "geography"
     },
     {
-        "question": "What colour sand is at Pink Sands Beach in the Bahamas?",
+        "question": "What colour is the famous sand on Harbour Island in the Bahamas?",
         "answer": [
             "pink"
         ],
@@ -28,7 +28,7 @@
         "roundId": "geography"
     },
     {
-        "question": "What colour is the Black Sea associated with?",
+        "question": "What colour is the landlocked sea between Eastern Europe and Turkey?",
         "answer": [
             "black"
         ],
@@ -57,7 +57,7 @@
         "roundId": "geography"
     },
     {
-        "question": "What colour is the white sand at White Sands National Park?",
+        "question": "What colour are the unusual dunes at the New Mexico national park?",
         "answer": [
             "white"
         ],
@@ -81,6 +81,69 @@
         "question": "What colour represents mountains on topographic maps?",
         "answer": [
             "brown"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the sand in the Sahara Desert?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the planet Mars?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are the Swiss Alps in winter?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the Amazon rainforest from above?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the Eiffel Tower?",
+        "answer": [
+            "brown",
+            "grey"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are autumn leaves in a forest?",
+        "answer": [
+            "red",
+            "orange",
+            "yellow",
+            "brown"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the Great Wall of China?",
+        "answer": [
+            "grey",
+            "brown"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are tropical seas typically?",
+        "answer": [
+            "blue",
+            "green"
         ],
         "roundId": "geography"
     }
