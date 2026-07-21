@@ -17,18 +17,42 @@ import { ReconnectionBanner } from './components/ReconnectionBanner';
 const HostScreen = lazy(() => import('./components/HostScreen.tsx'));
 const PlayerScreen = lazy(() => import('./components/PlayerScreen.tsx'));
 
-// Socket.IO connection - uses relative path to leverage Vite proxy
-// In production/ngrok: connects through the same origin (proxied to backend)
-// In local dev: Vite proxy forwards to configured server
-const socket: Socket = io({
+// In hosted environments (e.g. Render), set VITE_SOCKET_SERVER_URL to your backend URL.
+// Supports legacy VITE_SERVER_URL as a fallback.
+const rawSocketServerUrl =
+  import.meta.env.VITE_SOCKET_SERVER_URL?.trim() ||
+  import.meta.env.VITE_SERVER_URL?.trim() ||
+  '';
+const socketServerUrl = rawSocketServerUrl
+  ? rawSocketServerUrl.replace(/\/+$/, '')
+  : undefined;
+
+const wakeBackend = () => {
+  if (!socketServerUrl) return;
+
+  fetch(`${socketServerUrl}/api/health`, { method: 'GET', cache: 'no-store' }).catch(() => {
+    // Ignore wake failures; Socket.IO reconnect loop will continue.
+  });
+};
+
+// Kick off an early wake request in hosted mode.
+wakeBackend();
+
+const socket: Socket = io(socketServerUrl, {
   path: '/socket.io',
   transports: socketConfig.socket.transports as ('websocket' | 'polling')[],
   reconnection: socketConfig.socket.reconnection,
-  reconnectionDelay: socketConfig.socket.reconnectionDelay,
-  reconnectionAttempts: socketConfig.socket.reconnectionAttempts
+  reconnectionDelay: Math.max(socketConfig.socket.reconnectionDelay, 1500),
+  reconnectionDelayMax: 10000,
+  reconnectionAttempts: Infinity,
+  timeout: 20000
 });
 
-console.log('Socket.IO connecting via proxy to backend server');
+console.log(`Socket.IO connecting to ${socketServerUrl ?? 'same-origin backend'}`);
+
+socket.on('connect_error', () => {
+  wakeBackend();
+});
 
 
 

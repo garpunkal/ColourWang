@@ -7,6 +7,7 @@ import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import type { CorsOptions } from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
 import serverConfig from '../../config/server.json';
 import environmentConfig from '../../config/environment.json';
@@ -14,7 +15,47 @@ import environmentConfig from '../../config/environment.json';
 logger.info('Starting ColourWang server...');
 
 const app = express();
-app.use(cors(serverConfig.server.cors));
+
+const corsOptions: CorsOptions = {
+    ...serverConfig.server.cors
+};
+
+const normalizeOrigin = (origin: string) => origin.trim().replace(/\/+$/, '').toLowerCase();
+
+// Allow overriding CORS origin via env for hosted deployments (e.g. Render frontend URL).
+if (process.env.FRONTEND_ORIGIN) {
+    const origins = process.env.FRONTEND_ORIGIN
+        .split(',')
+        .map((origin) => normalizeOrigin(origin))
+        .filter(Boolean);
+
+    if (origins.length > 0) {
+        const allowedOrigins = new Set(origins);
+        corsOptions.origin = (requestOrigin, callback) => {
+            // Allow requests with no origin (server-to-server, health checks, curl).
+            if (!requestOrigin) {
+                callback(null, true);
+                return;
+            }
+
+            const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
+            if (allowedOrigins.has(normalizedRequestOrigin)) {
+                callback(null, true);
+                return;
+            }
+
+            callback(new Error(`CORS blocked origin: ${requestOrigin}`));
+        };
+        logger.info(`Using FRONTEND_ORIGIN for CORS: ${origins.join(', ')}`);
+    }
+}
+
+if (corsOptions.origin === '*' && corsOptions.credentials) {
+    logger.warn('CORS origin is "*" with credentials=true; disabling credentials for compatibility');
+    corsOptions.credentials = false;
+}
+
+app.use(cors(corsOptions));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -72,7 +113,7 @@ if (existsSync(keyPath) && existsSync(certFilePath)) {
 }
 
 const io = new Server(server, {
-    cors: serverConfig.server.cors
+    cors: corsOptions
 });
 
 logger.info('Registering socket handlers...');

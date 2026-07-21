@@ -7,6 +7,8 @@ interface Props {
 }
 
 export function ReconnectionBanner({ isReconnecting, attempt }: Props) {
+    const isColdStartWake = attempt <= 2;
+
     return (
         <AnimatePresence>
             {isReconnecting && (
@@ -25,11 +27,11 @@ export function ReconnectionBanner({ isReconnecting, attempt }: Props) {
                         </motion.div>
                         <div className="flex flex-col items-center">
                             <span className="font-black uppercase text-sm tracking-wider">
-                                Connection Lost - Reconnecting...
+                                {isColdStartWake ? 'Waking Server - Reconnecting...' : 'Connection Lost - Reconnecting...'}
                             </span>
                             {attempt > 0 && (
                                 <span className="text-xs font-medium opacity-80">
-                                    Attempt {attempt} of 5
+                                    Attempt {attempt}
                                 </span>
                             )}
                         </div>
