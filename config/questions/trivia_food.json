@@ -77,8 +77,7 @@
     {
         "question": "What colour is tahini?",
         "answer": [
-            "brown",
-            "beige"
+            "brown"
         ],
         "roundId": "food"
     },
@@ -132,13 +131,6 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is the hottest part of a chili pepper?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "food"
-    },
-    {
         "question": "What colour is the foam on a cappuccino?",
         "answer": [
             "white"
@@ -146,7 +138,7 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is  miso paste?",
+        "question": "What colour is miso paste?",
         "answer": [
             "brown",
             "white",

@@ -115,9 +115,10 @@
         "roundId": "general"
     },
     {
-        "question": "What colour is a yield traffic sign?",
+        "question": "What colour is a yield (give way) traffic sign?",
         "answer": [
-            "yellow"
+            "red",
+            "white"
         ],
         "roundId": "general"
     },

@@ -32,7 +32,6 @@
         "question": "What colour is Ariana Grande's Glinda wig?",
         "answer": [
             "pink",
-            "blonde",
             "yellow"
         ],
         "roundId": "celebrities"
@@ -56,22 +55,6 @@
         "roundId": "celebrities"
     },
     {
-        "question": "What colour was Zendaya's 2024 Met Gala gown?",
-        "answer": [
-            "green",
-            "blue"
-        ],
-        "roundId": "celebrities"
-    },
-    {
-        "question": "What colour is Bad Bunny associated with?",
-        "answer": [
-            "yellow",
-            "pink"
-        ],
-        "roundId": "celebrities"
-    },
-    {
         "question": "What colour carpet did Timothée Chalamet arrive shirtless to?",
         "answer": [
             "red"
@@ -89,16 +72,13 @@
     {
         "question": "What colour is Beyoncé's 'Single Ladies' outfit?",
         "answer": [
-            "silver",
-            "grey",
-            "white"
+            "black"
         ],
         "roundId": "celebrities"
     },
     {
         "question": "What colour hair does Dolly Parton have?",
         "answer": [
-            "blonde",
             "yellow"
         ],
         "roundId": "celebrities"

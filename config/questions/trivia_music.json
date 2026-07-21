@@ -86,7 +86,6 @@
     {
         "question": "What colour is Frank Ocean's album cover?",
         "answer": [
-            "blonde",
             "yellow"
         ],
         "roundId": "music"
@@ -119,13 +118,6 @@
         "question": "What colour velvet is in the Led Zeppelin song?",
         "answer": [
             "black"
-        ],
-        "roundId": "music"
-    },
-    {
-        "question": "What colour is in Fleetwood Mac's 'Dreams'?",
-        "answer": [
-            "white"
         ],
         "roundId": "music"
     }

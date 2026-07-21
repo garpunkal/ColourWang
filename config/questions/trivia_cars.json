@@ -121,8 +121,7 @@
     {
         "question": "What colour is the DeLorean time machine in Back to the Future?",
         "answer": [
-            "grey",
-            "silver"
+            "grey"
         ],
         "roundId": "cars"
     },
@@ -132,20 +131,6 @@
             "yellow",
             "orange",
             "green"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour stripe is on the Ford Mustang GT?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour is traditionally associated with Tiffany & Co. boxes?",
-        "answer": [
-            "blue"
         ],
         "roundId": "cars"
     },
@@ -161,21 +146,6 @@
         "question": "What colour was the original Ford Model T famously available in?",
         "answer": [
             "black"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour is the stripe on a skunk?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are Ghostbusters' jumpsuits?",
-        "answer": [
-            "grey",
-            "brown"
         ],
         "roundId": "cars"
     },
@@ -212,58 +182,11 @@
         "roundId": "cars"
     },
     {
-        "question": "What colours are school buses?",
-        "answer": [
-            "yellow",
-            "orange"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colours are UPS delivery trucks?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colours are John Deere tractors?",
-        "answer": [
-            "green",
-            "yellow"
-        ],
-        "roundId": "cars"
-    },
-    {
         "question": "What colour are most car interiors?",
         "answer": [
             "black",
             "grey",
             "brown"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are race car checkered flags?",
-        "answer": [
-            "black",
-            "white"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are Lamborghini cars often?",
-        "answer": [
-            "yellow",
-            "orange",
-            "green"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colours are London red buses?",
-        "answer": [
-            "red"
         ],
         "roundId": "cars"
     },
@@ -283,27 +206,11 @@
         "roundId": "cars"
     },
     {
-        "question": "What colour are most car windshields?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "cars"
-    },
-    {
         "question": "What colours are Ford Mustangs commonly?",
         "answer": [
             "red",
             "blue",
             "black",
-            "white"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are FedEx trucks?",
-        "answer": [
-            "purple",
-            "orange",
             "white"
         ],
         "roundId": "cars"
@@ -318,34 +225,12 @@
         "roundId": "cars"
     },
     {
-        "question": "What colour are car brake lights?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are car turn signals?",
-        "answer": [
-            "orange",
-            "yellow"
-        ],
-        "roundId": "cars"
-    },
-    {
         "question": "What colours are BMW cars commonly?",
         "answer": [
             "black",
             "white",
             "blue",
             "grey"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are reverse lights on cars?",
-        "answer": [
-            "white"
         ],
         "roundId": "cars"
     },
@@ -359,28 +244,12 @@
         "roundId": "cars"
     },
     {
-        "question": "What colour are car license plates in most US states?",
-        "answer": [
-            "white",
-            "blue"
-        ],
-        "roundId": "cars"
-    },
-    {
         "question": "What colours are Jeep Wranglers commonly?",
         "answer": [
             "red",
             "blue",
             "green",
             "black"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are car hazard lights?",
-        "answer": [
-            "orange",
-            "red"
         ],
         "roundId": "cars"
     },
@@ -695,14 +564,6 @@
             "white",
             "black",
             "grey"
-        ],
-        "roundId": "cars"
-    },
-    {
-        "question": "What colour are car air filters?",
-        "answer": [
-            "white",
-            "yellow"
         ],
         "roundId": "cars"
     },

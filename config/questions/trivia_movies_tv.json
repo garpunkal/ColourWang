@@ -145,8 +145,7 @@
     {
         "question": "What colour are C-3PO's parts?",
         "answer": [
-            "yellow",
-            "gold"
+            "yellow"
         ],
         "roundId": "movies_tv"
     },
@@ -174,7 +173,6 @@
     {
         "question": "What colour is Rapunzel's hair?",
         "answer": [
-            "blonde",
             "yellow"
         ],
         "roundId": "movies_tv"
@@ -344,8 +342,7 @@
         "question": "What colour dragon does Daenerys ride in Game of Thrones?",
         "answer": [
             "black",
-            "green",
-            "white"
+            "green"
         ],
         "roundId": "movies_tv"
     },
@@ -353,7 +350,7 @@
         "question": "What colour are the banners of House Lannister?",
         "answer": [
             "red",
-            "gold"
+            "yellow"
         ],
         "roundId": "movies_tv"
     },
@@ -368,8 +365,7 @@
     {
         "question": "What colour is the DeLorean in Back to the Future?",
         "answer": [
-            "grey",
-            "silver"
+            "grey"
         ],
         "roundId": "movies_tv"
     },

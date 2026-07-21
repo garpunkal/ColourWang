@@ -1,12 +1,5 @@
 [
     {
-        "question": "What colour are test tubes commonly in science labs?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "science"
-    },
-    {
         "question": "What colour represents oxygen on the periodic table?",
         "answer": [
             "red"
