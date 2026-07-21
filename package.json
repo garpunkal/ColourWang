@@ -10,7 +10,7 @@
         "start:client": "npm run start --prefix client"
     },
     "devDependencies": {
-        "concurrently": "^9.2.1"
+        "concurrently": "^9.2.4"
     },
     "dependencies": {
         "@types/socket.io": "^3.0.2",
