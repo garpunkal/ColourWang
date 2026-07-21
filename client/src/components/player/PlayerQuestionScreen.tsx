@@ -19,18 +19,37 @@ interface Props {
 
 export function PlayerQuestionScreen({ socket, gameState, currentQuestion, currentQuestionIndex }: Props) {
     const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
+    const myId = localStorage.getItem('cw_playerId');
     const [stealCardActiveThisQuestion, setStealCardActiveThisQuestion] = useState(true);
     const [selectedColors, setSelectedColors] = useState<string[]>(me?.lastAnswer || []);
     const [hasAnswered, setHasAnswered] = useState(me?.lastAnswer !== null);
+    const [isBlockedThisQuestion, setIsBlockedThisQuestion] = useState(Boolean(me?.isBlockedThisQuestion));
+    const [hasUsedBlockCard, setHasUsedBlockCard] = useState(Boolean(me?.blockCardUsed));
+    const [blockCardPending, setBlockCardPending] = useState(false);
+    const [isBlockTargetPickerOpen, setIsBlockTargetPickerOpen] = useState(false);
+    const [blockedPlayerIds, setBlockedPlayerIds] = useState<string[]>(
+        gameState.players.filter(p => p.isBlockedThisQuestion).map(p => p.id)
+    );
     const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>(
         gameState.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null }))
     );
 
     const [stealNotice, setStealNotice] = useState<{ name: string; value: number } | null>(null);
+    const [blockNotice, setBlockNotice] = useState<{ blockerName: string } | null>(null);
     const [disabledIndexes, setDisabledIndexes] = useState<number[]>(me?.disabledIndexes || []);
     const [timeLeft, setTimeLeft] = useState(gameState.timerDuration || 30);
 
+    const targetablePlayers = gameState.players.filter(p => {
+        if (!myId || p.id === myId) return false;
+        const alreadyBlocked = blockedPlayerIds.includes(p.id);
+        return !alreadyBlocked;
+    });
+
     const submitAnswer = useCallback(() => {
+        if (isBlockedThisQuestion) {
+            return;
+        }
+
         if (gameState && selectedColors.length > 0) {
             setHasAnswered(true);
             hapticFeedback.medium();
@@ -40,10 +59,10 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 useStealCard: false
             });
         }
-    }, [gameState, selectedColors, socket]);
+    }, [gameState, selectedColors, socket, isBlockedThisQuestion]);
 
-    const toggleColour = (colour: string) => {
-        if (hasAnswered) return;
+    const toggleColour = useCallback((colour: string) => {
+        if (hasAnswered || isBlockedThisQuestion) return;
         audioManager.playSelect();
         hapticFeedback.light();
         setSelectedColors(prev =>
@@ -51,7 +70,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 ? prev.filter(c => c !== colour)
                 : [...prev, colour]
         );
-    };
+    }, [hasAnswered, isBlockedThisQuestion]);
 
     // Listen for events
     useEffect(() => {
@@ -60,7 +79,6 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         };
 
         const stealHandler = ({ playerId, value, disabledMap }: { playerId: string, value: number, disabledMap: Record<string, number[]> }) => {
-            const myId = localStorage.getItem('cw_playerId');
             const stealer = gameState.players.find(p => p.id === playerId);
 
             if (!hasAnswered) {
@@ -85,25 +103,55 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             setStealCardActiveThisQuestion(false);
         };
 
+        const blockHandler = ({ playerId, targetPlayerId }: { playerId: string, targetPlayerId: string }) => {
+            const blocker = gameState.players.find(p => p.id === playerId);
+
+            setBlockedPlayerIds(prev => (prev.includes(targetPlayerId) ? prev : [...prev, targetPlayerId]));
+
+            if (targetPlayerId === myId) {
+                setIsBlockedThisQuestion(true);
+                setSelectedColors([]);
+                if (blocker && playerId !== myId) {
+                    audioManager.playSteal();
+                    setBlockNotice({ blockerName: blocker.name });
+                    setTimeout(() => setBlockNotice(null), 3500);
+                }
+            }
+
+            if (playerId === myId) {
+                setHasUsedBlockCard(true);
+                setBlockCardPending(false);
+                setIsBlockTargetPickerOpen(false);
+            }
+        };
+
 
         socket.on('player-answered', answerHandler);
         socket.on('steal-card-used', stealHandler);
+        socket.on('block-card-used', blockHandler);
 
         return () => {
             socket.off('player-answered', answerHandler);
             socket.off('steal-card-used', stealHandler);
+            socket.off('block-card-used', blockHandler);
         };
-    }, [socket, gameState.players, hasAnswered]);
+    }, [socket, gameState.players, hasAnswered, myId, currentQuestion.options]);
 
     // Timer and Reset Logic
     useEffect(() => {
         const anyoneStole = gameState.players.some(p => p.disabledIndexes && p.disabledIndexes.length > 0);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setStealCardActiveThisQuestion(!anyoneStole);
         setSelectedColors([]);
         setHasAnswered(false);
+        setIsBlockedThisQuestion(Boolean(me?.isBlockedThisQuestion));
+        setBlockCardPending(false);
+        setIsBlockTargetPickerOpen(false);
+        setBlockedPlayerIds(gameState.players.filter(p => p.isBlockedThisQuestion).map(p => p.id));
+        setBlockNotice(null);
         setTimeLeft(gameState.timerDuration || 30);
         setDisabledIndexes(me?.disabledIndexes || []);
-    }, [currentQuestionIndex]);
+    }, [currentQuestionIndex, gameState.players, gameState.timerDuration, me?.disabledIndexes, me?.isBlockedThisQuestion]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -123,6 +171,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     useEffect(() => {
         if (timeLeft === 0 && !hasAnswered) {
             if (selectedColors.length > 0) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 submitAnswer();
             } else {
                 setHasAnswered(true);
@@ -133,12 +182,12 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 });
             }
         }
-    }, [timeLeft, hasAnswered]);
+    }, [timeLeft, hasAnswered, selectedColors.length, socket, gameState.code, submitAnswer]);
 
     // Keyboard navigation support
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
-            if (hasAnswered || timeLeft === 0) return;
+            if (hasAnswered || timeLeft === 0 || isBlockedThisQuestion) return;
 
             const sortedOptions = sortColors(currentQuestion.options);
             
@@ -164,7 +213,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
 
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [hasAnswered, timeLeft, disabledIndexes, selectedColors, currentQuestion.options, submitAnswer, toggleColour]);
+    }, [hasAnswered, timeLeft, disabledIndexes, selectedColors, currentQuestion.options, submitAnswer, toggleColour, isBlockedThisQuestion]);
 
     const avatarColor = getAvatarColor(me?.avatar || 'cyber-blue');
 
@@ -197,11 +246,44 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             className="relative"
                         >
                             <div className="bg-color-pink border-8 md:border-12 border-white px-8 md:px-12 py-6 md:py-8 flex flex-col items-center rounded-lg shadow-2xl">
-                                <span className="text-3xl md:text-[5rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-lg">
+                                <span className="text-3xl md:text-[5rem] font-black text-white leading-tight tracking-tighter italic uppercase text-center drop-shadow-lg">
                                     {stealNotice.name}
                                 </span>
-                                <span className="text-4xl md:text-[8rem] font-black text-white leading-none tracking-tighter italic uppercase text-center drop-shadow-xl -mt-4">
+                                <span className="text-4xl md:text-[8rem] font-black text-white leading-tight tracking-tighter italic uppercase text-center drop-shadow-xl -mt-4">
                                     STOLE {stealNotice.value} {stealNotice.value === 1 ? 'CARD' : 'CARDS'}!
+                                </span>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {blockNotice && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-110 flex items-center justify-center pointer-events-none p-6"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.4, 0.6] }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute inset-0 bg-error/40 mix-blend-color-dodge backdrop-blur-xl"
+                        />
+                        <motion.div
+                            initial={{ scale: 3, rotate: -30, opacity: 0, filter: 'blur(20px)' }}
+                            animate={{ scale: 0.6, rotate: -10, opacity: 1, filter: 'blur(0px)' }}
+                            transition={{ type: "spring", damping: 14, stiffness: 200 }}
+                            className="relative"
+                        >
+                            <div className="bg-error border-8 md:border-12 border-white px-8 md:px-12 py-6 md:py-8 flex flex-col items-center rounded-lg shadow-2xl">
+                                <span className="text-3xl md:text-[5rem] font-black text-white leading-tight tracking-tighter italic uppercase text-center drop-shadow-lg">
+                                    {blockNotice.blockerName}
+                                </span>
+                                <span className="text-4xl md:text-[8rem] font-black text-white leading-tight tracking-tighter italic uppercase text-center drop-shadow-xl -mt-4">
+                                    BLOCKED YOU!
                                 </span>
                             </div>
                         </motion.div>
@@ -266,17 +348,26 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 >
                     {currentQuestion.question}
                 </h3>
+                {isBlockedThisQuestion && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 md:mt-4 px-4 py-2 rounded-full bg-error/20 border border-error/50 mx-auto w-fit"
+                    >
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-white">Blocked this round. You cannot answer this question.</span>
+                    </motion.div>
+                )}
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 0.4, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mt-1 md:mt-4 px-2 md:px-3 py-0.5 md:py-2 rounded-full glass-panel mx-auto w-fit opacity-60"
+                    className="mt-1 md:mt-4 px-2 md:px-3 py-0.5 md:py-2 rounded-full glass-panel mx-auto w-fit"
                 >
-                    <span className="text-[10px] md:text-xs font-medium uppercase tracking-wider italic">
+                    <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider italic">
                         {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length === 1 ? (
-                            <span className="text-white/50">💡 Select 1 colour</span>
+                            <span className="text-white/80">💡 Select 1 colour</span>
                         ) : (
-                            <span className="text-white/50">💡 Select {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length} colours</span>
+                            <span className="text-white/80">💡 Select {(currentQuestion.correctColours || currentQuestion.correctAnswers || []).length} colours</span>
                         )}
                     </span>
                 </motion.div>
@@ -293,13 +384,13 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         color={color}
                                         isSelected={selectedColors.includes(color)}
                                         onClick={() => toggleColour(color)}
-                                        disabled={hasAnswered || timeLeft === 0}
+                                        disabled={hasAnswered || timeLeft === 0 || isBlockedThisQuestion}
                                         size="responsive"
                                         index={i}
                                     />
                                 )
                             )}
-                            {gameState.jokersEnabled !== false && me && !me.stealCardUsed && stealCardActiveThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
+                            {gameState.jokersEnabled !== false && me && !me.stealCardUsed && stealCardActiveThisQuestion && !isBlockedThisQuestion && (playersAnswered.filter(p => !p.hasAnswered).length >= 2) && (
                                 <ColorCard
                                     key="steal"
                                     color="#FFD700"
@@ -316,13 +407,35 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 />
                             )}
                         </div>
+                        {gameState.blocksEnabled !== false && me && !hasUsedBlockCard && !blockCardPending && !isBlockedThisQuestion && targetablePlayers.length > 0 && (
+                            <div className="w-full max-w-4xl px-2 md:px-6 mx-auto mt-3 md:mt-5">
+                                <motion.button
+                                    whileHover={{ y: -2, boxShadow: '0 0 30px rgba(239,68,68,0.45)' }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setIsBlockTargetPickerOpen(true)}
+                                    disabled={hasAnswered || timeLeft === 0}
+                                    className="group relative w-full overflow-hidden rounded-3xl border-2 border-red-400/70 bg-gradient-to-r from-red-600/35 via-red-500/20 to-black/60 transition-all hover:from-red-600/45 hover:to-black/70 disabled:opacity-30 disabled:grayscale"
+                                    aria-label="Choose a player to block"
+                                >
+                                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.18),transparent_55%)]" />
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-red-300/30 to-transparent" />
+                                    <div className="relative flex items-center justify-between gap-4 px-5 py-4 md:px-7 md:py-6">
+                                        <div className="flex flex-col items-start text-left">
+                                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-white/65">Danger Action</span>
+                                            <span className="text-xl md:text-3xl font-black uppercase tracking-[0.12em] text-white">Block A Player</span>
+                                        </div>
+                                        <span className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-red-100/85 group-hover:text-white transition-colors">Choose Target</span>
+                                    </div>
+                                </motion.button>
+                            </div>
+                        )}
                     </div>
                     <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-0">
                         <motion.button
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => submitAnswer()}
-                            disabled={selectedColors.length === 0 || timeLeft === 0}
+                            disabled={selectedColors.length === 0 || timeLeft === 0 || isBlockedThisQuestion}
                             className="w-full btn btn-primary py-2.5 md:py-8 text-lg md:text-3xl transition-all flex items-center justify-center gap-2 md:gap-8 rounded-[3rem] disabled:opacity-20 disabled:grayscale italic uppercase font-black tracking-widest shrink-0 shadow-lg"
                             style={{ boxShadow: `0 20px 40px -10px ${avatarColor}60` }}
                             aria-label={`Submit answer - ${selectedColors.length} color${selectedColors.length !== 1 ? 's' : ''} selected`}
@@ -377,6 +490,59 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     </div>
                 </motion.div>
             )}
+
+            <AnimatePresence>
+                {isBlockTargetPickerOpen && timeLeft > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-120 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="w-full max-w-2xl glass-panel rounded-3xl border border-white/20 p-5 md:p-8"
+                        >
+                            <div className="flex items-center justify-between mb-5">
+                                <h4 className="text-xl md:text-3xl font-black italic uppercase tracking-tight text-white">Choose Who To Block</h4>
+                                <button
+                                    onClick={() => setIsBlockTargetPickerOpen(false)}
+                                    className="px-3 py-1.5 rounded-xl text-xs md:text-sm font-black uppercase tracking-wider text-white/70 bg-white/10 hover:bg-white/20"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {targetablePlayers.map((player) => (
+                                    <button
+                                        key={player.id}
+                                        onClick={() => {
+                                            if (timeLeft === 0) return;
+                                            setBlockCardPending(true);
+                                            socket.emit('use-block-card', { code: gameState.code, targetPlayerId: player.id });
+                                        }}
+                                        disabled={timeLeft === 0}
+                                        className="flex items-center gap-3 p-3 rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 transition-colors text-left"
+                                    >
+                                        <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/20 shrink-0">
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <span className="block text-base md:text-lg font-black uppercase italic truncate">{player.name}</span>
+                                            <span className="block text-[10px] font-black uppercase tracking-wider text-white/50">Tap To Block</span>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                            {targetablePlayers.length === 0 && (
+                                <p className="text-sm font-bold uppercase tracking-wider text-white/50 text-center py-6">No available players to block.</p>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }

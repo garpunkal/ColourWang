@@ -18,8 +18,12 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
     const [playersAnswered, setPlayersAnswered] = useState<{ id: string; hasAnswered: boolean }[]>(
         gameState.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null }))
     );
+    const [blockedPlayerIds, setBlockedPlayerIds] = useState<string[]>(
+        gameState.players.filter(p => p.isBlockedThisQuestion).map(p => p.id)
+    );
 
     const [stealNotice, setStealNotice] = useState<{ name: string; value: number } | null>(null);
+    const [blockNotice, setBlockNotice] = useState<{ blockerName: string; targetName: string } | null>(null);
 
     useEffect(() => {
         const answerHandler = (players: { id: string; hasAnswered: boolean }[]) => {
@@ -34,19 +38,33 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             }
         };
 
+        const blockHandler = ({ playerId, targetPlayerId }: { playerId: string; targetPlayerId: string }) => {
+            const blocker = gameState.players.find(p => p.id === playerId);
+            const target = gameState.players.find(p => p.id === targetPlayerId);
+            if (blocker && target) {
+                setBlockedPlayerIds(prev => (prev.includes(targetPlayerId) ? prev : [...prev, targetPlayerId]));
+                setBlockNotice({ blockerName: blocker.name, targetName: target.name });
+                setTimeout(() => setBlockNotice(null), 12000);
+            }
+        };
+
 
         socket.on('player-answered', answerHandler);
         socket.on('steal-card-used', stealHandler);
+        socket.on('block-card-used', blockHandler);
 
         return () => {
             socket.off('player-answered', answerHandler);
             socket.off('steal-card-used', stealHandler);
+            socket.off('block-card-used', blockHandler);
         };
     }, [socket, gameState.players]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPlayersAnswered([]);
-    }, [currentQuestionIndex]);
+        setBlockedPlayerIds(gameState.players.filter(p => p.isBlockedThisQuestion).map(p => p.id));
+    }, [currentQuestionIndex, gameState.players]);
 
     return (
         <motion.div
@@ -81,6 +99,39 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                     {[...Array(4)].map((_, i) => (
                                         <span key={i} className="text-5xl md:text-7xl font-black italic uppercase text-white">
                                             {stealNotice.name} stole {stealNotice.value} cards!
+                                        </span>
+                                    ))}
+                                </motion.div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+                {blockNotice && (
+                    <motion.div
+                        key="block-notice"
+                        initial={{ y: -200, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -200, opacity: 0 }}
+                        className="fixed top-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-b-8 border-error shadow-2xl"
+                    >
+                        <div className="h-2 w-full bg-gradient-to-r from-error via-white to-error animate-pulse" />
+                        <div className="flex-1 flex items-center">
+                            <div className="bg-error px-8 md:px-16 flex flex-col items-center justify-center shrink-0 border-r-4 border-black h-full">
+                                <span className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">BREAKING</span>
+                                <span className="text-xl md:text-2xl font-black text-white/80 uppercase tracking-widest">BLOCK ALERT</span>
+                            </div>
+                            <div className="flex-1 overflow-hidden">
+                                <motion.div
+                                    animate={{ x: ['100%', '-100%'] }}
+                                    transition={{ duration: 10, ease: "linear", repeat: Infinity }}
+                                    className="whitespace-nowrap flex items-center gap-48 py-8"
+                                >
+                                    {[...Array(4)].map((_, i) => (
+                                        <span key={i} className="text-5xl md:text-7xl font-black italic uppercase text-white">
+                                            {blockNotice.blockerName} blocked {blockNotice.targetName}!
                                         </span>
                                     ))}
                                 </motion.div>
@@ -160,7 +211,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 </div>
                                 <div className="flex flex-col items-start min-w-0 flex-1">
                                     <span className="text-xl font-black uppercase italic truncate w-full text-left" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
-                                    <span className="text-xs font-bold uppercase tracking-widest opacity-60 text-left">{isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest opacity-60 text-left">{blockedPlayerIds.includes(player.id) ? 'Blocked' : isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
                                 </div>
                                 {isAnswered && (
                                     <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 bg-success text-black rounded-full p-1">

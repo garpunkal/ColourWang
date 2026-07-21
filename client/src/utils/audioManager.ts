@@ -58,25 +58,69 @@ class AudioManager {
 
         const t = this.audioContext.currentTime;
 
-        // Soft melodic ping instead of sharp snap
-        const osc = this.audioContext.createOscillator();
-        const gain = this.audioContext.createGain();
+        const isFinalFive = typeof remaining === 'number' && remaining <= 5;
+        const urgency = isFinalFive ? (6 - remaining) / 5 : 0; // 0..1 across 5->1
 
-        osc.type = 'sine';
-        // Gentle frequency (330Hz = E4), slightly shifts up as time runs out (last 5s)
-        const freq = 330 + (remaining && remaining <= 5 ? (5 - remaining) * 20 : 0);
-        osc.frequency.setValueAtTime(freq, t);
+        // Muted click: filtered noise burst with restrained highs.
+        const clickLength = Math.floor(this.audioContext.sampleRate * 0.045);
+        const clickBuffer = this.audioContext.createBuffer(1, clickLength, this.audioContext.sampleRate);
+        const clickData = clickBuffer.getChannelData(0);
+        for (let i = 0; i < clickLength; i++) {
+            const env = 1 - (i / clickLength);
+            clickData[i] = (Math.random() * 2 - 1) * env;
+        }
 
-        // Quick but soft envelope
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.1, t + 0.01); // Toned down volume
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2); // Smooth decay
+        const click = this.audioContext.createBufferSource();
+        const clickFilter = this.audioContext.createBiquadFilter();
+        const clickGain = this.audioContext.createGain();
 
-        osc.connect(gain);
-        gain.connect(this.audioContext.destination);
+        click.buffer = clickBuffer;
+        clickFilter.type = 'bandpass';
+        clickFilter.frequency.setValueAtTime(900 + (250 * urgency), t);
+        clickFilter.Q.setValueAtTime(0.9, t);
 
-        osc.start(t);
-        osc.stop(t + 0.2);
+        clickGain.gain.setValueAtTime(0, t);
+        clickGain.gain.linearRampToValueAtTime(0.032 + (0.012 * urgency), t + 0.004);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+
+        click.connect(clickFilter);
+        clickFilter.connect(clickGain);
+        clickGain.connect(this.audioContext.destination);
+        click.start(t);
+        click.stop(t + 0.06);
+
+        // Subtle low thump under the click for presence.
+        const low = this.audioContext.createOscillator();
+        const lowGain = this.audioContext.createGain();
+        low.type = 'sine';
+        low.frequency.setValueAtTime(82 + (10 * urgency), t);
+        low.frequency.exponentialRampToValueAtTime(62, t + 0.08);
+
+        lowGain.gain.setValueAtTime(0, t);
+        lowGain.gain.linearRampToValueAtTime(0.018 + (0.01 * urgency), t + 0.007);
+        lowGain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+
+        low.connect(lowGain);
+        lowGain.connect(this.audioContext.destination);
+        low.start(t);
+        low.stop(t + 0.11);
+
+        // Last 3 seconds: add a very soft after-click for urgency.
+        if (typeof remaining === 'number' && remaining <= 3) {
+            const afterTime = t + 0.095;
+            const after = this.audioContext.createOscillator();
+            const afterGain = this.audioContext.createGain();
+            after.type = 'sine';
+            after.frequency.setValueAtTime(95, afterTime);
+            after.frequency.exponentialRampToValueAtTime(72, afterTime + 0.05);
+            afterGain.gain.setValueAtTime(0, afterTime);
+            afterGain.gain.linearRampToValueAtTime(0.009 + (0.006 * urgency), afterTime + 0.005);
+            afterGain.gain.exponentialRampToValueAtTime(0.001, afterTime + 0.055);
+            after.connect(afterGain);
+            afterGain.connect(this.audioContext.destination);
+            after.start(afterTime);
+            after.stop(afterTime + 0.06);
+        }
     }
 
     public playSelect() {

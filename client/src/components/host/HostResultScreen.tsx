@@ -30,7 +30,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
         variant: 'default' | 'danger' | 'warning';
         onConfirm: () => void;
     } | null>(null);
-    const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+    const isLastQuestionInRound = currentQuestionIndex === totalQuestions - 1;
+    const isFinalRound = gameState.currentRoundIndex === gameState.rounds.length - 1;
+    const isGameFinalQuestion = isFinalRound && isLastQuestionInRound;
 
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
@@ -231,14 +233,14 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                             className="btn btn-primary group relative w-full overflow-hidden rounded-2xl px-6 py-3 shadow-xl md:px-8 md:py-4"
                         >
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-                            <div className="relative z-10 flex items-center justify-between">
-                                <div className="flex flex-col items-start leading-none">
+                            <div className="relative z-10 flex items-center justify-between gap-5 md:gap-6">
+                                <div className="min-w-0 flex-1 flex flex-col items-start leading-none">
                                     <span className="mb-0.5 text-[10px] font-black uppercase tracking-[0.3em] opacity-60">Coming up</span>
                                     <span className="text-base font-black uppercase tracking-wide md:text-lg">
-                                        {isLastQuestion ? 'The Results' : 'Next Round'}
+                                        {isGameFinalQuestion ? 'The Results' : 'Next Round'}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-4">
+                                <div className="shrink-0 flex items-center gap-3 md:gap-4 pl-3 md:pl-4 border-l border-white/20">
                                     <div className="flex items-center gap-1.5">
                                         <span className="font-mono text-2xl font-black tabular-nums">{timeLeft}</span>
                                         <span className="text-[10px] font-black uppercase opacity-40">S</span>

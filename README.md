@@ -18,6 +18,19 @@ Core highlights:
 - PWA-ready client assets
 - Centralized game/content configuration in the `config` folder
 
+## Gameplay Events
+
+When jokers are enabled, players can use special event cards during question time.
+
+- STEAL: removes a random set of answer cards from other players.
+- BLOCK: choose a player to block from answering for the current question.
+
+BLOCK rules:
+
+- Can target any other player, whether they already answered or not.
+- Can only be used while question time is still active.
+- The blocked state lasts for the current question only.
+
 ## Tech Stack
 
 - Frontend: React 19 + Vite + TypeScript

@@ -10,6 +10,7 @@ export interface GameState {
     resultDuration?: number;
     lobbyDuration?: number;
     jokersEnabled?: boolean;
+    blocksEnabled?: boolean;
     soundEnabled?: boolean;
     musicEnabled?: boolean;
     bgmTrack?: string;

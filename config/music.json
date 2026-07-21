@@ -23,6 +23,10 @@
         "label": "Retro Arcade",
         "value": "Retro Arcade.mp3"
     },
+      {
+        "label": "Ready to Fight",
+        "value": "Ready to Fight.mp3"
+    },
     {
         "label": "Music Off",
         "value": "off"

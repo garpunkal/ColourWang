@@ -8,7 +8,10 @@ export interface Player {
     isCorrect: boolean;
     stealCardValue: number;
     stealCardUsed: boolean;
+    blockCardUsed: boolean;
     disabledIndexes?: number[];
+    isBlockedThisQuestion?: boolean;
+    blockedByPlayerId?: string | null;
     avatarStyle?: string;
     streak: number;
     answeredAt: number | null;
@@ -43,6 +46,7 @@ export interface GameState {
     timerDuration?: number;
     // Game Settings
     jokersEnabled?: boolean;
+    blocksEnabled?: boolean;
     resultDuration?: number;
     lobbyDuration?: number;
     soundEnabled?: boolean;

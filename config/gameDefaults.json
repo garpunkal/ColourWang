@@ -5,6 +5,7 @@
     "resultDuration": 10,
     "lobbyDuration": 10,
     "jokersEnabled": true,
+    "blocksEnabled": true,
     "soundEnabled": true,
     "musicEnabled": true,
     "defaultBgmTrack": "Retro Arcade.mp3",

@@ -15,6 +15,7 @@ interface GameState {
   resultDuration?: number;
   lobbyDuration?: number;
   jokersEnabled?: boolean;
+  blocksEnabled?: boolean;
   soundEnabled?: boolean;
   musicEnabled?: boolean;
   bgmTrack?: string;
@@ -77,7 +78,7 @@ export function registerSocketHandlers(io: Server) {
     socket.on('create-game', (payload) => {
       try {
         logger.info('[CREATE-GAME] Received create-game event with payload:', payload);
-        const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, selectedTopics } = payload;
+        const { rounds: numRounds, questionsPerRound, timer, resultDuration, lobbyDuration, jokersEnabled, blocksEnabled, soundEnabled, musicEnabled, bgmTrack, streaksEnabled, shieldsEnabled, fastestFingerEnabled, selectedTopics } = payload;
         const code = Math.random().toString(36).substring(2, 6).toUpperCase();
 
         // Generate Rounds with selected topics
@@ -105,6 +106,7 @@ export function registerSocketHandlers(io: Server) {
           resultDuration,
           lobbyDuration,
           jokersEnabled,
+          blocksEnabled: blocksEnabled ?? true,
           soundEnabled: soundEnabled ?? true,
           musicEnabled: musicEnabled ?? true,
           bgmTrack: bgmTrack || 'Retro Arcade.mp3',
@@ -179,6 +181,38 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('use-block-card', (payload: { code: string; targetPlayerId: string }) => {
+      const { code, targetPlayerId } = payload;
+      const normalizedCode = code.toUpperCase();
+      const game = games.get(normalizedCode);
+      if (game && game.status === 'QUESTION') {
+        if (game.blocksEnabled === false) return;
+
+        const blocker = game.players.find((p: Player) => p.socketId === socket.id);
+        const target = game.players.find((p: Player) => p.id === targetPlayerId);
+
+        if (!blocker || !target) return;
+        if (blocker.id === target.id) return;
+        if (blocker.blockCardUsed) return;
+        if (target.isBlockedThisQuestion) return;
+
+        blocker.blockCardUsed = true;
+        target.isBlockedThisQuestion = true;
+        target.blockedByPlayerId = blocker.id;
+        target.lastAnswer = null;
+        target.answeredAt = null;
+
+        logger.info(`[BLOCK] ${blocker.name} blocked ${target.name} from answering this question.`);
+
+        io.to(normalizedCode).emit('block-card-used', {
+          playerId: blocker.id,
+          targetPlayerId: target.id
+        });
+
+        io.to(normalizedCode).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
+      }
+    });
+
     socket.on('join-game', ({ code, name, avatar, avatarStyle }) => {
       const game = games.get(code.toUpperCase());
       if (game && game.status !== 'FINAL_SCORE') {
@@ -213,7 +247,10 @@ export function registerSocketHandlers(io: Server) {
           isCorrect: false,
           stealCardValue: Math.floor(Math.random() * 8) + 1, // 1-8
           stealCardUsed: false,
+          blockCardUsed: false,
           disabledIndexes: [],
+          isBlockedThisQuestion: false,
+          blockedByPlayerId: null,
           streak: 0,
           answeredAt: null,
           isFastestFinger: false,
@@ -228,7 +265,10 @@ export function registerSocketHandlers(io: Server) {
           ...p,
           stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
           stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+          blockCardUsed: typeof p.blockCardUsed === 'boolean' ? p.blockCardUsed : false,
           disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+          isBlockedThisQuestion: typeof p.isBlockedThisQuestion === 'boolean' ? p.isBlockedThisQuestion : false,
+          blockedByPlayerId: typeof p.blockedByPlayerId === 'string' ? p.blockedByPlayerId : null,
           streak: typeof p.streak === 'number' ? p.streak : 0
         }));
         // Debug: print all players before emitting joined-game
@@ -274,7 +314,10 @@ export function registerSocketHandlers(io: Server) {
           socketId: p.id === playerId ? socket.id : p.socketId,
           stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
           stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+          blockCardUsed: typeof p.blockCardUsed === 'boolean' ? p.blockCardUsed : false,
           disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+          isBlockedThisQuestion: typeof p.isBlockedThisQuestion === 'boolean' ? p.isBlockedThisQuestion : false,
+          blockedByPlayerId: typeof p.blockedByPlayerId === 'string' ? p.blockedByPlayerId : null,
           streak: typeof p.streak === 'number' ? p.streak : 0,
           answeredAt: typeof p.answeredAt === 'number' ? p.answeredAt : null,
           roundScore: 0,
@@ -309,7 +352,10 @@ export function registerSocketHandlers(io: Server) {
             answeredAt: null,
             stealCardValue: Math.floor(Math.random() * 8) + 1,
             stealCardUsed: false,
+            blockCardUsed: false,
             disabledIndexes: [],
+            isBlockedThisQuestion: false,
+            blockedByPlayerId: null,
             streak: 0,
             roundScore: 0,
             streakPoints: 0,
@@ -424,6 +470,11 @@ export function registerSocketHandlers(io: Server) {
       if (game && game.status === 'QUESTION') {
         const player = game.players.find(p => p.socketId === socket.id);
         if (player) {
+          if (player.isBlockedThisQuestion) {
+            logger.info(`[BLOCK] Ignored answer from blocked player ${player.name}.`);
+            return;
+          }
+
           // Filter out any colors that are at disabled indexes for this player
           let filteredAnswers = answers;
           if (player.disabledIndexes && player.disabledIndexes.length > 0) {
@@ -522,6 +573,8 @@ export function registerSocketHandlers(io: Server) {
               p.lastAnswer = null;
               p.isCorrect = false;
               p.disabledIndexes = [];
+              p.isBlockedThisQuestion = false;
+              p.blockedByPlayerId = null;
               p.answeredAt = null;
               p.isFastestFinger = false;
             });
@@ -540,6 +593,8 @@ export function registerSocketHandlers(io: Server) {
           p.lastAnswer = null;
           p.isCorrect = false;
           p.disabledIndexes = [];
+          p.isBlockedThisQuestion = false;
+          p.blockedByPlayerId = null;
           p.answeredAt = null;
           p.isFastestFinger = false;
         });
@@ -586,7 +641,10 @@ export function registerSocketHandlers(io: Server) {
           p.lastAnswer = null;
           p.isCorrect = false;
           p.stealCardUsed = false;
+          p.blockCardUsed = false;
           p.disabledIndexes = [];
+          p.isBlockedThisQuestion = false;
+          p.blockedByPlayerId = null;
           p.streak = 0;
           p.stealCardValue = Math.floor(Math.random() * 8) + 1;
         });

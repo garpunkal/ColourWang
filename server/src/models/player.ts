@@ -8,7 +8,10 @@ export interface Player {
     isCorrect: boolean;
     stealCardValue: number; // Value of the STEAL card (1-8)
     stealCardUsed: boolean; // Has the STEAL card been used?
+    blockCardUsed: boolean; // Has the BLOCK card been used?
     disabledIndexes?: number[]; // Indexes of options currently disabled for this player
+    isBlockedThisQuestion?: boolean; // True when this player is blocked for the current question
+    blockedByPlayerId?: string | null; // Player id of the blocker for the current question
     avatarStyle?: string;
     streak: number;
     answeredAt: number | null;

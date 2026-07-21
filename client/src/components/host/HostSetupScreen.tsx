@@ -25,6 +25,7 @@ export function HostSetupScreen({ socket }: Props) {
     const [timer, setTimer] = useState(defaults.questionTimer);
     const [resultTimer, setResultTimer] = useState(defaults.resultDuration);
     const [jokers, setJokers] = useState(defaults.jokersEnabled);
+    const [blocksEnabled, setBlocksEnabled] = useState(defaults.blocksEnabled ?? true);
     const [playSounds, setPlaySounds] = useState(defaults.soundEnabled);
     const [musicEnabled, setMusicEnabled] = useState(defaults.musicEnabled);
     const [streaksEnabled, setStreaksEnabled] = useState(defaults.streaksEnabled);
@@ -116,6 +117,7 @@ export function HostSetupScreen({ socket }: Props) {
             resultDuration: resultTimer,
             lobbyDuration: 30,
             jokersEnabled: jokers,
+            blocksEnabled,
             soundEnabled: playSounds,
             musicEnabled,
             bgmTrack: selectedBgm,
@@ -272,6 +274,25 @@ export function HostSetupScreen({ socket }: Props) {
                                 <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${jokers ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
                                     <motion.div
                                         animate={{ x: jokers ? '100%' : '0%' }}
+                                        className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Blocks */}
+                        <div className="bg-black/20 p-1 md:p-3 rounded-xl md:rounded-3xl border border-white/5 flex flex-col items-center justify-between hover:bg-white/5 transition-all cursor-pointer group active:scale-95 h-full min-h-12.5 md:min-h-25"
+                            onClick={() => setBlocksEnabled(!blocksEnabled)}>
+                            <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
+                                <div className="flex flex-col gap-0.5 md:gap-1 text-left">
+                                    <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Blocks</label>
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                        {blocksEnabled ? 'ENABLED' : 'DISABLED'}
+                                    </span>
+                                </div>
+                                <div className={`w-8 h-5 md:w-12 md:h-7 rounded-full p-1 transition-colors duration-300 ${blocksEnabled ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' : 'bg-white/10'}`}>
+                                    <motion.div
+                                        animate={{ x: blocksEnabled ? '100%' : '0%' }}
                                         className="w-3 h-3 md:w-5 md:h-5 bg-white rounded-full shadow-md"
                                     />
                                 </div>

@@ -14,6 +14,9 @@ interface ColorCardProps {
     index?: number;
     isStealCard?: boolean;
     stealValue?: number;
+    isActionCard?: boolean;
+    actionLabel?: string;
+    actionValue?: number | string;
 }
 
 export const ColorCard = memo(function ColorCard({
@@ -25,8 +28,15 @@ export const ColorCard = memo(function ColorCard({
     size = 'medium',
     index = 0,
     isStealCard = false,
-    stealValue
+    stealValue,
+    isActionCard = false,
+    actionLabel,
+    actionValue
 }: ColorCardProps) {
+
+    const showActionCard = isStealCard || isActionCard;
+    const resolvedActionLabel = (actionLabel || (isStealCard ? 'STEAL' : 'ACTION')).toUpperCase();
+    const resolvedActionValue = actionValue ?? (isStealCard ? stealValue : undefined);
 
     const sizeStyles = {
         mini: { width: '3.5rem', height: '4.5rem' },
@@ -74,8 +84,8 @@ export const ColorCard = memo(function ColorCard({
             style={{ ...cardStyle, perspective: '1000px', willChange: 'transform, opacity' }}
             role="button"
             tabIndex={disabled ? -1 : 0}
-            aria-label={isStealCard 
-                ? `Steal card with value ${stealValue}` 
+            aria-label={showActionCard
+                ? `${resolvedActionLabel} card${resolvedActionValue !== undefined ? ` with value ${resolvedActionValue}` : ''}`
                 : `${getColorName(color)} color card${isSelected ? ', selected' : ''}${isCorrect ? ', correct answer' : ''}`
             }
             aria-pressed={isSelected}
@@ -100,7 +110,7 @@ export const ColorCard = memo(function ColorCard({
                 <div
                     className="absolute inset-0 rounded-2xl"
                     style={
-                        isStealCard
+                        showActionCard
                             ? {
                                 background: 'black',
                                 transform: 'translateY(8px) scale(0.92)',
@@ -127,7 +137,7 @@ export const ColorCard = memo(function ColorCard({
                         }
                     `}
                     style={
-                        isStealCard
+                        showActionCard
                             ? {
                                 background: 'linear-gradient(145deg, #1a1a2e 0%, #0d0d1a 100%)',
                                 transform: 'translateZ(0)'
@@ -144,21 +154,21 @@ export const ColorCard = memo(function ColorCard({
                     {/* Diagonal shine */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent" />
 
-                    {isStealCard && (
+                    {showActionCard && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
-                            {/* Steal card design */}
+                            {/* Generic action card design (STEAL / BLOCK / etc.) */}
                             <div className="text-center">
                                 <motion.span
                                     className="block text-4xl md:text-5xl font-black text-white drop-shadow-lg"
                                     animate={{ scale: [1, 1.05, 1] }}
                                     transition={{ duration: 2, repeat: Infinity }}
                                 >
-                                    {typeof stealValue === 'number' ? stealValue : '?'}
+                                    {resolvedActionValue !== undefined ? resolvedActionValue : '?'}
                                 </motion.span>
                                 <span
                                     className="block text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white/80 mt-1"
                                 >
-                                    STEAL
+                                    {resolvedActionLabel}
                                 </span>
                             </div>
                             {/* Decorative lines */}

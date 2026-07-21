@@ -58,7 +58,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
             exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
             className="w-full max-w-[95vw] flex flex-col items-center"
         >
-            <h1 className="mt-12 md:mt-16 text-hero text-display mb-4 text-center drop-shadow-2xl">
+            <h1 className="mt-6 md:mt-8 text-hero text-display mb-4 text-center drop-shadow-2xl">
                 <span className="block text-xl md:text-3xl mb-1 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80 uppercase">Player</span>
                 <span className="text-display-gradient pr-10">Lobby</span>
             </h1>
@@ -68,49 +68,53 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mb-6 max-w-4xl w-full px-4"
+                className="mb-4 max-w-3xl w-full px-3"
             >
-                <div className="glass-panel p-3 md:p-4 rounded-2xl border-white/10 bg-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <Settings size={16} className="text-white/40" />
-                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-white/40">Game Configuration</span>
+                <div className="glass-panel p-2 md:p-3 rounded-xl border-white/10 bg-white/5">
+                    <div className="flex items-center gap-1.5 mb-2">
+                        <Settings size={14} className="text-white/40" />
+                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/40">Game Configuration</span>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Rounds</span>
-                            <span className="text-lg md:text-xl font-black font-mono text-color-blue">{gameState.rounds?.length || 0}</span>
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-1.5 md:gap-2">
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Rounds</span>
+                            <span className="text-sm md:text-base font-black font-mono text-color-blue">{gameState.rounds?.length || 0}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Questions</span>
-                            <span className="text-lg md:text-xl font-black font-mono text-white">{gameState.questions?.length || 0}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Questions</span>
+                            <span className="text-sm md:text-base font-black font-mono text-white">{gameState.questions?.length || 0}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Timer</span>
-                            <span className="text-lg md:text-xl font-black font-mono text-color-pink">{gameState.timerDuration || 0}s</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Timer</span>
+                            <span className="text-sm md:text-base font-black font-mono text-color-pink">{gameState.timerDuration || 0}s</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Reveal</span>
-                            <span className="text-lg md:text-xl font-black font-mono text-color-yellow">{gameState.resultDuration || 0}s</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Reveal</span>
+                            <span className="text-sm md:text-base font-black font-mono text-color-yellow">{gameState.resultDuration || 0}s</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Sound FX</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.soundEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.soundEnabled ? 'ON' : 'OFF'}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Sound</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.soundEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.soundEnabled ? 'ON' : 'OFF'}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Music</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.musicEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.musicEnabled ? 'ON' : 'OFF'}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Music</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.musicEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.musicEnabled ? 'ON' : 'OFF'}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Steals</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.jokersEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.jokersEnabled ? 'ON' : 'OFF'}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Steals</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.jokersEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.jokersEnabled ? 'ON' : 'OFF'}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Streaks</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.streaksEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.streaksEnabled ? 'ON' : 'OFF'}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Blocks</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.blocksEnabled !== false ? 'text-success' : 'text-white/30'}`}>{gameState.blocksEnabled !== false ? 'ON' : 'OFF'}</span>
                         </div>
-                        <div className="flex flex-col items-center p-2 bg-black/20 rounded-xl border border-white/5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Fastest Finger</span>
-                            <span className={`text-xs md:text-sm font-black uppercase ${gameState.fastestFingerEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.fastestFingerEnabled ? 'ON' : 'OFF'}</span>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Streaks</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.streaksEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.streaksEnabled ? 'ON' : 'OFF'}</span>
+                        </div>
+                        <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Fastest</span>
+                            <span className={`text-[10px] md:text-xs font-black uppercase ${gameState.fastestFingerEnabled ? 'text-success' : 'text-white/30'}`}>{gameState.fastestFingerEnabled ? 'ON' : 'OFF'}</span>
                         </div>
                     </div>
                 </div>
