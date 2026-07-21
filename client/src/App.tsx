@@ -349,90 +349,70 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#050510]/95 backdrop-blur-3xl text-white p-8 text-center"
+            className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md text-white p-6 text-center"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 30, opacity: 0 }}
+              initial={{ scale: 0.96, y: 12, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", damping: 20, stiffness: 100 }}
-              className="flex flex-col items-center gap-12 max-w-3xl"
+              transition={{ type: "spring", damping: 22, stiffness: 110 }}
+              className="w-full max-w-xl glass-card rounded-4xl border border-white/15 shadow-2xl p-6 md:p-8"
             >
-              {/* Animated Connection Icon */}
-              <div className="relative group">
+              <div className="flex flex-col items-center gap-6">
                 <motion.div
                   animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.1, 0.3, 0.1],
-                    rotate: [0, 180, 360]
+                    y: [0, -3, 0],
+                    scale: [1, 1.02, 1]
                   }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-10 bg-error/30 blur-[80px] rounded-full"
-                />
-                <motion.div
-                  animate={{
-                    borderColor: ['rgba(255, 51, 102, 0.2)', 'rgba(255, 51, 102, 0.6)', 'rgba(255, 51, 102, 0.2)'],
-                    boxShadow: [
-                      '0 0 0px rgba(255, 51, 102, 0)',
-                      '0 0 50px rgba(255, 51, 102, 0.3)',
-                      '0 0 0px rgba(255, 51, 102, 0)'
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-40 h-40 md:w-56 md:h-56 rounded-full border-4 border-error/30 flex items-center justify-center relative z-10 bg-black/40 backdrop-blur-md"
+                  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-color-blue/15 border border-color-blue/40 flex items-center justify-center"
                 >
-                  <WifiOff size={80} className="text-error animate-pulse" />
+                  <WifiOff size={36} className="text-color-blue/90" />
                 </motion.div>
-              </div>
 
-              <div className="space-y-8">
-                <div className="space-y-2">
-                  <motion.h2
-                    animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="text-6xl md:text-9xl font-black italic tracking-tighter uppercase drop-shadow-[0_0_50px_rgba(255,51,102,0.6)] leading-none"
-                  >
-                    Signal Lost
-                  </motion.h2>
-                  <div className="h-2 w-24 md:w-32 bg-error mx-auto rounded-full" />
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-xl md:text-4xl font-bold text-white tracking-[0.2em] uppercase italic">
-                    Reconnecting
-                  </p>
-                  <p className="text-base md:text-xl font-medium text-white/30 uppercase tracking-[0.4em]">
-                    Hold tight... searching for host...
-                  </p>
-                  <p className="text-xs md:text-sm font-mono text-white/45 uppercase tracking-[0.2em]">
-                    Last check: {secondsSinceReconnectCheck}s ago | Next check in {Math.max(0, 4 - (secondsSinceReconnectCheck % 4))}s
+                <div className="space-y-3">
+                  <h2 className="text-2xl md:text-4xl font-black italic tracking-tight uppercase">
+                    Tiny Signal Detour
+                  </h2>
+                  <p className="text-sm md:text-base font-bold uppercase tracking-[0.14em] text-white/70">
+                    You are still in the game. Re-linking to your room now.
                   </p>
                 </div>
-              </div>
 
-              {/* Premium Loading dots */}
-              <div className="flex gap-6 items-center">
+                <div className="w-full rounded-2xl bg-black/30 border border-white/10 p-4 md:p-5">
+                  <div className="flex items-center justify-between gap-3 text-xs md:text-sm uppercase tracking-[0.12em] font-black text-white/70">
+                    <span>Last check {secondsSinceReconnectCheck}s ago</span>
+                    <span>Next in {Math.max(0, 4 - (secondsSinceReconnectCheck % 4))}s</span>
+                  </div>
+                  <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
+                    <motion.div
+                      key={secondsSinceReconnectCheck}
+                      initial={{ width: '10%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 4, ease: 'linear' }}
+                      className="h-full rounded-full bg-linear-to-r from-color-blue via-color-purple to-color-pink"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3 items-center">
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
                     animate={{
-                      y: [0, -20, 0],
-                      scale: [1, 1.5, 1],
-                      backgroundColor: ['#ffffff', '#ff3366', '#ffffff'],
-                      boxShadow: [
-                        '0 0 0px rgba(255,255,255,0)',
-                        '0 0 20px rgba(255,51,102,0.8)',
-                        '0 0 0px rgba(255,255,255,0)'
-                      ]
+                      y: [0, -6, 0],
+                      opacity: [0.35, 1, 0.35]
                     }}
                     transition={{
-                      duration: 1.2,
+                      duration: 1,
                       repeat: Infinity,
                       delay: i * 0.2,
                       ease: "easeInOut"
                     }}
-                    className="w-4 h-4 rounded-full"
+                    className="w-2.5 h-2.5 rounded-full bg-color-blue"
                   />
                 ))}
+                  <span className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/55">Syncing</span>
+                </div>
               </div>
             </motion.div>
           </motion.div>

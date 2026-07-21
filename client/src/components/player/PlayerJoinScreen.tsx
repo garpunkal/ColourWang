@@ -179,7 +179,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             <p className="text-black/60 font-bold text-lg leading-tight">{modalError}</p>
                             <button
                                 onClick={() => setModalError(null)}
-                                className="w-full btn bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl"
+                                className="w-full bg-red-600 hover:bg-red-700 text-white border border-red-900/40 py-4 rounded-xl text-xl font-black uppercase tracking-widest mt-4 shadow-xl transition-colors"
                             >
                                 OK
                             </button>
