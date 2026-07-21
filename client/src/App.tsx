@@ -430,7 +430,7 @@ function App() {
                     className="w-2.5 h-2.5 rounded-full bg-color-blue"
                   />
                 ))}
-                  <span className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/55">Syncing</span>
+                 
                 </div>
               </div>
             </motion.div>
