@@ -158,7 +158,7 @@
         "roundId": "cars"
     },
     {
-        "question": "What colour was the original Ford Model T famously available in?\",
+        "question": "What colour was the original Ford Model T famously available in?",
         "answer": [
             "black"
         ],
@@ -184,14 +184,6 @@
         "answer": [
             "orange",
             "red"
-        ],
-        "roundId": "cars"
-    }
-]
-        "answer": [
-            "black",
-            "white",
-            "blue"
         ],
         "roundId": "cars"
     },

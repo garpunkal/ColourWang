@@ -85,6 +85,16 @@ export function registerSocketHandlers(io: Server) {
         const gameRounds = generateGameRounds(numRounds || 4, questionsPerRound || 10, selectedTopics);
         logger.info('[CREATE-GAME] Game rounds generated:', gameRounds.length);
 
+        if (!gameRounds.length || !gameRounds[0]?.questions?.length) {
+          logger.error('[CREATE-GAME] Failed to generate rounds/questions', {
+            requestedRounds: numRounds || 4,
+            requestedQuestionsPerRound: questionsPerRound || 10,
+            selectedTopics
+          });
+          socket.emit('error', 'Failed to create game: no questions available');
+          return;
+        }
+
         const game: GameState = {
           code,
           players: [],
