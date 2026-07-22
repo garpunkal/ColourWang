@@ -83,6 +83,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     };
 
     return (
+        <>
         <motion.div
             key="result"
             initial={{ opacity: 0 }}
@@ -270,32 +271,34 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 </div>
             </div>
 
-            {modalConfig && (
-                <ConfirmModal
-                    isOpen={showConfirmModal}
-                    title={modalConfig.title}
-                    message={modalConfig.message}
-                    confirmText={modalConfig.confirmText}
-                    variant={modalConfig.variant}
-                    onConfirm={modalConfig.onConfirm}
-                    onCancel={() => setShowConfirmModal(false)}
-                />
-            )}
-
-            <AnimatePresence>
-                {showDeletedToast && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 24, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 12, scale: 0.95 }}
-                        transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-                        className="fixed bottom-8 left-1/2 z-[200] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-black/80 px-5 py-3 shadow-2xl backdrop-blur-md"
-                    >
-                        <CheckCircle size={18} className="shrink-0 text-green-400" />
-                        <span className="text-sm font-black uppercase tracking-wide text-white">Question deleted</span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </motion.div>
+
+        {modalConfig && (
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                confirmText={modalConfig.confirmText}
+                variant={modalConfig.variant}
+                onConfirm={modalConfig.onConfirm}
+                onCancel={() => setShowConfirmModal(false)}
+            />
+        )}
+
+        <AnimatePresence>
+            {showDeletedToast && (
+                <motion.div
+                    initial={{ opacity: 0, y: 24, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.95 }}
+                    transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+                    className="fixed bottom-8 left-1/2 z-[200] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-black/80 px-5 py-3 shadow-2xl backdrop-blur-md"
+                >
+                    <CheckCircle size={18} className="shrink-0 text-green-400" />
+                    <span className="text-sm font-black uppercase tracking-wide text-white">Question deleted</span>
+                </motion.div>
+            )}
+        </AnimatePresence>
+        </>
     );
 }

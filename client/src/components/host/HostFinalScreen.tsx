@@ -26,6 +26,7 @@ interface Props {
 export function HostFinalScreen({ socket, players, rounds, timer, code }: Props) {
     const [showSupernova, setShowSupernova] = useState(false);
     const [showImpactFlash, setShowImpactFlash] = useState(true);
+    const [revealedCount, setRevealedCount] = useState(0);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -35,15 +36,28 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
     useEffect(() => {
-        // Front-load a hard impact pulse, then trigger the supernova winner reveal.
         const flashTimer = setTimeout(() => setShowImpactFlash(false), 650);
-        const supernovaTimer = setTimeout(() => setShowSupernova(true), 900);
+
+        // Reveal players one at a time, last place first, winner last.
+        const timers: ReturnType<typeof setTimeout>[] = [];
+        const n = sortedPlayers.length;
+        let cumulative = 1200; // initial pause before first reveal
+
+        for (let step = 1; step <= n; step++) {
+            const isWinner = step === n;
+            cumulative += isWinner ? 2200 : 1400;
+            const t = cumulative;
+            timers.push(setTimeout(() => setRevealedCount(step), t));
+            if (isWinner) {
+                timers.push(setTimeout(() => setShowSupernova(true), t + 300));
+            }
+        }
 
         return () => {
             clearTimeout(flashTimer);
-            clearTimeout(supernovaTimer);
+            timers.forEach(clearTimeout);
         };
-    }, []);
+    }, [sortedPlayers.length]);
 
     const itemVariants: Variants = {
         hidden: { opacity: 0, y: 20, scale: 0.98 },
@@ -155,73 +169,101 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                 {sortedPlayers.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const isWinner = i === 0;
+                    // Reveal from last place (i = n-1) up to first (i = 0)
+                    const isRevealed = revealedCount >= sortedPlayers.length - i;
 
                     return (
-                        <motion.div
-                            key={player.id}
-                            initial={{ opacity: 0, y: 80, scale: 0.88, rotateZ: i % 2 === 0 ? -2 : 2 }}
-                            animate={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
-                            transition={{
-                                delay: 0.22 + (i * 0.12),
-                                type: 'spring',
-                                stiffness: isWinner ? 200 : 150,
-                                damping: isWinner ? 17 : 21
-                            }}
-                            className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
-                                ? 'border-yellow-500/50'
-                                : 'border-white/5 hover:border-white/10'
-                                }`}
-                            style={{
-                                boxShadow: isWinner
-                                    ? `0 20px 60px -15px ${avatarColor}55, 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 1px 0 rgba(255,255,255,0.1)`
-                                    : undefined
-                            }}
-                        >
-                            {/* Rank Indicator */}
-                            <div className={`text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center ${isWinner ? 'text-yellow-400' : 'text-white/20'
-                                }`}>
-                                #{i + 1}
-                            </div>
-
-                            {/* Avatar */}
-                            <div className={`relative w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden ring-2 md:ring-4 ${isWinner ? 'ring-yellow-500' : 'ring-white/10'
-                                }`}>
-                                <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
-                            </div>
-
-                            {/* Name & Title */}
-                            <div className="flex-1 min-w-0 py-2">
-                                <h2 className={`text-xl md:text-5xl font-black uppercase italic tracking-tight leading-none wrap-break-word ${isWinner ? 'text-white' : 'text-white/90'
-                                    }`}>
-                                    {player.name}
-                                </h2>
-                                {isWinner && (
-                                    <p className="text-yellow-500 font-black text-[8px] md:text-xs uppercase tracking-[0.15em] mt-1 md:mt-2">
-                                        The Undisputed Legend
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Score */}
-                            <div className="text-right shrink-0 px-2 md:px-8">
-                                <span className={`text-2xl md:text-6xl font-mono font-black ${isWinner ? 'text-yellow-400 glow-text' : 'text-white'
-                                    }`}
-                                    style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
-                                >
-                                    {player.score}
-                                    <span className="text-[10px] md:text-xl ml-1 md:ml-2 opacity-40 font-sans tracking-widest uppercase">pts</span>
-                                </span>
-                            </div>
-
-                            {/* Decorative Shine for Winner */}
-                            {isWinner && (
+                        <AnimatePresence key={player.id} mode="wait">
+                            {isRevealed ? (
                                 <motion.div
-                                    animate={{ left: ['-100%', '200%'] }}
-                                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
-                                />
+                                    key="revealed"
+                                    initial={{ opacity: 0, y: 60, scale: 0.88, rotateZ: i % 2 === 0 ? -2 : 2 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: isWinner ? 200 : 150,
+                                        damping: isWinner ? 17 : 21
+                                    }}
+                                    className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
+                                        ? 'border-yellow-500/50'
+                                        : 'border-white/5 hover:border-white/10'
+                                        }`}
+                                    style={{
+                                        boxShadow: isWinner
+                                            ? `0 20px 60px -15px ${avatarColor}55, 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 1px 0 rgba(255,255,255,0.1)`
+                                            : undefined
+                                    }}
+                                >
+                                    {/* Rank Indicator */}
+                                    <div className={`text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center ${isWinner ? 'text-yellow-400' : 'text-white/20'
+                                        }`}>
+                                        #{i + 1}
+                                    </div>
+
+                                    {/* Avatar */}
+                                    <div className={`relative w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden ring-2 md:ring-4 ${isWinner ? 'ring-yellow-500' : 'ring-white/10'
+                                        }`}>
+                                        <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                    </div>
+
+                                    {/* Name & Title */}
+                                    <div className="flex-1 min-w-0 py-2">
+                                        <h2 className={`text-xl md:text-5xl font-black uppercase italic tracking-tight leading-none wrap-break-word ${isWinner ? 'text-white' : 'text-white/90'
+                                            }`}>
+                                            {player.name}
+                                        </h2>
+                                        {isWinner && (
+                                            <p className="text-yellow-500 font-black text-[8px] md:text-xs uppercase tracking-[0.15em] mt-1 md:mt-2">
+                                                The Undisputed Legend
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Score */}
+                                    <div className="text-right shrink-0 px-2 md:px-8">
+                                        <span className={`text-2xl md:text-6xl font-mono font-black ${isWinner ? 'text-yellow-400 glow-text' : 'text-white'
+                                            }`}
+                                            style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+                                        >
+                                            {player.score}
+                                            <span className="text-[10px] md:text-xl ml-1 md:ml-2 opacity-40 font-sans tracking-widest uppercase">pts</span>
+                                        </span>
+                                    </div>
+
+                                    {/* Decorative Shine for Winner */}
+                                    {isWinner && (
+                                        <motion.div
+                                            animate={{ left: ['-100%', '200%'] }}
+                                            transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
+                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
+                                        />
+                                    )}
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="placeholder"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.06 }}
+                                    className="relative glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 border-white/5"
+                                >
+                                    <div className="text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center text-white/15">
+                                        #{i + 1}
+                                    </div>
+                                    <div className="w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl bg-white/5 ring-2 md:ring-4 ring-white/5 flex items-center justify-center">
+                                        <motion.span
+                                            animate={{ opacity: [0.2, 0.6, 0.2] }}
+                                            transition={{ duration: 1.4, repeat: Infinity }}
+                                            className="text-2xl md:text-4xl font-black text-white/20"
+                                        >
+                                            ?
+                                        </motion.span>
+                                    </div>
+                                    <div className="flex-1 h-6 md:h-10 rounded-full bg-white/5" />
+                                    <div className="w-16 md:w-32 h-6 md:h-10 rounded-full bg-white/5 shrink-0" />
+                                </motion.div>
                             )}
-                        </motion.div>
+                        </AnimatePresence>
                     );
                 })}
             </div>
