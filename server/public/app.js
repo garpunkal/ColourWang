@@ -24,19 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let pendingAction = null;
   let isFirstLoad = true;
 
-  // 1. Setup Sparkline Charts
-  const MAX_DATA_POINTS = 15;
+  // 1. Zero-Latency Real-Time Sparkline Charts
+  const MAX_DATA_POINTS = 20;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
-  const cpuData = Array(MAX_DATA_POINTS).fill(null);
-  const memoryData = Array(MAX_DATA_POINTS).fill(null);
+  const cpuData = Array(MAX_DATA_POINTS).fill(0);
+  const memoryData = Array(MAX_DATA_POINTS).fill(0);
 
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: {
-      duration: 300,
-      easing: 'easeOutQuad'
-    },
+    animation: false, // Disables animation lag completely for instant updates
+    parsing: false,   // Optimized direct array drawing
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
     scales: {
       x: { display: false },
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     elements: {
       point: { radius: 0, hoverRadius: 4 },
-      line: { tension: 0.35, borderWidth: 2 }
+      line: { tension: 0.2, borderWidth: 2 }
     }
   };
 
@@ -109,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
       memoryData.shift();
     }
 
-    if (cpuChart) cpuChart.update();
-    if (memoryChart) memoryChart.update();
+    if (cpuChart) cpuChart.update('none'); // Render instantly without animation frames
+    if (memoryChart) memoryChart.update('none');
   }
 
   // 2. Toast Notifications
@@ -417,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Start polling
+  // Immediate start + 1-second refresh interval
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);
