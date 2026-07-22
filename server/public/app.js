@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let pendingAction = null;
   let isFirstLoad = true;
 
-  // 1. Optimized Sparkline Charts (Fast 1s Updates)
-  const MAX_DATA_POINTS = 15; // Increased buffer for smooth 1s tracking
+  // 1. Setup Sparkline Charts
+  const MAX_DATA_POINTS = 15;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(null);
   const memoryData = Array(MAX_DATA_POINTS).fill(null);
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
-      duration: 300, // Short transition for 1s polling
+      duration: 300,
       easing: 'easeOutQuad'
     },
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
@@ -48,42 +48,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const cpuCtx = document.getElementById('cpuChart').getContext('2d');
-  const cpuChart = new Chart(cpuCtx, {
-    type: 'line',
-    data: {
-      labels: chartLabels,
-      datasets: [{
-        data: cpuData,
-        borderColor: '#3dba7e',
-        backgroundColor: 'rgba(61, 186, 126, 0.12)',
-        fill: true,
-        spanGaps: true
-      }]
-    },
-    options: commonChartOptions
-  });
+  const cpuCanvas = document.getElementById('cpuChart');
+  let cpuChart = null;
+  if (cpuCanvas) {
+    const cpuCtx = cpuCanvas.getContext('2d');
+    cpuChart = new Chart(cpuCtx, {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          data: cpuData,
+          borderColor: '#3dba7e',
+          backgroundColor: 'rgba(61, 186, 126, 0.12)',
+          fill: true,
+          spanGaps: true
+        }]
+      },
+      options: commonChartOptions
+    });
+  }
 
-  const memoryCtx = document.getElementById('memoryChart').getContext('2d');
-  const memoryChart = new Chart(memoryCtx, {
-    type: 'line',
-    data: {
-      labels: chartLabels,
-      datasets: [{
-        data: memoryData,
-        borderColor: '#7c5cfc',
-        backgroundColor: 'rgba(124, 92, 252, 0.12)',
-        fill: true,
-        spanGaps: true
-      }]
-    },
-    options: commonChartOptions
-  });
+  const memoryCanvas = document.getElementById('memoryChart');
+  let memoryChart = null;
+  if (memoryCanvas) {
+    const memoryCtx = memoryCanvas.getContext('2d');
+    memoryChart = new Chart(memoryCtx, {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          data: memoryData,
+          borderColor: '#7c5cfc',
+          backgroundColor: 'rgba(124, 92, 252, 0.12)',
+          fill: true,
+          spanGaps: true
+        }]
+      },
+      options: commonChartOptions
+    });
+  }
 
   function updateMetricsCharts(cpuPercent, memoryMb) {
     const timeLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // Seed historical baseline instantly on initial fetch so graph isn't empty
     if (isFirstLoad) {
       for (let i = 0; i < MAX_DATA_POINTS; i++) {
         chartLabels[i] = timeLabel;
@@ -102,13 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
       memoryData.shift();
     }
 
-    cpuChart.update();
-    memoryChart.update();
+    if (cpuChart) cpuChart.update();
+    if (memoryChart) memoryChart.update();
   }
 
   // 2. Toast Notifications
   function showToast(message, isError = false) {
     const container = document.getElementById('toast-container');
+    if (!container) return;
+
     const toast = document.createElement('div');
     toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${
       isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
@@ -128,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Confirmation Modal
   function askConfirmation({ title, body, onConfirm }) {
+    if (!confirmModal || !confirmTitle || !confirmBody) return;
     confirmTitle.textContent = title;
     confirmBody.textContent = body;
     pendingAction = onConfirm;
@@ -135,20 +145,28 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmModal.classList.add('flex');
   }
 
-  confirmCancel.addEventListener('click', () => {
-    confirmModal.classList.add('hidden');
-    confirmModal.classList.remove('flex');
-    pendingAction = null;
-  });
-
-  confirmOk.addEventListener('click', async () => {
-    confirmModal.classList.add('hidden');
-    confirmModal.classList.remove('flex');
-    if (pendingAction) {
-      await pendingAction();
+  if (confirmCancel) {
+    confirmCancel.addEventListener('click', () => {
+      if (confirmModal) {
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+      }
       pendingAction = null;
-    }
-  });
+    });
+  }
+
+  if (confirmOk) {
+    confirmOk.addEventListener('click', async () => {
+      if (confirmModal) {
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+      }
+      if (pendingAction) {
+        await pendingAction();
+        pendingAction = null;
+      }
+    });
+  }
 
   function formatUptime(seconds) {
     const d = Math.floor(seconds / 86400);
@@ -157,33 +175,39 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${d}d ${h}h ${m}m`;
   }
 
-  // 4. Fetch Metrics & Active Games (1s Polling Loop)
+  // 4. Fetch Metrics & Active Games
   async function fetchServerStatus() {
     try {
       const res = await fetch('/api/status');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      serverStatus.innerHTML = '● Online';
-      serverStatus.className = 'font-semibold text-[#3dba7e]';
+      if (serverStatus) {
+        serverStatus.innerHTML = '● Online';
+        serverStatus.className = 'font-semibold text-[#3dba7e]';
+      }
 
       const usedMemory = data.memory?.used || 0;
       const cpuUsage = data.cpu || Math.floor(Math.random() * 8) + 2;
 
-      statActiveGames.textContent = data.games?.total || 0;
-      statMemory.textContent = `${usedMemory} MB`;
-      statCpu.textContent = `${cpuUsage}%`;
-      statUptime.textContent = formatUptime(data.uptime || 0);
+      if (statActiveGames) statActiveGames.textContent = data.games?.total || 0;
+      if (statMemory) statMemory.textContent = `${usedMemory} MB`;
+      if (statCpu) statCpu.textContent = `${cpuUsage}%`;
+      if (statUptime) statUptime.textContent = formatUptime(data.uptime || 0);
 
       updateMetricsCharts(cpuUsage, usedMemory);
       fetchGamesList();
     } catch (err) {
-      serverStatus.innerHTML = '● Offline';
-      serverStatus.className = 'font-semibold text-[#e05252]';
+      if (serverStatus) {
+        serverStatus.innerHTML = '● Offline';
+        serverStatus.className = 'font-semibold text-[#e05252]';
+      }
     }
   }
 
   async function fetchGamesList() {
+    if (!gamesGrid) return;
+
     try {
       const res = await fetch('/api/admin/games');
       if (!res.ok) return;
@@ -193,12 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let totalPlayers = 0;
 
       if (!games || games.length === 0) {
-        emptyState.classList.remove('hidden');
-        statTotalPlayers.textContent = '0';
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (statTotalPlayers) statTotalPlayers.textContent = '0';
         return;
       }
 
-      emptyState.classList.add('hidden');
+      if (emptyState) emptyState.classList.add('hidden');
 
       games.forEach(game => {
         const code = game.code || game.id || 'N/A';
@@ -244,83 +268,89 @@ document.addEventListener('DOMContentLoaded', () => {
         gamesGrid.appendChild(card);
       });
 
-      statTotalPlayers.textContent = totalPlayers.toString();
+      if (statTotalPlayers) statTotalPlayers.textContent = totalPlayers.toString();
     } catch (err) {
       console.error('Failed to load games list:', err);
     }
   }
 
-  // 5. Button Actions
-  gamesGrid.addEventListener('click', (e) => {
-    const button = e.target.closest('button[data-action]');
-    if (!button) return;
+  // 5. Button Action Listeners
+  if (gamesGrid) {
+    gamesGrid.addEventListener('click', (e) => {
+      const button = e.target.closest('button[data-action]');
+      if (!button) return;
 
-    const action = button.getAttribute('data-action');
-    const gameCode = button.getAttribute('data-code');
+      const action = button.getAttribute('data-action');
+      const gameCode = button.getAttribute('data-code');
 
-    if (action === 'kill') {
-      askConfirmation({
-        title: `Kill Game ${gameCode}?`,
-        body: 'This will terminate the room and disconnect all active players in this game.',
-        onConfirm: async () => {
-          try {
-            const res = await fetch(`/api/admin/games/${gameCode}/kill`, { method: 'POST' });
-            if (res.ok) {
-              showToast(`Game ${gameCode} killed`);
-              fetchServerStatus();
-            } else {
-              showToast(`Failed to kill game ${gameCode}`, true);
+      if (action === 'kill') {
+        askConfirmation({
+          title: `Kill Game ${gameCode}?`,
+          body: 'This will terminate the room and disconnect all active players in this game.',
+          onConfirm: async () => {
+            try {
+              const res = await fetch(`/api/admin/games/${gameCode}/kill`, { method: 'POST' });
+              if (res.ok) {
+                showToast(`Game ${gameCode} killed`);
+                fetchServerStatus();
+              } else {
+                showToast(`Failed to kill game ${gameCode}`, true);
+              }
+            } catch (err) {
+              showToast('Network error while killing game', true);
             }
-          } catch (err) {
-            showToast('Network error while killing game', true);
           }
-        }
-      });
-    } else if (action === 'restart') {
-      askConfirmation({
-        title: `Restart Game ${gameCode}?`,
-        body: 'This will reset the room score and return players to the lobby.',
-        onConfirm: async () => {
-          try {
-            const res = await fetch(`/api/admin/games/${gameCode}/restart`, { method: 'POST' });
-            if (res.ok) {
-              showToast(`Game ${gameCode} restarted`);
-              fetchServerStatus();
-            } else {
-              showToast(`Failed to restart game ${gameCode}`, true);
+        });
+      } else if (action === 'restart') {
+        askConfirmation({
+          title: `Restart Game ${gameCode}?`,
+          body: 'This will reset the room score and return players to the lobby.',
+          onConfirm: async () => {
+            try {
+              const res = await fetch(`/api/admin/games/${gameCode}/restart`, { method: 'POST' });
+              if (res.ok) {
+                showToast(`Game ${gameCode} restarted`);
+                fetchServerStatus();
+              } else {
+                showToast(`Failed to restart game ${gameCode}`, true);
+              }
+            } catch (err) {
+              showToast('Network error while restarting game', true);
             }
-          } catch (err) {
-            showToast('Network error while restarting game', true);
           }
-        }
-      });
-    }
-  });
-
-  btnKillAll.addEventListener('click', () => {
-    askConfirmation({
-      title: 'Kill ALL Active Games?',
-      body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
-      onConfirm: async () => {
-        try {
-          const res = await fetch('/api/admin/games/kill-all', { method: 'POST' });
-          if (res.ok) {
-            showToast('All games killed');
-            fetchServerStatus();
-          } else {
-            showToast('Failed to kill all games', true);
-          }
-        } catch (err) {
-          showToast('Network error execution failed', true);
-        }
+        });
       }
     });
-  });
+  }
 
-  btnRefresh.addEventListener('click', () => {
-    fetchServerStatus();
-    showToast('Dashboard refreshed');
-  });
+  if (btnKillAll) {
+    btnKillAll.addEventListener('click', () => {
+      askConfirmation({
+        title: 'Kill ALL Active Games?',
+        body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
+        onConfirm: async () => {
+          try {
+            const res = await fetch('/api/admin/games/kill-all', { method: 'POST' });
+            if (res.ok) {
+              showToast('All games killed');
+              fetchServerStatus();
+            } else {
+              showToast('Failed to kill all games', true);
+            }
+          } catch (err) {
+            showToast('Network error execution failed', true);
+          }
+        }
+      });
+    });
+  }
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      fetchServerStatus();
+      showToast('Dashboard refreshed');
+    });
+  }
 
   // 6. Real-time Live Log Streaming via SSE
   function initLogStream() {
@@ -349,6 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function appendLog(message, level = 'info') {
+    if (!logTerminal) return;
+
     const logLine = document.createElement('div');
     const normalizedLevel = String(level).toLowerCase();
     
@@ -377,11 +409,15 @@ document.addEventListener('DOMContentLoaded', () => {
     logTerminal.scrollTop = logTerminal.scrollHeight;
   }
 
-  btnClearLogs.addEventListener('click', () => {
-    logTerminal.innerHTML = '<div class="text-[#c084fc]">[SYSTEM] Logs cleared.</div>';
-  });
+  if (btnClearLogs) {
+    btnClearLogs.addEventListener('click', () => {
+      if (logTerminal) {
+        logTerminal.innerHTML = '<div class="text-[#c084fc]">[SYSTEM] Logs cleared.</div>';
+      }
+    });
+  }
 
-  // Initial Instant Load & Fast 1-Second Polling
+  // Start polling
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);
