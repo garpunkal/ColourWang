@@ -1,48 +1,34 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('ColourWang - General Application Tests', () => {
+// The app shows a landing page at '/' with HOST and JOIN cards.
+// Clicking the JOIN card navigates to the PlayerJoinScreen.
+
+test.describe('General Application', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).waitFor();
   });
 
-  test('should load the application successfully', async ({ page }) => {
-    // Check page title
+  test('should load with the correct title', async ({ page }) => {
     await expect(page).toHaveTitle(/ColourWang/i);
   });
 
-  test('should display main application layout', async ({ page }) => {
-    // Check that the root element exists
-    const root = page.locator('#root');
-    await expect(root).toBeVisible();
+  test('should render the root element', async ({ page }) => {
+    await expect(page.locator('#root')).toBeVisible();
   });
 
-  test('should have proper meta tags', async ({ page }) => {
-    // Check viewport meta tag for mobile responsiveness
-    const viewportMeta = page.locator('meta[name="viewport"]');
-    await expect(viewportMeta).toHaveAttribute('content', /device-width/);
+  test('should have a viewport meta tag', async ({ page }) => {
+    await expect(page.locator('meta[name="viewport"]')).toHaveAttribute('content', /device-width/);
   });
 
-  test('should load stylesheets', async ({ page }) => {
-    // Wait for page to fully load
-    await page.waitForLoadState('networkidle');
-    
-    // Check that CSS is loaded by looking for a styled element
-    const htmlElement = page.locator('html');
-    const computedStyle = await htmlElement.evaluate((el) => 
-      window.getComputedStyle(el).getPropertyValue('background-color')
-    );
-    expect(computedStyle).toBeTruthy();
+  test('should show the JOIN card on the landing page', async ({ page }) => {
+    await expect(page.locator('button').filter({ hasText: 'JOIN NOW' })).toBeVisible();
   });
 
-  test('should have accessible color contrast on main UI', async ({ page }) => {
-    // Check that text is visible on background
-    const labels = page.locator('label');
-    const count = await labels.count();
-    expect(count).toBeGreaterThan(0);
-    
-    // Verify labels are visible
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      await expect(labels.nth(i)).toBeVisible();
-    }
+  test('should navigate to the player join form when the JOIN card is clicked', async ({ page }) => {
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await expect(page.locator('input[placeholder*="ENTER NAME" i]')).toBeVisible();
+    await expect(page.locator('input[placeholder*="CODE" i]')).toBeVisible();
+    await expect(page.locator('button').filter({ hasText: /^JOIN$/i })).toBeVisible();
   });
 });
