@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let pendingAction = null;
   let isFirstLoad = true;
 
-  // 1. Zero-Latency Real-Time Sparkline Charts
+  // 1. Fast, Reliable Sparkline Charts
   const MAX_DATA_POINTS = 20;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(0);
@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false, // Disables animation lag completely for instant updates
-    parsing: false,   // Optimized direct array drawing
+    animation: false, // Instant zero-latency updates
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
     scales: {
       x: { display: false },
@@ -58,8 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           data: cpuData,
           borderColor: '#3dba7e',
           backgroundColor: 'rgba(61, 186, 126, 0.12)',
-          fill: true,
-          spanGaps: true
+          fill: true
         }]
       },
       options: commonChartOptions
@@ -78,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
           data: memoryData,
           borderColor: '#7c5cfc',
           backgroundColor: 'rgba(124, 92, 252, 0.12)',
-          fill: true,
-          spanGaps: true
+          fill: true
         }]
       },
       options: commonChartOptions
@@ -107,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
       memoryData.shift();
     }
 
-    if (cpuChart) cpuChart.update('none'); // Render instantly without animation frames
+    if (cpuChart) cpuChart.update('none');
     if (memoryChart) memoryChart.update('none');
   }
 
@@ -173,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${d}d ${h}h ${m}m`;
   }
 
-  // 4. Fetch Metrics & Active Games
+  // 4. Fetch Server Metrics & Active Games
   async function fetchServerStatus() {
     try {
       const res = await fetch('/api/status');
@@ -272,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 5. Button Action Listeners
+  // 5. Action Buttons Event Handling
   if (gamesGrid) {
     gamesGrid.addEventListener('click', (e) => {
       const button = e.target.closest('button[data-action]');
@@ -287,12 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
           body: 'This will terminate the room and disconnect all active players in this game.',
           onConfirm: async () => {
             try {
-              const res = await fetch(`/api/admin/games/${gameCode}/kill`, { method: 'POST' });
-              if (res.ok) {
+              const res = await fetch(`/api/admin/games/${gameCode}/kill`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
                 showToast(`Game ${gameCode} killed`);
                 fetchServerStatus();
               } else {
-                showToast(`Failed to kill game ${gameCode}`, true);
+                showToast(`Failed: ${data.error || 'Could not kill game'}`, true);
               }
             } catch (err) {
               showToast('Network error while killing game', true);
@@ -305,12 +306,16 @@ document.addEventListener('DOMContentLoaded', () => {
           body: 'This will reset the room score and return players to the lobby.',
           onConfirm: async () => {
             try {
-              const res = await fetch(`/api/admin/games/${gameCode}/restart`, { method: 'POST' });
-              if (res.ok) {
+              const res = await fetch(`/api/admin/games/${gameCode}/restart`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
                 showToast(`Game ${gameCode} restarted`);
                 fetchServerStatus();
               } else {
-                showToast(`Failed to restart game ${gameCode}`, true);
+                showToast(`Failed: ${data.error || 'Could not restart game'}`, true);
               }
             } catch (err) {
               showToast('Network error while restarting game', true);
@@ -328,12 +333,16 @@ document.addEventListener('DOMContentLoaded', () => {
         body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
         onConfirm: async () => {
           try {
-            const res = await fetch('/api/admin/games/kill-all', { method: 'POST' });
-            if (res.ok) {
-              showToast('All games killed');
+            const res = await fetch('/api/admin/games/kill-all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              showToast('All active games killed');
               fetchServerStatus();
             } else {
-              showToast('Failed to kill all games', true);
+              showToast(`Failed: ${data.error || 'Could not kill all games'}`, true);
             }
           } catch (err) {
             showToast('Network error execution failed', true);
@@ -350,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Real-time Live Log Streaming via SSE
+  // 6. Real-Time Log Streaming via SSE
   function initLogStream() {
     const eventSource = new EventSource('/api/logs/stream');
 
@@ -415,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Immediate start + 1-second refresh interval
+  // Immediate fetch + 1-second interval
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);

@@ -3,7 +3,7 @@ import { Server } from 'socket.io';
 import { games } from '../game/gamesMap';
 import { logger } from '../utils/logger';
 
-// Utility to get all entries as [code, game] tuples safely
+// Helper to reliably retrieve all active game entries
 function safeGetEntries(): [string, any][] {
   if (!games) return [];
   if (games instanceof Map) {
@@ -15,57 +15,51 @@ function safeGetEntries(): [string, any][] {
   return [];
 }
 
-// Utility to lookup a game safely
+// Helper to look up a game instance by code (case-insensitive)
 function safeGetGame(code: string): any | null {
   if (!games || !code) return null;
   const targetCode = String(code).trim().toUpperCase();
-  
+
   if (games instanceof Map) {
-    if (games.has(targetCode)) return games.get(targetCode);
-    // Case-insensitive search fallback
     for (const [key, val] of games.entries()) {
-      if (String(key).toUpperCase() === targetCode) return val;
+      if (String(key).trim().toUpperCase() === targetCode) return val;
     }
   } else if (typeof games === 'object') {
     const record = games as Record<string, any>;
-    if (record[targetCode]) return record[targetCode];
     for (const key of Object.keys(record)) {
-      if (String(key).toUpperCase() === targetCode) return record[key];
+      if (String(key).trim().toUpperCase() === targetCode) return record[key];
     }
   }
   return null;
 }
 
-// Utility to delete a game safely
-function safeDeleteGame(code: string): boolean {
-  if (!games || !code) return false;
+// Helper to remove a game from storage
+function safeDeleteGame(code: string): void {
+  if (!games || !code) return;
   const targetCode = String(code).trim().toUpperCase();
 
   if (games instanceof Map) {
-    if (games.has(targetCode)) return games.delete(targetCode);
     for (const key of games.keys()) {
-      if (String(key).toUpperCase() === targetCode) return games.delete(key);
+      if (String(key).trim().toUpperCase() === targetCode) {
+        games.delete(key);
+        return;
+      }
     }
   } else if (typeof games === 'object') {
     const record = games as Record<string, any>;
-    if (record[targetCode]) {
-      delete record[targetCode];
-      return true;
-    }
     for (const key of Object.keys(record)) {
-      if (String(key).toUpperCase() === targetCode) {
+      if (String(key).trim().toUpperCase() === targetCode) {
         delete record[key];
-        return true;
+        return;
       }
     }
   }
-  return false;
 }
 
-export function createAdminRouter(io: Server) {
+export function createAdminRouter(io?: Server) {
   const router = Router();
 
-  // GET /api/admin/games - List active games
+  // GET /api/admin/games - List all active games
   router.get('/games', (_req: Request, res: Response) => {
     try {
       const entries = safeGetEntries();
@@ -89,66 +83,72 @@ export function createAdminRouter(io: Server) {
         };
       });
 
-      res.json(activeGames);
+      res.status(200).json(activeGames);
     } catch (err: any) {
-      logger.error('Failed to list games:', err?.stack || err);
+      logger.error('[ADMIN] Error listing games:', err?.stack || err);
       res.status(500).json({ error: 'Failed to list active games', details: err?.message });
     }
   });
 
-  // POST /api/admin/games/kill-all - Kill all games
+  // POST /api/admin/games/kill-all - Kill all active games
   router.post('/games/kill-all', (_req: Request, res: Response) => {
     try {
-      logger.info('[ADMIN] Triggered: Kill All Games');
+      logger.info('[ADMIN] Action: Kill All Games');
 
-      if (io && typeof io.emit === 'function') {
+      // Safe Socket Broadcast
+      if (io) {
         try {
           io.emit('game_terminated', { reason: 'Host terminated all active sessions.' });
         } catch (sErr) {
-          logger.warn('[ADMIN] Socket broadcast failed during kill-all:', sErr);
+          logger.warn('[ADMIN] Socket emit warning during kill-all:', sErr);
         }
       }
 
+      // Safe cleanup of every game object
       const entries = safeGetEntries();
       for (const [code, game] of entries) {
-        try {
-          if (game) {
+        if (game) {
+          try {
             if (typeof game.cleanup === 'function') game.cleanup();
             else if (typeof game.destroy === 'function') game.destroy();
             else if (typeof game.stop === 'function') game.stop();
+          } catch (cErr) {
+            logger.warn(`[ADMIN] Cleanup error on game ${code}:`, cErr);
           }
-        } catch (cErr) {
-          logger.warn(`[ADMIN] Cleanup warning for ${code}:`, cErr);
         }
       }
 
+      // Wipe state
       if (games instanceof Map) {
         games.clear();
       } else if (typeof games === 'object') {
         for (const k of Object.keys(games)) delete (games as any)[k];
       }
 
-      logger.info('[ADMIN] All games successfully terminated.');
-      res.json({ success: true, message: 'All games killed.' });
+      logger.info('[ADMIN] All games successfully cleared.');
+      return res.status(200).json({ success: true, message: 'All active games killed.' });
     } catch (err: any) {
-      logger.error('[ADMIN] Fatal error in kill-all:', err?.stack || err);
-      res.status(500).json({ error: 'Failed to kill all games', details: err?.message });
+      logger.error('[ADMIN] Error executing kill-all:', err?.stack || err);
+      return res.status(500).json({ error: 'Failed to kill all games', details: err?.message });
     }
   });
 
   // POST /api/admin/games/:code/kill - Kill a single game
   router.post('/games/:code/kill', (req: Request, res: Response) => {
-    try {
-      const code = Array.isArray(req.params.code) ? req.params.code[0] : String(req.params.code);
-      logger.info(`[ADMIN] Triggered: Kill Game ${code}`);
+    const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
+    const code = String(rawCode || '').trim();
 
+    try {
+      logger.info(`[ADMIN] Action: Kill Game ${code}`);
       const game = safeGetGame(code);
 
-      if (io && typeof io.to === 'function') {
+      // Safe Socket Room Emit
+      if (io) {
         try {
           io.to(code).emit('game_terminated', { reason: 'Game terminated by host.' });
+          io.to(code.toLowerCase()).emit('game_terminated', { reason: 'Game terminated by host.' });
         } catch (sErr) {
-          logger.warn(`[ADMIN] Socket room emit failed for ${code}:`, sErr);
+          logger.warn(`[ADMIN] Socket emit warning on game ${code}:`, sErr);
         }
       }
 
@@ -158,27 +158,27 @@ export function createAdminRouter(io: Server) {
           else if (typeof game.destroy === 'function') game.destroy();
           else if (typeof game.stop === 'function') game.stop();
         } catch (cErr) {
-          logger.warn(`[ADMIN] Cleanup failed for ${code}:`, cErr);
+          logger.warn(`[ADMIN] Cleanup error on game ${code}:`, cErr);
         }
       }
 
       safeDeleteGame(code);
 
-      logger.info(`[ADMIN] Successfully killed game ${code}`);
-      res.json({ success: true, message: `Game ${code} killed.` });
+      logger.info(`[ADMIN] Game ${code} killed successfully.`);
+      return res.status(200).json({ success: true, message: `Game ${code} killed.` });
     } catch (err: any) {
-      const paramCode = String(req.params.code);
-      logger.error(`[ADMIN] Fatal error killing game ${paramCode}:`, err?.stack || err);
-      res.status(500).json({ error: `Failed to kill game ${paramCode}`, details: err?.message });
+      logger.error(`[ADMIN] Error killing game ${code}:`, err?.stack || err);
+      return res.status(500).json({ error: `Failed to kill game ${code}`, details: err?.message });
     }
   });
 
   // POST /api/admin/games/:code/restart - Restart a single game
   router.post('/games/:code/restart', (req: Request, res: Response) => {
-    try {
-      const code = Array.isArray(req.params.code) ? req.params.code[0] : String(req.params.code);
-      logger.info(`[ADMIN] Triggered: Restart Game ${code}`);
+    const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
+    const code = String(rawCode || '').trim();
 
+    try {
+      logger.info(`[ADMIN] Action: Restart Game ${code}`);
       const game = safeGetGame(code);
 
       if (!game) {
@@ -195,24 +195,24 @@ export function createAdminRouter(io: Server) {
           game.currentRound = 0;
         }
       } catch (rErr) {
-        logger.warn(`[ADMIN] Restart method warning on ${code}:`, rErr);
+        logger.warn(`[ADMIN] Restart method warning on game ${code}:`, rErr);
         game.status = 'LOBBY';
       }
 
-      if (io && typeof io.to === 'function') {
+      if (io) {
         try {
           io.to(code).emit('game_restarted', { message: 'Game state reset by host.' });
+          io.to(code.toLowerCase()).emit('game_restarted', { message: 'Game state reset by host.' });
         } catch (sErr) {
-          logger.warn(`[ADMIN] Socket room restart emit failed for ${code}:`, sErr);
+          logger.warn(`[ADMIN] Socket emit warning on restart for ${code}:`, sErr);
         }
       }
 
-      logger.info(`[ADMIN] Successfully restarted game ${code}`);
-      res.json({ success: true, message: `Game ${code} restarted.` });
+      logger.info(`[ADMIN] Game ${code} restarted successfully.`);
+      return res.status(200).json({ success: true, message: `Game ${code} restarted.` });
     } catch (err: any) {
-      const paramCode = String(req.params.code);
-      logger.error(`[ADMIN] Fatal error restarting game ${paramCode}:`, err?.stack || err);
-      res.status(500).json({ error: `Failed to restart game ${paramCode}`, details: err?.message });
+      logger.error(`[ADMIN] Error restarting game ${code}:`, err?.stack || err);
+      return res.status(500).json({ error: `Failed to restart game ${code}`, details: err?.message });
     }
   });
 
