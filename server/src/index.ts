@@ -19,16 +19,23 @@ logger.info('Starting ColourWang server...');
 
 const app = express();
 
+// Render (and most PaaS reverse proxies) terminate TLS and forward requests
+// internally over plain HTTP. Without this, req.protocol always reports
+// 'http' even for real https:// requests, which breaks any same-origin
+// comparison built from req.protocol/req.get('host') (see CORS setup below).
+app.set('trust proxy', true);
+
 // Parse JSON request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const corsOptions: CorsOptions = {
+const baseCorsOptions: CorsOptions = {
     ...serverConfig.server.cors
 };
 
 const normalizeOrigin = (origin: string) => origin.trim().replace(/\/+$/, '').toLowerCase();
 
+let allowedOrigins: Set<string> | null = null;
 if (process.env.FRONTEND_ORIGIN) {
     const origins = process.env.FRONTEND_ORIGIN
         .split(',')
@@ -36,31 +43,44 @@ if (process.env.FRONTEND_ORIGIN) {
         .filter(Boolean);
 
     if (origins.length > 0) {
-        const allowedOrigins = new Set(origins);
-        corsOptions.origin = (requestOrigin, callback) => {
-            if (!requestOrigin) {
-                callback(null, true);
-                return;
-            }
-
-            const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
-            if (allowedOrigins.has(normalizedRequestOrigin)) {
-                callback(null, true);
-                return;
-            }
-
-            callback(new Error(`CORS blocked origin: ${requestOrigin}`));
-        };
+        allowedOrigins = new Set(origins);
         logger.info(`Using FRONTEND_ORIGIN for CORS: ${origins.join(', ')}`);
     }
 }
 
-if (corsOptions.origin === '*' && corsOptions.credentials) {
+if (baseCorsOptions.origin === '*' && baseCorsOptions.credentials) {
     logger.warn('CORS origin is "*" with credentials=true; disabling credentials for compatibility');
-    corsOptions.credentials = false;
+    baseCorsOptions.credentials = false;
 }
 
-app.use(cors(corsOptions));
+// Use a per-request delegate (rather than a static origin function) so we can
+// always allow the request's own host — e.g. the admin dashboard served by
+// this same Express app — regardless of what FRONTEND_ORIGIN is set to.
+// Browsers attach an Origin header to POST/DELETE/etc. requests even when
+// same-origin, so without this a same-origin dashboard request could get
+// rejected purely because its origin wasn't in the FRONTEND_ORIGIN allowlist
+// (curl requests without an Origin header were never affected by this).
+app.use(cors((req, callback) => {
+    if (!allowedOrigins) {
+        callback(null, baseCorsOptions);
+        return;
+    }
+
+    const requestOrigin = req.headers.origin as string | undefined;
+    const selfOrigin = normalizeOrigin(`${req.protocol}://${req.get('host') || ''}`);
+
+    if (!requestOrigin || allowedOrigins.has(normalizeOrigin(requestOrigin)) || normalizeOrigin(requestOrigin) === selfOrigin) {
+        callback(null, { ...baseCorsOptions, origin: true });
+        return;
+    }
+
+    // Don't throw — just omit CORS headers so genuinely cross-origin browser
+    // requests get blocked client-side, instead of erroring the request for
+    // everyone (including legitimate same-origin callers hitting edge cases
+    // in host/protocol detection behind a proxy).
+    logger.warn(`CORS: origin not in allowlist and not self: ${requestOrigin}`);
+    callback(null, { ...baseCorsOptions, origin: false });
+}));
 
 // Serve static frontend files directly at root
 app.use(express.static(join(process.cwd(), 'public')));

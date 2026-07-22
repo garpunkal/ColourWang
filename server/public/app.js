@@ -228,6 +228,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalRounds = game.settings?.totalRounds ?? game.totalRounds ?? 10;
         const currentQuestion = game.currentQuestion ?? 0;
         const questionsPerRound = game.settings?.questionsPerRound ?? game.questionsPerRound ?? 3;
+        // currentRound/currentQuestion are 0-based indexes from the server;
+        // display 1-based, clamped so a finished game doesn't show e.g. "4 / 3".
+        const displayRound = totalRounds > 0 ? Math.min(currentRound + 1, totalRounds) : currentRound + 1;
+        const displayQuestion = questionsPerRound > 0 ? Math.min(currentQuestion + 1, questionsPerRound) : currentQuestion + 1;
         const answerTime = game.settings?.answerTime ?? 15;
         const categories = game.settings?.categories || [];
         const hostName = game.hostName || 'Host';
@@ -264,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- Metric Cards Grid -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="grid grid-cols-3 gap-2 text-xs">
             <div class="bg-[#0f0f13] p-2.5 rounded-lg border border-[#2e2e42] flex items-center gap-2.5">
               <div class="p-1.5 rounded bg-[#7c5cfc]/10 text-[#7c5cfc]">
                 <i data-lucide="users" class="w-4 h-4"></i>
@@ -281,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div>
                 <span class="text-[#8888aa] block text-[0.62rem] uppercase font-semibold">Round</span>
-                <span class="font-bold text-white text-sm">${currentRound} / ${totalRounds}</span>
+                <span class="font-bold text-white text-sm">${displayRound} / ${totalRounds}</span>
               </div>
             </div>
 
@@ -291,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div>
                 <span class="text-[#8888aa] block text-[0.62rem] uppercase font-semibold">Question</span>
-                <span class="font-bold text-white text-sm">${currentQuestion} / ${questionsPerRound}</span>
+                <span class="font-bold text-white text-sm">${displayQuestion} / ${questionsPerRound}</span>
               </div>
             </div>
 
