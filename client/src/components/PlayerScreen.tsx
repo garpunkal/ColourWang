@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
 import { PlayerJoinScreen } from './player/PlayerJoinScreen';
@@ -19,29 +19,6 @@ interface Props {
 export default function PlayerScreen({ socket, gameState, setGameState }: Props) {
     const [name] = useState(localStorage.getItem('playerName') || '');
     const [showLeaveModal, setShowLeaveModal] = useState(false);
-
-    // Debug logging for blank screen issue
-    useEffect(() => {
-        if (!gameState) return;
-
-        const me = gameState.players.find(p => p.socketId === socket.id || p.id === localStorage.getItem('cw_playerId'));
-
-        console.log('[DEBUG] PlayerScreen Render:', {
-            status: gameState.status,
-            hasMe: !!me,
-            myId: me?.id,
-            socketId: socket.id,
-            storedId: localStorage.getItem('cw_playerId'),
-            playerCount: gameState.players.length
-        });
-
-        if (gameState.status === 'RESULT' && !me) {
-            console.error('[CRITICAL] PlayerScreen: Status is RESULT but player not found in gameState!', {
-                socketId: socket.id,
-                players: gameState.players.map(p => ({ id: p.id, socketId: p.socketId, name: p.name }))
-            });
-        }
-    }, [gameState, socket.id]);
 
     // Get list of taken avatars from current players
     const takenAvatars = gameState?.players.map(p => ({ 
@@ -83,7 +60,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
     };
 
     return (
-        <div className={isResultView ? 'min-h-screen w-full relative z-10 overflow-hidden' : 'flex flex-col p-2 md:p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10'}>
+        <div className={isResultView ? 'min-h-screen w-full relative z-10' : 'flex flex-col p-2 md:p-4 min-h-screen w-full max-w-2xl mx-auto relative z-10'}>
             {!isResultView && (
                 <PlayerHeader
                     name={me?.name || name}
@@ -113,14 +90,7 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                     />
                 ))}
 
-                {status === 'RESULT' && !me && (
-                    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-pulse">
-                        <h2 className="text-2xl font-bold text-white mb-2">Syncing Results...</h2>
-                        <p className="text-white/60">Please wait...</p>
-                    </div>
-                )}
-
-                {status === 'RESULT' && me && (
+                {status === 'RESULT' && (
                     <PlayerResultScreen
                         key={`result-${currentQuestionIndex}`}
                         player={me}
