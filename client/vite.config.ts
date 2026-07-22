@@ -4,16 +4,18 @@ import tailwindcss from '@tailwindcss/vite'
 import mkcert from 'vite-plugin-mkcert'
 import { resolve } from 'path'
 
+const isTest = process.env.PLAYWRIGHT === '1'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    mkcert({
+    ...(!isTest ? [mkcert({
       savePath: resolve(__dirname, '../certs'),
       keyFileName: 'localhost-key.pem',
       certFileName: 'localhost.pem'
-    })
+    })] : [])
   ],
   server: {
     host: true,
