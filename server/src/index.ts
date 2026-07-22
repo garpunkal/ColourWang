@@ -108,10 +108,32 @@ app.get('/', (_req, res) => {
 });
 
 // System Status API
+// Real process CPU usage, tracked as a delta between polls rather than a
+// point-in-time snapshot (process.cpuUsage() alone is cumulative since
+// process start, not a percentage). process.cpuUsage(previous) returns the
+// diff since the previous snapshot, which we divide by real elapsed time.
+let lastCpuUsage = process.cpuUsage();
+let lastCpuSampleAt = process.hrtime.bigint();
+
+function sampleCpuPercent(): number {
+    const usageDelta = process.cpuUsage(lastCpuUsage);
+    const now = process.hrtime.bigint();
+    const elapsedMicros = Number(now - lastCpuSampleAt) / 1000;
+
+    lastCpuUsage = process.cpuUsage();
+    lastCpuSampleAt = now;
+
+    if (elapsedMicros <= 0) return 0;
+
+    const busyMicros = usageDelta.user + usageDelta.system;
+    return Math.min(100, Math.max(0, Math.round((busyMicros / elapsedMicros) * 100)));
+}
+
 app.get('/api/status', (_req, res) => {
     res.json({
         status: 'ok',
         uptime: process.uptime(),
+        cpu: sampleCpuPercent(),
         memory: {
             used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
             total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),

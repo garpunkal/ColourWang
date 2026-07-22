@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const usedMemory = data.memory?.used || 0;
-      const cpuUsage = data.cpu || Math.floor(Math.random() * 8) + 2;
+      const cpuUsage = data.cpu ?? 0;
 
       if (statActiveGames) statActiveGames.textContent = data.games?.total || 0;
       if (statMemory) statMemory.textContent = `${usedMemory} MB`;
