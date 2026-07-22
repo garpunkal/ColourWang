@@ -6,7 +6,8 @@ import { resolve } from 'path'
 import { existsSync } from 'fs'
 
 const isCI = !!process.env.CI;
-const skipMkcert = isCI || !!process.env.SKIP_MKCERT;
+const isTest = process.env.PLAYWRIGHT === '1';
+const skipMkcert = isCI || isTest || !!process.env.SKIP_MKCERT;
 
 // Use HTTPS proxy target only when certs already exist.
 // On first run they won't exist yet — the server falls back to HTTP in that case too.

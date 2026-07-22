@@ -55,12 +55,14 @@ export default defineConfig({
       command: 'npm run start --prefix server',
       url: serverHealthUrl,
       reuseExistingServer: !CI,
+      timeout: 120_000,
     },
     {
       command: 'npm run dev --prefix client',
       url: clientUrl,
       reuseExistingServer: !CI,
       env: { SKIP_MKCERT: 'true' },
+      timeout: 120_000,
     },
   ],
 });

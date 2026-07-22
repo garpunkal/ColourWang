@@ -36,6 +36,7 @@ BLOCK rules:
 - Frontend: React 19 + Vite + TypeScript
 - Backend: Node.js + Express + Socket.IO
 - Tooling: ESLint, Nodemon, Concurrently
+- Testing: Playwright (E2E)
 
 ## Quick Start
 
@@ -72,6 +73,22 @@ The client uses local certificates and runs over HTTPS.
 - Then run the server (or run both with `npm run dev`).
 - On first use, browsers/devices may show a self-signed certificate warning.
 
+## Testing
+
+End-to-end tests use [Playwright](https://playwright.dev) and are configured at the project root.
+
+```bash
+npm test             # run all Playwright tests (headless)
+npm run test:ui      # open Playwright UI mode
+npm run test:debug   # run with Playwright Inspector
+```
+
+The test runner automatically starts both the backend and the Vite client before running tests via `webServer` in `playwright.config.ts`. You do not need to start either server manually.
+
+- In CI, both servers start over HTTP (no certs required).
+- Locally, HTTPS is used if `certs/` already exists; otherwise falls back to HTTP.
+- Reports are written to `client/playwright-report/` after each run.
+
 ## Scripts
 
 From the project root:
@@ -80,6 +97,9 @@ From the project root:
 - `npm run dev:server` - run only server
 - `npm run dev:client` - run only client
 - `npm run install:all` - install root, server, and client dependencies
+- `npm test` - run Playwright E2E tests
+- `npm run test:ui` - open Playwright UI mode
+- `npm run test:debug` - run Playwright in debug/inspector mode
 
 From `server`:
 
