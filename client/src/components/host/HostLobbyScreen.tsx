@@ -120,7 +120,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                 </div>
             </motion.div>
 
-            <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mb-8 px-8">
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mb-8 px-8 max-h-[440px] overflow-y-auto">
                 {players.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const textColor = getAvatarTextColor(player.avatar);
