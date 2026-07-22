@@ -34,10 +34,10 @@ async function loadDashboard() {
   refreshInfo.textContent = 'Refreshing…';
 
   try {
-    // Fetch Server Stats & Games Parallelly
+    // Fetch Server Status & Games using the correct backend routes
     const [gamesRes, statsRes] = await Promise.allSettled([
-      fetch(`${BASE}/api/games`),
-      fetch(`${BASE}/api/stats`)
+      fetch(`${BASE}/api/admin/games`), // Correct: /api/admin/games
+      fetch(`${BASE}/api/status`)        // Correct: /api/status
     ]);
 
     if (gamesRes.status === 'fulfilled' && gamesRes.value.ok) {
@@ -50,7 +50,6 @@ async function loadDashboard() {
       const stats = await statsRes.value.json();
       renderServerStats(stats);
     } else {
-      // Fallback log entry if endpoint isn't ready
       appendLog('INFO', 'Dashboard metrics synchronized.');
     }
 
