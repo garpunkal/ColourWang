@@ -389,7 +389,7 @@
 
   async function killGame(code) {
     try {
-      const res = await fetch(`${BASE}/api/admin/games/${code}`, { method: 'DELETE' });
+      const res = await fetch(`${BASE}/api/admin/games/${code}/kill`, { method: 'POST' });
       const data = await res.json();
       if (res.ok) { toast(`Game ${code} killed`, 'success'); loadGames(); }
       else toast(data.error || 'Failed', 'error');
@@ -407,7 +407,7 @@
 
   async function killAll() {
     try {
-      const res = await fetch(`${BASE}/api/admin/games`, { method: 'DELETE' });
+      const res = await fetch(`${BASE}/api/admin/games/kill-all`, { method: 'POST' });
       const data = await res.json();
       if (res.ok) { toast(`Killed ${data.killed.length} game(s)`, 'success'); loadGames(); }
       else toast(data.error || 'Failed', 'error');

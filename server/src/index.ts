@@ -60,7 +60,7 @@ if (corsOptions.origin === '*' && corsOptions.credentials) {
 
 app.use(cors(corsOptions));
 
-// Serve root status page
+// Serve root landing page
 app.get('/', (_req, res) => {
     res.sendFile(join(__dirname, '../public/index.html'));
 });

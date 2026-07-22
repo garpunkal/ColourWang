@@ -4,7 +4,7 @@
         "protocol": "auto",
         "cors": {
             "origin": "*",
-            "methods": ["GET", "POST"],
+            "methods": ["GET", "POST", "DELETE", "OPTIONS"],
             "credentials": true
         },
         "ssl": {

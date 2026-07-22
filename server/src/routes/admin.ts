@@ -56,6 +56,42 @@ export function createAdminRouter(io: Server): Router {
         res.json({ success: true, code });
     });
 
+    // DELETE /api/admin/games — kill ALL games
+    router.delete('/games', (_req, res) => {
+        const codes = Array.from(games.keys());
+        codes.forEach(code => {
+            io.to(code).emit('game-ended');
+            games.delete(code);
+        });
+        logger.info(`[ADMIN] All ${codes.length} game(s) killed by admin`);
+        res.json({ success: true, killed: codes });
+    });
+
+    // POST /api/admin/games/kill-all — kill ALL games (POST alternative, must be above /:code routes)
+    router.post('/games/kill-all', (_req, res) => {
+        const codes = Array.from(games.keys());
+        codes.forEach(code => {
+            io.to(code).emit('game-ended');
+            games.delete(code);
+        });
+        logger.info(`[ADMIN] All ${codes.length} game(s) killed by admin (via POST)`);
+        res.json({ success: true, killed: codes });
+    });
+
+    // POST /api/admin/games/:code/kill — kill a game (POST alternative)
+    router.post('/games/:code/kill', (req, res) => {
+        const code = String(req.params.code).toUpperCase();
+        const game = games.get(code);
+        if (!game) {
+            res.status(404).json({ error: 'Game not found' });
+            return;
+        }
+        io.to(code).emit('game-ended');
+        games.delete(code);
+        logger.info(`[ADMIN] Game ${code} killed by admin (via POST)`);
+        res.json({ success: true, code });
+    });
+
     // POST /api/admin/games/:code/reset — reset game back to LOBBY
     router.post('/games/:code/reset', (req, res) => {
         const code = String(req.params.code).toUpperCase();
@@ -90,17 +126,6 @@ export function createAdminRouter(io: Server): Router {
         io.to(code).emit('game-status-changed', game);
         logger.info(`[ADMIN] Game ${code} reset to LOBBY by admin`);
         res.json({ success: true, code });
-    });
-
-    // DELETE /api/admin/games — kill ALL games
-    router.delete('/games', (_req, res) => {
-        const codes = Array.from(games.keys());
-        codes.forEach(code => {
-            io.to(code).emit('game-ended');
-            games.delete(code);
-        });
-        logger.info(`[ADMIN] All ${codes.length} game(s) killed by admin`);
-        res.json({ success: true, killed: codes });
     });
 
     return router;
