@@ -36,8 +36,8 @@ async function loadDashboard() {
   try {
     // Fetch Server Stats & Games Parallelly
     const [gamesRes, statsRes] = await Promise.allSettled([
-      fetch(`${BASE}/api/admin/games`),
-      fetch(`${BASE}/api/admin/stats`)
+      fetch(`${BASE}/api/games`),
+      fetch(`${BASE}/api/stats`)
     ]);
 
     if (gamesRes.status === 'fulfilled' && gamesRes.value.ok) {
@@ -208,7 +208,7 @@ document.getElementById('btn-kill-all').addEventListener('click', () => {
 
 async function killGame(code) {
   try {
-    const res = await fetch(`${BASE}/api/admin/games/${code}/kill`, { method: 'POST' });
+    const res = await fetch(`${BASE}/api/games/${code}/kill`, { method: 'POST' });
     const data = await res.json();
     if (res.ok) { 
       toast(`Game ${code} killed`, 'success'); 
@@ -224,7 +224,7 @@ async function killGame(code) {
 
 async function resetGame(code) {
   try {
-    const res = await fetch(`${BASE}/api/admin/games/${code}/reset`, { method: 'POST' });
+    const res = await fetch(`${BASE}/api/games/${code}/reset`, { method: 'POST' });
     const data = await res.json();
     if (res.ok) { 
       toast(`Game ${code} reset to lobby`, 'success'); 
@@ -240,7 +240,7 @@ async function resetGame(code) {
 
 async function killAll() {
   try {
-    const res = await fetch(`${BASE}/api/admin/games/kill-all`, { method: 'POST' });
+    const res = await fetch(`${BASE}/api/games/kill-all`, { method: 'POST' });
     const data = await res.json();
     if (res.ok) { 
       toast(`Killed ${data.killed.length} game(s)`, 'success'); 
