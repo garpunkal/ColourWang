@@ -60,7 +60,6 @@ async function loadDashboard() {
     refreshInfo.classList.remove('text-[#7c5cfc]');
   }
 }
-
 function renderServerStats(stats) {
   if (!stats) return;
 
@@ -68,7 +67,7 @@ function renderServerStats(stats) {
     document.getElementById('stat-cpu').textContent = stats.cpu;
   }
 
-  // Handle memory object or fallback to direct string/number
+  // Handle memory object or raw value
   if (stats.memory) {
     const memEl = document.getElementById('stat-memory');
     if (typeof stats.memory === 'object') {
@@ -79,15 +78,44 @@ function renderServerStats(stats) {
     }
   }
 
-  if (stats.uptime) {
-    document.getElementById('stat-uptime').textContent = stats.uptime;
+  // Format uptime cleanly
+  if (stats.uptime != null) {
+    document.getElementById('stat-uptime').textContent = formatUptime(stats.uptime);
   }
 }
+
 function updateTotalStats(games) {
   document.getElementById('stat-active-games').textContent = games.length;
   const totalPlayers = games.reduce((acc, g) => acc + (g.playerCount || 0), 0);
   document.getElementById('stat-total-players').textContent = totalPlayers;
 }
+
+
+function formatUptime(seconds) {
+  if (seconds == null || isNaN(seconds)) return '0s';
+
+  // If the server already sent a pre-formatted string (e.g. "1h 20m"), return it as-is
+  if (typeof seconds === 'string' && isNaN(Number(seconds))) {
+    return seconds;
+  }
+
+  let totalSeconds = Math.floor(Number(seconds));
+  const days = Math.floor(totalSeconds / 86400);
+  totalSeconds %= 86400;
+  const hours = Math.floor(totalSeconds / 3600);
+  totalSeconds %= 3600;
+  const minutes = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+
+  const parts = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0 || days > 0) parts.push(`${hours}h`);
+  if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
+  parts.push(`${secs}s`);
+
+  return parts.join(' ');
+}
+
 
 function renderGames(games) {
   const grid = document.getElementById('games-grid');
