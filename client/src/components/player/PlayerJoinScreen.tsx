@@ -246,7 +246,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     style={avatarStyle}
                                     className="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                                 />
-                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 glass rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap" >
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-2 glass rounded-full text-xs font-black uppercase tracking-widest whitespace-nowrap" >
                                     {avatarStyle.replace('-', ' ')}
                                 </div>
                             </motion.div>
@@ -286,7 +286,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                             width: 'calc(33.333% - 6px)',
                                             ...(isSelected ? { '--tw-ring-color': getAvatarColor(a) } as React.CSSProperties : {})
                                         }}
-                                        title={taken ? `${getAvatarName(a)} - Taken` : getAvatarName(a)}
+                                        title={getAvatarName(a)}
                                     >
                                         <div className="w-full h-full relative">
                                             <Avatar seed={a} style={avatarStyle} className="w-full h-full drop-shadow-md" />
