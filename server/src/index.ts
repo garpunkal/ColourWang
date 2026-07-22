@@ -19,7 +19,7 @@ logger.info('Starting ColourWang server...');
 
 const app = express();
 
-// Enable JSON body parsing for admin REST calls
+// Parse JSON request bodies
 app.use(express.json());
 
 const corsOptions: CorsOptions = {
@@ -98,8 +98,7 @@ app.get('/api/logs/stream', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
     
-    // ⚡ FIX FOR RENDER.COM / REVERSE PROXIES:
-    // Prevents Render's Nginx proxy layer from buffering log chunks
+    // Disable Nginx/Render proxy buffering for live logs
     res.setHeader('X-Accel-Buffering', 'no');
 
     if (res.flushHeaders) {
@@ -132,7 +131,7 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// List all mp3 files in client/public/bgm for the frontend to consume
+// List all mp3 files in client/public/bgm
 app.get('/api/bgm-list', (req, res) => {
     try {
         const bgmPath = join(__dirname, '../../client/public/bgm');
@@ -148,7 +147,7 @@ app.get('/api/bgm-list', (req, res) => {
     }
 });
 
-// Check if SSL certificates exist
+// SSL verification
 const certPath = join(__dirname, serverConfig.server.ssl.certPath);
 const keyPath = join(certPath, serverConfig.server.ssl.keyFileName);
 const certFilePath = join(certPath, serverConfig.server.ssl.certFileName);
@@ -177,7 +176,7 @@ const io = new Server(server, {
 logger.info('Registering socket handlers...');
 registerSocketHandlers(io);
 
-// Mount admin REST routes (needs io reference)
+// Mount admin REST routes
 app.use('/api/admin', createAdminRouter(io));
 
 const PORT = process.env.PORT || serverConfig.server.port;
