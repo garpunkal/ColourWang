@@ -61,9 +61,7 @@
         <div id="status-badge" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.8rem] text-[#8888aa] whitespace-nowrap">
           Server: <span id="server-status" class="font-semibold text-[#3dba7e]">● Online</span>
         </div>
-        <div id="refresh-info" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.75rem] text-[#8888aa] whitespace-nowrap transition-colors">
-          Auto-refresh: 1s
-        </div>
+       
       </div>
     </header>
 
@@ -106,11 +104,11 @@
 
         <div class="flex items-center justify-between text-xs text-[#8888aa] pt-2 border-t border-[#2e2e42]">
           <span>Uptime: <strong id="stat-uptime" class="text-[#e8e8f0]">0d 0h 0m</strong></span>
-          <span>Node.js: <strong class="text-[#e8e8f0]">v20.x</strong></span>
+        
         </div>
       </div>
-
     </section>
+
       <section class="space-y-4">
       <div class="lg:col-span-2 bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
         <div class="flex items-center justify-between">
@@ -134,9 +132,10 @@
           Active Game Rooms
         </h2>
         <div class="flex items-center gap-2.5">
+          <!-- Subtle, matching action button -->
           <button id="btn-kill-all"
-            class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-            ⚠ Kill All Games
+            class="bg-[#2e2e42] hover:bg-[#3e3e56] text-white disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+            ✕ Kill all games
           </button>
           <button id="btn-refresh"
             class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">

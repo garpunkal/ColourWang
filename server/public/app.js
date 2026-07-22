@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const statCpu = document.getElementById('stat-cpu');
   const statMemory = document.getElementById('stat-memory');
   const statUptime = document.getElementById('stat-uptime');
-  
+
   const logTerminal = document.getElementById('log-terminal');
   const btnClearLogs = document.getElementById('btn-clear-logs');
-  
+
   const gamesGrid = document.getElementById('games-grid');
   const emptyState = document.getElementById('empty-state');
   const btnKillAll = document.getElementById('btn-kill-all');
@@ -93,9 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function showToast(message, isError = false) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${
-      isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
-    }`;
+    toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
+      }`;
     toast.textContent = message;
     container.appendChild(toast);
 
@@ -310,36 +309,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const eventSource = new EventSource('/api/logs/stream');
 
     eventSource.onopen = () => {
-      appendLog('[SYSTEM] Connected to server log stream', 'info');
+      appendLog('[SYSTEM] Connected to server log stream', 'system');
     };
 
     eventSource.onmessage = (event) => {
       try {
         const entry = JSON.parse(event.data);
-        const msg = typeof entry === 'string' ? entry : `[${entry.level || 'LOG'}] ${entry.message || JSON.stringify(entry)}`;
-        appendLog(msg, entry.level);
+        const level = entry.level ? String(entry.level).toLowerCase() : 'info';
+        const msg = typeof entry === 'string' ? entry : `[${level.toUpperCase()}] ${entry.message || JSON.stringify(entry)}`;
+        appendLog(msg, level);
       } catch (err) {
-        appendLog(event.data);
+        appendLog(event.data, 'info');
       }
     };
 
     eventSource.onerror = () => {
-      appendLog('[SYSTEM] Log stream disconnected. Reconnecting...', 'error');
+      appendLog('[SYSTEM] Log stream disconnected. Reconnecting...', 'warn');
       eventSource.close();
       setTimeout(initLogStream, 3000);
     };
   }
 
+  // Expanded Log Level Color Selector
   function appendLog(message, level = 'info') {
     const logLine = document.createElement('div');
-    
-    let colorClass = 'text-[#8888aa]';
-    if (level === 'error' || message.includes('error') || message.includes('ERR')) {
-      colorClass = 'text-[#e05252]';
-    } else if (level === 'warn' || message.includes('warn')) {
-      colorClass = 'text-[#e09a30]';
-    } else if (message.includes('[SYSTEM]')) {
-      colorClass = 'text-[#7c5cfc]';
+    const normalizedLevel = String(level).toLowerCase();
+
+    let colorClass = 'text-[#cbd5e1]'; // Default slate fallback
+
+    if (normalizedLevel === 'error' || normalizedLevel === 'fatal' || message.includes('ERROR') || message.includes('ERR')) {
+      colorClass = 'text-[#f87171] font-semibold'; // Bright Red
+    } else if (normalizedLevel === 'warn' || normalizedLevel === 'warning' || message.includes('WARN')) {
+      colorClass = 'text-[#fbbf24]'; // Amber / Yellow
+    } else if (normalizedLevel === 'info') {
+      colorClass = 'text-[#38bdf8]'; // Sky Blue
+    } else if (normalizedLevel === 'debug') {
+      colorClass = 'text-[#a855f7]'; // Indigo / Violet
+    } else if (normalizedLevel === 'trace' || normalizedLevel === 'verbose') {
+      colorClass = 'text-[#64748b]'; // Muted Slate
+    } else if (normalizedLevel === 'success' || message.includes('✓') || message.includes('SUCCESS')) {
+      colorClass = 'text-[#34d399]'; // Emerald Green
+    } else if (normalizedLevel === 'system' || message.includes('[SYSTEM]')) {
+      colorClass = 'text-[#c084fc] font-medium'; // Electric Purple
     }
 
     logLine.className = colorClass;
@@ -350,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnClearLogs.addEventListener('click', () => {
-    logTerminal.innerHTML = '<div class="text-[#7c5cfc]">[SYSTEM] Logs cleared.</div>';
+    logTerminal.innerHTML = '<div class="text-[#c084fc]">[SYSTEM] Logs cleared.</div>';
   });
 
   // Initial Load & Poll Loop
