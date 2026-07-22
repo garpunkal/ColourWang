@@ -1,7 +1,7 @@
 import type { Socket } from 'socket.io-client';
 import type { Question, GameState } from '../../types/game';
-import { Play, Trash2, Users, Hash } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Play, Trash2, Users, Hash, CheckCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 
 import { ColorCard } from '../ColorCard';
@@ -22,6 +22,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     const correctColours = sortColors(currentQuestion.correctAnswers || currentQuestion.correctColours);
     const [timeLeft, setTimeLeft] = useState(gameState.resultDuration || 30);
     const [isRemoving, setIsRemoving] = useState(false);
+    const [showDeletedToast, setShowDeletedToast] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
         title: string;
@@ -68,12 +69,14 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 if (gameState.code) {
                     socket.emit('remove-question', { code: gameState.code });
                 }
+                setShowConfirmModal(false);
+                setShowDeletedToast(true);
 
                 setTimeout(() => {
+                    setShowDeletedToast(false);
                     onNextQuestion();
                     setIsRemoving(false);
-                }, 1000);
-                setShowConfirmModal(false);
+                }, 2000);
             }
         });
         setShowConfirmModal(true);
@@ -278,6 +281,21 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     onCancel={() => setShowConfirmModal(false)}
                 />
             )}
+
+            <AnimatePresence>
+                {showDeletedToast && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 24, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 12, scale: 0.95 }}
+                        transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+                        className="fixed bottom-8 left-1/2 z-[200] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-black/80 px-5 py-3 shadow-2xl backdrop-blur-md"
+                    >
+                        <CheckCircle size={18} className="shrink-0 text-green-400" />
+                        <span className="text-sm font-black uppercase tracking-wide text-white">Question deleted</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }
