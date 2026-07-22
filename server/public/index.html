@@ -5,54 +5,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ColourWang – Dashboard & Admin</title>
-  <meta name="description" content="ColourWang Live Game Dashboard, Server Metrics, Logs, and Active Game Management." />
+  <meta name="description"
+    content="ColourWang Live Game Dashboard, Server Metrics, Logs, and Active Game Management." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <link rel="stylesheet" href="/main.css" />
 </head>
 
 <body class="bg-[#0f0f13] text-[#e8e8f0] font-sans min-h-screen p-3.5 sm:p-6 relative">
 
   <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-    <div class="absolute -inset-[50%] animate-mesh-drift bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(124,92,252,0.18)_0%,transparent_70%),radial-gradient(ellipse_50%_60%_at_80%_20%,rgba(0,229,255,0.12)_0%,transparent_70%),radial-gradient(ellipse_70%_40%_at_50%_80%,rgba(248,58,123,0.10)_0%,transparent_70%)]"></div>
+    <div
+      class="absolute inset-[-50%] animate-mesh-drift bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(124,92,252,0.18)_0%,transparent_70%),radial-gradient(ellipse_50%_60%_at_80%_20%,rgba(0,229,255,0.12)_0%,transparent_70%),radial-gradient(ellipse_70%_40%_at_50%_80%,rgba(248,58,123,0.10)_0%,transparent_70%)]">
+    </div>
   </div>
 
-  <div class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+  <div
+    class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-size-[48px_48px]">
+  </div>
 
-  <div class="relative z-10 max-w-[1200px] mx-auto space-y-6">
+  <div class="relative z-10 max-w-300 mx-auto space-y-6">
 
     <header class="flex items-center justify-between flex-wrap gap-3">
       <h1 class="text-[1.6rem] font-bold tracking-[-0.5px]">
         Colour<span class="text-[#7c5cfc]">Wang</span> Control Center
       </h1>
-      
+
       <div class="flex items-center gap-2.5 flex-wrap">
-        <div id="status-badge" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.8rem] text-[#8888aa] whitespace-nowrap">
+        <div id="status-badge"
+          class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.8rem] text-[#8888aa] whitespace-nowrap">
           Server: <span id="server-status" class="font-semibold text-[#3dba7e]">● Online</span>
         </div>
-        <div id="refresh-info" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.75rem] text-[#8888aa] whitespace-nowrap transition-colors">
+        <div id="refresh-info"
+          class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.75rem] text-[#8888aa] whitespace-nowrap transition-colors">
           Auto-refresh: 5s
         </div>
       </div>
     </header>
 
-    
+
     <section class="space-y-4">
-      
+
       <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
         <h2 class="text-xl font-extrabold tracking-tight font-outfit">
           Active Game Rooms
         </h2>
         <div class="flex items-center gap-2.5">
-          <button id="btn-kill-all" class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+          <button id="btn-kill-all"
+            class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
             ⚠ Kill All Games
           </button>
-          <button id="btn-refresh" class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+          <button id="btn-refresh"
+            class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
             ↺ Refresh now
           </button>
         </div>
@@ -60,17 +71,18 @@
 
       <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4"></div>
 
-      <div id="empty-state" class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
+      <div id="empty-state"
+        class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
         No active games at the moment.
       </div>
 
     </section>
 
     <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      
+
       <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col justify-between gap-4">
         <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Server Overview</h2>
-        
+
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-[#0f0f13] border border-[#2e2e42] p-3 rounded-lg">
             <span class="text-[0.7rem] text-[#8888aa] uppercase tracking-wide block">Active Games</span>
@@ -99,12 +111,14 @@
       <div class="lg:col-span-2 bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
         <div class="flex items-center justify-between">
           <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Live System Logs</h2>
-          <button id="btn-clear-logs" class="text-xs text-[#8888aa] hover:text-[#e8e8f0] transition-colors cursor-pointer">
+          <button id="btn-clear-logs"
+            class="text-xs text-[#8888aa] hover:text-[#e8e8f0] transition-colors cursor-pointer">
             Clear Logs
           </button>
         </div>
 
-        <div id="log-terminal" class="bg-[#0f0f13] border border-[#2e2e42] rounded-lg p-3 font-mono text-[0.78rem] h-[160px] overflow-y-auto space-y-1.5 leading-relaxed">
+        <div id="log-terminal"
+          class="bg-[#0f0f13] border border-[#2e2e42] rounded-lg p-3 font-mono text-[0.78rem] h-40 overflow-y-auto space-y-1.5 leading-relaxed">
           <div class="text-[#8888aa]">[SYSTEM] Initializing logging connection...</div>
         </div>
       </div>
@@ -114,17 +128,20 @@
 
   </div>
 
-  <div id="toast-container" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[9999]"></div>
+  <div id="toast-container" class="fixed bottom-6 right-6 flex flex-col gap-2 z-9999"></div>
 
-  <div id="confirm-modal" role="dialog" aria-modal="true" class="hidden fixed inset-0 bg-black/70 items-center justify-center z-[9000]">
-    <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-2xl p-7 max-w-[360px] w-[90%] flex flex-col gap-4">
+  <div id="confirm-modal" role="dialog" aria-modal="true"
+    class="hidden fixed inset-0 bg-black/70 items-center justify-center z-9000">
+    <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-2xl p-7 max-w-90 w-[90%] flex flex-col gap-4">
       <h3 id="confirm-title" class="text-[1.1rem] font-bold">Are you sure?</h3>
       <p id="confirm-body" class="text-[0.875rem] text-[#8888aa]"></p>
       <div class="flex gap-2.5 justify-end">
-        <button id="confirm-cancel" class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] rounded-lg px-4.5 py-2.5 text-[0.875rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+        <button id="confirm-cancel"
+          class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] rounded-lg px-4.5 py-2.5 text-[0.875rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
           Cancel
         </button>
-        <button id="confirm-ok" class="bg-[#e05252] text-white hover:bg-[#f07070] rounded-lg px-4.5 py-2.5 text-[0.875rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+        <button id="confirm-ok"
+          class="bg-[#e05252] text-white hover:bg-[#f07070] rounded-lg px-4.5 py-2.5 text-[0.875rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
           Confirm
         </button>
       </div>
