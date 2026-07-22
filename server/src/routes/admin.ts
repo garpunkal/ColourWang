@@ -3,7 +3,7 @@ import { Server } from 'socket.io';
 import { games } from '../game/gamesMap';
 import { logger } from '../utils/logger';
 
-// Safe helper to iterate game entries regardless of whether games is a Map or JS Object
+// Helper to reliably retrieve all active game entries
 function safeGetEntries(): [string, any][] {
   if (!games) return [];
   if (games instanceof Map) {
@@ -15,7 +15,7 @@ function safeGetEntries(): [string, any][] {
   return [];
 }
 
-// Safe helper to find a game instance by code (case-insensitive)
+// Helper to look up a game instance by code (case-insensitive)
 function safeGetGame(code: string): any | null {
   if (!games || !code) return null;
   const targetCode = String(code).trim().toUpperCase();
@@ -33,7 +33,7 @@ function safeGetGame(code: string): any | null {
   return null;
 }
 
-// Safe helper to delete a game key
+// Helper to remove a game from storage
 function safeDeleteGame(code: string): boolean {
   if (!games || !code) return false;
   const targetCode = String(code).trim().toUpperCase();
@@ -106,7 +106,6 @@ export function createAdminRouter(io?: Server) {
     try {
       logger.info('[ADMIN] Action: Kill All Games');
 
-      // 1. Broadcast sockets
       if (io) {
         try {
           io.emit('game_terminated', { reason: 'Host terminated all active sessions.' });
@@ -115,7 +114,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // 2. Safe cleanup per instance
       const entries = safeGetEntries();
       for (const [code, game] of entries) {
         if (game) {
@@ -129,7 +127,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // 3. Clear storage
       if (games instanceof Map) {
         games.clear();
       } else if (typeof games === 'object') {
@@ -155,7 +152,6 @@ export function createAdminRouter(io?: Server) {
       logger.info(`[ADMIN] Action: Kill Game ${code}`);
       const game = safeGetGame(code);
 
-      // 1. Notify sockets
       if (io) {
         try {
           io.to(code).emit('game_terminated', { reason: 'Game terminated by host.' });
@@ -165,7 +161,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // 2. Cleanup instance
       if (game) {
         try {
           if (typeof game.cleanup === 'function') game.cleanup();
@@ -176,7 +171,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // 3. Delete from map
       safeDeleteGame(code);
 
       logger.info(`[ADMIN] Game ${code} killed successfully.`);
@@ -229,6 +223,19 @@ export function createAdminRouter(io?: Server) {
       logger.error(`[ADMIN] Error restarting game ${code}:`, err?.stack || err);
       return res.status(500).json({ error: `Failed to restart game ${code}`, details: err?.message || String(err) });
     }
+  });
+
+  // Method Fallbacks for clear error reporting on non-POST requests
+  router.all('/games/kill-all', (_req: Request, res: Response) => {
+    res.status(405).json({ error: 'Method Not Allowed. Please use HTTP POST.' });
+  });
+
+  router.all('/games/:code/kill', (_req: Request, res: Response) => {
+    res.status(405).json({ error: 'Method Not Allowed. Please use HTTP POST.' });
+  });
+
+  router.all('/games/:code/restart', (_req: Request, res: Response) => {
+    res.status(405).json({ error: 'Method Not Allowed. Please use HTTP POST.' });
   });
 
   return router;

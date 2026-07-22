@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const gamesGrid = document.getElementById('games-grid');
   const emptyState = document.getElementById('empty-state');
   const btnKillAll = document.getElementById('btn-kill-all');
-  const btnRefresh = document.getElementById('btn-refresh');
 
   const confirmModal = document.getElementById('confirm-modal');
   const confirmTitle = document.getElementById('confirm-title');
@@ -141,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (confirmCancel) {
-    confirmCancel.addEventListener('click', () => {
+    confirmCancel.addEventListener('click', (e) => {
+      e.preventDefault();
       if (confirmModal) {
         confirmModal.classList.add('hidden');
         confirmModal.classList.remove('flex');
@@ -151,7 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (confirmOk) {
-    confirmOk.addEventListener('click', async () => {
+    confirmOk.addEventListener('click', async (e) => {
+      e.preventDefault();
       if (confirmModal) {
         confirmModal.classList.add('hidden');
         confirmModal.classList.remove('flex');
@@ -230,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         totalPlayers += playerCount;
 
-        // Render category pills
         const categoryTags = categories.length > 0
           ? categories.map(c => `<span class="bg-[#2e2e42] text-[#8888aa] text-[0.65rem] px-2 py-0.5 rounded font-medium">${c}</span>`).join(' ')
           : '<span class="text-[#8888aa] text-[0.65rem] italic">All Categories</span>';
@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gamesGrid.addEventListener('click', (e) => {
       const button = e.target.closest('button[data-action]');
       if (!button) return;
+      e.preventDefault();
 
       const action = button.getAttribute('data-action');
       const gameCode = button.getAttribute('data-code');
@@ -305,9 +306,12 @@ document.addEventListener('DOMContentLoaded', () => {
           body: 'This will terminate the room and disconnect all active players in this game.',
           onConfirm: async () => {
             try {
-              const res = await fetch(`/api/admin/games/${gameCode}/kill`, {
+              const res = await fetch(`/api/admin/games/${encodeURIComponent(gameCode)}/kill`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                }
               });
               const data = await res.json();
               if (res.ok && data.success) {
@@ -327,9 +331,12 @@ document.addEventListener('DOMContentLoaded', () => {
           body: 'This will reset the room score and return players to the lobby.',
           onConfirm: async () => {
             try {
-              const res = await fetch(`/api/admin/games/${gameCode}/restart`, {
+              const res = await fetch(`/api/admin/games/${encodeURIComponent(gameCode)}/restart`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                }
               });
               const data = await res.json();
               if (res.ok && data.success) {
@@ -348,7 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (btnKillAll) {
-    btnKillAll.addEventListener('click', () => {
+    btnKillAll.addEventListener('click', (e) => {
+      e.preventDefault();
       askConfirmation({
         title: 'Kill ALL Active Games?',
         body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
@@ -356,7 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             const res = await fetch('/api/admin/games/kill-all', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' }
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              }
             });
             const data = await res.json();
             if (res.ok && data.success) {
@@ -370,13 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-    });
-  }
-
-  if (btnRefresh) {
-    btnRefresh.addEventListener('click', () => {
-      fetchServerStatus();
-      showToast('Dashboard refreshed');
     });
   }
 
@@ -438,14 +442,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (btnClearLogs) {
-    btnClearLogs.addEventListener('click', () => {
+    btnClearLogs.addEventListener('click', (e) => {
+      e.preventDefault();
       if (logTerminal) {
         logTerminal.innerHTML = '<div class="text-[#c084fc]">[SYSTEM] Logs cleared.</div>';
       }
     });
   }
 
-  // Immediate start + 1s loop
+  // Start polling
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);
