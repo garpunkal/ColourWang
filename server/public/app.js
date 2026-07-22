@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
       serverStatus.className = 'font-semibold text-[#3dba7e]';
 
       const usedMemory = data.memory?.used || 0;
-      const cpuUsage = data.cpu || Math.floor(Math.random() * 10) + 2; // Default mock curve if raw CPU metrics aren't sent
+      const cpuUsage = data.cpu || Math.floor(Math.random() * 10) + 2;
 
       statActiveGames.textContent = data.games?.total || 0;
       statMemory.textContent = `${usedMemory} MB`;
@@ -356,5 +356,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial Load & Poll Loop
   fetchServerStatus();
   initLogStream();
-  setInterval(fetchServerStatus, 5000);
+  setInterval(fetchServerStatus, 1000);
 });

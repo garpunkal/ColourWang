@@ -22,14 +22,14 @@
 
 <body class="bg-[#0f0f13] text-[#e8e8f0] font-sans min-h-screen p-3.5 sm:p-6 relative">
 
-  <!-- Mesh drift bg -->
+  <!-- Background Mesh Drift -->
   <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
     <div
       class="absolute inset-[-50%] animate-mesh-drift bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(124,92,252,0.18)_0%,transparent_70%),radial-gradient(ellipse_50%_60%_at_80%_20%,rgba(0,229,255,0.12)_0%,transparent_70%),radial-gradient(ellipse_70%_40%_at_50%_80%,rgba(248,58,123,0.10)_0%,transparent_70%)]">
     </div>
   </div>
 
-  <!-- Grid texture overlay -->
+  <!-- Background Grid texture -->
   <div
     class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-size-[48px_48px]">
   </div>
@@ -37,58 +37,32 @@
   <div class="relative z-10 max-w-5xl mx-auto space-y-6">
     <header class="flex items-center justify-between flex-wrap gap-4 py-2">
       <a href="/" class="flex items-center gap-3 no-underline text-current group">
-        <div class="relative w-[70px] h-[40px] flex items-center justify-center shrink-0 overflow-visible"
-          aria-hidden="true">
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(-75deg); background-color: #f83a3a;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(-60deg); background-color: #f8833a;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(-45deg); background-color: #f8d33a;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(-30deg); background-color: #93f83a;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(-15deg); background-color: #3af863;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(0deg); background-color: #3af8d3;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(15deg); background-color: #3a93f8;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(30deg); background-color: #633af8;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(45deg); background-color: #c33af8;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(60deg); background-color: #f83ac3;"></div>
-          <div
-            class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
-            style="transform-origin: bottom center; transform: rotate(75deg); background-color: #f83a63;"></div>
+        <div class="relative w-[70px] h-[40px] flex items-center justify-center shrink-0 overflow-visible" aria-hidden="true">
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(-75deg); background-color: #f83a3a;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(-60deg); background-color: #f8833a;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(-45deg); background-color: #f8d33a;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(-30deg); background-color: #93f83a;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(-15deg); background-color: #3af863;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(0deg); background-color: #3af8d3;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(15deg); background-color: #3a93f8;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(30deg); background-color: #633af8;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(45deg); background-color: #c33af8;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(60deg); background-color: #f83ac3;"></div>
+          <div class="card absolute bottom-0 left-[calc(50%-5px)] w-[10px] h-[28px] rounded-[2px] border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25" style="transform-origin: bottom center; transform: rotate(75deg); background-color: #f83a63;"></div>
         </div>
         <div class="flex flex-col">
-          <span
-            class="font-outfit font-black text-2xl tracking-tight leading-none text-white drop-shadow-[0_0_20px_rgba(124,92,252,0.3)]">
+          <span class="font-outfit font-black text-2xl tracking-tight leading-none text-white drop-shadow-[0_0_20px_rgba(124,92,252,0.3)]">
             ColourWang
-          </span>
+          </span>    
         </div>
       </a>
 
       <div class="flex items-center gap-2.5 flex-wrap">
-        <div id="status-badge"
-          class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.8rem] text-[#8888aa] whitespace-nowrap">
+        <div id="status-badge" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.8rem] text-[#8888aa] whitespace-nowrap">
           Server: <span id="server-status" class="font-semibold text-[#3dba7e]">● Online</span>
         </div>
-        <div id="refresh-info"
-          class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.75rem] text-[#8888aa] whitespace-nowrap transition-colors">
-          Auto-refresh: 5s
+        <div id="refresh-info" class="bg-[#1a1a24] border border-[#2e2e42] rounded-lg px-3.5 py-1.5 text-[0.75rem] text-[#8888aa] whitespace-nowrap transition-colors">
+          Auto-refresh: 1s
         </div>
       </div>
     </header>
@@ -108,7 +82,6 @@
           </div>
         </div>
 
-        <!-- Real-time Sparkline Charts -->
         <div class="space-y-3">
           <div class="bg-[#0f0f13] border border-[#2e2e42] p-3 rounded-lg">
             <div class="flex justify-between items-center mb-1">
@@ -125,69 +98,64 @@
               <span class="text-[0.7rem] text-[#8888aa] uppercase tracking-wide">Memory Used</span>
               <span id="stat-memory" class="text-xs font-bold text-[#7c5cfc]">0 MB</span>
             </div>
-
             <div class="h-14 w-full">
               <canvas id="memoryChart"></canvas>
             </div>
           </div>
         </div>
 
-
         <div class="flex items-center justify-between text-xs text-[#8888aa] pt-2 border-t border-[#2e2e42]">
           <span>Uptime: <strong id="stat-uptime" class="text-[#e8e8f0]">0d 0h 0m</strong></span>
           <span>Node.js: <strong class="text-[#e8e8f0]">v20.x</strong></span>
         </div>
       </div>
-  
-  </section>
 
-  <section class="space-y-4">
-    <div class="lg:col-span-2 bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Live System Logs</h2>
-        <button id="btn-clear-logs"
-          class="text-xs text-[#8888aa] hover:text-[#e8e8f0] transition-colors cursor-pointer">
-          Clear Logs
-        </button>
+    </section>
+      <section class="space-y-4">
+      <div class="lg:col-span-2 bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Live System Logs</h2>
+          <button id="btn-clear-logs"
+            class="text-xs text-[#8888aa] hover:text-[#e8e8f0] transition-colors cursor-pointer">
+            Clear Logs
+          </button>
+        </div>
+
+        <div id="log-terminal"
+          class="bg-[#0f0f13] border border-[#2e2e42] rounded-lg p-3 font-mono text-[0.78rem] h-64 overflow-y-auto overflow-x-hidden space-y-1.5 leading-relaxed whitespace-pre-wrap break-words [scrollbar-width:thin] [scrollbar-color:#2e2e42_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#2e2e42] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#7c5cfc]">
+          <div class="text-[#8888aa]">[SYSTEM] Initializing logging connection...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
+        <h2 class="text-xl font-extrabold tracking-tight font-outfit">
+          Active Game Rooms
+        </h2>
+        <div class="flex items-center gap-2.5">
+          <button id="btn-kill-all"
+            class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+            ⚠ Kill All Games
+          </button>
+          <button id="btn-refresh"
+            class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+            ↺ Refresh now
+          </button>
+        </div>
       </div>
 
-      <!-- Styled Terminal with Fancy Slim Scrollbar & Word Wrapping -->
-      <div id="log-terminal"
-        class="bg-[#0f0f13] border border-[#2e2e42] rounded-lg p-3 font-mono text-[0.78rem] h-64 overflow-y-auto overflow-x-hidden space-y-1.5 leading-relaxed whitespace-pre-wrap break-words [scrollbar-width:thin] [scrollbar-color:#2e2e42_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#2e2e42] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#7c5cfc]">
-        <div class="text-[#8888aa]">[SYSTEM] Initializing logging connection...</div>
+      <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4"></div>
+
+      <div id="empty-state"
+        class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
+        No active games at the moment.
       </div>
-    </div>
-  </section>
-
-  <section class="space-y-4">
-    <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
-      <h2 class="text-xl font-extrabold tracking-tight font-outfit">
-        Active Game Rooms
-      </h2>
-      <div class="flex items-center gap-2.5">
-        <button id="btn-kill-all"
-          class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-          ⚠ Kill All Games
-        </button>
-        <button id="btn-refresh"
-          class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-          ↺ Refresh now
-        </button>
-      </div>
-    </div>
-
-    <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4"></div>
-
-    <div id="empty-state"
-      class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
-      No active games at the moment.
-    </div>
-  </section>
+    </section>
   </div>
 
   <div id="toast-container" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[9999]"></div>
 
-  <!-- Modal overlay explicitly pinned above everything -->
   <div id="confirm-modal" role="dialog" aria-modal="true"
     class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm items-center justify-center z-[10000]">
     <div class="bg-[#1a1a24] border border-[#2e2e42] shadow-2xl rounded-2xl p-7 max-w-md w-[90%] flex flex-col gap-4">
@@ -206,7 +174,7 @@
     </div>
   </div>
 
-  <script src="./app.js"></script>
+  <script src="/app.js"></script>
 </body>
 
 </html>

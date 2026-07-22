@@ -28,7 +28,6 @@ const corsOptions: CorsOptions = {
 
 const normalizeOrigin = (origin: string) => origin.trim().replace(/\/+$/, '').toLowerCase();
 
-// Allow overriding CORS origin via env for hosted deployments (e.g. Render frontend URL).
 if (process.env.FRONTEND_ORIGIN) {
     const origins = process.env.FRONTEND_ORIGIN
         .split(',')
@@ -62,14 +61,14 @@ if (corsOptions.origin === '*' && corsOptions.credentials) {
 
 app.use(cors(corsOptions));
 
+// Serve static frontend files directly at root
 app.use(express.static(join(process.cwd(), 'public')));
 
-// Fallback route for root HTML
 app.get('/', (_req, res) => {
     res.sendFile(join(process.cwd(), 'public/index.html'));
 });
 
-// Server status
+// System Status API
 app.get('/api/status', (_req, res) => {
     res.json({
         status: 'ok',
@@ -92,20 +91,17 @@ app.get('/api/status', (_req, res) => {
     });
 });
 
-// Live log stream via Server-Sent Events (SSE)
+// Real-Time SSE Log Streaming (Proxy Buffering Disabled for Render)
 app.get('/api/logs/stream', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
-    
-    // Disable Nginx/Render proxy buffering for live logs
     res.setHeader('X-Accel-Buffering', 'no');
 
     if (res.flushHeaders) {
         res.flushHeaders();
     }
 
-    // Send buffered history first
     getLogHistory().forEach(entry => {
         res.write(`data: ${JSON.stringify(entry)}\n\n`);
     });
@@ -116,7 +112,6 @@ app.get('/api/logs/stream', (req, res) => {
     req.on('close', () => logBus.off('entry', onEntry));
 });
 
-// Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
@@ -131,7 +126,6 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// List all mp3 files in client/public/bgm
 app.get('/api/bgm-list', (req, res) => {
     try {
         const bgmPath = join(__dirname, '../../client/public/bgm');
@@ -147,7 +141,6 @@ app.get('/api/bgm-list', (req, res) => {
     }
 });
 
-// SSL verification
 const certPath = join(__dirname, serverConfig.server.ssl.certPath);
 const keyPath = join(certPath, serverConfig.server.ssl.keyFileName);
 const certFilePath = join(certPath, serverConfig.server.ssl.certFileName);
@@ -182,5 +175,5 @@ app.use('/api/admin', createAdminRouter(io));
 const PORT = process.env.PORT || serverConfig.server.port;
 server.listen(PORT, () => {
     logger.info(`Server running on ${protocol}://localhost:${PORT}`);
-    logger.info(`Admin dashboard: ${protocol}://localhost:${PORT}/admin`);
+    logger.info(`Dashboard running at: ${protocol}://localhost:${PORT}/`);
 });
