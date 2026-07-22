@@ -262,7 +262,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
                     <div className="space-y-2">
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Colour Choice</label>
-                        <div className="grid grid-cols-4 gap-2 md:gap-3 p-3 md:p-4 glass rounded-4xl border-white/10 shadow-inner bg-black/20">
+                        <div className="grid grid-cols-4 gap-2 md:gap-3 p-3 md:p-4 glass rounded-4xl border-white/10 shadow-inner bg-black/20 max-h-[360px] overflow-y-auto">
                             {AVATAR_IDS.map((a) => {
                                 const taken = isAvatarTaken(a);
                                 const isSelected = avatar === a;
