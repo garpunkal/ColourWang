@@ -32,6 +32,16 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
     }, [players]);
 
+    // Dense ranking — ties share the same rank, next rank increments by 1 (not by count)
+    const denseRanks = useMemo(() => {
+        let rank = 1;
+        return sortedPlayers.map((player, i) => {
+            if (i === 0) return rank;
+            if (sortedPlayers[i - 1].score !== player.score) rank++;
+            return rank;
+        });
+    }, [sortedPlayers]);
+
     const winner = sortedPlayers[0];
     const winnerColor = winner ? getAvatarColor(winner.avatar) : '#FFD700';
 
@@ -168,7 +178,8 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
             <div className="flex flex-col gap-3 md:gap-4 mb-16">
                 {sortedPlayers.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
-                    const isWinner = i === 0;
+                    const rank = denseRanks[i];
+                    const isWinner = rank === 1;
                     // Reveal from last place (i = n-1) up to first (i = 0)
                     const isRevealed = revealedCount >= sortedPlayers.length - i;
 
@@ -197,7 +208,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                     {/* Rank Indicator */}
                                     <div className={`text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center ${isWinner ? 'text-yellow-400' : 'text-white/20'
                                         }`}>
-                                        #{i + 1}
+                                        #{rank}
                                     </div>
 
                                     {/* Avatar */}
@@ -214,7 +225,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                         </h2>
                                         {isWinner && (
                                             <p className="text-yellow-500 font-black text-[8px] md:text-xs uppercase tracking-[0.15em] mt-1 md:mt-2">
-                                                The Undisputed Legend
+                                                {denseRanks.filter(r => r === 1).length > 1 ? 'Joint Champions' : 'The Undisputed Legend'}
                                             </p>
                                         )}
                                     </div>
@@ -248,7 +259,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                     className="relative glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 border-white/5"
                                 >
                                     <div className="text-2xl md:text-5xl font-black font-mono italic w-10 md:w-20 text-center text-white/15">
-                                        #{i + 1}
+                                        #{denseRanks[i]}
                                     </div>
                                     <div className="w-12 h-12 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl bg-white/5 ring-2 md:ring-4 ring-white/5 flex items-center justify-center">
                                         <motion.span
