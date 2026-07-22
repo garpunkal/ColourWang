@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const statCpu = document.getElementById('stat-cpu');
   const statMemory = document.getElementById('stat-memory');
   const statUptime = document.getElementById('stat-uptime');
-
+  
   const logTerminal = document.getElementById('log-terminal');
   const btnClearLogs = document.getElementById('btn-clear-logs');
-
+  
   const gamesGrid = document.getElementById('games-grid');
   const emptyState = document.getElementById('empty-state');
   const btnKillAll = document.getElementById('btn-kill-all');
@@ -93,8 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function showToast(message, isError = false) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
-      }`;
+    toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${
+      isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
+    }`;
     toast.textContent = message;
     container.appendChild(toast);
 
@@ -330,27 +331,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Expanded Log Level Color Selector
   function appendLog(message, level = 'info') {
     const logLine = document.createElement('div');
     const normalizedLevel = String(level).toLowerCase();
-
-    let colorClass = 'text-[#cbd5e1]'; // Default slate fallback
+    
+    let colorClass = 'text-[#cbd5e1]';
 
     if (normalizedLevel === 'error' || normalizedLevel === 'fatal' || message.includes('ERROR') || message.includes('ERR')) {
-      colorClass = 'text-[#f87171] font-semibold'; // Bright Red
+      colorClass = 'text-[#f87171] font-semibold';
     } else if (normalizedLevel === 'warn' || normalizedLevel === 'warning' || message.includes('WARN')) {
-      colorClass = 'text-[#fbbf24]'; // Amber / Yellow
+      colorClass = 'text-[#fbbf24]';
     } else if (normalizedLevel === 'info') {
-      colorClass = 'text-[#38bdf8]'; // Sky Blue
+      colorClass = 'text-[#38bdf8]';
     } else if (normalizedLevel === 'debug') {
-      colorClass = 'text-[#a855f7]'; // Indigo / Violet
+      colorClass = 'text-[#a855f7]';
     } else if (normalizedLevel === 'trace' || normalizedLevel === 'verbose') {
-      colorClass = 'text-[#64748b]'; // Muted Slate
+      colorClass = 'text-[#64748b]';
     } else if (normalizedLevel === 'success' || message.includes('✓') || message.includes('SUCCESS')) {
-      colorClass = 'text-[#34d399]'; // Emerald Green
+      colorClass = 'text-[#34d399]';
     } else if (normalizedLevel === 'system' || message.includes('[SYSTEM]')) {
-      colorClass = 'text-[#c084fc] font-medium'; // Electric Purple
+      colorClass = 'text-[#c084fc] font-medium';
     }
 
     logLine.className = colorClass;

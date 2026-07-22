@@ -148,18 +148,23 @@ const certFilePath = join(certPath, serverConfig.server.ssl.certFileName);
 let server;
 let protocol = 'http';
 
-if (existsSync(keyPath) && existsSync(certFilePath)) {
+// Proxy / Environment aware server initialization
+if (process.env.RENDER || process.env.NODE_ENV === 'production') {
+    server = createHttpServer(app);
+    protocol = 'https';
+    logger.info('✓ Running behind reverse proxy with TLS termination');
+} else if (existsSync(keyPath) && existsSync(certFilePath)) {
     const httpsOptions = {
         key: readFileSync(keyPath),
         cert: readFileSync(certFilePath)
     };
     server = createHttpsServer(httpsOptions, app);
     protocol = 'https';
-    logger.info('✓ SSL certificates found, using HTTPS');
+    logger.info('✓ Local SSL certificates found, using HTTPS');
 } else {
     server = createHttpServer(app);
     protocol = 'http';
-    logger.warn('⚠ SSL certificates not found, using HTTP');
+    logger.info('Running on HTTP for local development');
 }
 
 const io = new Server(server, {
@@ -174,6 +179,6 @@ app.use('/api/admin', createAdminRouter(io));
 
 const PORT = process.env.PORT || serverConfig.server.port;
 server.listen(PORT, () => {
-    logger.info(`Server running on ${protocol}://localhost:${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
     logger.info(`Dashboard running at: ${protocol}://localhost:${PORT}/`);
 });
