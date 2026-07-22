@@ -104,17 +104,12 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
 
     return (
         <>
-        <motion.div
-            key="result"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="relative min-h-screen w-full overflow-hidden"
-        >
+            {/* Fixed background elements rendered outside the clipping wrapper so they fill the viewport */}
             <motion.div
                 initial={{ scale: 1.2, opacity: 0 }}
                 animate={{ scale: 1, opacity: 0.88 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="fixed inset-0 z-0"
+                className="fixed inset-0 z-0 pointer-events-none"
                 style={{
                     background: 'radial-gradient(circle at 50% 22%, rgba(59,130,246,0.35) 0%, rgba(10,12,16,0.98) 58%)'
                 }}
@@ -126,6 +121,12 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 className="pointer-events-none fixed left-1/2 top-[21%] h-72 w-72 -translate-x-1/2 rounded-full border border-blue-300/60 z-0"
             />
 
+        <motion.div
+            key="result"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="relative min-h-screen w-full"
+        >
             <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center px-4 pb-28 pt-8 md:px-8 md:pt-10">
                 <div className="mb-5 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-7 md:px-4">
                     <div className="flex items-center gap-2">

@@ -204,7 +204,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 placeholder="ENTER NAME"
                                 maxLength={10}
                                 value={name}
-                                onChange={e => name.length < 10 ? setName(e.target.value.toUpperCase()) : null}
+                                onChange={e => setName(e.target.value.toUpperCase())}
                             />
                         </div>
 
