@@ -226,10 +226,19 @@ function App() {
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="mb-8 md:mb-16 flex flex-col items-center"
-            ><Logo />
-              {/* Logo Removed */}
+              className="mb-8 md:mb-12 flex flex-col items-center"
+            >
+              <Logo />
             </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.7 }}
+              className="mb-8 md:mb-10 text-sm md:text-base font-bold uppercase tracking-[0.2em] text-white/40 text-center px-4"
+            >
+              A live colour quiz — host on a big screen, everyone joins on their phone
+            </motion.p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl px-4 md:px-0">
 
