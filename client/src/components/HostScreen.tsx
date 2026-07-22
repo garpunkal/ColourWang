@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, animate } from 'framer-motion';
 import { HostSetupScreen } from './host/HostSetupScreen';
 import { HostHeader } from './host/HostHeader';
 import { HostLobbyScreen } from './host/HostLobbyScreen';
@@ -31,6 +31,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
 
     const [showExplosion, setShowExplosion] = useState(false);
     const lastResultKey = useRef<string | null>(null);
+    const shakeRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleUnload = () => {
@@ -59,6 +60,16 @@ const HostScreen = ({ socket, gameState }: Props) => {
             // Trigger explosion after a tiny delay to ensure the reset happens correctly
             const timer = setTimeout(() => {
                 setShowExplosion(true);
+                // Shake content imperatively so the transform is cleaned up after and never traps fixed children
+                if (shakeRef.current) {
+                    animate(
+                        shakeRef.current,
+                        { x: [0, -15, 15, -15, 15, -10, 10, -5, 5, 0], y: [0, 8, -8, 8, -8, 4, -4, 2, -2, 0] },
+                        { duration: 0.5 }
+                    ).then(() => {
+                        if (shakeRef.current) shakeRef.current.style.transform = '';
+                    });
+                }
                 // Hide explosion after its sequence
                 setTimeout(() => setShowExplosion(false), 2500);
             }, 100);
@@ -83,14 +94,6 @@ const HostScreen = ({ socket, gameState }: Props) => {
         return () => audioManager.stopBGM();
     }, []);
 
-    // Shake animation variants
-    const shakeVariants = {
-        shake: {
-            x: [0, -15, 15, -15, 15, -10, 10, -5, 5, 0],
-            y: [0, 8, -8, 8, -8, 4, -4, 2, -2, 0],
-            transition: { duration: 0.5 }
-        }
-    };
 
     useEffect(() => {
         if (gameState?.status === 'QUESTION' && gameState.timerDuration) {
@@ -171,12 +174,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     return (
-        <motion.div
-            className={isResultView ? 'flex-1 flex flex-col overflow-hidden relative w-full min-h-screen' : 'flex-1 flex flex-col p-12 overflow-hidden relative w-full min-h-screen'}
-            animate={showExplosion ? "shake" : ""}
-            variants={shakeVariants}
-        >
-            {/* Massive Shockwave Overlay */}
+        <div className="flex-1 flex flex-col relative w-full min-h-screen">
+            {/* Massive Shockwave Overlay – outside shake wrapper so fixed positioning isn't trapped */}
             <AnimatePresence>
                 {showExplosion && (
                     <div
@@ -302,6 +301,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
+            <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-screen' : 'flex-1 flex flex-col p-12 relative w-full min-h-screen'}>
             {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION') && (
                 <HostHeader
                     code={code}
@@ -383,7 +383,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     ) : null}
                 </AnimatePresence>
             </div>
-        </motion.div>
+            </div>
+        </div>
     );
 };
 
