@@ -22,7 +22,7 @@ function safeGetGame(code: string): any | null {
   
   if (games instanceof Map) {
     if (games.has(targetCode)) return games.get(targetCode);
-    // Fallback: Case-insensitive search
+    // Case-insensitive search fallback
     for (const [key, val] of games.entries()) {
       if (String(key).toUpperCase() === targetCode) return val;
     }
@@ -101,7 +101,6 @@ export function createAdminRouter(io: Server) {
     try {
       logger.info('[ADMIN] Triggered: Kill All Games');
 
-      // 1. Socket emit to disconnect/notify clients
       if (io && typeof io.emit === 'function') {
         try {
           io.emit('game_terminated', { reason: 'Host terminated all active sessions.' });
@@ -110,7 +109,6 @@ export function createAdminRouter(io: Server) {
         }
       }
 
-      // 2. Safe cleanup per instance
       const entries = safeGetEntries();
       for (const [code, game] of entries) {
         try {
@@ -124,7 +122,6 @@ export function createAdminRouter(io: Server) {
         }
       }
 
-      // 3. Clear games structure
       if (games instanceof Map) {
         games.clear();
       } else if (typeof games === 'object') {
@@ -142,7 +139,7 @@ export function createAdminRouter(io: Server) {
   // POST /api/admin/games/:code/kill - Kill a single game
   router.post('/games/:code/kill', (req: Request, res: Response) => {
     try {
-      const code = req.params.code;
+      const code = Array.isArray(req.params.code) ? req.params.code[0] : String(req.params.code);
       logger.info(`[ADMIN] Triggered: Kill Game ${code}`);
 
       const game = safeGetGame(code);
@@ -170,15 +167,16 @@ export function createAdminRouter(io: Server) {
       logger.info(`[ADMIN] Successfully killed game ${code}`);
       res.json({ success: true, message: `Game ${code} killed.` });
     } catch (err: any) {
-      logger.error(`[ADMIN] Fatal error killing game ${req.params.code}:`, err?.stack || err);
-      res.status(500).json({ error: `Failed to kill game ${req.params.code}`, details: err?.message });
+      const paramCode = String(req.params.code);
+      logger.error(`[ADMIN] Fatal error killing game ${paramCode}:`, err?.stack || err);
+      res.status(500).json({ error: `Failed to kill game ${paramCode}`, details: err?.message });
     }
   });
 
   // POST /api/admin/games/:code/restart - Restart a single game
   router.post('/games/:code/restart', (req: Request, res: Response) => {
     try {
-      const code = req.params.code;
+      const code = Array.isArray(req.params.code) ? req.params.code[0] : String(req.params.code);
       logger.info(`[ADMIN] Triggered: Restart Game ${code}`);
 
       const game = safeGetGame(code);
@@ -212,8 +210,9 @@ export function createAdminRouter(io: Server) {
       logger.info(`[ADMIN] Successfully restarted game ${code}`);
       res.json({ success: true, message: `Game ${code} restarted.` });
     } catch (err: any) {
-      logger.error(`[ADMIN] Fatal error restarting game ${req.params.code}:`, err?.stack || err);
-      res.status(500).json({ error: `Failed to restart game ${req.params.code}`, details: err?.message });
+      const paramCode = String(req.params.code);
+      logger.error(`[ADMIN] Fatal error restarting game ${paramCode}:`, err?.stack || err);
+      res.status(500).json({ error: `Failed to restart game ${paramCode}`, details: err?.message });
     }
   });
 
