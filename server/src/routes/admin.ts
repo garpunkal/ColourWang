@@ -72,27 +72,31 @@ export function createAdminRouter(io?: Server) {
           playerCount = game.players instanceof Map ? game.players.size : Object.keys(game.players).length;
         }
 
-        const rawSettings = game?.settings || game?.config || {};
-        const categories = rawSettings.categories || game?.categories || [];
-        const answerTime = rawSettings.answerTime ?? rawSettings.questionTime ?? game?.answerTime ?? 15;
-        const totalRounds = rawSettings.totalRounds ?? rawSettings.rounds ?? game?.totalRounds ?? game?.maxRounds ?? 10;
-        const questionsPerRound = rawSettings.questionsPerRound ?? game?.questionsPerRound ?? 3;
+        const rounds = Array.isArray(game?.rounds) ? game.rounds : [];
+        const currentRound = game?.currentRoundIndex ?? 0;
+        const totalRounds = rounds.length;
+        const currentQuestion = game?.currentQuestionIndex ?? 0;
+        const questionsPerRound = rounds[currentRound]?.questions?.length ?? game?.questions?.length ?? 0;
+        const answerTime = game?.timerDuration ?? 15;
+        const categories = rounds.map((r: any) => r?.title).filter(Boolean);
 
-        const hostName = game?.hostName || game?.host?.name || 'Host';
-        const isHostConnected = game?.isHostConnected ?? game?.hostConnected ?? true;
+        // No host name is stored on GameState today (only a raw hostSocketId),
+        // so this stays a placeholder until that's tracked at join time.
+        const hostName = 'Host';
+        const isHostConnected = !!(io && game?.hostSocketId && io.sockets.sockets.get(game.hostSocketId)?.connected);
 
         return {
           code,
           status,
           playerCount,
-          currentRound: game?.currentRound ?? game?.round ?? 0,
+          currentRound,
           totalRounds,
-          currentQuestion: game?.currentQuestion ?? game?.questionIndex ?? 0,
+          currentQuestion,
           questionsPerRound,
           hostName,
           isHostConnected,
           settings: {
-            categories: Array.isArray(categories) ? categories : [String(categories)],
+            categories,
             answerTime,
             totalRounds,
             questionsPerRound
