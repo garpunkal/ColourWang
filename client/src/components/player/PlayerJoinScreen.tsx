@@ -246,7 +246,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     style={avatarStyle}
                                     className="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                                 />
-                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-2 glass rounded-full text-xs font-black uppercase tracking-widest whitespace-nowrap" >
+                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 bg-black/80 rounded-full text-sm md:text-base font-black uppercase tracking-widest whitespace-nowrap text-white shadow-lg border border-white/20" >
                                     {avatarStyle.replace('-', ' ')}
                                 </div>
                             </motion.div>
