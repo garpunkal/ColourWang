@@ -261,7 +261,7 @@ export function HostSetupScreen({ socket }: Props) {
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
                                     <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Sound FX</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
                                         {playSounds ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
@@ -299,7 +299,7 @@ export function HostSetupScreen({ socket }: Props) {
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
                                     <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Steals</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
                                         {jokers ? 'ENABLED' : 'DISABLED'}
                                     </span>
                                 </div>
@@ -318,7 +318,7 @@ export function HostSetupScreen({ socket }: Props) {
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
                                     <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Blocks</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
                                         {blocksEnabled ? 'ENABLED' : 'DISABLED'}
                                     </span>
                                 </div>
@@ -337,7 +337,7 @@ export function HostSetupScreen({ socket }: Props) {
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
                                     <label className="text-sm md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Streaks</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
                                         {streaksEnabled ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
@@ -357,7 +357,7 @@ export function HostSetupScreen({ socket }: Props) {
                             <div className="flex flex-row md:flex-col items-center md:items-start justify-between w-full h-full">
                                 <div className="flex flex-col gap-0.5 md:gap-1 text-left">
                                     <label className="text-xs md:text-xl font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors cursor-pointer text-left">Fastest Finger</label>
-                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block">
+                                    <span className="text-[9px] md:text-xs font-bold opacity-30 tracking-wider hidden md:block mb-2">
                                         {fastestFingerEnabled ? 'ON' : 'OFF'}
                                     </span>
                                 </div>
@@ -423,15 +423,15 @@ export function HostSetupScreen({ socket }: Props) {
                                         <span className="text-xs md:text-sm uppercase tracking-wider">
                                             {topic.title}
                                         </span>
-                                        <div className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${
+                                        <div className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ${
                                             isSelected 
-                                                ? 'bg-success shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
-                                                : 'bg-white/20'
+                                                ? 'bg-success shadow-[0_0_20px_rgba(34,197,94,0.4)]' 
+                                                : 'bg-white/10'
                                         }`}>
                                             <motion.div
                                                 animate={{ x: isSelected ? '100%' : '0%' }}
                                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                className="w-4 h-4 bg-white rounded-full shadow-md"
+                                                className="w-5 h-5 bg-white rounded-full shadow-md"
                                             />
                                         </div>
                                     </button>
