@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isFirstLoad = true;
 
   // 1. Fast Sparkline Charts
-  const MAX_DATA_POINTS = 20;
+  const MAX_DATA_POINTS = 40;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(0);
   const memoryData = Array(MAX_DATA_POINTS).fill(0);
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false,
+    animation: { duration: 350, easing: 'linear' },
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
     scales: {
       x: { display: false },
@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
       memoryData.shift();
     }
 
-    if (cpuChart) cpuChart.update('none');
-    if (memoryChart) memoryChart.update('none');
+    if (cpuChart) cpuChart.update();
+    if (memoryChart) memoryChart.update();
   }
 
   // 2. Toast Notifications
@@ -215,10 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!games || games.length === 0) {
         if (emptyState) emptyState.classList.remove('hidden');
         if (statTotalPlayers) statTotalPlayers.textContent = '0';
+        if (btnKillAll) btnKillAll.classList.add('hidden');
         return;
       }
 
       if (emptyState) emptyState.classList.add('hidden');
+      if (btnKillAll) btnKillAll.classList.remove('hidden');
 
       games.forEach(game => {
         const code = game.code || 'N/A';
@@ -508,5 +510,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Start polling
   fetchServerStatus();
   initLogStream();
-  setInterval(fetchServerStatus, 1000);
+  setInterval(fetchServerStatus, 500);
 });
