@@ -21,6 +21,7 @@ const app = express();
 
 // Parse JSON request bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const corsOptions: CorsOptions = {
     ...serverConfig.server.cors
