@@ -19,26 +19,58 @@ interface Props {
     socket: Socket;
 }
 
+const SETTINGS_STORAGE_KEY = 'colourwang_host_settings';
+
+function loadStoredSettings() {
+    try {
+        const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+    } catch {
+        // ignore corrupt data
+    }
+    return null;
+}
+
 export function HostSetupScreen({ socket }: Props) {
-    const [rounds, setRounds] = useState(defaults.rounds);
-    const [questionsPerRound, setQuestionsPerRound] = useState(defaults.questionsPerRound);
-    const [timer, setTimer] = useState(defaults.questionTimer);
-    const [resultTimer, setResultTimer] = useState(defaults.resultDuration);
-    const [jokers, setJokers] = useState(defaults.jokersEnabled);
-    const [blocksEnabled, setBlocksEnabled] = useState(defaults.blocksEnabled ?? true);
-    const [playSounds, setPlaySounds] = useState(defaults.soundEnabled);
-    const [musicEnabled, setMusicEnabled] = useState(defaults.musicEnabled);
-    const [streaksEnabled, setStreaksEnabled] = useState(defaults.streaksEnabled);
-    const [fastestFingerEnabled, setFastestFingerEnabled] = useState(defaults.fastestFingerEnabled);
+    const allTopicIds = (roundsData as TopicOption[]).map(topic => topic.id);
+    const stored = loadStoredSettings();
+
+    const [rounds, setRounds] = useState(stored?.rounds ?? defaults.rounds);
+    const [questionsPerRound, setQuestionsPerRound] = useState(stored?.questionsPerRound ?? defaults.questionsPerRound);
+    const [timer, setTimer] = useState(stored?.timer ?? defaults.questionTimer);
+    const [resultTimer, setResultTimer] = useState(stored?.resultTimer ?? defaults.resultDuration);
+    const [jokers, setJokers] = useState(stored?.jokers ?? defaults.jokersEnabled);
+    const [blocksEnabled, setBlocksEnabled] = useState(stored?.blocksEnabled ?? defaults.blocksEnabled ?? true);
+    const [playSounds, setPlaySounds] = useState(stored?.playSounds ?? defaults.soundEnabled);
+    const [musicEnabled, setMusicEnabled] = useState(stored?.musicEnabled ?? defaults.musicEnabled);
+    const [streaksEnabled, setStreaksEnabled] = useState(stored?.streaksEnabled ?? defaults.streaksEnabled);
+    const [fastestFingerEnabled, setFastestFingerEnabled] = useState(stored?.fastestFingerEnabled ?? defaults.fastestFingerEnabled);
     const [selectedBgm] = useState(defaults.defaultBgmTrack);
     const [allQuestions, setAllQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
     const [error] = useState<string | null>(null);
     const [availableTopics] = useState<TopicOption[]>((roundsData as TopicOption[]).sort((a, b) => a.sortOrder - b.sortOrder));
-    const [selectedTopics, setSelectedTopics] = useState<string[]>(
-        (roundsData as TopicOption[]).map(topic => topic.id)
-    );
+    const [selectedTopics, setSelectedTopics] = useState<string[]>(() => {
+        if (stored?.selectedTopics) {
+            // Filter out any stored IDs that no longer exist as valid topics
+            const valid = stored.selectedTopics.filter((id: string) => allTopicIds.includes(id));
+            if (valid.length > 0) return valid;
+        }
+        return allTopicIds;
+    });
     const isConnected = useSocketConnection(socket);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({
+                rounds, questionsPerRound, timer, resultTimer,
+                jokers, blocksEnabled, playSounds, musicEnabled,
+                streaksEnabled, fastestFingerEnabled, selectedTopics,
+            }));
+        } catch {
+            // ignore storage errors
+        }
+    }, [rounds, questionsPerRound, timer, resultTimer, jokers, blocksEnabled, playSounds, musicEnabled, streaksEnabled, fastestFingerEnabled, selectedTopics]);
 
 
     useEffect(() => {
