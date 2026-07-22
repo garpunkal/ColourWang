@@ -3,7 +3,7 @@ class AudioManager {
     private bgmAudio: HTMLAudioElement | null = null;
     private isMutedSFX: boolean = false;
     private isMutedBGM: boolean = false;
-    private proceduralNodes: AudioBufferSourceNode[] = [];
+    private proceduralNodes: AudioScheduledSourceNode[] = [];
 
     constructor() {
         // Initialize AudioContext lazily to comply with browser autoplay policies
@@ -343,7 +343,7 @@ class AudioManager {
     }
 
     public stopProceduralBGM() {
-        this.proceduralNodes.forEach((node: AudioBufferSourceNode) => {
+        this.proceduralNodes.forEach((node: AudioScheduledSourceNode) => {
             // Suppress errors — node may already be stopped/disconnected
             // eslint-disable-next-line no-empty
             try { node.stop(); } catch { }
