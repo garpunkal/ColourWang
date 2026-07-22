@@ -60,13 +60,12 @@ if (corsOptions.origin === '*' && corsOptions.credentials) {
 
 app.use(cors(corsOptions));
 
-app.use(express.static(join(__dirname, '../public')));
+app.use(express.static(join(process.cwd(), 'public')));
 
-// Serve root landing page
+// Fallback route for root HTML
 app.get('/', (_req, res) => {
-    res.sendFile(join(__dirname, '../public/index.html'));
+    res.sendFile(join(process.cwd(), 'public/index.html'));
 });
-
 
 // Server status
 app.get('/api/status', (_req, res) => {
