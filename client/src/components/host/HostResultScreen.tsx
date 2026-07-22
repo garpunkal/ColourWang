@@ -90,7 +90,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 initial={{ scale: 1.2, opacity: 0 }}
                 animate={{ scale: 1, opacity: 0.88 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="absolute inset-0"
+                className="fixed inset-0 z-0"
                 style={{
                     background: 'radial-gradient(circle at 50% 22%, rgba(59,130,246,0.35) 0%, rgba(10,12,16,0.98) 58%)'
                 }}
@@ -99,7 +99,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 initial={{ scale: 0.2, opacity: 0.9 }}
                 animate={{ scale: 1.65, opacity: 0 }}
                 transition={{ duration: 1.1, ease: [0.2, 0.65, 0.2, 1] }}
-                className="pointer-events-none absolute left-1/2 top-[21%] h-72 w-72 -translate-x-1/2 rounded-full border border-blue-300/60"
+                className="pointer-events-none fixed left-1/2 top-[21%] h-72 w-72 -translate-x-1/2 rounded-full border border-blue-300/60 z-0"
             />
 
             <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center px-4 pb-28 pt-8 md:px-8 md:pt-10">

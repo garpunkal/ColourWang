@@ -85,7 +85,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 if (stealer && playerId !== myId) {
                     audioManager.playSteal();
                     setStealNotice({ name: stealer.name, value });
-                    setTimeout(() => setStealNotice(null), 3500);
+                    setTimeout(() => setStealNotice(null), 1500);
                 }
                 if (myId && playerId !== myId && disabledMap && disabledMap[myId]) {
                     const newDisabledIndexes = disabledMap[myId];

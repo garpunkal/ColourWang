@@ -168,11 +168,13 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                 damping: isWinner ? 17 : 21
                             }}
                             className={`relative overflow-hidden group glass rounded-3xl md:rounded-4xl p-3 md:p-6 flex items-center gap-3 md:gap-8 border-2 transition-colors ${isWinner
-                                ? 'bg-gradient-to-r from-white/10 to-transparent border-yellow-500/50'
+                                ? 'border-yellow-500/50'
                                 : 'border-white/5 hover:border-white/10'
                                 }`}
                             style={{
-                                boxShadow: isWinner ? `0 20px 60px -15px ${avatarColor}30` : 'none'
+                                boxShadow: isWinner
+                                    ? `0 20px 60px -15px ${avatarColor}55, 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 1px 0 rgba(255,255,255,0.1)`
+                                    : undefined
                             }}
                         >
                             {/* Rank Indicator */}
