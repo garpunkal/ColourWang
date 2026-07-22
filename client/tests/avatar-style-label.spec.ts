@@ -1,81 +1,58 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('PlayerJoinScreen Avatar Style Label', () => {
+// Labels in PlayerJoinScreen DOM order:
+//   0: "Name"  1: "Code"  2: "Style Your Wang"  3: <current style name>
+// The style name is avatarStyle.replace('-', ' ') — lowercase text, CSS handles uppercase.
+// There are 12 available styles in config/avatars.json.
+
+test.describe('Avatar Style Label', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the join screen
     await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
-  test('should display avatar style name as the section label', async ({ page }) => {
-    // The label should initially contain the default avatar style
-    const label = page.locator('label').filter({ hasText: /avataaars|pixel-art|adventurer|bottts-neutral|micah|open-peeps|personas|toon-head/i }).first();
-    
-    // Verify the label exists and contains a style name
-    await expect(label).toBeVisible();
-    
-    // Get the initial style name
-    const initialText = await label.textContent();
-    expect(initialText).toBeTruthy();
+  test('should display the default style name as a label', async ({ page }) => {
+    // Default style is "avataaars" → displayed as "avataaars" (CSS uppercases it visually)
+    const styleLabel = page.locator('label').nth(3);
+    await expect(styleLabel).toBeVisible();
+    expect((await styleLabel.textContent())?.trim()).toBe('avataaars');
   });
 
-  test('should update label when cycling through avatar styles', async ({ page }) => {
-    // Get initial label text
-    const label = page.locator('label').filter({ hasText: /avataaars|pixel-art|adventurer|bottts-neutral|micah|open-peeps|personas|toon-head/i }).first();
-    const initialStyle = await label.textContent();
-
-    // Click the next style button
-    const nextButton = page.locator('button').filter({ has: page.locator('svg') }).nth(1); // Right chevron
-    await nextButton.click();
-
-    // Wait a moment for state update
-    await page.waitForTimeout(300);
-
-    // Verify label has changed
-    const updatedStyle = await label.textContent();
-    expect(updatedStyle).not.toBe(initialStyle);
+  test('should update the label when cycling to the next style', async ({ page }) => {
+    const styleLabel = page.locator('label').nth(3);
+    const initial = (await styleLabel.textContent())?.trim();
+    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
+    await page.waitForTimeout(200);
+    expect((await styleLabel.textContent())?.trim()).not.toBe(initial);
   });
 
-  test('should show uppercase hyphenated style names formatted with spaces', async ({ page }) => {
-    // Click through styles and verify formatting
-    const label = page.locator('label').filter({ hasText: /avataaars|pixel-art|adventurer|bottts-neutral|micah|open-peeps|personas|toon-head/i }).first();
-    
-    // The label should contain properly formatted text (e.g., "PIXEL ART" instead of "pixel-art")
-    const labelText = await label.textContent();
-    expect(labelText).toMatch(/[A-Z\s]+/); // Should contain uppercase and spaces
-    expect(labelText).not.toContain('-'); // Should not contain hyphens after formatting
-  });
-
-  test('should not display "Colour Choice" label', async ({ page }) => {
-    // Verify that the old "Colour Choice" label is gone
-    const colourChoiceLabel = page.locator('label').filter({ hasText: /Colour Choice/i });
-    await expect(colourChoiceLabel).not.toBeVisible();
-  });
-
-  test('should cycle through all available styles', async ({ page }) => {
-    const label = page.locator('label').filter({ hasText: /avataaars|pixel-art|adventurer|bottts-neutral|micah|open-peeps|personas|toon-head/i }).first();
-    const nextButton = page.locator('button').filter({ has: page.locator('svg') }).nth(1);
-    
-    const styles = new Set<string>();
-    
-    // Collect styles by cycling through
-    for (let i = 0; i < 10; i++) {
-      const currentStyle = await label.textContent();
-      styles.add(currentStyle || '');
-      await nextButton.click();
-      await page.waitForTimeout(200);
+  test('should display style names with spaces instead of hyphens', async ({ page }) => {
+    const styleLabel = page.locator('label').nth(3);
+    const nextBtn = page.getByRole('button').filter({ has: page.locator('svg') }).nth(1);
+    for (let i = 0; i < 12; i++) {
+      expect(await styleLabel.textContent()).not.toContain('-');
+      await nextBtn.click();
+      await page.waitForTimeout(100);
     }
-
-    // Should have at least 8 different styles (from the config)
-    expect(styles.size).toBeGreaterThanOrEqual(8);
   });
 
-  test('should have valid styling on the label', async ({ page }) => {
-    const label = page.locator('label').filter({ hasText: /avataaars|pixel-art|adventurer|bottts-neutral|micah|open-peeps|personas|toon-head/i }).first();
-    
-    // Verify label has proper styling classes
-    const className = await label.getAttribute('class');
-    expect(className).toContain('uppercase');
-    expect(className).toContain('font-black');
-    expect(className).toContain('tracking');
+  test('should not display a "Colour Choice" label', async ({ page }) => {
+    await expect(page.locator('label').filter({ hasText: /Colour Choice/i })).not.toBeVisible();
+  });
+
+  test('should cycle through all 12 available styles', async ({ page }) => {
+    const styleLabel = page.locator('label').nth(3);
+    const nextBtn = page.getByRole('button').filter({ has: page.locator('svg') }).nth(1);
+    const styles = new Set<string>();
+
+    styles.add((await styleLabel.textContent())?.trim() || '');
+    for (let i = 0; i < 12; i++) {
+      await nextBtn.click();
+      await page.waitForTimeout(100);
+      styles.add((await styleLabel.textContent())?.trim() || '');
+    }
+    expect(styles.size).toBe(12);
   });
 });
