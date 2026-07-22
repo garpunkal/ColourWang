@@ -24,23 +24,44 @@ document.addEventListener('DOMContentLoaded', () => {
   let isFirstLoad = true;
 
   // 1. Fast Sparkline Charts
-  const MAX_DATA_POINTS = 40;
+  const MAX_DATA_POINTS = 30;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(0);
   const memoryData = Array(MAX_DATA_POINTS).fill(0);
 
+  // Auto-scaling the y-axis (beginAtZero with no fixed max) forces Chart.js
+  // to recompute the whole layout/grid on every single update, on top of
+  // animating — at a 500ms poll rate that's what causes the stutter. Fixing
+  // min/max up front removes that recompute entirely and also stops the
+  // "rubber-banding" that reads as jank.
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 350, easing: 'linear' },
+    animation: { duration: 300, easing: 'linear' },
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
-    scales: {
-      x: { display: false },
-      y: { display: false, beginAtZero: true }
-    },
     elements: {
       point: { radius: 0, hoverRadius: 4 },
       line: { tension: 0.2, borderWidth: 2 }
+    }
+  };
+
+  const cpuChartOptions = {
+    ...commonChartOptions,
+    scales: {
+      x: { display: false },
+      y: { display: false, min: 0, max: 100 }
+    }
+  };
+
+  // Memory has no natural fixed ceiling like CPU% does — start with a
+  // reasonable default and bump it once from real data (see below), rather
+  // than recalculating it on every frame.
+  let memoryChartMax = 512;
+  const memoryChartOptions = {
+    ...commonChartOptions,
+    scales: {
+      x: { display: false },
+      y: { display: false, min: 0, max: memoryChartMax }
     }
   };
 
@@ -59,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
           fill: true
         }]
       },
-      options: commonChartOptions
+      options: cpuChartOptions
     });
   }
 
@@ -78,11 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
           fill: true
         }]
       },
-      options: commonChartOptions
+      options: memoryChartOptions
     });
   }
 
-  function updateMetricsCharts(cpuPercent, memoryMb) {
+  let memoryScaleInitialized = false;
+
+  function updateMetricsCharts(cpuPercent, memoryMb, memoryTotalMb) {
     const timeLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
     if (isFirstLoad) {
@@ -101,6 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       memoryData.push(memoryMb);
       memoryData.shift();
+    }
+
+    // Set the memory chart's ceiling once from real data instead of
+    // recalculating it every frame — a little headroom above total so the
+    // line doesn't hug the top edge.
+    if (!memoryScaleInitialized && memoryTotalMb) {
+      memoryChartMax = Math.ceil(memoryTotalMb * 1.1);
+      if (memoryChart) memoryChart.options.scales.y.max = memoryChartMax;
+      memoryScaleInitialized = true;
     }
 
     if (cpuChart) cpuChart.update();
@@ -191,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (statCpu) statCpu.textContent = `${cpuUsage}%`;
       if (statUptime) statUptime.textContent = formatUptime(data.uptime || 0);
 
-      updateMetricsCharts(cpuUsage, usedMemory);
+      updateMetricsCharts(cpuUsage, usedMemory, data.memory?.total);
       fetchGamesList();
     } catch (err) {
       if (serverStatus) {
