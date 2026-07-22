@@ -35,6 +35,18 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     const isFinalRound = gameState.currentRoundIndex === gameState.rounds.length - 1;
     const isGameFinalQuestion = isFinalRound && isLastQuestionInRound;
 
+    const nextButtonLabel = isGameFinalQuestion
+        ? 'Show Results'
+        : isLastQuestionInRound
+            ? 'Next Round'
+            : 'Next Question';
+
+    const nextButtonSublabel = isGameFinalQuestion
+        ? 'Final standings'
+        : isLastQuestionInRound
+            ? `Round ${(gameState.currentRoundIndex ?? 0) + 2}`
+            : `Question ${currentQuestionIndex + 2} of ${totalQuestions}`;
+
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
@@ -239,9 +251,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                             <div className="relative z-10 flex items-center justify-between gap-5 md:gap-6">
                                 <div className="min-w-0 flex-1 flex flex-col items-start leading-none">
-                                    <span className="mb-0.5 text-[10px] font-black uppercase tracking-[0.3em] opacity-60">Coming up</span>
+                                    <span className="mb-0.5 text-[10px] font-black uppercase tracking-[0.3em] opacity-60">{nextButtonSublabel}</span>
                                     <span className="text-base font-black uppercase tracking-wide md:text-lg">
-                                        {isGameFinalQuestion ? 'The Results' : 'Next Round'}
+                                        {nextButtonLabel}
                                     </span>
                                 </div>
                                 <div className="shrink-0 flex items-center gap-3 md:gap-4 pl-3 md:pl-4 border-l border-white/20">
