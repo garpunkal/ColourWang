@@ -3,7 +3,6 @@ import { Server } from 'socket.io';
 import { games } from '../game/gamesMap';
 import { logger } from '../utils/logger';
 
-// Helper to reliably retrieve all active game entries
 function safeGetEntries(): [string, any][] {
   if (!games) return [];
   if (games instanceof Map) {
@@ -15,7 +14,6 @@ function safeGetEntries(): [string, any][] {
   return [];
 }
 
-// Helper to look up a game instance by code (case-insensitive)
 function safeGetGame(code: string): any | null {
   if (!games || !code) return null;
   const targetCode = String(code).trim().toUpperCase();
@@ -33,7 +31,6 @@ function safeGetGame(code: string): any | null {
   return null;
 }
 
-// Helper to remove a game from storage
 function safeDeleteGame(code: string): boolean {
   if (!games || !code) return false;
   const targetCode = String(code).trim().toUpperCase();
@@ -60,7 +57,7 @@ function safeDeleteGame(code: string): boolean {
 export function createAdminRouter(io?: Server) {
   const router = Router();
 
-  // GET /api/admin/games - List all active games with full settings
+  // GET /api/admin/games - Full rich game metrics
   router.get('/games', (_req: Request, res: Response) => {
     try {
       const entries = safeGetEntries();
@@ -79,6 +76,10 @@ export function createAdminRouter(io?: Server) {
         const categories = rawSettings.categories || game?.categories || [];
         const answerTime = rawSettings.answerTime ?? rawSettings.questionTime ?? game?.answerTime ?? 15;
         const totalRounds = rawSettings.totalRounds ?? rawSettings.rounds ?? game?.totalRounds ?? game?.maxRounds ?? 10;
+        const questionsPerRound = rawSettings.questionsPerRound ?? game?.questionsPerRound ?? 3;
+
+        const hostName = game?.hostName || game?.host?.name || 'Host';
+        const isHostConnected = game?.isHostConnected ?? game?.hostConnected ?? true;
 
         return {
           code,
@@ -86,10 +87,15 @@ export function createAdminRouter(io?: Server) {
           playerCount,
           currentRound: game?.currentRound ?? game?.round ?? 0,
           totalRounds,
+          currentQuestion: game?.currentQuestion ?? game?.questionIndex ?? 0,
+          questionsPerRound,
+          hostName,
+          isHostConnected,
           settings: {
             categories: Array.isArray(categories) ? categories : [String(categories)],
             answerTime,
-            totalRounds
+            totalRounds,
+            questionsPerRound
           }
         };
       });
@@ -101,7 +107,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/kill-all - Kill all active games
+  // POST /api/admin/games/kill-all
   router.post('/games/kill-all', (_req: Request, res: Response) => {
     try {
       logger.info('[ADMIN] Action: Kill All Games');
@@ -143,7 +149,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/:code/kill - Kill a single game
+  // POST /api/admin/games/:code/kill
   router.post('/games/:code/kill', (req: Request, res: Response) => {
     const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
     const code = String(rawCode || '').trim();
@@ -181,7 +187,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/:code/restart - Restart a single game
+  // POST /api/admin/games/:code/restart
   router.post('/games/:code/restart', (req: Request, res: Response) => {
     const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
     const code = String(rawCode || '').trim();
@@ -225,7 +231,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // Method Fallbacks for clear error reporting on non-POST requests
+  // Method Fallbacks
   router.all('/games/kill-all', (_req: Request, res: Response) => {
     res.status(405).json({ error: 'Method Not Allowed. Please use HTTP POST.' });
   });
