@@ -289,5 +289,102 @@
             "brown"
         ],
         "roundId": "animals"
+    },
+    {
+        "question": "What colour is a badger's distinctive face stripe pattern?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is the fur of Britain's native squirrel species, which is being outcompeted by an invasive American import?",
+        "answer": [
+            "red",
+            "orange",
+            "brown"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a magpie's plumage primarily?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour are a kingfisher's back feathers?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour are a hedgehog's spines?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a peacock's body plumage, aside from its tail?",
+        "answer": [
+            "blue",
+            "green"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour are the legs and feet of an Atlantic puffin?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a female mallard duck, in contrast to the male's iridescent head?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a giraffe's tongue?",
+        "answer": [
+            "black",
+            "purple"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour does a flamingo's plumage turn because of its diet?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour eyes does a Siberian husky commonly have?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is the underside of a barn owl's wings?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "animals"
+    },
+    {
+        "question": "What colour is a zebra's skin underneath its stripes?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "animals"
     }
 ]

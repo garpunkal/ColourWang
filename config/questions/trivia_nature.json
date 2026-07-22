@@ -84,13 +84,6 @@
         "roundId": "nature"
     },
     {
-        "question": "What colour is moss?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "nature"
-    },
-    {
         "question": "What colour are autumn leaves typically?",
         "answer": [
             "red",
@@ -119,14 +112,6 @@
         "roundId": "nature"
     },
     {
-        "question": "What colour are redwood tree trunks?",
-        "answer": [
-            "red",
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
         "question": "What colour is a dandelion flower?",
         "answer": [
             "yellow"
@@ -134,30 +119,9 @@
         "roundId": "nature"
     },
     {
-        "question": "What colour is snow?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "nature"
-    },
-    {
         "question": "What colour are clouds on a clear day?",
         "answer": [
             "white"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is mud?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "nature"
-    },
-    {
-        "question": "What colour is coal?",
-        "answer": [
-            "black"
         ],
         "roundId": "nature"
     },
@@ -197,6 +161,125 @@
         "answer": [
             "blue",
             "green"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is a poppy flower?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is volcanic ash?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are the berries on a hawthorn bush in autumn?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour does heather turn British moorland when it blooms?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is gorse when it flowers on British heathland?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is a robin's egg?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour does a starling murmuration appear against the evening sky?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are the stalks of British rhubarb?",
+        "answer": [
+            "red",
+            "green"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is a foxglove flower commonly found in British hedgerows?",
+        "answer": [
+            "pink",
+            "purple"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are the berries of the deadly nightshade plant?",
+        "answer": [
+            "black",
+            "purple"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is a dandelion's flower before it turns to seed?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are a bumblebee's stripes, aside from black?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is amber, the fossilised tree resin?",
+        "answer": [
+            "orange",
+            "yellow",
+            "brown"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is a British holly berry at Christmas?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour are stinging nettle flowers?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "nature"
+    },
+    {
+        "question": "What colour is the lichen commonly found growing on gravestones and roof tiles in the UK?",
+        "answer": [
+            "yellow",
+            "green",
+            "grey"
         ],
         "roundId": "nature"
     }

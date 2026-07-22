@@ -109,13 +109,6 @@
         "roundId": "household"
     },
     {
-        "question": "What colour are most bathroom tiles?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "household"
-    },
-    {
         "question": "What colour are most washing-up gloves?",
         "answer": [
             "yellow"
@@ -144,16 +137,102 @@
         "roundId": "household"
     },
     {
-        "question": "What colour is a standard toilet?",
+        "question": "What colour is a traditional London double-decker bus?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a fire extinguisher usually?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the identifying label band on a UK carbon dioxide (CO2) fire extinguisher?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the identifying label band on a UK foam fire extinguisher?",
         "answer": [
             "white"
         ],
         "roundId": "household"
     },
     {
-        "question": "What colour is a traditional London double-decker bus?",
+        "question": "What colour is the identifying label band on a UK dry powder fire extinguisher?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the identifying label band on a UK wet chemical fire extinguisher?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the fuse fitted inside a standard UK 13-amp plug?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the fuse fitted inside a UK 3-amp plug?",
         "answer": [
             "red"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour was the live wire in old UK household wiring, before the 2006 standard?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour was the neutral wire in old UK household wiring, before the 2006 standard?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is the earth wire in UK household electrical wiring?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour are domestic gas pipes typically painted in the UK?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour cross appears on a standard First Aid box in the UK?",
+        "answer": [
+            "green",
+            "white"
+        ],
+        "roundId": "household"
+    },
+    {
+        "question": "What colour is a general waste wheelie bin most commonly in the UK?",
+        "answer": [
+            "black"
         ],
         "roundId": "household"
     }

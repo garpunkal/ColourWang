@@ -82,13 +82,6 @@
         "roundId": "toys"
     },
     {
-        "question": "What colour are Monopoly money $100 bills?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "toys"
-    },
-    {
         "question": "What colour is Big Bird?",
         "answer": [
             "yellow"
@@ -167,6 +160,93 @@
         "question": "What colour are standard playing card suits (hearts/diamonds)?",
         "answer": [
             "red"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are Hot Wheels track pieces typically?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is a Jenga block?",
+        "answer": [
+            "brown",
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are standard dominoes?",
+        "answer": [
+            "white",
+            "black"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is a conker (horse chestnut) traditionally?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour was the classic 1970s Space Hopper?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are the most expensive property squares (Mayfair and Park Lane) on a UK Monopoly board?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour are Buzz Lightyear's wings in Toy Story?",
+        "answer": [
+            "green",
+            "purple"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is Mr Potato Head's body?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is the Geography wedge in Trivial Pursuit?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is the History wedge in Trivial Pursuit?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is Colonel Mustard associated with in the board game Cluedo?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "toys"
+    },
+    {
+        "question": "What colour is the fourth spot colour on a Twister mat, alongside red, yellow and blue?",
+        "answer": [
+            "green"
         ],
         "roundId": "toys"
     }

@@ -129,5 +129,102 @@
             "black"
         ],
         "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Eleven's dress in Stranger Things season 1?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour are the Squid Game guards' masks?",
+        "answer": [
+            "pink",
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Queen Charlotte's wig in Bridgerton?",
+        "answer": [
+            "white",
+            "grey"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Wednesday Addams' school blazer in the Netflix series?",
+        "answer": [
+            "blue",
+            "yellow",
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the Demogorgon in Stranger Things?",
+        "answer": [
+            "grey",
+            "brown"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the Stranger Things logo text?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Eleven's dress in the first season of Stranger Things?",
+        "answer": [
+            "yellow",
+            "pink"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour jumpsuits do the guards wear in Squid Game?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour tracksuits do the contestants wear in Squid Game?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Wednesday Addams' school uniform in the Netflix series Wednesday?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is Carmen Sandiego's hair in the Netflix animated series?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the background of Netflix's 'N' loading animation?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
+    },
+    {
+        "question": "What colour is the mask worn by the Front Man in Squid Game?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "netflix"
     }
 ]

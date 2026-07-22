@@ -150,5 +150,84 @@
             "green"
         ],
         "roundId": "science"
+    },
+    {
+        "question": "What colour is chlorine gas?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is a Bunsen burner flame when fully oxygenated?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does litmus paper turn when testing an alkaline (base)?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is oxygen-rich (arterial) blood?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is the most common human eye colour worldwide?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does copper turn as it oxidises over time, such as on old roofs and statues?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does litmus paper turn in an acidic solution?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does litmus paper turn in an alkaline solution?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour flame does sodium produce in a flame test?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour does a 'Blood Moon' total lunar eclipse typically appear?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "science"
+    },
+    {
+        "question": "What colour is liquid oxygen?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "science"
     }
 ]

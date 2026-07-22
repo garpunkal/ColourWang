@@ -35,13 +35,6 @@
         "roundId": "geography"
     },
     {
-        "question": "What colour are most highway signs in the US?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "geography"
-    },
-    {
         "question": "What colour are icebergs when underwater?",
         "answer": [
             "blue"
@@ -144,6 +137,97 @@
         "answer": [
             "blue",
             "green"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the rock at the Grand Canyon?",
+        "answer": [
+            "red",
+            "orange",
+            "brown"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is polar ice?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are the Cliffs of Moher in Ireland?",
+        "answer": [
+            "grey",
+            "brown"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is Big Ben's clock face?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the snow cap on Mount Fuji?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the livery of a classic AA (Automobile Association) patrol van?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are the salt deposits famously found along the Dead Sea's shoreline?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour does Uluru (Ayers Rock) famously turn at sunset?",
+        "answer": [
+            "red",
+            "orange"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the sand on Bermuda's famous beaches?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour is the sand of the Sahara Desert predominantly?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are the famous chalk cliffs on England's south coast at Dover?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "geography"
+    },
+    {
+        "question": "What colour are the rock layers of the Grand Canyon predominantly?",
+        "answer": [
+            "red",
+            "orange",
+            "brown"
         ],
         "roundId": "geography"
     }

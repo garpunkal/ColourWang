@@ -168,5 +168,94 @@
             "black"
         ],
         "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Subway logo?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Burger King logo?",
+        "answer": [
+            "red",
+            "yellow",
+            "blue"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Tesco logo?",
+        "answer": [
+            "blue",
+            "red"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Boots logo?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Sainsbury's logo?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Marks & Spencer logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Android robot logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the WhatsApp app icon?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the background of the Snapchat ghost icon?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Airbnb 'Belo' symbol?",
+        "answer": [
+            "red",
+            "pink"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the Reddit alien mascot?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "logos"
+    },
+    {
+        "question": "What colour is the TripAdvisor owl logo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "logos"
     }
 ]

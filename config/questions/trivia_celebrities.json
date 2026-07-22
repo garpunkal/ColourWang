@@ -155,5 +155,84 @@
             "white"
         ],
         "roundId": "celebrities"
+    },
+    {
+        "question": "What colour hair does Prince Harry have?",
+        "answer": [
+            "red",
+            "orange"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour was Amy Winehouse's signature beehive hair?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour was David Bowie's hair during his Ziggy Stardust era?",
+        "answer": [
+            "orange",
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Boris Johnson's hair?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Adele's signature eyeliner flick?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour was Marilyn Monroe's hair, in contrast to her natural brunette?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Prince Harry's hair?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour swim shorts does Daniel Craig's James Bond wear in his iconic beach emergence scene in Casino Royale?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour boxing gloves did Muhammad Ali typically wear?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour suit did Barack Obama controversially wear to a 2012 press conference?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "celebrities"
+    },
+    {
+        "question": "What colour is Rod Stewart's famously spiky hair?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "celebrities"
     }
 ]

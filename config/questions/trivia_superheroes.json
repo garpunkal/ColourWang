@@ -161,5 +161,83 @@
             "red"
         ],
         "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Batman's utility belt?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is the Bat-Signal light?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour are Superman's boots?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Storm's hair in X-Men?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Loki's costume primarily?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Wonder Woman's classic costume, aside from her top?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is the Flash's classic suit?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Cyclops' visor in X-Men?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Iron Man's arc reactor typically depicted as?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Thanos' skin?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "superheroes"
+    },
+    {
+        "question": "What colour is Loki's cape in the Marvel films?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "superheroes"
     }
 ]

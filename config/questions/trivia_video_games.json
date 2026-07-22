@@ -257,5 +257,84 @@
             "red"
         ],
         "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the Triforce in The Legend of Zelda?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Shadow the Hedgehog?",
+        "answer": [
+            "black",
+            "red"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Waluigi?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is a Pac-Man power pellet?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Tails' fur in Sonic the Hedgehog?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Yoshi in the classic Super Mario games?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour pipes does Mario typically enter in the Mushroom Kingdom?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is Master Chief's armour in Halo?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the first portal fired in Portal, as opposed to the second, orange one?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour ghost is Blinky, the leader of the ghosts in Pac-Man?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "video_games"
+    },
+    {
+        "question": "What colour is the warp pipe Luigi and Mario travel through in the Super Mario games?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "video_games"
     }
 ]

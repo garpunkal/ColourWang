@@ -194,5 +194,85 @@
             "yellow"
         ],
         "roundId": "music"
+    },
+    {
+        "question": "What colours feature in the Union Jack design on Noel Gallagher's iconic guitar?",
+        "answer": [
+            "red",
+            "white",
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour was Freddie Mercury's tank top at Live Aid in 1985?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is the classic BBC Radio 1 logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is the BRIT Award trophy?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is Glastonbury's iconic Pyramid Stage?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is a standard vinyl record most commonly pressed in?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour was Michael Jackson's iconic single glove during his Thriller era?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour was David Bowie's lightning bolt face paint during his Aladdin Sane era?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour is the Beats by Dre headphones logo?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour was Amy Winehouse's iconic eyeliner?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "music"
+    },
+    {
+        "question": "What colour was Jimi Hendrix's most iconic Fender Stratocaster?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "music"
     }
 ]

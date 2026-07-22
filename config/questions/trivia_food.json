@@ -210,20 +210,6 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is a ripe banana?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "food"
-    },
-    {
-        "question": "What colour is chocolate?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "food"
-    },
-    {
         "question": "What colour is ketchup?",
         "answer": [
             "red"
@@ -238,21 +224,6 @@
         "roundId": "food"
     },
     {
-        "question": "What colour are blueberries?",
-        "answer": [
-            "blue",
-            "purple"
-        ],
-        "roundId": "food"
-    },
-    {
-        "question": "What colour is a lemon?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "food"
-    },
-    {
         "question": "What colour is the flesh of an avocado?",
         "answer": [
             "green"
@@ -260,23 +231,118 @@
         "roundId": "food"
     },
     {
-        "question": "What colour is milk?",
+        "question": "What colour is the lid on a jar of Marmite?",
         "answer": [
-            "white"
+            "yellow"
         ],
         "roundId": "food"
     },
     {
-        "question": "What colour is a carrot?",
+        "question": "What colour is HP Sauce?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a tin of Colman's mustard powder?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour are Percy Pig sweets from M&S?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is clotted cream traditionally?",
+        "answer": [
+            "white",
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is Ribena traditionally?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour icing checkerboard pattern does a Battenberg cake have (besides yellow)?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is Irn-Bru, Scotland's famous soft drink?",
         "answer": [
             "orange"
         ],
         "roundId": "food"
     },
     {
-        "question": "What colour is a ripe strawberry?",
+        "question": "What colour is the wrapper of a Wagon Wheel biscuit?",
         "answer": [
             "red"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is the coating on a traditional Scotch egg?",
+        "answer": [
+            "brown",
+            "orange"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a Battenberg cake's chequered sponge (besides pink)?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a jar of Marmite's lid?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is clotted cream traditionally served with a Cornish cream tea?",
+        "answer": [
+            "white",
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is the sauce on baked beans in a British 'full English' breakfast?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is a traditional Cornish pasty's crust?",
+        "answer": [
+            "brown",
+            "yellow"
+        ],
+        "roundId": "food"
+    },
+    {
+        "question": "What colour is English mustard powder, such as Colman's, once mixed?",
+        "answer": [
+            "yellow"
         ],
         "roundId": "food"
     }

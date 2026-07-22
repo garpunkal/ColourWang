@@ -1,781 +1,5 @@
 [
     {
-        "question": "What colour is Superman's cape?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Batman's suit primarily?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Spider-Man's suit primarily?",
-        "answer": [
-            "red",
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Hulk?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Wonder Woman's outfit primarily?",
-        "answer": [
-            "red",
-            "blue",
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Mickey Mouse's shorts?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Donald Duck's sailor suit?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Minnie Mouse's dress?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Pluto (Mickey's dog)?",
-        "answer": [
-            "yellow",
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Goofy's hat?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colours are in the Netflix logo?",
-        "answer": [
-            "red",
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the HBO logo background?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Disney+ logo?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Shrek?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colours are Buzz Lightyear's suit?",
-        "answer": [
-            "white",
-            "green",
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Woody's vest in Toy Story?",
-        "answer": [
-            "yellow",
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Grinch?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Elsa's dress in Frozen?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Anna's hair in Frozen?",
-        "answer": [
-            "red",
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are Dorothy's slippers in The Wizard of Oz movie?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the famous bricks in the road leading to the Emerald City?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Wicked Witch of the West's skin?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Darth Vader's lightsaber?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Luke Skywalker's lightsaber originally?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Yoda in Star Wars?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is R2-D2 primarily?",
-        "answer": [
-            "blue",
-            "white"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is C-3PO?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour dress does Cinderella wear to the ball?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the dress of the princess who lived with seven dwarfs?",
-        "answer": [
-            "blue",
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Belle's ballroom dress in Beauty and the Beast?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Ariel's tail in The Little Mermaid?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Ariel's hair?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Jasmine's outfit in Aladdin?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Pocahontas' dress?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colours are Mulan's warrior outfit?",
-        "answer": [
-            "blue",
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Tiana's princess dress in Princess and the Frog?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Rapunzel's hair in Tangled?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Merida's hair in Brave?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Matrix code rain?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour pill does Neo take in The Matrix?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Terminator's eye?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour lightsaber does Mace Windu use?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Iron Man's suit primarily?",
-        "answer": [
-            "red",
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Captain America's shield?",
-        "answer": [
-            "red",
-            "white",
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Thor's cape?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour hair does the Avenger played by Scarlett Johansson have?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the Teenage Mutant Ninja Turtles?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour mask does Leonardo wear (TMNT)?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour mask does Raphael wear (TMNT)?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour mask does Donatello wear (TMNT)?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour mask does Michelangelo wear (TMNT)?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is E.T.'s skin?",
-        "answer": [
-            "brown",
-            "grey"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the alien blood in the Alien movies?",
-        "answer": [
-            "yellow",
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Incredible Hulk when angry?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Flash's suit?",
-        "answer": [
-            "red",
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the cosmic superhero whose power comes from a ring and a lantern?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Aquaman's suit primarily?",
-        "answer": [
-            "orange",
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour hair does Harley Quinn have?",
-        "answer": [
-            "pink",
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Joker's hair?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Joker's suit typically?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are Stormtrooper uniforms?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Darth Vader's suit?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are Imperial Guard robes in Star Wars?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Kermit the Frog?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Miss Piggy's hair?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Cookie Monster?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Big Bird?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Elmo?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Oscar the Grouch?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the Smurfs?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour hat does Papa Smurf wear?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Garfield the cat?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the animated feline featured in the Inspector Clouseau film series?",
-        "answer": [
-            "pink"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Scooby-Doo?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Mystery Machine van?",
-        "answer": [
-            "green",
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour shirt does Fred wear in Scooby-Doo?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour sweater does Velma wear?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour dress does Daphne wear?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour shirt does Shaggy wear?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the car in Herbie movies?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is KITT from Knight Rider?",
-        "answer": [
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the DeLorean in Back to the Future?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the Ghostbusters' uniforms?",
-        "answer": [
-            "grey",
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Slimer in Ghostbusters?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour pill represents staying in ignorance in The Matrix?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Violet's force field in The Incredibles?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Dash's suit in The Incredibles?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the Minions?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Gru's scarf in Despicable Me?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the dress in the movie Titanic's dinner scene?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the famous dress in Pretty Woman?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the shoes in The Wizard of Oz book originally?",
-        "answer": [
-            "grey"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is King Kong?",
-        "answer": [
-            "brown",
-            "black"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Godzilla typically?",
-        "answer": [
-            "green",
-            "grey"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the alien in Predator movies?",
-        "answer": [
-            "green",
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour blood does the Predator have?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are Na'vi in Avatar?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour lightsaber does Obi-Wan use?",
-        "answer": [
-            "blue"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour lightsaber does Qui-Gon Jinn use?",
-        "answer": [
-            "green"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Chewbacca?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Jabba the Hutt?",
-        "answer": [
-            "green",
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the Millennium Falcon?",
-        "answer": [
-            "grey",
-            "white"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is Willy Wonka's top hat?",
-        "answer": [
-            "purple"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the chocolate river in Willy Wonka?",
-        "answer": [
-            "brown"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour are the Oompa Loompas?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour is the main character's jacket in Marty McFly's outfit?",
-        "answer": [
-            "red"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
-        "question": "What colour vest does Marty McFly wear?",
-        "answer": [
-            "orange"
-        ],
-        "roundId": "movies_tv"
-    },
-    {
         "question": "What colour is a tennis ball?",
         "answer": [
             "yellow",
@@ -846,6 +70,213 @@
         "question": "What colour medal does an Olympic champion receive?",
         "answer": [
             "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a golf ball typically?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the cue ball in pool/billiards?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the 8-ball in pool?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a rugby ball typically?",
+        "answer": [
+            "white",
+            "brown"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is an ice hockey puck?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour card sends a footballer off the pitch?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour card is a caution in football?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour belt is the highest rank in most martial arts?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the flag waved to end a car race?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a volleyball typically?",
+        "answer": [
+            "white",
+            "yellow",
+            "blue"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a standard American football?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the mat in a judo competition?",
+        "answer": [
+            "blue",
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour vest does a boxing referee typically wear?",
+        "answer": [
+            "white",
+            "black"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour are most boxing gloves?",
+        "answer": [
+            "red",
+            "blue"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is an Olympic gold medal?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is an Olympic silver medal?",
+        "answer": [
+            "grey",
+            "white"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is an Olympic bronze medal?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the shirt of the fastest rider in the Tour de France's points classification?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour bib does a substitute goalkeeper often wear to stand out?",
+        "answer": [
+            "green",
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is a table tennis ball most commonly?",
+        "answer": [
+            "white",
+            "orange"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the ball used in day-night Test cricket matches?",
+        "answer": [
+            "pink"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour flag does a football assistant referee (linesman) carry?",
+        "answer": [
+            "yellow",
+            "orange"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour card signals a player's dismissal from the pitch in football?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour card signals a caution in football?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour belt denotes the highest rank in most martial arts, such as judo and karate?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the lowest-value ball on a snooker table, other than the reds?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour jersey is worn by the overall leader of the Tour de France?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "sports"
+    },
+    {
+        "question": "What colour is the bullseye at the centre of a dartboard?",
+        "answer": [
+            "red"
         ],
         "roundId": "sports"
     }

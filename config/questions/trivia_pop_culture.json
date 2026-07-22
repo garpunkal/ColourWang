@@ -203,5 +203,84 @@
             "red"
         ],
         "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is a UK £20 note?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is a UK £50 note?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is a UK £10 note?",
+        "answer": [
+            "brown",
+            "orange"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour ribbon is traditionally used for Remembrance Day poppies' centre?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the postbox used for international mail in the UK?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is a can of Fanta predominantly?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the 'like' thumbs-up icon on Facebook?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the classic thumbs-up emoji?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the universal recycling symbol usually printed in?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the background of a 'Keep Calm and Carry On' poster?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "pop_culture"
+    },
+    {
+        "question": "What colour is the peace symbol traditionally printed on?",
+        "answer": [
+            "white",
+            "black"
+        ],
+        "roundId": "pop_culture"
     }
 ]

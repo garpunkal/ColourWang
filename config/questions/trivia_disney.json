@@ -161,5 +161,82 @@
             "yellow"
         ],
         "roundId": "disney"
+    },
+    {
+        "question": "What colour is Mufasa's mane in The Lion King?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Aladdin's vest?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Tigger?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Scrooge McDuck's coat?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Baloo the bear in The Jungle Book?",
+        "answer": [
+            "brown"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Scar's mane in The Lion King, in contrast to Mufasa's?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Maleficent's skin in Sleeping Beauty?",
+        "answer": [
+            "green"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Ursula the sea witch in The Little Mermaid?",
+        "answer": [
+            "purple"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Elsa's ice dress in Frozen?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is the streak in Anna's hair after being struck by Elsa's magic in Frozen?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "disney"
+    },
+    {
+        "question": "What colour is Genie in Aladdin?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "disney"
     }
 ]

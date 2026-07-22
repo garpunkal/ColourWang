@@ -22,13 +22,6 @@
         "roundId": "general"
     },
     {
-        "question": "What colour are most taxis in New York?",
-        "answer": [
-            "yellow"
-        ],
-        "roundId": "general"
-    },
-    {
         "question": "What colour is the top stripe on a rainbow?",
         "answer": [
             "red"
@@ -182,13 +175,6 @@
         "roundId": "general"
     },
     {
-        "question": "What colour is the US President's official residence in Washington DC?",
-        "answer": [
-            "white"
-        ],
-        "roundId": "general"
-    },
-    {
         "question": "What colour is a shamrock?",
         "answer": [
             "green"
@@ -196,23 +182,114 @@
         "roundId": "general"
     },
     {
-        "question": "What colour is coal?",
+        "question": "What colour are most road markings?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the Central line on the London Underground map?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the Circle line on the London Underground map?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the Northern line on the London Underground map?",
         "answer": [
             "black"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour is fresh snow?",
+        "question": "What colour is the Bakerloo line on the London Underground map?",
         "answer": [
-            "white"
+            "brown"
         ],
         "roundId": "general"
     },
     {
-        "question": "What colour are most road markings?",
+        "question": "What colour is the Metropolitan line on the London Underground map?",
         "answer": [
-            "white"
+            "purple"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the door of 10 Downing Street?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is a Belisha beacon at a UK zebra crossing?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the cross on England's St George's flag?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the background of Scotland's Saltire flag?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour are the give-way markings on a British zebra crossing (besides white)?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the NHS logo used across the UK?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the ribbon of the Victoria Cross, Britain's highest military honour?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour were British post boxes painted to celebrate home nation gold medallists at the 2012 London Olympics?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour hi-vis vest do Network Rail workers commonly wear in the UK?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "general"
+    },
+    {
+        "question": "What colour is the congestion charge zone symbol on London's road signs?",
+        "answer": [
+            "red"
         ],
         "roundId": "general"
     }

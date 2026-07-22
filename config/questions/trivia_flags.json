@@ -185,5 +185,96 @@
             "white"
         ],
         "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of India?",
+        "answer": [
+            "orange",
+            "white",
+            "green"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of the Netherlands?",
+        "answer": [
+            "red",
+            "white",
+            "blue"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of Belgium?",
+        "answer": [
+            "black",
+            "yellow",
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of South Korea?",
+        "answer": [
+            "white",
+            "red",
+            "blue",
+            "black"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colours are in the flag of South Africa?",
+        "answer": [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "black",
+            "white"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the background field of Japan's flag?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the maple leaf on Canada's flag?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the star on Vietnam's flag?",
+        "answer": [
+            "yellow"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the background of Turkey's flag?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the crescent and star on Turkey's flag?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "flags"
+    },
+    {
+        "question": "What colour is the background of Israel's flag, aside from its blue stripes and star?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "flags"
     }
 ]

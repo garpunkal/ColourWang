@@ -160,5 +160,85 @@
             "orange"
         ],
         "roundId": "fashion"
+    },
+    {
+        "question": "What colour are classic Converse All-Star sneakers most commonly sold in?",
+        "answer": [
+            "black",
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a hi-vis safety vest?",
+        "answer": [
+            "orange",
+            "yellow"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a British police custodian helmet?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour gown does a barrister traditionally wear in a UK court?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a Yeoman Warder's (Beefeater's) uniform at the Tower of London?",
+        "answer": [
+            "red",
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is traditionally worn by a bride in a Western wedding?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is traditionally worn for mourning dress in Western culture?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is the inside of a matador's cape, used to provoke the bull?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour is a wedding dress traditionally in Chinese culture?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour hard hat is worn by a visitor on a UK construction site?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "fashion"
+    },
+    {
+        "question": "What colour hi-vis vest do UK traffic marshals commonly wear?",
+        "answer": [
+            "orange"
+        ],
+        "roundId": "fashion"
     }
 ]

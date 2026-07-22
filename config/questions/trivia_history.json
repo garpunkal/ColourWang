@@ -58,14 +58,6 @@
         "roundId": "history"
     },
     {
-        "question": "What colour did Union soldiers wear during the American Civil War?",
-        "answer": [
-            "blue",
-            "grey"
-        ],
-        "roundId": "history"
-    },
-    {
         "question": "What colour were medieval knights' armor?",
         "answer": [
             "grey"
@@ -135,6 +127,91 @@
     },
     {
         "question": "What colour was the flag of the Soviet Union?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour was Napoleon's iconic hat?",
+        "answer": [
+            "black"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour were Viking shields typically painted?",
+        "answer": [
+            "red",
+            "yellow"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour, alongside purple and green, was a key Suffragette colour?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour tunic do Chelsea Pensioners wear?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour was Winston Churchill's famous wartime siren suit?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour uniform has the Royal Navy worn since 1748, giving rise to the name of the shade itself?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour was the rose emblem of the House of Lancaster in the Wars of the Roses?",
+        "answer": [
+            "red"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour was the rose emblem of the House of York in the Wars of the Roses?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour is the west-facing side of the former Berlin Wall's bare concrete typically?",
+        "answer": [
+            "grey"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour smoke signals that a new Pope has been elected from the Sistine Chapel chimney?",
+        "answer": [
+            "white"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour is the ribbon of the Order of the Garter, Britain's highest order of chivalry?",
+        "answer": [
+            "blue"
+        ],
+        "roundId": "history"
+    },
+    {
+        "question": "What colour cross did the Knights Templar wear on their mantles?",
         "answer": [
             "red"
         ],
