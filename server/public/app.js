@@ -23,24 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let pendingAction = null;
   let isFirstLoad = true;
 
-  // 1. Fast Sparkline Charts
+  // 1. Zero-Jank Real-Time Sparkline Charts
   const MAX_DATA_POINTS = 30;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(0);
   const memoryData = Array(MAX_DATA_POINTS).fill(0);
 
-  // Auto-scaling the y-axis (beginAtZero with no fixed max) forces Chart.js
-  // to recompute the whole layout/grid on every single update, on top of
-  // animating — at a 500ms poll rate that's what causes the stutter. Fixing
-  // min/max up front removes that recompute entirely and also stops the
-  // "rubber-banding" that reads as jank.
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 300, easing: 'linear' },
-    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    animation: false, // Disables animation engine to eliminate 500ms polling stutter/rubber-banding
+    layout: { padding: 0 },
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false }
+    },
     elements: {
-      point: { radius: 0, hoverRadius: 4 },
+      point: { radius: 0 },
       line: { tension: 0.2, borderWidth: 2 }
     }
   };
@@ -48,20 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const cpuChartOptions = {
     ...commonChartOptions,
     scales: {
-      x: { display: false },
-      y: { display: false, min: 0, max: 100 }
+      x: { display: false, grid: { display: false } },
+      y: { display: false, grid: { display: false }, min: 0, max: 100 }
     }
   };
 
-  // Memory has no natural fixed ceiling like CPU% does — start with a
-  // reasonable default and bump it once from real data (see below), rather
-  // than recalculating it on every frame.
   let memoryChartMax = 512;
   const memoryChartOptions = {
     ...commonChartOptions,
     scales: {
-      x: { display: false },
-      y: { display: false, min: 0, max: memoryChartMax }
+      x: { display: false, grid: { display: false } },
+      y: { display: false, grid: { display: false }, min: 0, max: memoryChartMax }
     }
   };
 
@@ -126,17 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
       memoryData.shift();
     }
 
-    // Set the memory chart's ceiling once from real data instead of
-    // recalculating it every frame — a little headroom above total so the
-    // line doesn't hug the top edge.
     if (!memoryScaleInitialized && memoryTotalMb) {
       memoryChartMax = Math.ceil(memoryTotalMb * 1.1);
       if (memoryChart) memoryChart.options.scales.y.max = memoryChartMax;
       memoryScaleInitialized = true;
     }
 
-    if (cpuChart) cpuChart.update();
-    if (memoryChart) memoryChart.update();
+    if (cpuChart) cpuChart.update('none');
+    if (memoryChart) memoryChart.update('none');
   }
 
   // 2. Toast Notifications
@@ -262,10 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalRounds = game.settings?.totalRounds ?? game.totalRounds ?? 10;
         const currentQuestion = game.currentQuestion ?? 0;
         const questionsPerRound = game.settings?.questionsPerRound ?? game.questionsPerRound ?? 3;
-        // currentRound/currentQuestion are 0-based indexes from the server;
-        // display 1-based, clamped so a finished game doesn't show e.g. "4 / 3".
+        
         const displayRound = totalRounds > 0 ? Math.min(currentRound + 1, totalRounds) : currentRound + 1;
         const displayQuestion = questionsPerRound > 0 ? Math.min(currentQuestion + 1, questionsPerRound) : currentQuestion + 1;
+        
         const answerTime = game.settings?.answerTime ?? 15;
         const categories = game.settings?.categories || [];
         const hostName = game.hostName || 'Host';
@@ -370,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (statTotalPlayers) statTotalPlayers.textContent = totalPlayers.toString();
 
-      // Render vector icons for newly injected cards
       if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
       }
