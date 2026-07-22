@@ -1,392 +1,287 @@
-const BASE = window.location.origin;
-let refreshTimer = null;
-const seenLogIds = new Set();
+document.addEventListener('DOMContentLoaded', () => {
+  // Elements
+  const serverStatus = document.getElementById('server-status');
+  const statActiveGames = document.getElementById('stat-active-games');
+  const statTotalPlayers = document.getElementById('stat-total-players');
+  const statCpu = document.getElementById('stat-cpu');
+  const statMemory = document.getElementById('stat-memory');
+  const statUptime = document.getElementById('stat-uptime');
+  
+  const logTerminal = document.getElementById('log-terminal');
+  const btnClearLogs = document.getElementById('btn-clear-logs');
+  
+  const gamesGrid = document.getElementById('games-grid');
+  const emptyState = document.getElementById('empty-state');
+  const btnKillAll = document.getElementById('btn-kill-all');
+  const btnRefresh = document.getElementById('btn-refresh');
 
-// Initial Setup
-loadDashboard();
-startAutoRefresh();
+  const confirmModal = document.getElementById('confirm-modal');
+  const confirmTitle = document.getElementById('confirm-title');
+  const confirmBody = document.getElementById('confirm-body');
+  const confirmCancel = document.getElementById('confirm-cancel');
+  const confirmOk = document.getElementById('confirm-ok');
 
-// Global Control Listeners
-document.getElementById('btn-refresh').addEventListener('click', () => {
-    loadDashboard();
-    startAutoRefresh();
-});
+  let pendingAction = null;
 
-document.getElementById('btn-clear-logs').addEventListener('click', () => {
-    document.getElementById('log-terminal').innerHTML = '';
-    seenLogIds.clear();
-});
+  // 1. Toast Notifications
+  function showToast(message, isError = false) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `px-4 py-2.5 rounded-lg text-xs font-semibold text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 ${
+      isError ? 'bg-[#e05252]' : 'bg-[#3dba7e]'
+    }`;
+    toast.textContent = message;
+    container.appendChild(toast);
 
-document.getElementById('btn-kill-all').addEventListener('click', () => {
-    const count = parseInt(document.getElementById('stat-active-games').textContent) || 0;
-    if (count === 0) {
-        toast('No active games to kill', 'error');
-        return;
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-y-2', 'opacity-0');
+    });
+
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'translate-y-2');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // 2. Custom Confirmation Modal
+  function askConfirmation({ title, body, onConfirm }) {
+    confirmTitle.textContent = title;
+    confirmBody.textContent = body;
+    pendingAction = onConfirm;
+    confirmModal.classList.remove('hidden');
+    confirmModal.classList.add('flex');
+  }
+
+  confirmCancel.addEventListener('click', () => {
+    confirmModal.classList.add('hidden');
+    confirmModal.classList.remove('flex');
+    pendingAction = null;
+  });
+
+  confirmOk.addEventListener('click', async () => {
+    confirmModal.classList.add('hidden');
+    confirmModal.classList.remove('flex');
+    if (pendingAction) {
+      await pendingAction();
+      pendingAction = null;
     }
-    confirmAction(`Kill ALL ${count} game(s)?`, 'Every active game will be terminated immediately.', killAll);
-});
+  });
 
-// Auto-Refresh Logic
-function startAutoRefresh() {
-    clearInterval(refreshTimer);
-    let countdown = 5;
-    const refreshInfo = document.getElementById('refresh-info');
+  // 3. Format Uptime Helper
+  function formatUptime(seconds) {
+    const d = Math.floor(seconds / 86400);
+    const h = Math.floor((seconds % 86400) / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return `${d}d ${h}h ${m}m`;
+  }
 
-    refreshTimer = setInterval(() => {
-        countdown--;
-        if (countdown <= 0) {
-            countdown = 5;
-            loadDashboard();
-        }
-        refreshInfo.textContent = `Auto-refresh: ${countdown}s`;
-    }, 1000);
-}
-
-// Main Fetcher
-async function loadDashboard() {
-    const refreshInfo = document.getElementById('refresh-info');
-    refreshInfo.classList.add('text-[#7c5cfc]');
-    refreshInfo.textContent = 'Refreshing…';
-
+  // 4. Fetch Metrics & Active Games
+  async function fetchServerStatus() {
     try {
-        const [gamesRes, statsRes] = await Promise.allSettled([
-            fetch(`${BASE}/api/admin/games`),
-            fetch(`${BASE}/api/status`)
-        ]);
+      const res = await fetch('/api/status');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
 
-        if (gamesRes.status === 'fulfilled' && gamesRes.value.ok) {
-            const games = await gamesRes.value.json();
-            renderGames(games);
-            updateTotalStats(games);
-        }
+      serverStatus.innerHTML = '● Online';
+      serverStatus.className = 'font-semibold text-[#3dba7e]';
 
-        if (statsRes.status === 'fulfilled' && statsRes.value.ok) {
-            const stats = await statsRes.value.json();
-            renderServerStats(stats);
-        } else {
-            appendLog('INFO', 'Dashboard metrics synchronized.');
-        }
+      statActiveGames.textContent = data.games?.total || 0;
+      statMemory.textContent = `${data.memory?.used || 0} MB`;
+      statUptime.textContent = formatUptime(data.uptime || 0);
 
+      // Fetch detailed games list from admin endpoint
+      fetchGamesList();
     } catch (err) {
-        toast('Failed to update dashboard', 'error');
-        appendLog('ERROR', 'Failed to fetch server details.');
-    } finally {
-        refreshInfo.classList.remove('text-[#7c5cfc]');
+      serverStatus.innerHTML = '● Offline';
+      serverStatus.className = 'font-semibold text-[#e05252]';
     }
-}
+  }
 
-// Server Metrics & Logs Renderer
-function renderServerStats(stats) {
-    if (!stats) return;
+  async function fetchGamesList() {
+    try {
+      const res = await fetch('/api/admin/games');
+      if (!res.ok) return;
+      const games = await res.json();
 
-    if (stats.cpu) {
-        document.getElementById('stat-cpu').textContent = stats.cpu;
-    }
+      gamesGrid.innerHTML = '';
+      let totalPlayers = 0;
 
-    // 1. Memory Formatting (Handles Object vs String/Number)
-    if (stats.memory) {
-        const memEl = document.getElementById('stat-memory');
-        if (typeof stats.memory === 'object') {
-            const { used, total, unit = 'MB' } = stats.memory;
-            memEl.textContent = `${used} / ${total} ${unit}`;
-        } else {
-            memEl.textContent = stats.memory;
-        }
-    }
-
-    // 2. Uptime Formatting
-    if (stats.uptime != null) {
-        document.getElementById('stat-uptime').textContent = formatUptime(stats.uptime);
-    }
-
-    // 3. System Logs Processing
-    if (Array.isArray(stats.logs) && stats.logs.length > 0) {
-        stats.logs.forEach(log => {
-            const logId = typeof log === 'object'
-                ? (log.id || `${log.timestamp || ''}_${log.message}`)
-                : log;
-
-            if (!seenLogIds.has(logId)) {
-                seenLogIds.add(logId);
-                if (typeof log === 'object') {
-                    appendLog(log.level || 'INFO', log.message);
-                } else {
-                    appendLog('INFO', log);
-                }
-            }
-        });
-
-        // Clean up cache cap
-        if (seenLogIds.size > 500) {
-            const arr = Array.from(seenLogIds);
-            seenLogIds.clear();
-            arr.slice(-200).forEach(id => seenLogIds.add(id));
-        }
-    }
-}
-
-function updateTotalStats(games) {
-    document.getElementById('stat-active-games').textContent = games.length;
-    const totalPlayers = games.reduce((acc, g) => acc + (g.playerCount || 0), 0);
-    document.getElementById('stat-total-players').textContent = totalPlayers;
-}
-
-// Games Grid Renderer
-function renderGames(games) {
-    const grid = document.getElementById('games-grid');
-    const empty = document.getElementById('empty-state');
-    grid.innerHTML = '';
-
-    if (!games.length) {
-        empty.style.display = 'block';
+      if (!games || games.length === 0) {
+        emptyState.classList.remove('hidden');
+        statTotalPlayers.textContent = '0';
         return;
-    }
-    empty.style.display = 'none';
+      }
 
-    games.forEach(g => {
+      emptyState.classList.add('hidden');
+
+      games.forEach(game => {
+        totalPlayers += game.playerCount || 0;
+
         const card = document.createElement('div');
-        card.className = 'bg-[#1a1a24] border border-[#2e2e42] hover:border-[#7c5cfc] rounded-xl p-[18px] flex flex-col gap-[14px] transition-colors';
-
-        const sortedPlayers = [...(g.players || [])].sort((a, b) => b.score - a.score);
-        const playersHtml = sortedPlayers.length
-            ? sortedPlayers.map(p => `
-          <div class="flex items-center justify-between p-[5px_8px] rounded-md bg-white/[0.04] text-[0.82rem] gap-2">
-            <span class="w-[7px] h-[7px] rounded-full shrink-0 ${p.connected ? 'bg-[#3dba7e]' : 'bg-[#e05252]'}" title="${p.connected ? 'Connected' : 'Disconnected'}"></span>
-            <span class="flex-1 font-medium">${esc(p.name)}</span>
-            ${p.streak >= 3 ? `<span class="text-[0.7rem] text-[#e09a30]">🔥${p.streak}</span>` : ''}
-            <span class="font-bold text-[#7c5cfc] min-w-[34px] text-right">${p.score}pts</span>
-          </div>`).join('')
-            : '<p class="text-[#8888aa] text-[0.82rem] italic">No players yet</p>';
-
-        const statusClasses = {
-            LOBBY: 'bg-[#1e3b2e] text-[#3dba7e]',
-            QUESTION: 'bg-[#231a3f] text-[#7c5cfc]',
-            RESULT: 'bg-[#3b2e10] text-[#e09a30]',
-            COUNTDOWN: 'bg-[#3b2e10] text-[#e09a30]',
-            ROUND_INTRO: 'bg-[#1a2e3b] text-[#5cb8e4]',
-            FINAL_SCORE: 'bg-[#3b1a1a] text-[#e05252]'
-        };
-
+        card.className = 'bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-4 flex flex-col justify-between gap-4';
         card.innerHTML = `
-      <div class="flex items-center justify-between gap-2">
-        <span class="text-[1.4rem] font-extrabold tracking-[3px] text-[#7c5cfc]">${esc(g.code)}</span>
-        <span class="text-[0.7rem] font-bold px-[10px] py-[4px] rounded-[20px] uppercase tracking-[1px] ${statusClasses[g.status] || 'bg-[#2e2e42] text-[#8888aa]'}">${g.status.replace('_', ' ')}</span>
-      </div>
-      <div class="flex gap-3 flex-wrap">
-        <span class="text-[0.78rem] text-[#8888aa]">Players: <strong class="text-[#e8e8f0]">${g.playerCount}</strong></span>
-        <span class="text-[0.78rem] text-[#8888aa]">Round: <strong class="text-[#e8e8f0]">${g.currentRoundIndex + 1}/${g.totalRounds}</strong></span>
-        <span class="text-[0.78rem] text-[#8888aa]">Q: <strong class="text-[#e8e8f0]">${g.currentQuestionIndex + 1}/${g.questionsInRound}</strong></span>
-        ${g.roundTitle ? `<span class="text-[0.78rem] text-[#8888aa]">📦 <strong class="text-[#e8e8f0]">${esc(g.roundTitle)}</strong></span>` : ''}
-      </div>
-      <div>
-        <p class="text-[0.72rem] font-bold tracking-[1px] uppercase text-[#8888aa] mb-2">Settings</p>
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-[6px]">${renderSettings(g.settings)}</div>
-      </div>
-      <div>
-        <p class="text-[0.72rem] font-bold tracking-[1px] uppercase text-[#8888aa] mb-2">Players</p>
-        <div class="flex flex-col gap-1 max-h-[180px] overflow-y-auto">${playersHtml}</div>
-      </div>
-      <div class="flex gap-2 flex-wrap">
-        <button class="btn-reset flex-1 p-[8px_10px] text-[0.8rem] bg-[#e09a30] text-black hover:bg-[#f0b450] font-semibold rounded-lg transition-colors border-0 cursor-pointer" data-code="${esc(g.code)}">↺ Reset to Lobby</button>
-        <button class="btn-kill flex-1 p-[8px_10px] text-[0.8rem] bg-[#e05252] text-white hover:bg-[#f07070] font-semibold rounded-lg transition-colors border-0 cursor-pointer" data-code="${esc(g.code)}">✕ Kill Game</button>
-      </div>`;
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-mono text-[#8888aa]">CODE:</span>
+              <span class="font-outfit font-black text-lg text-white ml-1">${game.code}</span>
+            </div>
+            <span class="text-[0.7rem] px-2 py-0.5 rounded bg-[#2e2e42] text-[#8888aa] uppercase font-bold">${game.status}</span>
+          </div>
 
-        grid.appendChild(card);
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-[#0f0f13] p-2 rounded border border-[#2e2e42]">
+              <span class="text-[#8888aa] block text-[0.65rem] uppercase">Players</span>
+              <span class="font-bold text-white">${game.playerCount || 0}</span>
+            </div>
+            <div class="bg-[#0f0f13] p-2 rounded border border-[#2e2e42]">
+              <span class="text-[#8888aa] block text-[0.65rem] uppercase">Round</span>
+              <span class="font-bold text-white">${game.currentRound || 0} / ${game.totalRounds || 0}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 pt-2 border-t border-[#2e2e42]">
+            <button data-action="restart" data-code="${game.code}" class="flex-1 bg-[#2e2e42] hover:bg-[#3e3e56] text-white text-xs py-1.5 px-3 rounded font-medium transition-colors cursor-pointer">
+              ↺ Restart
+            </button>
+            <button data-action="kill" data-code="${game.code}" class="flex-1 bg-[#e05252]/20 hover:bg-[#e05252] text-[#e05252] hover:text-white text-xs py-1.5 px-3 rounded font-medium transition-colors cursor-pointer">
+              ✕ Kill
+            </button>
+          </div>
+        `;
+
+        gamesGrid.appendChild(card);
+      });
+
+      statTotalPlayers.textContent = totalPlayers.toString();
+    } catch (err) {
+      console.error('Failed to load games list:', err);
+    }
+  }
+
+  // 5. Game Control Actions (Kill / Restart)
+  gamesGrid.addEventListener('click', (e) => {
+    const button = e.target.closest('button[data-action]');
+    if (!button) return;
+
+    const action = button.getAttribute('data-action');
+    const gameCode = button.getAttribute('data-code');
+
+    if (action === 'kill') {
+      askConfirmation({
+        title: `Kill Game ${gameCode}?`,
+        body: 'This will terminate the room and disconnect all active players in this game.',
+        onConfirm: async () => {
+          try {
+            const res = await fetch(`/api/admin/games/${gameCode}/kill`, { method: 'POST' });
+            if (res.ok) {
+              showToast(`Game ${gameCode} killed`);
+              fetchServerStatus();
+            } else {
+              showToast(`Failed to kill game ${gameCode}`, true);
+            }
+          } catch (err) {
+            showToast('Network error while killing game', true);
+          }
+        }
+      });
+    } else if (action === 'restart') {
+      askConfirmation({
+        title: `Restart Game ${gameCode}?`,
+        body: 'This will reset the room score and return players to the lobby.',
+        onConfirm: async () => {
+          try {
+            const res = await fetch(`/api/admin/games/${gameCode}/restart`, { method: 'POST' });
+            if (res.ok) {
+              showToast(`Game ${gameCode} restarted`);
+              fetchServerStatus();
+            } else {
+              showToast(`Failed to restart game ${gameCode}`, true);
+            }
+          } catch (err) {
+            showToast('Network error while restarting game', true);
+          }
+        }
+      });
+    }
+  });
+
+  // Kill All Games Button
+  btnKillAll.addEventListener('click', () => {
+    askConfirmation({
+      title: 'Kill ALL Active Games?',
+      body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
+      onConfirm: async () => {
+        try {
+          const res = await fetch('/api/admin/games/kill-all', { method: 'POST' });
+          if (res.ok) {
+            showToast('All games killed');
+            fetchServerStatus();
+          } else {
+            showToast('Failed to kill all games', true);
+          }
+        } catch (err) {
+          showToast('Network error execution failed', true);
+        }
+      }
     });
+  });
 
-    // Re-bind Action Listeners
-    document.querySelectorAll('.btn-kill').forEach(btn => {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            const code = btn.getAttribute('data-code');
-            confirmAction(
-                `Kill game ${code}?`,
-                'All players will be disconnected and the game will be removed.',
-                () => killGame(code)
-            );
-        };
-    });
+  btnRefresh.addEventListener('click', () => {
+    fetchServerStatus();
+    showToast('Dashboard refreshed');
+  });
 
-    document.querySelectorAll('.btn-reset').forEach(btn => {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            const code = btn.getAttribute('data-code');
-            confirmAction(
-                `Reset game ${code}?`,
-                'The game will be sent back to the lobby and all scores will be cleared.',
-                () => resetGame(code)
-            );
-        };
-    });
-}
+  // 6. Real-time Live Log Streaming via SSE
+  function initLogStream() {
+    const eventSource = new EventSource('/api/logs/stream');
 
-function renderSettings(s) {
-    if (!s) return '';
-    const bool = (label, val, icon) => {
-        const on = val !== false;
-        return `<div class="flex flex-col items-center justify-center gap-[3px] p-[7px_8px] rounded-lg bg-white/[0.04] border ${on ? 'border-[#2a3d2a]' : 'border-[#3d2a2a]'} text-center">
-      <span class="text-[#8888aa] text-[0.62rem] uppercase tracking-[0.5px]">${label}</span>
-      <span class="font-bold text-[0.78rem] ${on ? 'text-[#3dba7e]' : 'text-[#e05252]'}">${icon} ${on ? 'On' : 'Off'}</span>
-    </div>`;
+    eventSource.onopen = () => {
+      appendLog('[SYSTEM] Connected to server log stream', 'info');
     };
-    const dur = (label, v) => `<div class="flex flex-col items-center justify-center gap-[3px] p-[7px_8px] rounded-lg bg-white/[0.04] border border-[#2e2e42] text-center">
-      <span class="text-[#8888aa] text-[0.62rem] uppercase tracking-[0.5px]">${label}</span>
-      <span class="font-bold text-[#e8e8f0] text-[0.78rem]">${v != null ? v + 's' : '—'}</span>
-    </div>`;
-    return [
-        dur('Timer', s.timerDuration),
-        dur('Result', s.resultDuration),
-        dur('Lobby', s.lobbyDuration),
-        bool('Jokers', s.jokersEnabled, '🃏'),
-        bool('Blocks', s.blocksEnabled, '🛡'),
-        bool('Streaks', s.streaksEnabled, '🔥'),
-        bool('Fastest', s.fastestFingerEnabled, '⚡'),
-        bool('Sound', s.soundEnabled, '🔊'),
-        bool('Music', s.musicEnabled, '🎵'),
-    ].join('');
-}
 
-// Log Terminal Handler
-function appendLog(level, message) {
-    const terminal = document.getElementById('log-terminal');
-    if (!terminal) return;
+    eventSource.onmessage = (event) => {
+      try {
+        const entry = JSON.parse(event.data);
+        const msg = typeof entry === 'string' ? entry : `[${entry.level || 'LOG'}] ${entry.message || JSON.stringify(entry)}`;
+        appendLog(msg, entry.level);
+      } catch (err) {
+        appendLog(event.data);
+      }
+    };
 
+    eventSource.onerror = () => {
+      appendLog('[SYSTEM] Log stream disconnected. Reconnecting...', 'error');
+      eventSource.close();
+      setTimeout(initLogStream, 3000); // Auto reconnect
+    };
+  }
+
+  function appendLog(message, level = 'info') {
     const logLine = document.createElement('div');
-    const time = new Date().toLocaleTimeString();
-
-    const colorMap = {
-        INFO: 'text-[#5cb8e4]',
-        WARN: 'text-[#e09a30]',
-        ERROR: 'text-[#e05252]'
-    };
-
-    logLine.innerHTML = `<span class="text-[#8888aa]">[${time}]</span> <span class="${colorMap[level] || 'text-[#e8e8f0]'} font-bold">[${level}]</span> ${esc(message)}`;
-    terminal.appendChild(logLine);
-    terminal.scrollTop = terminal.scrollHeight;
-}
-
-// Admin API Actions
-async function killGame(code) {
-    try {
-        const res = await fetch(`${BASE}/api/games/${code}/kill`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const data = await res.json();
-        if (res.ok) {
-            toast(`Game ${code} killed`, 'success');
-            appendLog('WARN', `Game ${code} was killed by administrator.`);
-            loadDashboard();
-        } else {
-            toast(data.error || 'Failed to kill game', 'error');
-        }
-    } catch {
-        toast('Request failed', 'error');
+    
+    let colorClass = 'text-[#8888aa]';
+    if (level === 'error' || message.includes('error') || message.includes('ERR')) {
+      colorClass = 'text-[#e05252]';
+    } else if (level === 'warn' || message.includes('warn')) {
+      colorClass = 'text-[#e09a30]';
+    } else if (message.includes('[SYSTEM]')) {
+      colorClass = 'text-[#7c5cfc]';
     }
-}
 
-async function resetGame(code) {
-    try {
-        const res = await fetch(`${BASE}/api/games/${code}/reset`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const data = await res.json();
-        if (res.ok) {
-            toast(`Game ${code} reset to lobby`, 'success');
-            appendLog('INFO', `Game ${code} was reset to lobby.`);
-            loadDashboard();
-        } else {
-            toast(data.error || 'Failed to reset game', 'error');
-        }
-    } catch {
-        toast('Request failed', 'error');
-    }
-}
+    logLine.className = colorClass;
+    logLine.textContent = message;
+    logTerminal.appendChild(logLine);
 
-async function killAll() {
-    try {
-        const res = await fetch(`${BASE}/api/games/kill-all`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const data = await res.json();
-        if (res.ok) {
-            toast(`Killed ${data.killed ? data.killed.length : 'all'} game(s)`, 'success');
-            appendLog('WARN', `ALL games were terminated by administrator.`);
-            loadDashboard();
-        } else {
-            toast(data.error || 'Failed to kill all games', 'error');
-        }
-    } catch {
-        toast('Request failed', 'error');
-    }
-}
+    // Auto-scroll to bottom
+    logTerminal.scrollTop = logTerminal.scrollHeight;
+  }
 
-// Modal & Toast Utilities
-let confirmCallback = null;
+  btnClearLogs.addEventListener('click', () => {
+    logTerminal.innerHTML = '<div class="text-[#7c5cfc]">[SYSTEM] Logs cleared.</div>';
+  });
 
-function confirmAction(title, body, callback) {
-    document.getElementById('confirm-title').textContent = title;
-    document.getElementById('confirm-body').textContent = body;
-    confirmCallback = callback;
-    const modal = document.getElementById('confirm-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function closeModal() {
-    const modal = document.getElementById('confirm-modal');
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
-    confirmCallback = null;
-}
-
-document.getElementById('confirm-cancel').addEventListener('click', closeModal);
-document.getElementById('confirm-ok').addEventListener('click', () => {
-    closeModal();
-    if (confirmCallback) {
-        confirmCallback();
-        confirmCallback = null;
-    }
+  // Initial Load & Poll Timer
+  fetchServerStatus();
+  initLogStream();
+  setInterval(fetchServerStatus, 5000);
 });
-
-document.getElementById('confirm-modal').addEventListener('click', e => {
-    if (e.target === document.getElementById('confirm-modal')) {
-        closeModal();
-    }
-});
-
-function toast(msg, type = 'success') {
-    const el = document.createElement('div');
-    const typeClasses = type === 'success' ? 'border-[#3dba7e] text-[#3dba7e]' : 'border-[#e05252] text-[#e05252]';
-    el.className = `bg-[#1a1a24] border rounded-xl p-[12px_18px] text-[0.85rem] max-w-[320px] animate-slide-in ${typeClasses}`;
-    el.textContent = msg;
-    document.getElementById('toast-container').appendChild(el);
-    setTimeout(() => el.remove(), 3500);
-}
-
-function formatUptime(seconds) {
-    if (seconds == null || isNaN(seconds)) return '0s';
-    if (typeof seconds === 'string' && isNaN(Number(seconds))) return seconds;
-
-    let totalSeconds = Math.floor(Number(seconds));
-    const days = Math.floor(totalSeconds / 86400);
-    totalSeconds %= 86400;
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const minutes = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-
-    const parts = [];
-    if (days > 0) parts.push(`${days}d`);
-    if (hours > 0 || days > 0) parts.push(`${hours}h`);
-    if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
-    parts.push(`${secs}s`);
-
-    return parts.join(' ');
-}
-
-function esc(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}

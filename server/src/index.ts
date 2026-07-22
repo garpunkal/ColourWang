@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { logger } from './utils/logger';
 import { createServer as createHttpsServer } from 'https';
@@ -12,12 +11,16 @@ import { registerSocketHandlers } from './socket/handlers';
 import { createAdminRouter } from './routes/admin';
 import { logBus, getLogHistory } from './utils/logger';
 import { games } from './game/gamesMap';
+
 const serverConfig: typeof import('../../config/server.json') = require('../../config/server.json');
 const environmentConfig: typeof import('../../config/environment.json') = require('../../config/environment.json');
 
 logger.info('Starting ColourWang server...');
 
 const app = express();
+
+// Enable JSON body parsing for admin REST calls
+app.use(express.json());
 
 const corsOptions: CorsOptions = {
     ...serverConfig.server.cors
@@ -35,7 +38,6 @@ if (process.env.FRONTEND_ORIGIN) {
     if (origins.length > 0) {
         const allowedOrigins = new Set(origins);
         corsOptions.origin = (requestOrigin, callback) => {
-            // Allow requests with no origin (server-to-server, health checks, curl).
             if (!requestOrigin) {
                 callback(null, true);
                 return;
@@ -90,12 +92,19 @@ app.get('/api/status', (_req, res) => {
     });
 });
 
-// Live log stream via Server-Sent Events
+// Live log stream via Server-Sent Events (SSE)
 app.get('/api/logs/stream', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
-    res.flushHeaders();
+    
+    // ⚡ FIX FOR RENDER.COM / REVERSE PROXIES:
+    // Prevents Render's Nginx proxy layer from buffering log chunks
+    res.setHeader('X-Accel-Buffering', 'no');
+
+    if (res.flushHeaders) {
+        res.flushHeaders();
+    }
 
     // Send buffered history first
     getLogHistory().forEach(entry => {
@@ -104,6 +113,7 @@ app.get('/api/logs/stream', (req, res) => {
 
     const onEntry = (entry: any) => res.write(`data: ${JSON.stringify(entry)}\n\n`);
     logBus.on('entry', onEntry);
+
     req.on('close', () => logBus.off('entry', onEntry));
 });
 
@@ -147,7 +157,6 @@ let server;
 let protocol = 'http';
 
 if (existsSync(keyPath) && existsSync(certFilePath)) {
-    // Use HTTPS if certificates exist
     const httpsOptions = {
         key: readFileSync(keyPath),
         cert: readFileSync(certFilePath)
@@ -156,10 +165,9 @@ if (existsSync(keyPath) && existsSync(certFilePath)) {
     protocol = 'https';
     logger.info('✓ SSL certificates found, using HTTPS');
 } else {
-    // Fallback to HTTP if certificates don't exist yet
     server = createHttpServer(app);
+    protocol = 'http';
     logger.warn('⚠ SSL certificates not found, using HTTP');
-    logger.warn('  Run the client first to generate certificates, then restart the server');
 }
 
 const io = new Server(server, {
