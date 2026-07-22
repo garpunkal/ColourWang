@@ -1,33 +1,17 @@
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, LogOut } from 'lucide-react';
-import { useSettings } from '../../contexts/SettingsContext';
+import { LogOut } from 'lucide-react';
 
 interface Props {
     onLeave?: () => void;
 }
 
 export function PlayerFooter({ onLeave }: Props) {
-    const { colourblindMode: colorblindMode, setColourblindMode: setColorblindMode } = useSettings();
-
     return (
         <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="mt-auto pt-4 md:pt-12 pb-2 md:pb-6 flex items-center justify-center gap-6 z-50 pointer-events-auto"
         >
-            <button
-                onClick={() => setColorblindMode(!colorblindMode)}
-                className={`
-                    w-10 h-10 flex items-center justify-center rounded-full transition-all border
-                    ${colorblindMode
-                        ? 'bg-white/80 text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.2)]'
-                        : 'bg-white/5 text-white/10 border-white/5 hover:text-white/40 hover:bg-white/10 hover:border-white/10'}
-                `}
-                title={colorblindMode ? "Disable Colourblind Mode" : "Enable Colourblind Mode"}
-            >
-                {colorblindMode ? <Eye size={18} strokeWidth={2} /> : <EyeOff size={18} strokeWidth={2} />}
-            </button>
-
             {onLeave && (
                 <button
                     onClick={onLeave}

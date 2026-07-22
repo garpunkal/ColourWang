@@ -197,12 +197,16 @@
         "available": [
             "adventurer",
             "avataaars",
+            "avataaars-neutral",
             "bottts-neutral",
             "micah",
             "open-peeps",
             "personas",
             "pixel-art",
-            "toon-head"
+            "toon-head",
+            "glyphs",
+            "croodles",
+            "fun-emoji"            
         ],
         "default": "avataaars"
     }

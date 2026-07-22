@@ -1,18 +1,13 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 
-interface SettingsContextType {
-    colourblindMode: boolean;
-    setColourblindMode: (enabled: boolean) => void;
-}
+type SettingsContextType = Record<string, never>;
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-    const [colourblindMode, setColourblindMode] = useState(false);
-
     return (
-        <SettingsContext.Provider value={{ colourblindMode, setColourblindMode }}>
+        <SettingsContext.Provider value={{}}>
             {children}
         </SettingsContext.Provider>
     );
