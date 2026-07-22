@@ -26,6 +26,7 @@ RUN npm ci --omit=dev --prefix server
 
 # Runtime artifacts and shared config/assets used by the server.
 COPY --from=builder /app/server/dist ./server/dist
+COPY server/public ./server/public
 COPY config ./config
 COPY client/public/bgm ./client/public/bgm
 

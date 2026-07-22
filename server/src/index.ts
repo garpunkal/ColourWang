@@ -9,6 +9,9 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import type { CorsOptions } from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
+import { createAdminRouter } from './routes/admin';
+import { logBus, getLogHistory } from './utils/logger';
+import { games } from './game/gamesMap';
 const serverConfig: typeof import('../../config/server.json') = require('../../config/server.json');
 const environmentConfig: typeof import('../../config/environment.json') = require('../../config/environment.json');
 
@@ -56,6 +59,56 @@ if (corsOptions.origin === '*' && corsOptions.credentials) {
 }
 
 app.use(cors(corsOptions));
+
+// Serve root status page
+app.get('/', (_req, res) => {
+    res.sendFile(join(__dirname, '../public/index.html'));
+});
+
+// Serve admin dashboard
+app.get('/admin', (_req, res) => {
+    res.sendFile(join(__dirname, '../public/admin.html'));
+});
+
+// Server status
+app.get('/api/status', (_req, res) => {
+    res.json({
+        status: 'ok',
+        uptime: process.uptime(),
+        memory: {
+            used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+            total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+            unit: 'MB'
+        },
+        games: {
+            total: games.size,
+            byStatus: Object.fromEntries(
+                ['LOBBY', 'COUNTDOWN', 'ROUND_INTRO', 'QUESTION', 'RESULT', 'FINAL_SCORE'].map(s => [
+                    s, [...games.values()].filter(g => g.status === s).length
+                ])
+            )
+        },
+        version: process.env.npm_package_version || '1.0.0',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Live log stream via Server-Sent Events
+app.get('/api/logs/stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    // Send buffered history first
+    getLogHistory().forEach(entry => {
+        res.write(`data: ${JSON.stringify(entry)}\n\n`);
+    });
+
+    const onEntry = (entry: any) => res.write(`data: ${JSON.stringify(entry)}\n\n`);
+    logBus.on('entry', onEntry);
+    req.on('close', () => logBus.off('entry', onEntry));
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -119,7 +172,11 @@ const io = new Server(server, {
 logger.info('Registering socket handlers...');
 registerSocketHandlers(io);
 
+// Mount admin REST routes (needs io reference)
+app.use('/api/admin', createAdminRouter(io));
+
 const PORT = process.env.PORT || serverConfig.server.port;
 server.listen(PORT, () => {
     logger.info(`Server running on ${protocol}://localhost:${PORT}`);
+    logger.info(`Admin dashboard: ${protocol}://localhost:${PORT}/admin`);
 });
