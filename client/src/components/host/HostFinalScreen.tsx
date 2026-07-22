@@ -27,6 +27,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     const [showSupernova, setShowSupernova] = useState(false);
     const [showImpactFlash, setShowImpactFlash] = useState(true);
     const [revealedCount, setRevealedCount] = useState(0);
+    const [revealCountdown, setRevealCountdown] = useState<number | null>(3);
 
     const sortedPlayers = useMemo(() => {
         return [...players].sort((a, b) => b.score - a.score).slice(0, 5);
@@ -48,10 +49,15 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     useEffect(() => {
         const flashTimer = setTimeout(() => setShowImpactFlash(false), 650);
 
+        // Countdown 3 → 2 → 1 → null before first reveal
+        const cd2 = setTimeout(() => setRevealCountdown(2), 600);
+        const cd1 = setTimeout(() => setRevealCountdown(1), 1200);
+        const cdDone = setTimeout(() => setRevealCountdown(null), 1800);
+
         // Reveal players one at a time, last place first, winner last.
         const timers: ReturnType<typeof setTimeout>[] = [];
         const n = sortedPlayers.length;
-        let cumulative = 1200; // initial pause before first reveal
+        let cumulative = 1800; // starts after countdown finishes
 
         for (let step = 1; step <= n; step++) {
             const isWinner = step === n;
@@ -65,6 +71,9 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
 
         return () => {
             clearTimeout(flashTimer);
+            clearTimeout(cd2);
+            clearTimeout(cd1);
+            clearTimeout(cdDone);
             timers.forEach(clearTimeout);
         };
     }, [sortedPlayers.length]);
@@ -173,6 +182,25 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                     </motion.p>
                 </motion.div>
             </div>
+
+            {/* Pre-reveal countdown */}
+            <AnimatePresence>
+                {revealCountdown !== null && (
+                    <motion.div
+                        key={revealCountdown}
+                        initial={{ opacity: 0, scale: 1.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.6 }}
+                        transition={{ duration: 0.25 }}
+                        className="fixed inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none"
+                    >
+                        <p className="text-xs font-black uppercase tracking-[0.4em] text-white/40 mb-2">Revealing in</p>
+                        <span className="text-[12rem] font-black font-mono leading-none text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]">
+                            {revealCountdown}
+                        </span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Players List */}
             <div className="flex flex-col gap-3 md:gap-4 mb-16">
