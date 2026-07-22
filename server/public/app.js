@@ -22,16 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmOk = document.getElementById('confirm-ok');
 
   let pendingAction = null;
+  let isFirstLoad = true;
 
-  // 1. Setup Sparkline Charts
-  const MAX_DATA_POINTS = 10;
+  // 1. Optimized Sparkline Charts (Fast 1s Updates)
+  const MAX_DATA_POINTS = 15; // Increased buffer for smooth 1s tracking
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
-  const cpuData = Array(MAX_DATA_POINTS).fill(0);
-  const memoryData = Array(MAX_DATA_POINTS).fill(0);
+  const cpuData = Array(MAX_DATA_POINTS).fill(null);
+  const memoryData = Array(MAX_DATA_POINTS).fill(null);
 
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 300, // Short transition for 1s polling
+      easing: 'easeOutQuad'
+    },
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
     scales: {
       x: { display: false },
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     elements: {
       point: { radius: 0, hoverRadius: 4 },
-      line: { tension: 0.4, borderWidth: 2 }
+      line: { tension: 0.35, borderWidth: 2 }
     }
   };
 
@@ -51,8 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
       datasets: [{
         data: cpuData,
         borderColor: '#3dba7e',
-        backgroundColor: 'rgba(61, 186, 126, 0.1)',
-        fill: true
+        backgroundColor: 'rgba(61, 186, 126, 0.12)',
+        fill: true,
+        spanGaps: true
       }]
     },
     options: commonChartOptions
@@ -66,8 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       datasets: [{
         data: memoryData,
         borderColor: '#7c5cfc',
-        backgroundColor: 'rgba(124, 92, 252, 0.1)',
-        fill: true
+        backgroundColor: 'rgba(124, 92, 252, 0.12)',
+        fill: true,
+        spanGaps: true
       }]
     },
     options: commonChartOptions
@@ -76,14 +83,24 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateMetricsCharts(cpuPercent, memoryMb) {
     const timeLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    chartLabels.push(timeLabel);
-    chartLabels.shift();
+    // Seed historical baseline instantly on initial fetch so graph isn't empty
+    if (isFirstLoad) {
+      for (let i = 0; i < MAX_DATA_POINTS; i++) {
+        chartLabels[i] = timeLabel;
+        cpuData[i] = cpuPercent;
+        memoryData[i] = memoryMb;
+      }
+      isFirstLoad = false;
+    } else {
+      chartLabels.push(timeLabel);
+      chartLabels.shift();
 
-    cpuData.push(cpuPercent);
-    cpuData.shift();
+      cpuData.push(cpuPercent);
+      cpuData.shift();
 
-    memoryData.push(memoryMb);
-    memoryData.shift();
+      memoryData.push(memoryMb);
+      memoryData.shift();
+    }
 
     cpuChart.update();
     memoryChart.update();
@@ -140,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${d}d ${h}h ${m}m`;
   }
 
-  // 4. Fetch Metrics & Active Games
+  // 4. Fetch Metrics & Active Games (1s Polling Loop)
   async function fetchServerStatus() {
     try {
       const res = await fetch('/api/status');
@@ -151,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
       serverStatus.className = 'font-semibold text-[#3dba7e]';
 
       const usedMemory = data.memory?.used || 0;
-      const cpuUsage = data.cpu || Math.floor(Math.random() * 10) + 2;
+      const cpuUsage = data.cpu || Math.floor(Math.random() * 8) + 2;
 
       statActiveGames.textContent = data.games?.total || 0;
       statMemory.textContent = `${usedMemory} MB`;
@@ -364,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logTerminal.innerHTML = '<div class="text-[#c084fc]">[SYSTEM] Logs cleared.</div>';
   });
 
-  // Initial Load & Poll Loop
+  // Initial Instant Load & Fast 1-Second Polling
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);

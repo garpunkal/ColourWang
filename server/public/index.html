@@ -64,6 +64,7 @@
       </div>
     </header>
 
+    <!-- Section 1: Server Overview -->
     <section class="space-y-4">
       <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col justify-between gap-4">
         <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Server Overview</h2>
@@ -103,13 +104,13 @@
 
         <div class="flex items-center justify-between text-xs text-[#8888aa] pt-2 border-t border-[#2e2e42]">
           <span>Uptime: <strong id="stat-uptime" class="text-[#e8e8f0]">0d 0h 0m</strong></span>
-        
         </div>
       </div>
-</section>
+    </section>
 
-       <section class="space-y-4">
-      <div class="lg:col-span-2 bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
+    <!-- Section 2: Live System Logs -->
+    <section class="space-y-4">
+      <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col gap-3">
         <div class="flex items-center justify-between">
           <h2 class="text-sm font-bold uppercase tracking-wider text-[#8888aa]">Live System Logs</h2>
           <button id="btn-clear-logs"
@@ -125,6 +126,7 @@
       </div>
     </section>
 
+    <!-- Section 3: Active Game Rooms -->
     <section class="space-y-4">
       <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
         <h2 class="text-xl font-extrabold tracking-tight font-outfit">
@@ -134,11 +136,7 @@
           <button id="btn-kill-all"
             class="bg-[#2e2e42] hover:bg-[#3e3e56] text-white disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
             ✕ Kill all games
-          </button>
-          <button id="btn-refresh"
-            class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg py-2.5 px-5 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-            ↺ Refresh now
-          </button>
+          </button>         
         </div>
       </div>
 
