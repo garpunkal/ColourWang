@@ -63,11 +63,26 @@ async function loadDashboard() {
 
 function renderServerStats(stats) {
   if (!stats) return;
-  if (stats.cpu) document.getElementById('stat-cpu').textContent = stats.cpu;
-  if (stats.memory) document.getElementById('stat-memory').textContent = stats.memory;
-  if (stats.uptime) document.getElementById('stat-uptime').textContent = stats.uptime;
-}
 
+  if (stats.cpu) {
+    document.getElementById('stat-cpu').textContent = stats.cpu;
+  }
+
+  // Handle memory object or fallback to direct string/number
+  if (stats.memory) {
+    const memEl = document.getElementById('stat-memory');
+    if (typeof stats.memory === 'object') {
+      const { used, total, unit = 'MB' } = stats.memory;
+      memEl.textContent = `${used} / ${total} ${unit}`;
+    } else {
+      memEl.textContent = stats.memory;
+    }
+  }
+
+  if (stats.uptime) {
+    document.getElementById('stat-uptime').textContent = stats.uptime;
+  }
+}
 function updateTotalStats(games) {
   document.getElementById('stat-active-games').textContent = games.length;
   const totalPlayers = games.reduce((acc, g) => acc + (g.playerCount || 0), 0);
