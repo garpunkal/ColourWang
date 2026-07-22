@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
+import avatarConfig from '../../config/avatars.json';
 
 // Labels in PlayerJoinScreen DOM order:
 //   0: "Name"  1: "Code"  2: "Style Your Wang"  3: <current style name>
 // The style name is avatarStyle.replace('-', ' ') — lowercase text, CSS handles uppercase.
-// There are 12 available styles in config/avatars.json.
+
+const totalStyles = avatarConfig.styles.available.length;
 
 test.describe('Avatar Style Label', () => {
   test.beforeEach(async ({ page }) => {
@@ -24,17 +26,24 @@ test.describe('Avatar Style Label', () => {
     const styleLabel = page.locator('label').nth(3);
     const initial = (await styleLabel.textContent())?.trim();
     await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
-    await page.waitForTimeout(200);
+    await page.waitForFunction(
+      (prev) => (document.querySelectorAll('label')[3] as HTMLElement)?.textContent?.trim() !== prev,
+      initial,
+    );
     expect((await styleLabel.textContent())?.trim()).not.toBe(initial);
   });
 
   test('should display style names with spaces instead of hyphens', async ({ page }) => {
     const styleLabel = page.locator('label').nth(3);
     const nextBtn = page.getByRole('button').filter({ has: page.locator('svg') }).nth(1);
-    for (let i = 0; i < 12; i++) {
-      expect(await styleLabel.textContent()).not.toContain('-');
+    for (let i = 0; i < totalStyles; i++) {
+      const current = (await styleLabel.textContent())?.trim() ?? '';
+      expect(current).not.toContain('-');
       await nextBtn.click();
-      await page.waitForTimeout(100);
+      await page.waitForFunction(
+        (prev) => (document.querySelectorAll('label')[3] as HTMLElement)?.textContent?.trim() !== prev,
+        current,
+      );
     }
   });
 
@@ -42,17 +51,21 @@ test.describe('Avatar Style Label', () => {
     await expect(page.locator('label').filter({ hasText: /Colour Choice/i })).not.toBeVisible();
   });
 
-  test('should cycle through all 12 available styles', async ({ page }) => {
+  test('should cycle through all available styles', async ({ page }) => {
     const styleLabel = page.locator('label').nth(3);
     const nextBtn = page.getByRole('button').filter({ has: page.locator('svg') }).nth(1);
     const styles = new Set<string>();
 
     styles.add((await styleLabel.textContent())?.trim() || '');
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < totalStyles; i++) {
+      const prev = (await styleLabel.textContent())?.trim() || '';
       await nextBtn.click();
-      await page.waitForTimeout(100);
+      await page.waitForFunction(
+        (p) => (document.querySelectorAll('label')[3] as HTMLElement)?.textContent?.trim() !== p,
+        prev,
+      );
       styles.add((await styleLabel.textContent())?.trim() || '');
     }
-    expect(styles.size).toBe(12);
+    expect(styles.size).toBe(totalStyles);
   });
 });
