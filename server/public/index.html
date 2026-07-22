@@ -657,8 +657,7 @@
 
         document.getElementById('stat-games').textContent = data.games?.total ?? '0';
         document.getElementById('stat-uptime').textContent = formatUptime(data.uptime ?? 0);
-        document.getElementById('stat-memory').textContent = data.memory ? `${data.memory.used} MB` : '—';
-        document.getElementById('stat-version').textContent = data.version || '—';
+        document.getElementById('stat-memory').textContent = data.memory ? `${data.memory.used} MB` : '—';        
 
         // Fetch active player count from admin endpoint
         try {
