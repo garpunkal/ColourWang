@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { logger } from './logger';
-import paletteRaw from '../../../config/palette.json';
+const paletteRaw: typeof import('../../../config/palette.json') = require('../../../config/palette.json');
 
 interface QuestionData {
     question: string;

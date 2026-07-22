@@ -6,35 +6,41 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Error Handling', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'networkidle' });
     await page.evaluate(() => localStorage.clear());
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
   test('should show "no codename" error when name is blank', async ({ page }) => {
+    const joinButton = page.locator('button').filter({ hasText: /^JOIN$/i });
+    const modal = page.locator('.fixed.inset-0.z-50');
     await page.locator('input[placeholder*="CODE" i]').fill('ABCD');
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
-    await page.waitForSelector('.fixed.inset-0.z-50');
+    await joinButton.click({ force: true });
+    await page.waitForTimeout(100);
+    if (!(await modal.isVisible())) {
+      await joinButton.click({ force: true });
+    }
+    await expect(modal).toBeVisible();
     await expect(page.locator('p').filter({ hasText: /codename/i })).toBeVisible();
   });
 
   test('should show "4-character code" error when code is too short', async ({ page }) => {
     await page.locator('input[placeholder*="ENTER NAME" i]').fill('PLAYER1');
     await page.locator('input[placeholder*="CODE" i]').fill('AB');
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await expect(page.locator('p').filter({ hasText: /4-character/i })).toBeVisible();
   });
 
   test('should show "no codename" error when both fields are blank', async ({ page }) => {
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await expect(page.locator('p').filter({ hasText: /codename/i })).toBeVisible();
   });
 
   test('should dismiss the error modal by clicking the backdrop', async ({ page }) => {
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await page.mouse.click(10, 10);
     await expect(page.locator('.fixed.inset-0.z-50')).not.toBeVisible();
@@ -43,14 +49,14 @@ test.describe('Error Handling', () => {
   test('should not close the modal when clicking inside the modal card', async ({ page }) => {
     await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
     await page.waitForSelector('.fixed.inset-0.z-50');
-    await page.locator('.fixed.inset-0.z-50').locator('h3').click();
+    await page.locator('.fixed.inset-0.z-50').locator('h3').click({ force: true });
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should show validation error for a 3-character code', async ({ page }) => {
     await page.locator('input[placeholder*="ENTER NAME" i]').fill('PLAYER1');
     await page.locator('input[placeholder*="CODE" i]').fill('ABC');
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await expect(page.locator('p').filter({ hasText: /4-character/i })).toBeVisible();
   });

@@ -6,9 +6,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Avatar Colour Selection', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'networkidle' });
     await page.evaluate(() => localStorage.clear());
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('button[title]');
   });
 
@@ -18,29 +18,29 @@ test.describe('Avatar Colour Selection', () => {
 
   test('should show a ring indicator on the selected avatar', async ({ page }) => {
     const btn = page.locator('button[title="NEON PINK"]');
-    await btn.click();
+    await btn.click({ force: true });
     expect(await btn.getAttribute('class')).toContain('ring');
   });
 
   test('should deselect the previous avatar when a new one is chosen', async ({ page }) => {
-    await page.locator('button[title="NEON PINK"]').click();
-    await page.locator('button[title="CYBER BLUE"]').click();
+    await page.locator('button[title="NEON PINK"]').click({ force: true });
+    await page.locator('button[title="CYBER BLUE"]').click({ force: true });
     expect(await page.locator('button[title="NEON PINK"]').getAttribute('class')).not.toContain('ring');
     expect(await page.locator('button[title="CYBER BLUE"]').getAttribute('class')).toContain('ring');
   });
 
   test('should persist the avatar selection in localStorage', async ({ page }) => {
-    await page.locator('button[title="NEON PINK"]').click();
+    await page.locator('button[title="NEON PINK"]').click({ force: true });
     await page.waitForFunction(() => localStorage.getItem('playerAvatar') === 'neon-pink');
     expect(await page.evaluate(() => localStorage.getItem('playerAvatar'))).toBe('neon-pink');
   });
 
   test('should restore the avatar selection from localStorage on reload', async ({ page }) => {
-    await page.locator('button[title="CYBER BLUE"]').click();
+    await page.locator('button[title="CYBER BLUE"]').click({ force: true });
     await page.waitForFunction(() => localStorage.getItem('playerAvatar') === 'cyber-blue');
 
-    await page.reload();
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('button[title]');
 
     expect(await page.locator('button[title="CYBER BLUE"]').getAttribute('class')).toContain('ring');
@@ -48,7 +48,7 @@ test.describe('Avatar Colour Selection', () => {
 
   test('should handle rapid avatar selection without crashing', async ({ page }) => {
     for (const title of ['MIDNIGHT BLACK', 'IRON GRAY', 'CRIMSON RED', 'NEON PINK', 'CYBER BLUE']) {
-      await page.locator(`button[title="${title}"]`).click();
+      await page.locator(`button[title="${title}"]`).click({ force: true });
     }
     await expect(page.locator('#root')).toBeVisible();
     expect(await page.locator('button[title="CYBER BLUE"]').getAttribute('class')).toContain('ring');

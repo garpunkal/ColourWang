@@ -1,4 +1,4 @@
-import serverConfig from '../../../config/server.json';
+const serverConfig: typeof import('../../../config/server.json') = require('../../../config/server.json');
 
 interface LoggerInterface {
     info: (message: any, ...optionalParams: any[]) => void;

@@ -9,8 +9,8 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import type { CorsOptions } from 'cors';
 import { registerSocketHandlers } from './socket/handlers';
-import serverConfig from '../../config/server.json';
-import environmentConfig from '../../config/environment.json';
+const serverConfig: typeof import('../../config/server.json') = require('../../config/server.json');
+const environmentConfig: typeof import('../../config/environment.json') = require('../../config/environment.json');
 
 logger.info('Starting ColourWang server...');
 

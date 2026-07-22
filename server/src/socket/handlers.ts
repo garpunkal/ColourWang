@@ -4,7 +4,7 @@ import { games } from '../game/gamesMap';
 import { getShuffledQuestions, removeQuestionByText, generateGameRounds } from '../utils/questionLoader';
 import { generateCode } from '../utils/generateCode';
 import { logger } from '../utils/logger';
-import serverConfig from '../../../config/server.json';
+const serverConfig: typeof import('../../../config/server.json') = require('../../../config/server.json');
 interface GameState {
   code: string;
   players: Player[];
@@ -32,7 +32,7 @@ interface GameState {
 import { Player } from '../models/player';
 
 // Available avatar colours
-import avatarsData from '../../../config/avatars.json';
+const avatarsData: typeof import('../../../config/avatars.json') = require('../../../config/avatars.json');
 
 // Available avatar colours
 const AVATAR_IDS = avatarsData.colors.map(c => c.id);

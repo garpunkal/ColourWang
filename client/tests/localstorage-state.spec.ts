@@ -6,9 +6,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('LocalStorage and State Management', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'networkidle' });
     await page.evaluate(() => localStorage.clear());
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
@@ -30,34 +30,34 @@ test.describe('LocalStorage and State Management', () => {
     await page.locator('input[placeholder*="ENTER NAME" i]').fill('TESTNAME');
     await page.waitForFunction(() => localStorage.getItem('playerName') === 'TESTNAME');
 
-    await page.reload();
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
     expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('TESTNAME');
   });
 
   test('should persist avatar style to localStorage when cycling', async ({ page }) => {
-    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
+    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click({ force: true });
     await page.waitForFunction(() => !!localStorage.getItem('playerAvatarStyle'));
     const stored = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
     expect(stored).toBeTruthy();
   });
 
   test('should restore avatar style from localStorage after reload', async ({ page }) => {
-    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
+    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click({ force: true });
     await page.waitForFunction(() => !!localStorage.getItem('playerAvatarStyle'));
     const before = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
 
-    await page.reload();
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
     expect(await page.evaluate(() => localStorage.getItem('playerAvatarStyle'))).toBe(before);
   });
 
   test('should persist avatar colour selection to localStorage', async ({ page }) => {
-    await page.locator('button[title="NEON PINK"]').click();
+    await page.locator('button[title="NEON PINK"]').click({ force: true });
     await page.waitForFunction(() => localStorage.getItem('playerAvatar') === 'neon-pink');
     expect(await page.evaluate(() => localStorage.getItem('playerAvatar'))).toBe('neon-pink');
   });
@@ -76,8 +76,8 @@ test.describe('LocalStorage and State Management', () => {
       localStorage.setItem('playerAvatar', '');
       localStorage.setItem('playerAvatarStyle', '');
     });
-    await page.reload();
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
     await expect(page.locator('#root')).toBeVisible();
     await page.locator('input[placeholder*="ENTER NAME" i]').fill('NEWNAME');

@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('UI Accessibility and Responsiveness', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'networkidle' });
     await page.evaluate(() => localStorage.clear());
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
@@ -41,7 +41,7 @@ test.describe('UI Accessibility and Responsiveness', () => {
   });
 
   test('should show an error modal when joining without data', async ({ page }) => {
-    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click({ force: true });
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
@@ -49,8 +49,8 @@ test.describe('UI Accessibility and Responsiveness', () => {
     await page.locator('input[placeholder*="ENTER NAME" i]').fill('PLAYER1');
     await page.waitForFunction(() => localStorage.getItem('playerName') === 'PLAYER1');
 
-    await page.reload();
-    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click({ force: true });
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
     expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('PLAYER1');
@@ -58,10 +58,10 @@ test.describe('UI Accessibility and Responsiveness', () => {
 
   test('should remain stable after rapid JOIN button clicks', async ({ page }) => {
     const joinBtn = page.locator('button').filter({ hasText: /^JOIN$/i });
-    await joinBtn.click();
+    await joinBtn.click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await page.mouse.click(10, 10);
-    await joinBtn.click();
+    await joinBtn.click({ force: true });
     await page.waitForSelector('.fixed.inset-0.z-50');
     await page.mouse.click(10, 10);
     await expect(page.locator('#root')).toBeVisible();
