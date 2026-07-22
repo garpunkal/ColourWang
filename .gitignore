@@ -530,3 +530,5 @@ MigrationBackup/
 
 # SSL Certificates
 certs/
+/client/playwright-report/*
+/test-results/*

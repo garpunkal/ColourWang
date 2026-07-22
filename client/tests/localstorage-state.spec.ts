@@ -1,175 +1,92 @@
 import { test, expect } from '@playwright/test';
 
+// localStorage keys (no cw_ prefix): playerName, playerAvatar, playerAvatarStyle
+// Code is NOT persisted to localStorage — do not test for cw_gameCode.
+// After a reload the app returns to the landing page; re-navigate to the join form.
+
 test.describe('LocalStorage and State Management', () => {
   test.beforeEach(async ({ page }) => {
-    // Clear localStorage before each test
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());
-    await page.reload();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
-  test('should initialize with empty localStorage values', async ({ page }) => {
-    // After reload, localStorage should be empty or have defaults
+  test('should start with empty localStorage after clearing', async ({ page }) => {
     const playerName = await page.evaluate(() => localStorage.getItem('playerName'));
     const playerAvatar = await page.evaluate(() => localStorage.getItem('playerAvatar'));
-
-    // These can be empty or have defaults, just check they don't throw errors
-    expect(typeof playerName).toBe('string');
-    expect(typeof playerAvatar).toBe('string');
+    expect(playerName).toBeNull();
+    expect(playerAvatar).toBeNull();
   });
 
-  test('should persist player name across reloads', async ({ page }) => {
-    // Enter a name
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('TESTNAME');
+  test('should persist player name to localStorage on input', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('TESTNAME');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'TESTNAME');
+    expect(await page.evaluate(() => localStorage.getItem('playerName'))).toBe('TESTNAME');
+  });
 
-    // Check localStorage
-    let storedName = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(storedName).toBe('TESTNAME');
+  test('should restore player name from localStorage after reload', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('TESTNAME');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'TESTNAME');
 
-    // Reload page
     await page.reload();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
-    // Name should be restored
-    const newNameValue = await nameInput.inputValue();
-    expect(newNameValue).toBe('TESTNAME');
+    expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('TESTNAME');
   });
 
-  test('should persist player avatar style across reloads', async ({ page }) => {
-    // Cycle to a different style
-    const nextButton = page.locator('button').filter({ has: page.locator('svg') }).nth(1);
-    await nextButton.click();
-    await page.waitForTimeout(200);
+  test('should persist avatar style to localStorage when cycling', async ({ page }) => {
+    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
+    await page.waitForFunction(() => !!localStorage.getItem('playerAvatarStyle'));
+    const stored = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
+    expect(stored).toBeTruthy();
+  });
 
-    // Get stored style
-    const storedStyle = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
-    expect(storedStyle).toBeTruthy();
+  test('should restore avatar style from localStorage after reload', async ({ page }) => {
+    await page.getByRole('button').filter({ has: page.locator('svg') }).nth(1).click();
+    await page.waitForFunction(() => !!localStorage.getItem('playerAvatarStyle'));
+    const before = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
 
-    // Reload page
     await page.reload();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
-    // Style should be the same
-    const newStyle = await page.evaluate(() => localStorage.getItem('playerAvatarStyle'));
-    expect(newStyle).toBe(storedStyle);
+    expect(await page.evaluate(() => localStorage.getItem('playerAvatarStyle'))).toBe(before);
   });
 
-  test('should handle malformed localStorage data gracefully', async ({ page, context }) => {
-    // Set invalid localStorage data
+  test('should persist avatar colour selection to localStorage', async ({ page }) => {
+    await page.locator('button[title="NEON PINK"]').click();
+    await page.waitForFunction(() => localStorage.getItem('playerAvatar') === 'neon-pink');
+    expect(await page.evaluate(() => localStorage.getItem('playerAvatar'))).toBe('neon-pink');
+  });
+
+  test('should update localStorage as player name changes', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('A');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'A');
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('ALICE');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'ALICE');
+    expect(await page.evaluate(() => localStorage.getItem('playerName'))).toBe('ALICE');
+  });
+
+  test('should handle empty localStorage values gracefully', async ({ page }) => {
     await page.evaluate(() => {
       localStorage.setItem('playerName', '');
       localStorage.setItem('playerAvatar', '');
       localStorage.setItem('playerAvatarStyle', '');
     });
-
-    // Reload page
     await page.reload();
-
-    // Page should still work
-    const root = page.locator('#root');
-    await expect(root).toBeVisible();
-
-    // Should be able to enter data
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('NEWNAME');
-    expect(await nameInput.inputValue()).toBe('NEWNAME');
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
+    await expect(page.locator('#root')).toBeVisible();
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('NEWNAME');
+    expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('NEWNAME');
   });
 
-  test('should update localStorage on input change', async ({ page }) => {
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    
-    // Type first character
-    await nameInput.fill('A');
-    let stored = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(stored).toBe('A');
-
-    // Type more characters
-    await nameInput.fill('ALICE');
-    stored = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(stored).toBe('ALICE');
-  });
-
-  test('should preserve localStorage during navigation', async ({ page }) => {
-    // Set some data
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('PLAYER');
-
-    const codeInput = page.locator('input[placeholder*="CODE" i]');
-    await codeInput.fill('TEST');
-
-    // Get stored values
-    const name = await page.evaluate(() => localStorage.getItem('playerName'));
-    const code = await page.evaluate(() => localStorage.getItem('cw_gameCode'));
-
-    // Navigate to same page
-    await page.goto('/');
-
-    // Values should persist
-    const nameAfter = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(nameAfter).toBe('PLAYER');
-  });
-
-  test('should handle rapid localStorage updates', async ({ page }) => {
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    
-    // Rapidly update input
-    const names = ['A', 'AB', 'ABC', 'ABCD', 'ABCDE'];
-    for (const name of names) {
-      await nameInput.fill(name);
-      await page.waitForTimeout(50);
-    }
-
-    // Final value should be correct
-    const stored = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(stored).toBe('ABCDE');
-  });
-
-  test('should restore full state on page reload', async ({ page }) => {
-    // Set up complete state
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('FULLNAME');
-
-    const codeInput = page.locator('input[placeholder*="CODE" i]');
-    await codeInput.fill('1234');
-
-    // Select an avatar
-    const avatarButtons = page.locator('button[title*="MIDNIGHT" i]');
-    if (await avatarButtons.count() > 0) {
-      const firstButton = avatarButtons.first();
-      const isDisabled = await firstButton.evaluate(el => (el as HTMLButtonElement).disabled);
-      if (!isDisabled) {
-        await firstButton.click();
-      }
-    }
-
-    // Get state
-    const beforeReloadName = await nameInput.inputValue();
-    const beforeReloadCode = await codeInput.inputValue();
-
-    // Reload
-    await page.reload();
-
-    // Check state
-    const afterReloadName = await nameInput.inputValue();
-    const afterReloadCode = await codeInput.inputValue();
-
-    expect(afterReloadName).toBe(beforeReloadName);
-    expect(afterReloadCode).toBe(beforeReloadCode);
-  });
-
-  test('should clear localStorage when explicitly cleared', async ({ page }) => {
-    // Set data
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('TESTDATA');
-
-    // Verify it's stored
-    let stored = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(stored).toBe('TESTDATA');
-
-    // Clear localStorage
+  test('should clear localStorage explicitly', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('TESTDATA');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'TESTDATA');
     await page.evaluate(() => localStorage.clear());
-
-    // Verify it's gone
-    stored = await page.evaluate(() => localStorage.getItem('playerName'));
-    expect(stored).toBeNull();
+    expect(await page.evaluate(() => localStorage.getItem('playerName'))).toBeNull();
   });
 });

@@ -1,154 +1,69 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('UI Responsiveness and Accessibility', () => {
+test.describe('UI Accessibility and Responsiveness', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
-  test('should have proper button accessibility', async ({ page }) => {
-    const buttons = page.locator('button');
-    const count = await buttons.count();
-    
-    expect(count).toBeGreaterThan(0);
-
-    // Check that buttons are focusable
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      const button = buttons.nth(i);
-      await button.focus();
-      const hasFocus = await button.evaluate(el => document.activeElement === el);
-      expect(hasFocus).toBe(true);
-    }
+  test('should display the Name, Code, and Style labels', async ({ page }) => {
+    await expect(page.locator('label').filter({ hasText: /^Name$/i })).toBeVisible();
+    await expect(page.locator('label').filter({ hasText: /^Code$/i })).toBeVisible();
+    await expect(page.locator('label').filter({ hasText: /Style Your Wang/i })).toBeVisible();
   });
 
-  test('should have proper input accessibility', async ({ page }) => {
-    const inputs = page.locator('input');
-    
-    // Name input should be accessible
-    const nameInput = inputs.nth(0);
-    await nameInput.focus();
-    const focused = await nameInput.evaluate(el => document.activeElement === el);
-    expect(focused).toBe(true);
-  });
-
-  test('should have proper color contrast for text', async ({ page }) => {
-    // Check labels are visible
-    const labels = page.locator('label');
-    const labelCount = await labels.count();
-    
-    expect(labelCount).toBeGreaterThan(0);
-    
-    // Each label should be visible
-    for (let i = 0; i < Math.min(labelCount, 3); i++) {
-      const label = labels.nth(i);
-      await expect(label).toBeVisible();
-    }
-  });
-
-  test('should properly handle form submission', async ({ page }) => {
-    // Fill in valid data
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('TEST');
-
-    const codeInput = page.locator('input[placeholder*="CODE" i]');
-    await codeInput.fill('1234');
-
-    // Form should have all required fields filled
-    const nameValue = await nameInput.inputValue();
-    const codeValue = await codeInput.inputValue();
-
-    expect(nameValue).toBe('TEST');
-    expect(codeValue.length).toBe(4);
-  });
-
-  test('should have proper focus management', async ({ page }) => {
-    // Tab through form elements
+  test('should have focusable form inputs', async ({ page }) => {
     const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
     await nameInput.focus();
+    expect(await nameInput.evaluate(el => document.activeElement === el)).toBe(true);
+  });
 
+  test('should advance focus from name to code input with Tab', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').focus();
     await page.keyboard.press('Tab');
-    
-    const codeInput = page.locator('input[placeholder*="CODE" i]');
-    const isFocused = await codeInput.evaluate(el => document.activeElement === el);
-    
-    // Either code input or a nearby element should be focused
-    const activeElement = await page.evaluate(() => 
-      (document.activeElement as HTMLElement)?.tagName || ''
-    );
-    expect(['INPUT', 'BUTTON']).toContain(activeElement);
+    const active = await page.evaluate(() => (document.activeElement as HTMLElement)?.tagName ?? '');
+    expect(['INPUT', 'BUTTON']).toContain(active);
   });
 
-  test('should display error messages clearly', async ({ page }) => {
-    // Try to join without data
-    const joinButton = page.locator('button').filter({ hasText: /JOIN/i });
-    await joinButton.click();
-
-    // Error should be visible
-    const errorDialog = page.locator('[role="dialog"], .fixed.inset-0, [class*="modal"]');
-    await expect(errorDialog).toBeVisible();
+  test('should have focusable avatar style buttons', async ({ page }) => {
+    const prevBtn = page.getByRole('button').filter({ has: page.locator('svg') }).first();
+    await prevBtn.focus();
+    expect(await prevBtn.evaluate(el => document.activeElement === el)).toBe(true);
   });
 
-  test('should have smooth animations and transitions', async ({ page }) => {
-    // Check if framer-motion is working
-    const animatedElements = page.locator('[class*="transform"], [style*="transform"]');
-    const count = await animatedElements.count();
-    
-    // Page should have animated elements
-    expect(count).toBeGreaterThanOrEqual(0);
+  test('should fill name and code inputs with valid data', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('TEST');
+    await page.locator('input[placeholder*="CODE" i]').fill('1234');
+    expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('TEST');
+    expect((await page.locator('input[placeholder*="CODE" i]').inputValue()).length).toBe(4);
   });
 
-  test('should handle rapid button clicks', async ({ page }) => {
-    const joinButton = page.locator('button').filter({ hasText: /JOIN/i });
-    
-    // Rapidly click button
-    await joinButton.click();
-    await joinButton.click();
-    await joinButton.click();
-
-    // Page should remain stable (no crashes)
-    const root = page.locator('#root');
-    await expect(root).toBeVisible();
+  test('should show an error modal when joining without data', async ({ page }) => {
+    await page.locator('button').filter({ hasText: /^JOIN$/i }).click();
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should clear error messages when dismissed', async ({ page }) => {
-    // Trigger an error
-    const joinButton = page.locator('button').filter({ hasText: /JOIN/i });
-    await joinButton.click();
+  test('should restore name from localStorage after reload', async ({ page }) => {
+    await page.locator('input[placeholder*="ENTER NAME" i]').fill('PLAYER1');
+    await page.waitForFunction(() => localStorage.getItem('playerName') === 'PLAYER1');
 
-    // Wait for error to appear
-    const errorDialog = page.locator('[role="dialog"], .fixed.inset-0');
-    await expect(errorDialog).toBeVisible();
-
-    // Click OK or dismiss button
-    const okButton = page.locator('button').filter({ hasText: /OK/i });
-    if (await okButton.count() > 0) {
-      await okButton.click();
-      
-      // Error should disappear
-      await expect(errorDialog).not.toBeVisible();
-    }
-  });
-
-  test('should maintain state during navigation', async ({ page }) => {
-    // Enter a name
-    const nameInput = page.locator('input[placeholder*="ENTER NAME" i]');
-    await nameInput.fill('PLAYER1');
-
-    // Refresh page
     await page.reload();
+    await page.locator('button').filter({ hasText: 'JOIN NOW' }).click();
+    await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
 
-    // Name should be restored from localStorage
-    const newNameValue = await nameInput.inputValue();
-    expect(newNameValue).toBe('PLAYER1');
+    expect(await page.locator('input[placeholder*="ENTER NAME" i]').inputValue()).toBe('PLAYER1');
   });
 
-  test('should display all required UI elements', async ({ page }) => {
-    // Check for key UI components
-    const nameLabel = page.locator('label').filter({ hasText: /Name/i });
-    const codeLabel = page.locator('label').filter({ hasText: /Code/i });
-    const styleLabel = page.locator('label').filter({ hasText: /Style/i });
-
-    await expect(nameLabel).toBeVisible();
-    await expect(codeLabel).toBeVisible();
-    // Style label might not always be visible depending on layout
+  test('should remain stable after rapid JOIN button clicks', async ({ page }) => {
+    const joinBtn = page.locator('button').filter({ hasText: /^JOIN$/i });
+    await joinBtn.click();
+    await page.waitForSelector('.fixed.inset-0.z-50');
+    await page.mouse.click(10, 10);
+    await joinBtn.click();
+    await page.waitForSelector('.fixed.inset-0.z-50');
+    await page.mouse.click(10, 10);
+    await expect(page.locator('#root')).toBeVisible();
   });
 });

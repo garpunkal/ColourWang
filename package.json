@@ -5,11 +5,15 @@
         "dev:server": "npm run dev --prefix server",
         "dev:client": "npm run dev --prefix client",
         "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+        "test": "npx playwright test",
+        "test:ui": "npx playwright test --ui",
+        "test:debug": "npx playwright test --debug",
         "install:all": "npm install && npm install --prefix server && npm install --prefix client",
         "start:server": "npm run start --prefix server",
         "start:client": "npm run start --prefix client"
     },
     "devDependencies": {
+        "@playwright/test": "^1.61.1",
         "concurrently": "^9.2.4"
     },
     "dependencies": {
