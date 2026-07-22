@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { audioManager } from '../../utils/audioManager';
 import { QRCodeSVG } from 'qrcode.react';
 import { Users } from 'lucide-react';
+import type { Socket } from 'socket.io-client';
+import { BGM_TRACKS } from '../../config/musicConfig';
 
 interface Props {
     code: string;
@@ -9,12 +11,10 @@ interface Props {
     compact?: boolean;
     pot?: number;
     musicEnabled?: boolean;
-    socket: any;
+    socket: Socket;
     currentBgm?: string;
     onAbandonGame?: () => void;
 }
-
-import { BGM_TRACKS } from '../../config/musicConfig';
 
 
 export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '', onAbandonGame }: Props) {
@@ -23,6 +23,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
 
     useEffect(() => {
         if (currentBgm) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedBGM(currentBgm);
         }
     }, [currentBgm]);

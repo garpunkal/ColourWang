@@ -3,7 +3,7 @@ class AudioManager {
     private bgmAudio: HTMLAudioElement | null = null;
     private isMutedSFX: boolean = false;
     private isMutedBGM: boolean = false;
-    private proceduralNodes: any[] = [];
+    private proceduralNodes: AudioBufferSourceNode[] = [];
 
     constructor() {
         // Initialize AudioContext lazily to comply with browser autoplay policies
@@ -13,7 +13,7 @@ class AudioManager {
 
     private init() {
         if (!this.audioContext) {
-            this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
         }
         if (this.audioContext.state === 'suspended') {
             this.audioContext.resume();
@@ -46,7 +46,7 @@ class AudioManager {
                 const tracks = await response.json();
                 console.log(`[AUDIO] Discovered ${tracks.length} BGM tracks for pre-caching.`);
             }
-        } catch (e) {
+        } catch {
             console.warn('[AUDIO] Failed to preload BGM list');
         }
     }
@@ -343,9 +343,12 @@ class AudioManager {
     }
 
     public stopProceduralBGM() {
-        this.proceduralNodes.forEach((node: any) => {
-            try { node.stop(); } catch (e) { }
-            try { node.disconnect(); } catch (e) { }
+        this.proceduralNodes.forEach((node: AudioBufferSourceNode) => {
+            // Suppress errors — node may already be stopped/disconnected
+            // eslint-disable-next-line no-empty
+            try { node.stop(); } catch { }
+            // eslint-disable-next-line no-empty
+            try { node.disconnect(); } catch { }
         });
         this.proceduralNodes = [];
     }

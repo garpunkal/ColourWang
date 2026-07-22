@@ -24,6 +24,7 @@ export const Avatar = ({
     const [selectedStyle, setSelectedStyle] = useState(style);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedStyle(style);
     }, [style]);
 

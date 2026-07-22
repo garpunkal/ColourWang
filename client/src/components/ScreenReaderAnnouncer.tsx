@@ -36,6 +36,7 @@ export function ScreenReaderAnnouncer({ message, priority = 'polite' }: Props) {
 /**
  * Global announcer hook for components to trigger screen reader announcements
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAnnouncer() {
     const announce = (message: string, priority: 'polite' | 'assertive' = 'polite') => {
         // Create temporary announcer element

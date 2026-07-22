@@ -63,7 +63,7 @@ function App() {
 
   const [role, setRole] = useState<'NONE' | 'HOST' | 'PLAYER'>(initialRole)
   const [gameState, setGameState] = useState<GameState | null>(null)
-  const [lastReconnectCheckAt, setLastReconnectCheckAt] = useState<number>(Date.now());
+  const [lastReconnectCheckAt, setLastReconnectCheckAt] = useState<number>(() => Date.now());
   const [secondsSinceReconnectCheck, setSecondsSinceReconnectCheck] = useState(0);
   const [hasConnectedOnce, setHasConnectedOnce] = useState<boolean>(socket.connected);
   const [showStartupConnectionIssue, setShowStartupConnectionIssue] = useState(false);
@@ -75,7 +75,9 @@ function App() {
 
   useEffect(() => {
     if (isConnected) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasConnectedOnce(true);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowStartupConnectionIssue(false);
       return;
     }
@@ -156,6 +158,7 @@ function App() {
 
   useEffect(() => {
     if (isConnected) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSecondsSinceReconnectCheck(0);
       return;
     }

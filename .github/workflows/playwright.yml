@@ -17,6 +17,9 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      checks: write
     
     steps:
       - uses: actions/checkout@v4

@@ -13,10 +13,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     );
 }
 
-export const useSettings = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+export function useSettings() {
     const context = useContext(SettingsContext);
     if (context === undefined) {
         throw new Error('useSettings must be used within a SettingsProvider');
     }
     return context;
-};
+}
