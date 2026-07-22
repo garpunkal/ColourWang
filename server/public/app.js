@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- Metric Cards Grid -->
-          <div class="grid grid-cols-3 gap-2 text-xs">
+          <div class="grid grid-cols-2 gap-2 text-xs">
             <div class="bg-[#0f0f13] p-2.5 rounded-lg border border-[#2e2e42] flex items-center gap-2.5">
               <div class="p-1.5 rounded bg-[#7c5cfc]/10 text-[#7c5cfc]">
                 <i data-lucide="users" class="w-4 h-4"></i>

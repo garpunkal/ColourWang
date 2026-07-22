@@ -53,6 +53,24 @@ if (baseCorsOptions.origin === '*' && baseCorsOptions.credentials) {
     baseCorsOptions.credentials = false;
 }
 
+// Socket.IO handles its own CORS separately from Express middleware, so it
+// needs its own options object. The dashboard doesn't use Socket.IO (only
+// the game clients do), so the "always allow self origin" behavior above
+// isn't relevant here — this preserves the original FRONTEND_ORIGIN
+// allowlist behavior.
+const socketCorsOptions: CorsOptions = {
+    ...baseCorsOptions,
+    origin: allowedOrigins
+        ? (requestOrigin, callback) => {
+            if (!requestOrigin || allowedOrigins!.has(normalizeOrigin(requestOrigin))) {
+                callback(null, true);
+                return;
+            }
+            callback(new Error(`CORS blocked origin: ${requestOrigin}`));
+        }
+        : baseCorsOptions.origin
+};
+
 // Use a per-request delegate (rather than a static origin function) so we can
 // always allow the request's own host — e.g. the admin dashboard served by
 // this same Express app — regardless of what FRONTEND_ORIGIN is set to.
@@ -189,7 +207,7 @@ if (process.env.RENDER || process.env.NODE_ENV === 'production') {
 }
 
 const io = new Server(server, {
-    cors: corsOptions
+    cors: socketCorsOptions
 });
 
 logger.info('Registering socket handlers...');
