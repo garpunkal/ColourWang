@@ -779,26 +779,19 @@ button {
 }
 
 .avatar-scrollbar {
-	scrollbar-width: thin;
-	scrollbar-color: rgba(255,255,255,0.15) transparent;
+	scrollbar-width: auto;
 }
 
 .avatar-scrollbar::-webkit-scrollbar {
-	width: 4px;
+	all: revert;
 }
 
 .avatar-scrollbar::-webkit-scrollbar-track {
-	background: transparent;
-	margin: 12px;
+	all: revert;
 }
 
 .avatar-scrollbar::-webkit-scrollbar-thumb {
-	background: rgba(255,255,255,0.15);
-	border-radius: 99px;
-}
-
-.avatar-scrollbar::-webkit-scrollbar-thumb:hover {
-	background: rgba(255,255,255,0.3);
+	all: revert;
 }
 
 /* Screen Reader Only (Accessibility) */
