@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Fan cards – 11 cards, pivot (16,32), spread -60° → +60°, step 12° -->
+  <!-- Each card: rect x=14 y=15 width=4 height=17, rotated about (16,32) -->
+
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#000000" stroke="#444" stroke-width="0.4" transform="rotate(-60,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#c4bbb1" transform="rotate(-48,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#ffffff" stroke="#ccc" stroke-width="0.4" transform="rotate(-36,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#ee1420" transform="rotate(-24,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#ff9d00" transform="rotate(-12,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#fcfe00" transform="rotate(0,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#8ccc00" transform="rotate(12,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#4ac3db" transform="rotate(24,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#83359a" transform="rotate(36,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#fc93c8" transform="rotate(48,16,32)"/>
+  <rect x="14" y="15" width="4" height="17" rx="1" fill="#b0562c" transform="rotate(60,16,32)"/>
+</svg>
