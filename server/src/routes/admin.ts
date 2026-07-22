@@ -59,27 +59,38 @@ function safeDeleteGame(code: string): void {
 export function createAdminRouter(io?: Server) {
   const router = Router();
 
-  // GET /api/admin/games - List all active games
+  // GET /api/admin/games - List all active games with full settings
   router.get('/games', (_req: Request, res: Response) => {
     try {
       const entries = safeGetEntries();
       const activeGames = entries.map(([key, game]) => {
         const code = key || game?.code || game?.id || 'N/A';
         const status = game?.status || game?.state || 'LOBBY';
+        
         let playerCount = 0;
-
         if (game?.playerCount !== undefined) {
           playerCount = game.playerCount;
         } else if (game?.players) {
           playerCount = game.players instanceof Map ? game.players.size : Object.keys(game.players).length;
         }
 
+        // Extract settings from game.settings or direct game properties
+        const rawSettings = game?.settings || game?.config || {};
+        const categories = rawSettings.categories || game?.categories || [];
+        const answerTime = rawSettings.answerTime ?? rawSettings.questionTime ?? game?.answerTime ?? 15;
+        const totalRounds = rawSettings.totalRounds ?? rawSettings.rounds ?? game?.totalRounds ?? game?.maxRounds ?? 10;
+
         return {
           code,
           status,
           playerCount,
           currentRound: game?.currentRound ?? game?.round ?? 0,
-          totalRounds: game?.totalRounds ?? game?.maxRounds ?? 10
+          totalRounds,
+          settings: {
+            categories: Array.isArray(categories) ? categories : [String(categories)],
+            answerTime,
+            totalRounds
+          }
         };
       });
 
@@ -90,12 +101,11 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/kill-all - Kill all active games
+  // POST /api/admin/games/kill-all
   router.post('/games/kill-all', (_req: Request, res: Response) => {
     try {
       logger.info('[ADMIN] Action: Kill All Games');
 
-      // Safe Socket Broadcast
       if (io) {
         try {
           io.emit('game_terminated', { reason: 'Host terminated all active sessions.' });
@@ -104,7 +114,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // Safe cleanup of every game object
       const entries = safeGetEntries();
       for (const [code, game] of entries) {
         if (game) {
@@ -118,7 +127,6 @@ export function createAdminRouter(io?: Server) {
         }
       }
 
-      // Wipe state
       if (games instanceof Map) {
         games.clear();
       } else if (typeof games === 'object') {
@@ -133,7 +141,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/:code/kill - Kill a single game
+  // POST /api/admin/games/:code/kill
   router.post('/games/:code/kill', (req: Request, res: Response) => {
     const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
     const code = String(rawCode || '').trim();
@@ -142,7 +150,6 @@ export function createAdminRouter(io?: Server) {
       logger.info(`[ADMIN] Action: Kill Game ${code}`);
       const game = safeGetGame(code);
 
-      // Safe Socket Room Emit
       if (io) {
         try {
           io.to(code).emit('game_terminated', { reason: 'Game terminated by host.' });
@@ -172,7 +179,7 @@ export function createAdminRouter(io?: Server) {
     }
   });
 
-  // POST /api/admin/games/:code/restart - Restart a single game
+  // POST /api/admin/games/:code/restart
   router.post('/games/:code/restart', (req: Request, res: Response) => {
     const rawCode = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
     const code = String(rawCode || '').trim();

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let pendingAction = null;
   let isFirstLoad = true;
 
-  // 1. Fast, Reliable Sparkline Charts
+  // 1. Fast Sparkline Charts
   const MAX_DATA_POINTS = 20;
   const chartLabels = Array(MAX_DATA_POINTS).fill('');
   const cpuData = Array(MAX_DATA_POINTS).fill(0);
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false, // Instant zero-latency updates
+    animation: false,
     plugins: { legend: { display: false }, tooltip: { enabled: true } },
     scales: {
       x: { display: false },
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${d}d ${h}h ${m}m`;
   }
 
-  // 4. Fetch Server Metrics & Active Games
+  // 4. Fetch Metrics & Active Games
   async function fetchServerStatus() {
     try {
       const res = await fetch('/api/status');
@@ -224,9 +224,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = game.status || game.state || 'LOBBY';
         const playerCount = game.playerCount ?? (game.players ? Object.keys(game.players).length : 0);
         const currentRound = game.currentRound ?? game.round ?? 0;
-        const totalRounds = game.totalRounds ?? game.maxRounds ?? 10;
+        const totalRounds = game.settings?.totalRounds ?? game.totalRounds ?? 10;
+        const answerTime = game.settings?.answerTime ?? 15;
+        const categories = game.settings?.categories || [];
 
         totalPlayers += playerCount;
+
+        // Render category pills
+        const categoryTags = categories.length > 0
+          ? categories.map(c => `<span class="bg-[#2e2e42] text-[#8888aa] text-[0.65rem] px-2 py-0.5 rounded font-medium">${c}</span>`).join(' ')
+          : '<span class="text-[#8888aa] text-[0.65rem] italic">All Categories</span>';
 
         const card = document.createElement('div');
         card.className = 'bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-4 flex flex-col justify-between gap-4 shadow-sm';
@@ -247,6 +254,20 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="bg-[#0f0f13] p-2.5 rounded-lg border border-[#2e2e42]">
               <span class="text-[#8888aa] block text-[0.65rem] uppercase font-semibold">Round</span>
               <span class="font-bold text-white text-sm">${currentRound} / ${totalRounds}</span>
+            </div>
+          </div>
+
+          <!-- Settings Overview -->
+          <div class="bg-[#0f0f13] p-2.5 rounded-lg border border-[#2e2e42] space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-[#8888aa] text-[0.65rem] uppercase font-semibold">Timer</span>
+              <span class="font-mono text-white text-[0.75rem] font-bold">${answerTime}s / question</span>
+            </div>
+            <div>
+              <span class="text-[#8888aa] block text-[0.65rem] uppercase font-semibold mb-1">Categories</span>
+              <div class="flex flex-wrap gap-1">
+                ${categoryTags}
+              </div>
             </div>
           </div>
 
@@ -424,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Immediate fetch + 1-second interval
+  // Immediate start + 1s loop
   fetchServerStatus();
   initLogStream();
   setInterval(fetchServerStatus, 1000);
