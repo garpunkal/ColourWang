@@ -94,6 +94,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
     };
 
     return (
+        <>
         <motion.div
             key="final"
             initial={{ opacity: 0, scale: 0.94, filter: 'blur(16px)' }}
@@ -182,25 +183,6 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                     </motion.p>
                 </motion.div>
             </div>
-
-            {/* Pre-reveal countdown */}
-            <AnimatePresence>
-                {revealCountdown !== null && (
-                    <motion.div
-                        key={revealCountdown}
-                        initial={{ opacity: 0, scale: 1.6 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.6 }}
-                        transition={{ duration: 0.25 }}
-                        className="fixed inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none"
-                    >
-                        <p className="text-xs font-black uppercase tracking-[0.4em] text-white/40 mb-2">Revealing in</p>
-                        <span className="text-[12rem] font-black font-mono leading-none text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]">
-                            {revealCountdown}
-                        </span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
 
             {/* Players List */}
             <div className="flex flex-col gap-3 md:gap-4 mb-16">
@@ -326,5 +308,25 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                 </p>
             </motion.div>
         </motion.div>
+
+        {/* Pre-reveal countdown — outside animated root to avoid fixed-position containment */}
+        <AnimatePresence>
+            {revealCountdown !== null && (
+                <motion.div
+                    key={revealCountdown}
+                    initial={{ opacity: 0, scale: 1.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.6 }}
+                    transition={{ duration: 0.25 }}
+                    className="fixed inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none"
+                >
+                    <p className="text-xs font-black uppercase tracking-[0.4em] text-white/40 mb-2">Revealing in</p>
+                    <span className="text-[12rem] font-black font-mono leading-none text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]">
+                        {revealCountdown}
+                    </span>
+                </motion.div>
+            )}
+        </AnimatePresence>
+        </>
     );
 }
