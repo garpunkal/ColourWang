@@ -54,7 +54,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     // Save name, avatar, and style to localStorage
     useEffect(() => {
-        if (name) localStorage.setItem('playerName', name);
+        localStorage.setItem('playerName', name);
     }, [name]);
 
     useEffect(() => {
@@ -140,12 +140,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         }
         if (name && code.length === 4) {
             setIsJoining(true);
-            console.log('Emitting join-game:', { name, avatar, avatarStyle, code: code.toUpperCase() });
+
             
             // Save player name for potential reconnection
-            localStorage.setItem('cw_playerName', name);
+            const upperName = name.toUpperCase();
+            localStorage.setItem('cw_playerName', upperName);
             
-            socket.emit('join-game', { name, avatar, avatarStyle, code: code.toUpperCase() });
+            socket.emit('join-game', { name: upperName, avatar, avatarStyle, code: code.toUpperCase() });
 
             // Timeout to reset loading if no response
             setTimeout(() => setIsJoining(false), 5000);
@@ -204,7 +205,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 placeholder="ENTER NAME"
                                 maxLength={10}
                                 value={name}
-                                onChange={e => setName(e.target.value.toUpperCase())}
+                                onChange={e => setName(e.target.value)}
                             />
                         </div>
 
