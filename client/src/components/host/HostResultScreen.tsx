@@ -35,17 +35,25 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     const isFinalRound = gameState.currentRoundIndex === gameState.rounds.length - 1;
     const isGameFinalQuestion = isFinalRound && isLastQuestionInRound;
 
+    // Per-round position derived from rounds data
+    const questionsBeforeCurrentRound = gameState.rounds
+        .slice(0, gameState.currentRoundIndex)
+        .reduce((sum, r) => sum + r.questions.length, 0);
+    const questionsInCurrentRound = gameState.rounds[gameState.currentRoundIndex]?.questions?.length ?? totalQuestions;
+    const questionIndexInRound = currentQuestionIndex - questionsBeforeCurrentRound;
+    const isLastInRound = questionIndexInRound === questionsInCurrentRound - 1;
+
     const nextButtonLabel = isGameFinalQuestion
         ? 'Show Results'
-        : isLastQuestionInRound
+        : isLastInRound
             ? 'Next Round'
             : 'Next Question';
 
     const nextButtonSublabel = isGameFinalQuestion
         ? 'Final standings'
-        : isLastQuestionInRound
+        : isLastInRound
             ? `Round ${(gameState.currentRoundIndex ?? 0) + 2}`
-            : `Question ${currentQuestionIndex + 2} of ${totalQuestions}`;
+            : `Question ${questionIndexInRound + 2} of ${questionsInCurrentRound}`;
 
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
