@@ -27,6 +27,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     // Accept self-signed mkcert certificates in local dev.
     ignoreHTTPSErrors: true,
+    // Disable framer-motion (and other CSS) animations so elements are immediately
+    // stable for Playwright's actionability checks, especially on webkit.
+    reducedMotion: 'reduce',
   },
 
   projects: [

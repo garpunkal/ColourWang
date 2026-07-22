@@ -12,11 +12,12 @@ test.describe('LocalStorage and State Management', () => {
     await page.waitForSelector('input[placeholder*="ENTER NAME" i]');
   });
 
-  test('should start with empty localStorage after clearing', async ({ page }) => {
+  test('should start with empty name and default avatar after clearing localStorage', async ({ page }) => {
+    // playerName is always written as '' (empty string) on mount; playerAvatar defaults to AVATAR_IDS[0]
     const playerName = await page.evaluate(() => localStorage.getItem('playerName'));
     const playerAvatar = await page.evaluate(() => localStorage.getItem('playerAvatar'));
-    expect(playerName).toBeNull();
-    expect(playerAvatar).toBeNull();
+    expect(playerName).toBe('');
+    expect(playerAvatar).toBeTruthy();  // always has a default avatar
   });
 
   test('should persist player name to localStorage on input', async ({ page }) => {
