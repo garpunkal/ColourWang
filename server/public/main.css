@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Custom keyframes for mesh background drift */
+@keyframes meshDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(3%, 2%) rotate(3deg);
+  }
+}
+
+/* Custom keyframes for toast notifications */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-mesh-drift {
+  animation: meshDrift 18s ease-in-out infinite alternate;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.2s ease forwards;
+}
