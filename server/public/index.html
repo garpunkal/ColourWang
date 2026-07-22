@@ -39,6 +39,31 @@
       </div>
     </header>
 
+    
+    <section class="space-y-4">
+      
+      <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
+        <h2 class="text-xl font-extrabold tracking-tight font-outfit">
+          Active Game Rooms
+        </h2>
+        <div class="flex items-center gap-2.5">
+          <button id="btn-kill-all" class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+            ⚠ Kill All Games
+          </button>
+          <button id="btn-refresh" class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
+            ↺ Refresh now
+          </button>
+        </div>
+      </div>
+
+      <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4"></div>
+
+      <div id="empty-state" class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
+        No active games at the moment.
+      </div>
+
+    </section>
+
     <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       
       <div class="bg-[#1a1a24] border border-[#2e2e42] rounded-xl p-5 flex flex-col justify-between gap-4">
@@ -84,29 +109,6 @@
 
     </section>
 
-    <section class="space-y-4">
-      
-      <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
-        <h2 class="text-xl font-extrabold tracking-tight font-outfit">
-          Active Game Rooms
-        </h2>
-        <div class="flex items-center gap-2.5">
-          <button id="btn-kill-all" class="bg-[#e09a30] text-black hover:bg-[#f0b450] disabled:opacity-40 disabled:cursor-not-allowed border-0 rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-            ⚠ Kill All Games
-          </button>
-          <button id="btn-refresh" class="bg-transparent border border-[#2e2e42] text-[#e8e8f0] hover:border-[#7c5cfc] hover:text-[#7c5cfc] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 text-[0.85rem] font-semibold cursor-pointer transition-colors whitespace-nowrap">
-            ↺ Refresh now
-          </button>
-        </div>
-      </div>
-
-      <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4"></div>
-
-      <div id="empty-state" class="text-center py-16 px-5 text-[#8888aa] text-base bg-[#1a1a24]/50 border border-[#2e2e42] rounded-xl hidden">
-        No active games at the moment.
-      </div>
-
-    </section>
 
   </div>
 

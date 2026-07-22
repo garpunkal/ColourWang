@@ -60,15 +60,13 @@ if (corsOptions.origin === '*' && corsOptions.credentials) {
 
 app.use(cors(corsOptions));
 
+app.use(express.static(join(__dirname, '../public')));
+
 // Serve root landing page
 app.get('/', (_req, res) => {
     res.sendFile(join(__dirname, '../public/index.html'));
 });
 
-// Serve admin dashboard
-app.get('/admin', (_req, res) => {
-    res.sendFile(join(__dirname, '../public/admin.html'));
-});
 
 // Server status
 app.get('/api/status', (_req, res) => {
