@@ -402,10 +402,10 @@ function App() {
 
                 <div className="space-y-3">
                   <h2 className="text-2xl md:text-4xl font-black italic tracking-tight uppercase">
-                    Tiny Signal Detour
+                    Disconnected
                   </h2>
                   <p className="text-sm md:text-base font-bold uppercase tracking-[0.14em] text-white/70">
-                    You are still in the game. Re-linking to your room now.
+                    Reconnecting, please wait...
                   </p>
                 </div>
 
