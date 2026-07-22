@@ -1,0 +1,37 @@
+name: Lint Client Code
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'client/**'
+      - '.github/workflows/lint.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'client/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install client dependencies
+        run: cd client && npm ci
+
+      - name: Run ESLint
+        run: cd client && npm run lint
+        continue-on-error: false
+
+      - name: TypeScript type check
+        run: cd client && npx tsc --noEmit
+        continue-on-error: false
