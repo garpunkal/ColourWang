@@ -29,6 +29,13 @@ Real-time multiplayer party game. The host runs the game on a large screen; play
 |---|---|---|
 | ![Player join](docs/screenshots/03-player-join.png) | ![Player question](docs/screenshots/07-player-question.png) | ![Player result](docs/screenshots/09-player-result.png) |
 
+
+### Server screens
+
+| Dashboad|
+|---|
+![Server Dashboard](docs/screenshots/10-dashboard-status.png)
+
 ## Quick Start
 
 ```bash
