@@ -58,6 +58,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
+    const hasManyPlayers = sortedPlayers.length > 3;
 
     const leadPlayer = sortedPlayers[0];
     const leadPlayerName = leadPlayer?.name || 'No leader yet';
@@ -186,7 +187,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className="mx-auto grid max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem] w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${hasManyPlayers ? 'max-h-[30dvh] sm:max-h-[34dvh] xl:max-h-[26rem]' : 'max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
                         {sortedPlayers.map((player, index) => {
                             const playerAnswer = sortColors(player.lastAnswer || []);
 
@@ -196,7 +197,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                     initial={{ opacity: 0, y: 26 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.28 + (index * 0.04) }}
-                                    className="group relative flex min-h-44 flex-col overflow-hidden rounded-2xl border p-3 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border p-3 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'min-h-36' : 'min-h-44'}`}
                                     style={{
                                         background: player.isCorrect
                                             ? 'linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.05) 100%)'

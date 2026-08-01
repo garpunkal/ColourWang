@@ -24,6 +24,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
 
     const [stealNotice, setStealNotice] = useState<{ name: string; value: number } | null>(null);
     const [blockNotice, setBlockNotice] = useState<{ blockerName: string; targetName: string } | null>(null);
+    const hasManyPlayers = gameState.players.length > 3;
 
     useEffect(() => {
         const answerHandler = (players: { id: string; hasAnswered: boolean }[]) => {
@@ -163,7 +164,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </div>
                 </motion.div>
 
-                <div className="flex-1 flex flex-col items-center justify-center my-6 sm:my-8 lg:my-10 gap-4 sm:gap-6 px-2 sm:px-4">
+                <div className={`flex-1 flex flex-col items-center justify-center ${hasManyPlayers ? 'my-4 sm:my-6 lg:my-8' : 'my-6 sm:my-8 lg:my-10'} gap-4 sm:gap-6 px-2 sm:px-4`}>
                     <motion.h1 
                         className="font-black text-display text-display-gradient px-2 sm:px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
                         style={{ 
@@ -195,7 +196,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </motion.div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 w-full max-w-7xl px-1 sm:px-2 mx-auto pb-6">
+                <div className={`mx-auto w-full max-w-7xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[28dvh] sm:max-h-[32dvh] overflow-y-auto pb-3 pr-1' : 'pb-6'}`}>
+                    <div className={`grid w-full ${hasManyPlayers ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6'}`}>
                     {gameState.players.map((player) => {
                         const playerStatus = playersAnswered.find(p => p.id === player.id);
                         const playerColor = getAvatarColor(player.avatar);
@@ -204,15 +206,15 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         return (
                             <motion.div
                                 key={player.id}
-                                className={`relative flex items-center gap-3 py-3 sm:py-4 px-3 sm:px-4 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-[14rem] sm:min-w-[16rem] max-w-[20rem] ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
+                                className={`relative flex items-center gap-3 rounded-2xl border-2 transition-all duration-300 w-full ${hasManyPlayers ? 'py-2 sm:py-2.5 px-2.5 sm:px-3' : 'py-3 sm:py-4 px-3 sm:px-4'} ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
                                 style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
                             >
-                                <div className="w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
+                                <div className={`${hasManyPlayers ? 'w-12 h-12 sm:w-14 sm:h-14' : 'w-16 h-16'} rounded-xl overflow-hidden border-2 shrink-0`} style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
                                     <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                 </div>
                                 <div className="flex flex-col items-start min-w-0 flex-1">
-                                    <span className="text-xl font-black uppercase italic truncate w-full text-left" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
-                                    <span className="text-xs font-bold uppercase tracking-widest opacity-60 text-left">{blockedPlayerIds.includes(player.id) ? 'Blocked' : isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
+                                    <span className={`${hasManyPlayers ? 'text-base sm:text-lg' : 'text-xl'} font-black uppercase italic truncate w-full text-left`} style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
+                                    <span className={`${hasManyPlayers ? 'text-[10px]' : 'text-xs'} font-bold uppercase tracking-widest opacity-60 text-left`}>{blockedPlayerIds.includes(player.id) ? 'Blocked' : isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
                                 </div>
                                 {isAnswered && (
                                     <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 bg-success text-black rounded-full p-1">
@@ -222,6 +224,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                             </motion.div>
                         );
                     })}
+                    </div>
                 </div>
             </div>
         </motion.div>

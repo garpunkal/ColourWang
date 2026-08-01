@@ -13,6 +13,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
     const [autoStartTimer, setAutoStartTimer] = useState<number | null>(null);
     const [countdown, setCountdown] = useState(5);
     const players = gameState.players;
+    const hasManyPlayers = players.length > 3;
     const isCountdownState = gameState.status === 'COUNTDOWN';
     const isRoundIntro = gameState.status === 'ROUND_INTRO';
     const currentRound = gameState.rounds ? gameState.rounds[gameState.currentRoundIndex] : null;
@@ -145,7 +146,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 animate={{ opacity: isCountdownState ? 0.4 : 1, scale: isCountdownState ? 0.95 : 1 }}
                 className="relative z-10"
             >
-                <div className="flex flex-col items-center gap-3 max-w-sm mx-auto">
+                <div className={`flex flex-col items-center max-w-sm mx-auto overflow-y-auto ${hasManyPlayers ? 'gap-2 max-h-[34dvh] pr-1' : 'gap-3'}`}>
                     {gameState.players.map((player, index) => {
                         const playerColor = getAvatarColor(player.avatar);
                         return (
@@ -154,13 +155,13 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                                className="flex items-center gap-3 px-4 py-2 rounded-2xl glass-panel w-full border"
+                                className={`flex items-center rounded-2xl glass-panel w-full border ${hasManyPlayers ? 'gap-2.5 px-3 py-1.5' : 'gap-3 px-4 py-2'}`}
                                 style={{
                                     borderColor: `${playerColor}30`,
                                     backgroundColor: `${playerColor}05`
                                 }}
                             >
-                                <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                                <div className={`${hasManyPlayers ? 'w-8 h-8' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
                                     <Avatar
                                         seed={player.avatar}
                                         style={player.avatarStyle}
@@ -169,13 +170,13 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                     />
                                 </div>
                                 <span
-                                    className="font-black text-sm md:text-base uppercase tracking-wider flex-1 text-left truncate text-white/90"
+                                    className={`font-black uppercase tracking-wider flex-1 text-left truncate text-white/90 ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}
                                 >
                                     {player.name}
                                 </span>
-                                <div className="bg-black/40 px-3 py-1 rounded-xl border border-white/5 backdrop-blur-sm">
+                                <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
                                     <span
-                                        className="font-black text-sm md:text-base font-mono tabular-nums tracking-tighter text-white"
+                                        className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}
                                         style={{
                                             textShadow: `0 0 10px rgba(255,255,255,0.5)`
                                         }}
