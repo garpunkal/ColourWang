@@ -51,6 +51,13 @@ function compareAnswers(answers: string[] | null, correct: string[] | undefined)
   return sortedAnswers.every((val, index) => val === sortedCorrect[index]);
 }
 
+function getPlayerAnsweredState(players: Player[]) {
+  return players.map((p) => ({
+    id: p.id,
+    hasAnswered: p.isBlockedThisQuestion === true || p.lastAnswer !== null
+  }));
+}
+
 export function registerSocketHandlers(io: Server) {
   io.on('connection', (socket: Socket) => {
     logger.info('User connected:', socket.id);
@@ -209,7 +216,7 @@ export function registerSocketHandlers(io: Server) {
           targetPlayerId: target.id
         });
 
-        io.to(normalizedCode).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
+        io.to(normalizedCode).emit('player-answered', getPlayerAnsweredState(game.players));
       }
     });
 
@@ -530,7 +537,7 @@ export function registerSocketHandlers(io: Server) {
             io.to(normalizedCode).emit('steal-card-used', { playerId: player.id, value: player.stealCardValue, disabledMap });
           }
           // Emit player-answered event to update UI
-          io.to(normalizedCode).emit('player-answered', game.players.map(p => ({ id: p.id, hasAnswered: p.lastAnswer !== null })));
+          io.to(normalizedCode).emit('player-answered', getPlayerAnsweredState(game.players));
         }
       }
     });
