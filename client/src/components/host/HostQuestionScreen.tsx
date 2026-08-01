@@ -212,7 +212,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 title={player.name}
                             >
                                 <div
-                                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
+                                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
                                     style={{
                                         borderColor: isBlocked ? 'rgba(239,68,68,0.85)' : isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
                                         boxShadow: isAnswered
