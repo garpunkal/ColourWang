@@ -73,7 +73,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             animate={{ scale: 1, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-7xl text-center relative min-h-[100dvh] overflow-x-hidden px-3 sm:px-4 lg:px-6 pb-6"
+            className="w-full max-w-7xl text-center relative min-h-dvh overflow-x-hidden px-3 sm:px-4 lg:px-6 pb-6"
         >
             <AnimatePresence mode="wait">
                 {stealNotice && (
@@ -84,7 +84,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         exit={{ y: 200, opacity: 0 }}
                         className="fixed bottom-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-t-8 border-color-yellow shadow-2xl"
                     >
-                        <div className="h-2 w-full bg-gradient-to-r from-color-yellow via-white to-color-yellow animate-pulse" />
+                        <div className="h-2 w-full bg-linear-to-r from-color-yellow via-white to-color-yellow animate-pulse" />
                         <div className="flex-1 flex items-center">
                             <div className="bg-color-yellow px-8 md:px-16 flex flex-col items-center justify-center shrink-0 border-r-4 border-black h-full">
                                 <span className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">BREAKING</span>
@@ -117,7 +117,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         exit={{ y: 200, opacity: 0 }}
                         className="fixed bottom-0 left-0 right-0 z-50 bg-black md:h-64 flex flex-col overflow-hidden border-t-8 border-error shadow-2xl"
                     >
-                        <div className="h-2 w-full bg-gradient-to-r from-error via-white to-error animate-pulse" />
+                        <div className="h-2 w-full bg-linear-to-r from-error via-white to-error animate-pulse" />
                         <div className="flex-1 flex items-center">
                             <div className="bg-error px-8 md:px-16 flex flex-col items-center justify-center shrink-0 border-r-4 border-black h-full">
                                 <span className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">BREAKING</span>
@@ -145,7 +145,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="glass-panel px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-4 rounded-3xl flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mx-auto w-full max-w-4xl"
+                    className="glass-panel px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-4 rounded-3xl flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mx-auto w-fit max-w-4xl"
                 >
                     <div className="flex flex-col items-center sm:items-start leading-none">
                         <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Round</span>
@@ -212,15 +212,15 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 title={player.name}
                             >
                                 <div
-                                    className="w-16 h-16 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
+                                    className="w-16 h-16 rounded-full overflow-hidden border-[1.5px] transition-all duration-150"
                                     style={{
                                         borderColor: isBlocked ? 'rgba(239,68,68,0.85)' : isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
                                         boxShadow: isAnswered
-                                            ? `0 0 10px ${playerColor}`
+                                            ? `0 0 4px ${playerColor}`
                                             : isBlocked
-                                                ? '0 0 8px rgba(239,68,68,0.35)'
+                                                ? '0 0 4px rgba(239,68,68,0.28)'
                                                 : 'none',
-                                       filter: isAnswered ? 'saturate(1.05)' : 'grayscale(1) saturate(0.3)',
+                                       filter: isAnswered ? 'none' : 'grayscale(1) saturate(0.3)',
                                         opacity: isAnswered ? 1 : 0.6
                                     }}
                                 >

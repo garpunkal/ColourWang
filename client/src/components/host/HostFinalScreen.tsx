@@ -256,7 +256,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                         <motion.div
                                             animate={{ left: ['-100%', '200%'] }}
                                             transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
-                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
+                                            className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
                                         />
                                     )}
                                 </motion.div>
@@ -300,7 +300,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                 >
                     <span className="relative z-10">Start New Battle</span>
                     <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute inset-0 bg-linear-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
                     />
                 </button>
                 <p className="text-white/10 font-black uppercase tracking-widest text-xs">

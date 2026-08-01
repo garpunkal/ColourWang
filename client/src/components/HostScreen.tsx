@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
 import { AnimatePresence, motion, animate } from 'framer-motion';
@@ -11,6 +11,7 @@ import { HostFinalScreen } from './host/HostFinalScreen';
 import { CountdownScreen } from './shared/CountdownScreen';
 import { RoundIntroScreen } from './RoundIntroScreen';
 import { audioManager } from '../utils/audioManager';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 // import { FullScreenCountdown } from './FullScreenCountdown';
 
 // Reduced spark count for performance
@@ -30,8 +31,25 @@ const HostScreen = ({ socket, gameState }: Props) => {
     // const [showCountdown, setShowCountdown] = useState(false);
 
     const [showExplosion, setShowExplosion] = useState(false);
+    const prefersReducedMotion = useReducedMotion();
     const lastResultKey = useRef<string | null>(null);
     const shakeRef = useRef<HTMLDivElement>(null);
+
+    const isLowPerformanceMode = useMemo(() => {
+        if (prefersReducedMotion) return true;
+        if (typeof navigator === 'undefined') return false;
+
+        const nav = navigator as Navigator & {
+            connection?: { saveData?: boolean };
+            deviceMemory?: number;
+        };
+
+        const lowCpuThreads = (navigator.hardwareConcurrency ?? 8) <= 4;
+        const lowMemory = (nav.deviceMemory ?? 8) <= 4;
+        const saveData = nav.connection?.saveData === true;
+
+        return lowCpuThreads || lowMemory || saveData;
+    }, [prefersReducedMotion]);
 
     useEffect(() => {
         const handleUnload = () => {
@@ -60,8 +78,8 @@ const HostScreen = ({ socket, gameState }: Props) => {
             // Trigger explosion after a tiny delay to ensure the reset happens correctly
             const timer = setTimeout(() => {
                 setShowExplosion(true);
-                // Shake content imperatively so the transform is cleaned up after and never traps fixed children
-                if (shakeRef.current) {
+                // Skip expensive shake animation on low-powered devices.
+                if (!isLowPerformanceMode && shakeRef.current) {
                     animate(
                         shakeRef.current,
                         { x: [0, -15, 15, -15, 15, -10, 10, -5, 5, 0], y: [0, 8, -8, 8, -8, 4, -4, 2, -2, 0] },
@@ -71,7 +89,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                     });
                 }
                 // Hide explosion after its sequence
-                setTimeout(() => setShowExplosion(false), 2500);
+                setTimeout(() => setShowExplosion(false), isLowPerformanceMode ? 1200 : 2200);
             }, 100);
 
             return () => clearTimeout(timer);
@@ -79,7 +97,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
             // Reset when leaving RESULT state so it can trigger again
             lastResultKey.current = null;
         }
-    }, [gameState?.status, gameState?.currentQuestionIndex]);
+    }, [gameState?.status, gameState?.currentQuestionIndex, isLowPerformanceMode]);
 
     // BGM Control
     useEffect(() => {
@@ -174,7 +192,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     return (
-        <div className="flex-1 flex flex-col relative w-full min-h-[100dvh]">
+        <div className="flex-1 flex flex-col relative w-full min-h-dvh">
             {/* Massive Shockwave Overlay – outside shake wrapper so fixed positioning isn't trapped */}
             <AnimatePresence>
                 {showExplosion && (
@@ -182,126 +200,169 @@ const HostScreen = ({ socket, gameState }: Props) => {
                         className="fixed pointer-events-none flex items-center justify-center overflow-hidden"
                         style={{ top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 9999, willChange: 'transform, opacity' }}
                     >
-                        {/* 1. Initial Blinding Flash */}
-                        <motion.div
-                            initial={{ opacity: 1 }}
-                            animate={{ opacity: 0 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                            className="absolute inset-0 bg-white"
-                        />
+                        {/* Keep low-power mode transform/opacity-only to avoid expensive paints. */}
+                        {isLowPerformanceMode ? (
+                            <>
+                                <motion.div
+                                    initial={{ opacity: 0.9 }}
+                                    animate={{ opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                                    className="absolute inset-0 bg-white"
+                                />
 
-                        {/* 2. Golden/Pink Gradient Wash */}
-                        <motion.div
-                            initial={{ opacity: 0.8 }}
-                            animate={{ opacity: 0 }}
-                            transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
-                            className="absolute inset-0"
-                            style={{ background: 'radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,51,102,0.4) 50%, transparent 70%)' }}
-                        />
+                                <motion.div
+                                    initial={{ opacity: 0.6, scale: 0.9 }}
+                                    animate={{ opacity: 0, scale: 1.4 }}
+                                    transition={{ duration: 0.75, ease: 'easeOut', delay: 0.05 }}
+                                    className="absolute rounded-full"
+                                    style={{
+                                        width: '40vh',
+                                        height: '40vh',
+                                        background: 'radial-gradient(circle, rgba(255,215,0,0.55) 0%, rgba(255,51,102,0.35) 55%, transparent 80%)',
+                                        willChange: 'transform, opacity'
+                                    }}
+                                />
 
-                        {/* 3. Rotating Light Beams */}
-                        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-                            <motion.div
-                                key={`beam-${i}`}
-                                initial={{ opacity: 0.8, scaleY: 0 }}
-                                animate={{ opacity: 0, scaleY: 1 }}
-                                transition={{ duration: 1.2, ease: "easeOut", delay: i * 0.03 }}
-                                className="absolute h-[200vh] w-8"
-                                style={{
-                                    background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.8), transparent)',
-                                    transform: `rotate(${angle}deg)`,
-                                    transformOrigin: 'center center'
-                                }}
-                            />
-                        ))}
+                                {[
+                                    { color: '#FFD700', delay: 0, scale: 6, duration: 0.8 },
+                                    { color: '#ff3366', delay: 0.08, scale: 4.5, duration: 0.7 }
+                                ].map((ring, i) => (
+                                    <motion.div
+                                        key={`ring-lite-${i}`}
+                                        initial={{ scale: 0.2, opacity: 0.85 }}
+                                        animate={{ scale: ring.scale, opacity: 0 }}
+                                        transition={{ duration: ring.duration, ease: 'easeOut', delay: ring.delay }}
+                                        className="absolute rounded-full"
+                                        style={{
+                                            width: '16vh',
+                                            height: '16vh',
+                                            border: `14px solid ${ring.color}`,
+                                            willChange: 'transform, opacity'
+                                        }}
+                                    />
+                                ))}
 
-                        {/* 4. Expanding Starburst */}
-                        <motion.div
-                            initial={{ scale: 0, rotate: 0, opacity: 1 }}
-                            animate={{ scale: 15, rotate: 180, opacity: 0 }}
-                            transition={{ duration: 1.8, ease: [0.2, 0, 0, 1] }}
-                            className="absolute"
-                            style={{
-                                width: '100px',
-                                height: '100px',
-                                background: 'conic-gradient(from 0deg, transparent, white 10%, transparent 20%, transparent, white 30%, transparent 40%,transparent, white 50%, transparent 60%, transparent, white 70%, transparent 80%, transparent, white 90%, transparent)',
-                                willChange: 'transform, opacity'
-                            }}
-                        />
+                                {SPARK_DATA.slice(0, 4).map((p, i) => (
+                                    <motion.div
+                                        key={`spark-lite-${i}`}
+                                        initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+                                        animate={{
+                                            x: Math.cos(p.angle) * 260,
+                                            y: Math.sin(p.angle) * 260,
+                                            scale: 0.25,
+                                            opacity: 0
+                                        }}
+                                        transition={{ duration: 0.55, ease: 'easeOut', delay: 0.08 }}
+                                        className="absolute w-3 h-3 rounded-full"
+                                        style={{
+                                            background: i % 2 === 0 ? '#FFD700' : '#ff3366',
+                                            willChange: 'transform, opacity'
+                                        }}
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            <>
+                                <motion.div
+                                    initial={{ opacity: 1 }}
+                                    animate={{ opacity: 0 }}
+                                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                                    className="absolute inset-0 bg-white"
+                                />
 
-                        {/* 5. Multiple Expanding Rings */}
-                        {[
-                            { color: '#FFD700', delay: 0, scale: 12, duration: 1.2 },
-                            { color: '#ff3366', delay: 0.1, scale: 10, duration: 1.1 },
-                            { color: '#00e5ff', delay: 0.2, scale: 8, duration: 1 },
-                            { color: '#ffffff', delay: 0.3, scale: 6, duration: 0.9 }
-                        ].map((ring, i) => (
-                            <motion.div
-                                key={`ring-${i}`}
-                                initial={{ scale: 0, opacity: 1, borderWidth: "80px" }}
-                                animate={{ scale: ring.scale, opacity: 0, borderWidth: "0px" }}
-                                transition={{ duration: ring.duration, ease: "easeOut", delay: ring.delay }}
-                                className="absolute rounded-full box-border"
-                                style={{
-                                    width: '20vh',
-                                    height: '20vh',
-                                    borderColor: ring.color,
-                                    borderStyle: 'solid',
-                                    willChange: 'transform, opacity'
-                                }}
-                            />
-                        ))}
+                                <motion.div
+                                    initial={{ opacity: 0.8 }}
+                                    animate={{ opacity: 0 }}
+                                    transition={{ duration: 1.2, ease: 'easeOut', delay: 0.1 }}
+                                    className="absolute inset-0"
+                                    style={{ background: 'radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,51,102,0.4) 50%, transparent 70%)' }}
+                                />
 
-                        {/* 6. Central Glowing Orb */}
-                        <motion.div
-                            initial={{ scale: 0, opacity: 1 }}
-                            animate={{ scale: 3, opacity: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="absolute w-32 h-32 rounded-full"
-                            style={{
-                                background: 'radial-gradient(circle, white 0%, rgba(255,215,0,0.8) 30%, rgba(255,51,102,0.6) 60%, transparent 70%)',
-                                boxShadow: '0 0 100px 50px rgba(255,215,0,0.5)',
-                                willChange: 'transform, opacity'
-                            }}
-                        />
+                                {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+                                    <motion.div
+                                        key={`beam-${i}`}
+                                        initial={{ opacity: 0.8, scaleY: 0 }}
+                                        animate={{ opacity: 0, scaleY: 1 }}
+                                        transition={{ duration: 1, ease: 'easeOut', delay: i * 0.03 }}
+                                        className="absolute h-[180vh] w-6"
+                                        style={{
+                                            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.7), transparent)',
+                                            transform: `rotate(${angle}deg)`,
+                                            transformOrigin: 'center center',
+                                            willChange: 'transform, opacity'
+                                        }}
+                                    />
+                                ))}
 
-                        {/* 7. Outward Energy Sparks - more dramatic */}
-                        {SPARK_DATA.map((p, i) => (
-                            <motion.div
-                                key={`spark-${i}`}
-                                initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
-                                animate={{
-                                    x: Math.cos(p.angle) * p.velocity * 1.5,
-                                    y: Math.sin(p.angle) * p.velocity * 1.5,
-                                    scale: 0,
-                                    opacity: 0
-                                }}
-                                transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                                className="absolute w-4 h-4 rounded-full"
-                                style={{
-                                    background: i % 2 === 0 ? '#FFD700' : '#ff3366',
-                                    boxShadow: `0 0 20px ${i % 2 === 0 ? '#FFD700' : '#ff3366'}`,
-                                    willChange: 'transform, opacity'
-                                }}
-                            />
-                        ))}
+                                <motion.div
+                                    initial={{ scale: 0, rotate: 0, opacity: 1 }}
+                                    animate={{ scale: 12, rotate: 140, opacity: 0 }}
+                                    transition={{ duration: 1.3, ease: [0.2, 0, 0, 1] }}
+                                    className="absolute"
+                                    style={{
+                                        width: '92px',
+                                        height: '92px',
+                                        background: 'conic-gradient(from 0deg, transparent, white 10%, transparent 20%, transparent, white 30%, transparent 40%, transparent, white 50%, transparent 60%, transparent, white 70%, transparent 80%, transparent, white 90%, transparent)',
+                                        willChange: 'transform, opacity'
+                                    }}
+                                />
 
-                        {/* 8. Screen Edge Glow Pulse */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 0.6, 0] }}
-                            transition={{ duration: 1, ease: "easeInOut" }}
-                            className="absolute inset-0"
-                            style={{
-                                boxShadow: 'inset 0 0 200px 100px rgba(255,215,0,0.3)',
-                                willChange: 'opacity'
-                            }}
-                        />
+                                {[
+                                    { color: '#FFD700', delay: 0, scale: 11, duration: 1.1 },
+                                    { color: '#ff3366', delay: 0.1, scale: 9, duration: 1 },
+                                    { color: '#00e5ff', delay: 0.18, scale: 7.5, duration: 0.9 }
+                                ].map((ring, i) => (
+                                    <motion.div
+                                        key={`ring-${i}`}
+                                        initial={{ scale: 0.25, opacity: 0.95 }}
+                                        animate={{ scale: ring.scale, opacity: 0 }}
+                                        transition={{ duration: ring.duration, ease: 'easeOut', delay: ring.delay }}
+                                        className="absolute rounded-full"
+                                        style={{
+                                            width: '20vh',
+                                            height: '20vh',
+                                            border: `18px solid ${ring.color}`,
+                                            willChange: 'transform, opacity'
+                                        }}
+                                    />
+                                ))}
+
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 1 }}
+                                    animate={{ scale: 2.6, opacity: 0 }}
+                                    transition={{ duration: 0.75, ease: 'easeOut' }}
+                                    className="absolute w-28 h-28 rounded-full"
+                                    style={{
+                                        background: 'radial-gradient(circle, white 0%, rgba(255,215,0,0.8) 30%, rgba(255,51,102,0.6) 60%, transparent 70%)',
+                                        willChange: 'transform, opacity'
+                                    }}
+                                />
+
+                                {SPARK_DATA.map((p, i) => (
+                                    <motion.div
+                                        key={`spark-${i}`}
+                                        initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+                                        animate={{
+                                            x: Math.cos(p.angle) * p.velocity,
+                                            y: Math.sin(p.angle) * p.velocity,
+                                            scale: 0,
+                                            opacity: 0
+                                        }}
+                                        transition={{ duration: 0.72, ease: 'easeOut', delay: 0.08 }}
+                                        className="absolute w-3 h-3 rounded-full"
+                                        style={{
+                                            background: i % 2 === 0 ? '#FFD700' : '#ff3366',
+                                            willChange: 'transform, opacity'
+                                        }}
+                                    />
+                                ))}
+                            </>
+                        )}
                     </div>
                 )}
             </AnimatePresence>
 
-            <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-[100dvh] overflow-y-auto' : 'flex-1 flex flex-col p-3 sm:p-6 lg:p-8 xl:p-10 relative w-full min-h-[100dvh] overflow-y-auto'}>
+            <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-dvh overflow-y-auto' : 'flex-1 flex flex-col p-3 sm:p-6 lg:p-8 xl:p-10 relative w-full min-h-dvh overflow-y-auto'}>
             {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION') && (
                 <HostHeader
                     code={code}
@@ -334,7 +395,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            <div className={isResultView ? 'min-h-[100dvh] w-full relative z-10 overflow-y-auto' : 'flex-1 flex flex-col justify-start items-center relative z-10 w-full overflow-y-auto pb-6'}>
+            <div className={isResultView ? 'min-h-dvh w-full relative z-10 overflow-y-auto' : 'flex-1 flex flex-col justify-start items-center relative z-10 w-full overflow-y-auto pb-6'}>
                 <AnimatePresence>
                     {isSyncing ? (
                         <div key="syncing" className="flex-1 flex flex-col items-center justify-center p-12 text-center">

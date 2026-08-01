@@ -476,7 +476,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
                                     </p>
                                 </div>
-                                <div className="flex items-center justify-center gap-2 flex-wrap w-full sm:w-auto">
+                                <div className="flex items-center justify-center gap-2 flex-wrap w-full sm:w-auto mx-auto">
                                     <input
                                         ref={uploadInputRef}
                                         type="file"

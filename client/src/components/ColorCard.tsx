@@ -173,8 +173,8 @@ export const ColorCard = memo(function ColorCard({
                                 </span>
                             </div>
                             {/* Decorative lines */}
-                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
+                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
                         </div>
                     )}
 

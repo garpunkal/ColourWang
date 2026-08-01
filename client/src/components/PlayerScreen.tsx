@@ -104,8 +104,6 @@ export default function PlayerScreen({ socket, gameState, setGameState }: Props)
                     <PlayerFinalScreen
                         player={me}
                         gameState={gameState}
-                        setGameState={setGameState}
-                        socket={socket}
                     />
                 )}
             </div>

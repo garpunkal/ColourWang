@@ -293,51 +293,52 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
             </AnimatePresence>
 
             <div className="text-center px-2 md:px-4 shrink-0 py-0.5 md:py-2">
-                <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-1 md:mb-8 glass-panel px-2 md:px-4 py-1 rounded-2xl mx-auto w-fit">
-                    <div className="flex flex-col items-center leading-none">
-                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Round</span>
-                        <span className="text-lg font-black italic tracking-tighter text-white">{gameState.currentRoundIndex + 1}</span>
+                <motion.div
+                    initial={{ y: -30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="glass-panel px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-4 rounded-3xl flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mx-auto w-fit max-w-4xl mb-1 md:mb-8"
+                >
+                    <div className="flex flex-col items-center sm:items-start leading-none">
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Round</span>
+                        <span className="text-2xl md:text-4xl font-black italic text-white/90">{gameState.currentRoundIndex + 1}</span>
                     </div>
-                    <div className="w-px h-6 bg-white/10" />
+                    <div className="hidden sm:block w-px h-12 bg-white/10" />
                     <div className="flex flex-col items-center leading-none">
-                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Question</span>
-                        <span className="text-lg font-black italic tracking-tighter text-white">{currentQuestionIndex + 1}</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Question</span>
+                        <span className="text-2xl md:text-4xl font-black italic">{currentQuestionIndex + 1}</span>
                     </div>
-                    <div className="w-px h-6 bg-white/10" />
-                    <div className="flex flex-col items-center leading-none">
-                        <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Time Left</span>
-                        <div className="flex items-baseline gap-1">
-                            <span className={`text-lg font-black font-mono tabular-nums italic tracking-tighter transition-colors ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-color-blue'}`}>{timeLeft}</span>
-                            <span className={`text-[8px] font-black opacity-40 ${timeLeft <= 5 ? 'text-error' : ''}`}>S</span>
-                        </div>
+                    <div className="hidden sm:block w-px h-12 bg-white/10" />
+                    <div className="flex flex-col items-center sm:items-end leading-none">
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue mb-1">Time</span>
+                        <span className={`text-2xl md:text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}s</span>
                     </div>
                     {gameState.streaksEnabled && me && me.streak > 0 && (
                         <>
-                            <div className="w-px h-6 bg-white/10" />
+                            <div className="hidden sm:block w-px h-12 bg-white/10" />
                             <motion.div 
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 className="flex flex-col items-center leading-none"
                             >
-                                <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Streak</span>
+                                <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Streak</span>
                                 <motion.div 
                                     className="flex items-center gap-1"
                                     animate={me.streak >= 3 ? { scale: [1, 1.1, 1] } : {}}
                                     transition={{ duration: 0.5, repeat: Infinity }}
                                 >
-                                    <span className={`text-lg font-black italic tracking-tighter ${me.streak >= 3 ? 'text-color-yellow' : 'text-color-orange'}`}>
+                                    <span className={`text-2xl md:text-4xl font-black italic tracking-tighter ${me.streak >= 3 ? 'text-color-yellow' : 'text-color-orange'}`}>
                                         {me.streak >= 3 ? '🔥' : '⚡'} {me.streak}
                                     </span>
                                     {me.streak >= 3 && (
-                                        <span className="text-[8px] font-black text-color-yellow opacity-80">×1.5</span>
+                                        <span className="text-xs md:text-sm font-black text-color-yellow opacity-80">×1.5</span>
                                     )}
                                 </motion.div>
                             </motion.div>
                         </>
                     )}
-                </div>
+                </motion.div>
                 <h3 
-                    className="text-lg md:text-4xl lg:text-5xl text-display text-display-gradient px-2 md:px-8 py-0.5 md:py-2 text-center max-w-4xl mx-auto"
+                    className="text-3xl lg:text-5xl text-display text-display-gradient px-2 md:px-8 py-4 md:py-4 text-center max-w-4xl mx-auto"
                     style={{ 
                         lineHeight: '1.1',
                         wordBreak: 'break-word',
@@ -432,7 +433,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-0">
+                    <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-4">
                         <motion.button
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
@@ -458,7 +459,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     key="selection"
                     initial={{ scale: 0.8, opacity: 0, y: 100 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
-                    className="text-center flex-1 flex flex-col items-center justify-center gap-6 w-full max-w-3xl mx-auto px-4"
+                    className="text-center flex-1 flex flex-col items-start justify-start gap-6 w-full max-w-3xl mx-auto px-4"
                 >
                     <div className="w-full space-y-3">
                         <div className="glass p-4 md:p-5 rounded-4xl border-white/10 space-y-3 mt-6">

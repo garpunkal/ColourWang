@@ -180,7 +180,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                    </div>
                    <div className="flex items-baseline gap-1">
                        <span className="font-mono text-2xl font-black tabular-nums text-white">{timeLeft}</span>
-                       <span className="text-[10px] font-bold text-white/35">s</span>
+                       <span className="text-sm font-bold text-white/35">s</span>
                    </div>
                </div>
             </motion.div>

@@ -76,7 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={this.handleReset}
-                            className="px-8 py-4 bg-gradient-to-r from-color-blue to-color-purple text-white font-black text-lg rounded-2xl uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="px-8 py-4 bg-linear-to-r from-color-blue to-color-purple text-white font-black text-lg rounded-2xl uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
                         >
                             Reload Game
                         </motion.button>

@@ -60,10 +60,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
     }, [gameState.players]);
     const hasManyPlayers = sortedPlayers.length > 3;
 
-    const leadPlayer = sortedPlayers[0];
-    const leadPlayerName = leadPlayer?.name || 'No leader yet';
-    const leadPlayerScore = leadPlayer?.score || 0;
-
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
@@ -126,9 +122,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             key="result"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative min-h-[100dvh] w-full overflow-x-hidden"
+            className="relative min-h-dvh w-full overflow-x-hidden"
         >
-            <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-3 pt-4 sm:px-6 md:px-8 md:pt-6 pb-6">
+            <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-7xl flex-col items-center px-3 pt-4 sm:px-6 md:px-8 md:pt-6 pb-6">
                 <div className="mb-4 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-6 md:px-4">
                     <div className="flex items-center gap-2">
                         <Hash size={14} className="text-blue-300" />
@@ -137,11 +133,10 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     <div className="flex items-center gap-2">
                         <Users size={14} className="text-cyan-300" />
                         <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">{gameState.players.length} Players</span>
-                    </div>
-                    <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">Lead {leadPlayerName} · {leadPlayerScore}</div>
+                    </div>                    
                 </div>
 
-                <div className="w-full text-center">
+                <div className="w-full text-center mb-4 flex flex-col justify-center items-center gap-2 md:mb-6 mx-auto">
                     <motion.h1
                         initial={{ y: 24, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -180,16 +175,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     </div>
                 </div>
 
-                <div className="w-full flex-1 overflow-hidden">
-                    <div className={`flex items-center justify-center gap-4 ${hasManyPlayers ? 'mb-2 md:mb-3' : 'mb-3 md:mb-4'}`}>
-                        <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30 md:w-20" />
-                        <span className="text-xs font-black uppercase tracking-[0.35em] text-white/60 md:text-sm">Player Intel</span>
-                        <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
-                    </div>
-
-                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
+                <div className="w-full overflow-hidden">
+                    <div className={`mx-auto flex flex-col md:flex-row flex-wrap w-full justify-center items-center max-w-6xl overflow-y-auto px-1 pb-2 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-88 pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-128'}`}>
                         {sortedPlayers.map((player, index) => {
-                          //  const playerAnswer = sortColors(player.lastAnswer || []);
 
                             return (
                                 <motion.div
@@ -209,13 +197,13 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                         boxShadow: player.streak >= 3 ? '0 0 30px rgba(249,115,22,0.2)' : 'none'
                                     }}
                                 >
-                                    <div className={`flex items-center ${hasManyPlayers ? 'mb-2 gap-2.5' : 'mb-3 gap-3'}`}>
+                                    <div className={`flex items-center ${hasManyPlayers ? 'gap-2.5' : 'gap-3'}`}>
                                         <div className={`relative shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-lg ${hasManyPlayers ? 'h-9 w-9' : 'h-11 w-11'}`}>
                                             <div className="absolute inset-0 bg-black/15" />
                                             <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="relative z-10 h-full w-full" />
                                         </div>
                                         <div className="min-w-0">
-                                            <span className={`block w-full truncate pr-8 font-black uppercase tracking-wide text-white ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
+                                            <span className={`block w-fit truncate pr-8 font-black uppercase tracking-wide text-white ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
                                                 {player.name}
                                             </span>
                                             <div className="flex items-center gap-1.5">
@@ -227,23 +215,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1' : 'p-1.5'}`}>
-                                        <div className="flex flex-wrap justify-center gap-1">
-                                            {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
-                                                <ColorCard
-                                                    key={i}
-                                                    color={color}
-                                                    size="micro"
-                                                    index={i}
-                                                    disabled={true}
-                                                />
-                                            )) : (
-                                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">No Answer</span>
-                                            )}
-                                        </div>
-                                    </div> */}
-
                                     <div className={`pointer-events-none absolute right-0 top-0 h-16 w-16 opacity-30 blur-2xl ${player.isCorrect ? 'bg-success' : 'bg-error'}`} />
                                 </motion.div>
                             );
@@ -251,15 +222,15 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     </div>
                 </div>
 
-                <div className="mt-auto pt-4 w-full px-4">
+                <div className="pt-16 w-full px-4">
                     <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3">
                         <motion.button
                             whileHover={{ scale: 1.03, y: -2 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={onNextQuestion}
-                            className="btn btn-primary group relative w-full overflow-hidden rounded-2xl px-6 py-3 shadow-xl md:px-8 md:py-4"
+                            className="btn btn-primary group relative  overflow-hidden rounded-2xl px-6 py-3 shadow-xl md:px-8 md:py-4"
                         >
-                            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+                            <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                             <div className="relative z-10 flex items-center justify-between gap-5 md:gap-6">
                                 <div className="min-w-0 flex-1 flex flex-col items-start leading-none">
                                     {nextButtonSublabel && <span className="mb-0.5 text-[10px] font-black uppercase tracking-[0.3em] opacity-60">{nextButtonSublabel}</span>}

@@ -1,19 +1,14 @@
 import type { Player, GameState } from '../../types/game';
-import type { Socket } from 'socket.io-client';
 import { motion } from 'framer-motion';
-import { LogOut, Trophy } from 'lucide-react';
-import { getAvatarColor } from '../../constants/avatars';
-import { Avatar } from '../GameAvatars';
+import { Trophy } from 'lucide-react';
 import { useMemo } from 'react';
 
 interface Props {
     player: Player;
     gameState: GameState;
-    setGameState: (state: GameState | null) => void;
-    socket: Socket;
 }
 
-export function PlayerFinalScreen({ player, gameState, setGameState, socket }: Props) {
+export function PlayerFinalScreen({ player, gameState }: Props) {
     const sortedPlayers = useMemo(() => {
         return [...gameState.players].sort((a, b) => b.score - a.score);
     }, [gameState.players]);
@@ -39,7 +34,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
             key="final"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-start w-full max-w-lg mx-auto overflow-hidden min-h-[80vh] relative py-10 pt-10"
+            className="flex flex-col items-center justify-start w-full max-w-lg mx-auto overflow-hidden relative py-4 md:py-6"
         >
             {/* Background Atmosphere */}
             <div
@@ -49,9 +44,9 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                 }}
             />
 
-            <div className="relative z-10 w-full flex flex-col items-center gap-12">
+            <div className="relative z-10 w-full flex flex-col items-center gap-6 md:gap-8">
                 {/* Ranking Visual - Text Only */}
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-2">
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -59,7 +54,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                         className="text-center"
                     >
                         <h3
-                            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-none"
+                            className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.9]"
                             style={{
                                 color: 'white',
                                 textShadow: `0 0 40px ${themeColor}`
@@ -68,7 +63,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                             RANK #{rank}
                         </h3>
                         <div
-                            className="mt-3 inline-block px-6 py-1.5 rounded-full text-sm font-black tracking-[0.4em] uppercase opacity-70 border border-white/10"
+                            className="mt-2 inline-block px-4 py-1 rounded-full text-xs font-black tracking-[0.3em] uppercase opacity-70 border border-white/10"
                             style={{ backgroundColor: `${themeColor}20`, color: 'white' }}
                         >
                             {isWinner ? 'WINNER' : 'LOSER'}
@@ -81,20 +76,20 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="w-full glass-panel p-6 rounded-4xl border-white/5 bg-white/2"
+                    className="w-full glass-panel p-4 md:p-5 rounded-3xl md:rounded-4xl border-white/5 bg-white/2"
                 >
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Trophy size={20} className="text-color-yellow" />
-                            <span className="text-xs uppercase tracking-[0.4em] text-white/40 font-black italic">Final Standings</span>
+                            <Trophy size={18} className="text-color-yellow" />
+                            <span className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/40 font-black italic">Final Standings</span>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-black italic">Your Score</span>
-                            <span className="text-xl font-black font-mono text-white">{player.score} PTS</span>
+                            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-black italic">Your Score</span>
+                            <span className="text-lg md:text-xl font-black font-mono text-white">{player.score} PTS</span>
                         </div>
                     </div>
 
-                    <div className="space-y-3">
+                    {/* <div className="space-y-3">
                         {ranks.map((p, index) => {
                             const pColor = getAvatarColor(p.avatar);
                             const isMe = p.id === player.id;
@@ -132,30 +127,10 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                                 </motion.div>
                             );
                         })}
-                    </div>
+                    </div> */}
                 </motion.div>
 
-                {/* Disconnect Action */}
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                        // Clear stored game data
-                        localStorage.removeItem('cw_gameCode');
-                        localStorage.removeItem('cw_playerId');
-                        // Disconnect from socket
-                        socket.disconnect();
-                        // Clear game state
-                        setGameState(null);
-                    }}
-                    className="flex items-center gap-3 px-12 py-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black italic tracking-widest uppercase text-xs group mt-4"
-                >
-                    <LogOut size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    Leave Game
-                </motion.button>
+              
             </div>
         </motion.div>
     );

@@ -63,7 +63,7 @@ export const Logo = ({ className = "" }: { className?: string }) => {
                         ColourWang
                     </h1>
                     {/* Subtle reflection below */}
-                    <div className="h-1 w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mt-2 rounded-full blur-[1px]" />
+                    <div className="h-1 w-full bg-linear-to-r from-transparent via-white/20 to-transparent mt-2 rounded-full blur-[1px]" />
                 </div>
             </div>
         </a>

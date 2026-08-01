@@ -4,6 +4,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Users } from 'lucide-react';
 import type { Socket } from 'socket.io-client';
 import { BGM_TRACKS } from '../../config/musicConfig';
+import { LogOut } from 'lucide-react';
+
 
 interface Props {
     code: string;
@@ -110,7 +112,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                             className="px-3 py-2 text-[10px] md:text-xs uppercase font-black tracking-wider rounded-xl border border-red-400/40 bg-red-500/10 text-red-200 hover:bg-red-500/20 hover:border-red-300/60 transition-colors"
                             title="Abandon current game and reset"
                         >
-                            Abandon Game
+                               <LogOut size={18} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5" />
                         </button>
                     )}
                     <div className="flex items-center bg-black/30 rounded-full border border-white/10 backdrop-blur-md hover:bg-black/40 transition-all duration-500 px-6 py-2 gap-3">
