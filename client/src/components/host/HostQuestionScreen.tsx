@@ -175,7 +175,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                             <div className="hidden sm:block w-px h-12 bg-white/10" />
                             <div className="flex flex-col items-center sm:items-end leading-none">
                                 <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue mb-1">Time</span>
-                                <span className={`text-2xl md:text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}s</span>
+                                <span className={`text-2xl md:text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}</span>
                             </div>
                         </motion.div>
 

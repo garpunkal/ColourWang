@@ -208,7 +208,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             </span>
                                             <div className="flex items-center gap-1.5">
                                                 <span className={`${hasManyPlayers ? 'text-xs' : 'text-sm'} font-black tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
-                                                    {player.isCorrect ? `+${player.roundScore || 0} POINTS` : '0 POINTS'}
+                                                    {player.isCorrect ? `+${player.roundScore || 0}` : '0'} 
                                                 </span>
                                                 {player.streak >= 3 && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>🔥</span>}
                                                 {player.isFastestFinger && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>⚡</span>}
@@ -241,7 +241,6 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 <div className="shrink-0 flex items-center gap-3 md:gap-4 pl-3 md:pl-4 border-l border-white/20">
                                     <div className="flex items-center gap-1.5">
                                         <span className="font-mono text-3xl font-black tabular-nums">{timeLeft}</span>
-                                        <span className="text-[16px] font-black uppercase ">s</span>
                                     </div>
                                     <Play fill="currentColor" size={20} className="transition-transform group-hover:translate-x-1" />
                                 </div>

@@ -87,23 +87,29 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="mb-3 text-5xl font-black uppercase italic leading-none tracking-tight text-white md:text-7xl"
+                        className="mb-6 text-5xl font-black uppercase italic leading-none tracking-tight text-white md:text-7xl "
                         style={{ textShadow: `0 0 40px ${themeColorHex}` }}
                     >
                         {isCorrect ? 'Correct!' : 'Wrong!'}
                     </motion.h2>
 
-                    <motion.div
-                        initial={{ y: 12, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.16 }}
-                        className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 backdrop-blur-sm"
-                        style={{ borderColor: `${themeColorHex}66`, background: `${themeColorHex}22` }}
-                    >
-                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white/90 md:text-sm">
-                            {isCorrect ? `+${player.roundScore || 0} Points` : '0 Points'}
-                        </span>
-                    </motion.div>
+
+                    {isCorrect ? (
+                        <motion.div
+                            initial={{ y: 12, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.16 }}
+                            className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 backdrop-blur-sm"
+                            style={{ borderColor: `${themeColorHex}66`, background: `${themeColorHex}22` }}
+                        >
+                            <span className="text-xs font-black uppercase tracking-[0.2em] text-white/90 md:text-sm">
+                               +{player.roundScore || 0} 
+                            </span>
+
+                        </motion.div>
+                    ) : (
+                        <></>
+                    )}
 
                     <AnimatePresence>
                         {(player.streakPoints > 0 || player.fastestFingerPoints > 0) && (
@@ -113,13 +119,13 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                 className="mb-6 flex flex-wrap justify-center gap-2"
                             >
                                 {player.streakPoints > 0 && (
-                                    <div className="rounded-lg border border-orange-400/40 bg-orange-500/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.18em] text-orange-200">
+                                    <div className="rounded-lg border border-orange-400/40 bg-orange-500/20 px-2 py-0.5 text-md font-black uppercase tracking-[0.18em] text-orange-200">
                                         Streak +{player.streakPoints}
                                     </div>
                                 )}
                                 {player.fastestFingerPoints > 0 && (
-                                    <div className="rounded-lg border border-yellow-300/40 bg-yellow-500/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.18em] text-yellow-100">
-                                        Speed +{player.fastestFingerPoints}
+                                    <div className="rounded-lg border border-yellow-300/40 bg-yellow-500/20 px-2 py-0.5 text-md font-black uppercase tracking-[0.18em] text-yellow-100">
+                                        Speed +{player.fastestFingerPoints} 
                                     </div>
                                 )}
                             </motion.div>
@@ -174,13 +180,12 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                 transition={{ delay: 0.35 }}
                 className="absolute inset-x-0 bottom-24 md:bottom-12 z-20 px-4"
             >
-               <div className="mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-2xl border border-white/15 bg-black/40 p-3 backdrop-blur-lg">
-                 
-                   <div className="flex items-baseline gap-1">
-                       <span className="font-mono text-2xl font-black tabular-nums text-white">{timeLeft}</span>
-                       <span className="text-md font-bold text-white/35">s</span>
-                   </div>
-               </div>
+                <div className="mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-2xl border border-white/15 bg-black/40 p-3 backdrop-blur-lg">
+
+                    <div className="flex items-baseline gap-1">
+                        <span className="font-mono text-2xl font-black tabular-nums text-white">{timeLeft}</span>
+                    </div>
+                </div>
             </motion.div>
         </motion.div>
     );

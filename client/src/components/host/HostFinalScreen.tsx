@@ -205,7 +205,6 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                                                 style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
                                             >
                                                 {player.score}
-                                                <span className="text-[10px] md:text-xl ml-1 md:ml-2 opacity-40 font-sans tracking-widest uppercase">pts</span>
                                             </span>
                                         </div>
 

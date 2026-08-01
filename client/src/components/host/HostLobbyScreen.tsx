@@ -63,7 +63,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                 <span className="text-display-gradient pr-10">Lobby</span>
             </h1>
 
-            <div className={`flex flex-wrap justify-center w-full max-w-7xl mb-4 md:mb-6 px-2 sm:px-4 lg:px-6 pt-2 pb-2 overflow-y-auto ${hasManyPlayers ? 'gap-2 sm:gap-3 max-h-[32dvh] sm:max-h-[36dvh] xl:max-h-[400px] pr-1' : 'gap-3 sm:gap-4 max-h-[38dvh] sm:max-h-[42dvh] xl:max-h-[440px]'}`}>
+            <div className={`flex flex-wrap justify-center w-full max-w-7xl mb-4 md:mb-6 px-2 sm:px-4 lg:px-6 pt-2 pb-2 overflow-y-auto ${hasManyPlayers ? 'gap-2 sm:gap-3 max-h-[32dvh] sm:max-h-[36dvh] xl:max-h-100 pr-1' : 'gap-3 sm:gap-4 max-h-[38dvh] sm:max-h-[42dvh] xl:max-h-[440px]'}`}>
                 {players.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const textColor = getAvatarTextColor(player.avatar);
@@ -73,7 +73,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                             initial={{ scale: 0, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             transition={{ type: "spring", delay: i * 0.05, stiffness: 200, damping: 20 }}
-                            className={`glass group relative rounded-2xl flex flex-col items-center border-white/10 shadow-lg transition-all duration-300 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-[10rem]' : 'p-3 gap-2 min-w-[9rem] sm:min-w-[10rem] md:min-w-[12rem]'}`}
+                            className={`glass group relative rounded-2xl flex flex-col items-center border-white/10 shadow-lg transition-all duration-300 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-40' : 'p-3 gap-2 min-w-[9rem] sm:min-w-[10rem] md:min-w-[12rem]'}`}
                             style={{
                                 border: `2px solid ${avatarColor}40`,
                                 background: `linear-gradient(180deg, ${avatarColor}15 0%, transparent 100%)`
@@ -90,7 +90,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                                 <X size={20} strokeWidth={3} className="transition-transform group-hover:rotate-90" />
                             </button>
 
-                            <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-[4.5rem] md:h-[4.5rem]' : 'w-20 h-20 md:w-24 md:h-24'} bg-white/5 rounded-2xl flex items-center justify-center shadow-inner border border-white/10 overflow-hidden shrink-0`}>
+                            <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-18 md:h-18' : 'w-20 h-20 md:w-24 md:h-24'} bg-white/5 rounded-2xl flex items-center justify-center shadow-inner border border-white/10 overflow-hidden shrink-0`}>
                                 <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                             </div>
                             <div className="flex flex-col items-center overflow-hidden w-full">
@@ -112,9 +112,9 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`glass rounded-2xl flex flex-col items-center border-white/10 shadow-lg border-dashed border-2 bg-white/5 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-[10rem]' : 'p-3 gap-2 min-w-40'}`}
+                        className={`glass rounded-2xl flex flex-col items-center border-white/10 shadow-lg border-dashed border-2 bg-white/5 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-40' : 'p-3 gap-2 min-w-40'}`}
                     >
-                        <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-[4.5rem] md:h-[4.5rem]' : 'w-20 h-20 md:w-24 md:h-24'} flex items-center justify-center relative bg-black/20 rounded-2xl overflow-hidden`}>
+                        <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-18 md:h-18' : 'w-20 h-20 md:w-24 md:h-24'} flex items-center justify-center relative bg-black/20 rounded-2xl overflow-hidden`}>
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
@@ -161,7 +161,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                         animate={{ y: 0, opacity: 1 }}
                         whileHover={{ scale: 1.05 }}
                         onClick={onStartGame}
-                        className="btn btn-primary text-xl sm:text-2xl md:text-3xl lg:text-4xl py-4 sm:py-5 md:py-6 lg:py-8 px-8 sm:px-10 md:px-12 lg:px-20 rounded-[2rem] sm:rounded-[3rem] shadow-[0_0_80px_rgba(0,229,255,0.4)] uppercase font-black italic tracking-widest border-t-4 md:border-t-6 border-white/20 animate-pulse-slow mb-6 md:mb-8"
+                        className="btn btn-primary text-xl sm:text-2xl md:text-3xl lg:text-4xl py-4 sm:py-5 md:py-6 lg:py-8 px-8 sm:px-10 md:px-12 lg:px-20 rounded-4xl sm:rounded-[3rem] shadow-[0_0_80px_rgba(0,229,255,0.4)] uppercase font-black italic tracking-widest border-t-4 md:border-t-6 border-white/20 animate-pulse-slow mb-6 md:mb-8"
                     >
                         {autoStartTimer !== null ? 'Start Now' : 'Start Game'}
                     </motion.button>

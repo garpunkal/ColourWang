@@ -72,14 +72,10 @@ export function PlayerFinalScreen({ player, gameState }: Props) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
                     className="w-full glass-panel p-4 md:p-5 rounded-3xl md:rounded-4xl border-white/5 bg-white/2"
-                >
-                    <div className="flex items-center justify-center">
-                        <div className="flex items-center mr-4">
-                            <Trophy size={36} className="text-color-yellow" />
-
-                        </div>
+                >                    <div className="flex items-center justify-center">
+                       
                         <div className="flex flex-col items-end">
-                            <span className="text-2xl md:text-4xl font-black text-white">{player.score} points</span>
+                            <span className="text-2xl md:text-4xl font-black text-white">{player.score}</span>
                         </div>
                     </div>
 

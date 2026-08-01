@@ -410,19 +410,9 @@ function App() {
                 </div>
 
                 <div className="w-full rounded-2xl bg-black/30 border border-white/10 p-4 md:p-5">
-                  <div className="flex items-center justify-between gap-3 text-xs md:text-sm uppercase tracking-[0.12em] font-black text-white/70">
-                    <span>Last check {secondsSinceReconnectCheck}s ago</span>
-                    <span>Next in {Math.max(0, 4 - (secondsSinceReconnectCheck % 4))}s</span>
-                  </div>
-                  <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
-                    <motion.div
-                      key={secondsSinceReconnectCheck}
-                      initial={{ width: '10%' }}
-                      animate={{ width: '100%' }}
-                      transition={{ duration: 4, ease: 'linear' }}
-                      className="h-full rounded-full bg-linear-to-r from-color-blue via-color-purple to-color-pink"
-                    />
-                  </div>
+                  <div className="flex items-center justify-center gap-3 text-xs md:text-sm uppercase tracking-[0.12em] font-black text-white/70">
+                    <span>ATTEMPTING RECONNECT IN {Math.max(0, 4 - (secondsSinceReconnectCheck % 4))}</span>
+                  </div>                  
                 </div>
 
                 <div className="flex gap-3 items-center">
