@@ -128,6 +128,11 @@ button {
 	padding: 0;
 	text-align: left;
 	position: relative;
+	/* Always form a stacking context so bg-animated (z:0) paints above
+	   the body background. Without this, once framer-motion opacity
+	   animations complete their temporary stacking context disappears
+	   and position:fixed z-index:-1 falls behind the opaque body bg. */
+	isolation: isolate;
 }
 
 /* --- Premium Background Animations --- */
@@ -138,7 +143,8 @@ button {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: -1;
+	z-index: 0;
+	pointer-events: none;
 	background: var(--background);
 	/* Removed overflow: hidden to prevent clipping of soft blur at edges */
 }

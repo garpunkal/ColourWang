@@ -547,7 +547,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         onClick={() => uploadInputRef.current?.click()}
                                         className={avatarActionButtonClass}
                                     >
-                                        Upload photo
+                                        Upload
                                     </button>
                                     <input
                                         ref={cameraInputRef}
@@ -563,8 +563,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         className={avatarActionButtonClass}
                                     >
                                         <span className="flex items-center gap-2">
-                                            <Camera size={12} />
-                                            Camera
+                                            <Camera size={12} />                                         
                                         </span>
                                     </button>
                                     {avatarImage && (
