@@ -172,7 +172,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                 initial={{ y: 24, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.35 }}
-                className="absolute inset-x-0 bottom-16 md:bottom-6 z-20 px-4"
+                className="absolute inset-x-0 bottom-24 md:bottom-12 z-20 px-4"
             >
                 <div className="mx-auto flex w-full max-w-sm items-center justify-between rounded-2xl border border-white/15 bg-black/40 p-3 backdrop-blur-lg">
                     <div className="flex items-center gap-3">
