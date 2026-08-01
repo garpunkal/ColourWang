@@ -141,54 +141,55 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 )}
             </div>
 
-            {/* Players List - Scale down during countdown */}
-            <motion.div
-                animate={{ opacity: isCountdownState ? 0.4 : 1, scale: isCountdownState ? 0.95 : 1 }}
-                className="relative z-10 min-h-0 flex-1"
-            >
-                <div className={`max-w-sm mx-auto h-full min-h-0 overflow-y-auto pr-1 ${hasManyPlayers ? 'grid grid-cols-1 gap-1.5 content-start' : 'flex flex-col items-center gap-3'}`}>
-                    {gameState.players.map((player, index) => {
-                        const playerColor = getAvatarColor(player.avatar);
-                        return (
-                            <motion.div
-                                key={player.id}
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                                className={`flex items-center rounded-2xl glass-panel w-full border ${hasManyPlayers ? 'gap-2 px-2.5 py-1' : 'gap-3 px-4 py-2'}`}
-                                style={{
-                                    borderColor: `${playerColor}30`,
-                                    backgroundColor: `${playerColor}05`
-                                }}
-                            >
-                                <div className={`${hasManyPlayers ? 'w-7 h-7' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
-                                    <Avatar
-                                        seed={player.avatar}
-                                        style={player.avatarStyle}
-                                        imageUrl={player.avatarImage}
-                                        className="w-full h-full"
-                                    />
-                                </div>
-                                <span
-                                    className={`font-black uppercase tracking-wider flex-1 text-left truncate text-white/90 ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
+            {!isCountdownState && !isRoundIntro && (
+                <motion.div
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="relative z-10 min-h-0 flex-1"
+                >
+                    <div className={`max-w-sm mx-auto h-full min-h-0 overflow-y-auto pr-1 ${hasManyPlayers ? 'grid grid-cols-1 gap-1.5 content-start' : 'flex flex-col items-center gap-3'}`}>
+                        {gameState.players.map((player, index) => {
+                            const playerColor = getAvatarColor(player.avatar);
+                            return (
+                                <motion.div
+                                    key={player.id}
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
+                                    className={`flex items-center rounded-2xl glass-panel w-full border ${hasManyPlayers ? 'gap-2 px-2.5 py-1' : 'gap-3 px-4 py-2'}`}
+                                    style={{
+                                        borderColor: `${playerColor}30`,
+                                        backgroundColor: `${playerColor}05`
+                                    }}
                                 >
-                                    {player.name}
-                                </span>
-                                <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
+                                    <div className={`${hasManyPlayers ? 'w-7 h-7' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
+                                        <Avatar
+                                            seed={player.avatar}
+                                            style={player.avatarStyle}
+                                            imageUrl={player.avatarImage}
+                                            className="w-full h-full"
+                                        />
+                                    </div>
                                     <span
-                                        className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
-                                        style={{
-                                            textShadow: `0 0 10px rgba(255,255,255,0.5)`
-                                        }}
+                                        className={`font-black uppercase tracking-wider flex-1 text-left truncate text-white/90 ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
                                     >
-                                        {player.score} <span className="text-[10px] opacity-60 ml-0.5">PTS</span>
+                                        {player.name}
                                     </span>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-            </motion.div>
+                                    <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
+                                        <span
+                                            className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
+                                            style={{
+                                                textShadow: `0 0 10px rgba(255,255,255,0.5)`
+                                            }}
+                                        >
+                                            {player.score} <span className="text-[10px] opacity-60 ml-0.5">PTS</span>
+                                        </span>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+            )}
 
             {/* Auto-start timer footer */}
             {!isCountdownState && autoStartTimer !== null && (
