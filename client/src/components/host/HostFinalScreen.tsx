@@ -259,10 +259,7 @@ export function HostFinalScreen({ socket, players, rounds, timer, code }: Props)
                         <motion.div
                             className="absolute inset-0 bg-linear-to-r from-orange-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"
                         />
-                    </button>
-                    <p className="text-white/10 font-black uppercase tracking-widest text-xs">
-                        Room Code: {code}
-                    </p>
+                    </button>                
                 </motion.div>
             </motion.div>           
         </>

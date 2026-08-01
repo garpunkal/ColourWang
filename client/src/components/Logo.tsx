@@ -1,71 +1,25 @@
-import { motion } from 'framer-motion';
+import palette from '../../../config/palette.json';
 
-const cardColors = [
-    '#000000',
-    '#c4bbb1',
-    '#ffffff',
-    '#ee1420',
-    '#ff9d00',
-    '#fcfe00',
-    '#8ccc00',
-    '#4ac3db',
-    '#83359a',
-    '#fc93c8',
-    '#b0562c'
-];
-
-export const Logo = ({ className = "" }: { className?: string }) => {
+export const Logo = () => {
     return (
-        <a href="/">
-            <div className={`relative flex flex-col items-center justify-center ${className} select-none`}>
-                {/* The Fan - Iconic Mark */}
-                <motion.div
-                    className="relative h-16 w-full flex justify-center items-end mb-2"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                >
-                    {cardColors.map((color, index) => {
-                        const total = cardColors.length;
-                        // Perfect semi-circle fan
-                        const spreadRange = 120;
-                        const startRotation = -(spreadRange / 2);
-                        const step = spreadRange / (total - 1);
-                        const rotation = startRotation + (index * step);
-
-                        // Simple arch calculation for Y positioning
-                        // x^2 + y^2 = r^2
-
-                        return (
-                            <div
-                                key={index}
-                                className="absolute origin-bottom rounded-sm shadow-md border border-white/30"
-                                style={{
-                                    backgroundColor: color,
-                                    width: '16px',
-                                    height: '40px',
-                                    transform: `rotate(${rotation}deg) translateY(-5px)`,
-                                    zIndex: index,
-                                    left: `calc(50% - 8px)`, // Center perfectly
-                                    bottom: 0,
-                                }}
-                            >
-                                {/* Glass Shine */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/30 opacity-50" />
-                            </div>
-                        );
-                    })}
-                </motion.div>
-
-                {/* The Wordmark */}
-                <div className="relative z-10">
-                    <h1 className="font-['Outfit'] font-black tracking-[-0.05em] text-white text-4xl md:text-6xl leading-none drop-shadow-2xl">
-                        ColourWang
-                    </h1>
-                    {/* Subtle reflection below */}
-                    <div className="h-1 w-full bg-linear-to-r from-transparent via-white/20 to-transparent mt-2 rounded-full blur-[1px]" />
-                </div>
+        <>
+            <div className="relative flex items-center justify-center shrink-0 overflow-visible card-fan mt-12 md:mt-22" aria-hidden="true">
+                {palette.palette.map((color) => {
+                    return (
+                        <div
+                            key={color.name}
+                            className="bg-(--dynamic-color) card absolute bottom-0 w-8 h-12 md:w-16 md:h-24 rounded-xs border border-white/20 shadow-[0_2px_6px_rgba(0,0,0,0.5)] overflow-hidden animate-fan-reveal origin-[bottom_center]
+                            after:content-[''] after:absolute after:inset-0 after:bg-linear-to-br after:from-transparent after:via-transparent after:via-40% after:to-white/25"
+                            style={{ '--dynamic-color': color.hex } as React.CSSProperties}
+                        ></div>
+                    )
+                })}
             </div>
-        </a>
+            <div className="flex flex-col">
+                <h1 className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 text-hero-logo text-display text-center drop-shadow-2xl w-full">
+                    <span className="text-display-gradient w-full">ColourWang</span>
+                </h1>
+            </div>
+        </>
     );
 };

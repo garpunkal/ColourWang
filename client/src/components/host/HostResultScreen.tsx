@@ -128,7 +128,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 <div className="mb-4 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-6 md:px-4">
                     <div className="flex items-center gap-2">
                         <Hash size={14} className="text-blue-300" />
-                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">Code {gameState.code}</span>
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">{gameState.code}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Users size={14} className="text-cyan-300" />

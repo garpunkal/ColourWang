@@ -464,7 +464,7 @@ export function HostSetupScreen({ socket }: Props) {
                     }`}
                     disabled={loadingQuestions || !!error || !allQuestions.length || !isConnected || !hasEnoughTopics}
                 >
-                    {!isConnected ? 'Connecting...' : !hasEnoughTopics ? 'Select More Topics' : 'Initialise Lobby'}
+                    {!isConnected ? 'Connecting...' : !hasEnoughTopics ? 'Select More Topics' : 'Create lobby'}
                 </motion.button>
             </div>
         </div >

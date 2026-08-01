@@ -96,13 +96,9 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                         )}
                     </div>
                 </div>
-
-                <div className={`flex flex-col items-center gap-6 transition-all duration-500 ${compact ? 'gap-2' : 'gap-6'}`}>
-                    {/* Logo Removed */}
-                </div>
-
-                {/* Player Count */}
-                <div className={`
+            
+               
+                {/* <div className={`
                         flex items-center gap-3 transition-all duration-500 w-fit lg:justify-self-end
                         ${compact ? '' : 'hidden'}
                     `}>
@@ -123,7 +119,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                             </span>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* QR Modal */}

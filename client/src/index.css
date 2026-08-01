@@ -82,15 +82,7 @@
 	font-family: "Outfit", "Inter", system-ui, sans-serif;
 }
 
-.text-hero {
-	font-size: clamp(3rem, 7vw, 6rem);
-	line-height: 1.1;
-}
 
-.text-hero-sm {
-	font-size: clamp(2rem, 5vw, 4rem);
-	line-height: 1.2;
-}
 
 html {
 	height: 100%;
@@ -135,7 +127,82 @@ button {
 	isolation: isolate;
 }
 
-/* --- Premium Background Animations --- */
+
+.text-hero {
+	font-size: clamp(3rem, 7vw, 6rem);
+	line-height: 1.1;
+}
+
+.text-hero-sm {
+	font-size: clamp(2rem, 5vw, 4rem);
+	line-height: 1.2;
+}
+
+.text-hero-logo {
+	font-size: clamp(2rem, 5vw, 4rem);
+	line-height: 1.2;
+	text-transform: none !important;
+	width: 100%;
+	span{ 
+		width:100%;
+		padding-right:15px;
+	}
+}
+
+/* Card Fan Rotations & Colors */
+.card-fan .card:nth-child(1) {
+	transform: rotate(-75deg);
+}
+.card-fan .card:nth-child(2) {
+	transform: rotate(-60deg);
+}
+.card-fan .card:nth-child(3) {
+	transform: rotate(-45deg);
+}
+.card-fan .card:nth-child(4) {
+	transform: rotate(-30deg);
+}
+.card-fan .card:nth-child(5) {
+	transform: rotate(-15deg);
+}
+.card-fan .card:nth-child(6) {
+	transform: rotate(0deg);
+}
+.card-fan .card:nth-child(7) {
+	transform: rotate(15deg);
+}
+.card-fan .card:nth-child(8) {
+	transform: rotate(30deg);
+}
+.card-fan .card:nth-child(9) {
+	transform: rotate(45deg);
+}
+.card-fan .card:nth-child(10) {
+	transform: rotate(60deg);
+}
+.card-fan .card:nth-child(11) {
+	transform: rotate(75deg);
+}
+
+.card-fan .card {
+	transform-origin: bottom center;
+}
+
+/* Animations */
+@keyframes fanReveal {
+	0% {
+		opacity: 0;
+		transform: rotate(0deg) translateY(20px);
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.animate-fan-reveal {
+	animation: fanReveal 6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 
 .bg-animated {
 	position: fixed;
@@ -258,7 +325,6 @@ button {
 }
 
 @keyframes mesh-shift {
-
 	0%,
 	100% {
 		opacity: 0.8;
@@ -427,7 +493,7 @@ button {
 	font-style: italic;
 	text-transform: uppercase;
 	letter-spacing: -0.05em;
-	line-height: 1.0;
+	line-height: 1;
 }
 
 .avatar-action-btn,
@@ -447,22 +513,32 @@ button {
 	text-transform: uppercase;
 	color: #ffffff;
 	background: linear-gradient(135deg, rgba(0, 229, 255, 0.95), rgba(157, 80, 187, 0.95));
-	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	box-shadow:
+		0 10px 24px rgba(0, 0, 0, 0.28),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+	transition:
+		transform 180ms ease,
+		box-shadow 180ms ease,
+		background 180ms ease,
+		border-color 180ms ease;
 }
 
 .avatar-action-btn:hover,
 .crop-action-btn:hover {
 	transform: translateY(-2px) scale(1.02);
-	box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+	box-shadow:
+		0 16px 32px rgba(0, 0, 0, 0.35),
+		inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .avatar-action-btn:active,
 .crop-action-btn:active {
 	transform: translateY(0) scale(0.98);
-	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	box-shadow:
+		0 8px 18px rgba(0, 0, 0, 0.28),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .avatar-action-btn:focus-visible,
@@ -488,23 +564,33 @@ button {
 	text-transform: uppercase;
 	color: #ffffff;
 	background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
-	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	box-shadow:
+		0 10px 24px rgba(0, 0, 0, 0.25),
+		inset 0 1px 0 rgba(255, 255, 255, 0.12);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+	transition:
+		transform 180ms ease,
+		box-shadow 180ms ease,
+		background 180ms ease,
+		border-color 180ms ease;
 }
 
 .avatar-action-btn-secondary:hover,
 .crop-action-btn-secondary:hover {
 	transform: translateY(-2px) scale(1.02);
 	background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
-	box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+	box-shadow:
+		0 16px 32px rgba(0, 0, 0, 0.3),
+		inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .avatar-action-btn-secondary:active,
 .crop-action-btn-secondary:active {
 	transform: translateY(0) scale(0.98);
-	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	box-shadow:
+		0 8px 18px rgba(0, 0, 0, 0.24),
+		inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .avatar-action-btn-secondary:focus-visible,
@@ -540,7 +626,6 @@ button {
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
-	
 }
 
 @media (max-width: 768px) {
@@ -604,7 +689,6 @@ button {
 }
 
 @keyframes logo-float {
-
 	0%,
 	100% {
 		transform: translateY(0px);
@@ -625,7 +709,6 @@ button {
 }
 
 @keyframes glow-pulse {
-
 	0%,
 	100% {
 		text-shadow:
@@ -786,7 +869,6 @@ button {
 
 /* Animations */
 @keyframes pulse-glow {
-
 	0%,
 	100% {
 		opacity: 0.5;
@@ -846,7 +928,8 @@ button {
 }
 
 @keyframes pulse-glow {
-	0%, 100% {
+	0%,
+	100% {
 		transform: scale(1);
 		box-shadow: 0 0 15px rgba(248, 58, 123, 0.4);
 	}
