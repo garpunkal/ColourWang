@@ -73,7 +73,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
             animate={{ scale: 1, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-360 text-center relative min-h-screen"
+            className="w-full max-w-7xl text-center relative min-h-[100dvh] overflow-x-hidden px-3 sm:px-4 lg:px-6 pb-6"
         >
             <AnimatePresence mode="wait">
                 {stealNotice && (
@@ -141,31 +141,31 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                 )}
             </AnimatePresence>
 
-            <div className="flex flex-col pt-8">
+            <div className="flex flex-col pt-4 sm:pt-6 lg:pt-8">
                 <motion.div
                     initial={{ y: -30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="glass-panel px-8 py-4 rounded-3xl flex items-center gap-8 mx-auto"
+                    className="glass-panel px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-4 rounded-3xl flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mx-auto w-full max-w-4xl"
                 >
-                    <div className="flex flex-col items-start leading-none">
+                    <div className="flex flex-col items-center sm:items-start leading-none">
                         <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Round</span>
                         <span className="text-2xl md:text-4xl font-black italic text-white/90">{gameState.currentRoundIndex + 1}</span>
                     </div>
-                    <div className="w-px h-12 bg-white/10" />
+                    <div className="hidden sm:block w-px h-12 bg-white/10" />
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue/60 mb-1">Question</span>
                         <span className="text-2xl md:text-4xl font-black italic">{currentQuestionIndex + 1}</span>
                     </div>
-                    <div className="w-px h-12 bg-white/10" />
-                    <div className="flex flex-col items-end leading-none">
+                    <div className="hidden sm:block w-px h-12 bg-white/10" />
+                    <div className="flex flex-col items-center sm:items-end leading-none">
                         <span className="text-xs md:text-sm font-black uppercase tracking-widest text-color-blue mb-1">Time</span>
                         <span className={`text-2xl md:text-4xl font-black tabular-nums italic ${timeLeft <= 5 ? 'text-error animate-pulse' : 'text-white'}`}>{timeLeft}s</span>
                     </div>
                 </motion.div>
 
-                <div className="flex-1 flex flex-col items-center justify-center my-16 gap-6 px-4">
+                <div className="flex-1 flex flex-col items-center justify-center my-6 sm:my-8 lg:my-10 gap-4 sm:gap-6 px-2 sm:px-4">
                     <motion.h1 
-                        className="text-4xl md:text-6xl lg:text-7xl font-black text-display text-display-gradient px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-display text-display-gradient px-2 sm:px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
                         style={{ 
                             lineHeight: '1.1',
                             wordBreak: 'break-word',
@@ -194,7 +194,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </motion.div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-6 w-full max-w-7xl px-4 mx-auto pb-12">
+                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 w-full max-w-7xl px-1 sm:px-2 mx-auto pb-6">
                     {gameState.players.map((player) => {
                         const playerStatus = playersAnswered.find(p => p.id === player.id);
                         const playerColor = getAvatarColor(player.avatar);
@@ -203,7 +203,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                         return (
                             <motion.div
                                 key={player.id}
-                                className={`relative flex items-center gap-3 py-4 px-4 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-60 max-w-80 ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
+                                className={`relative flex items-center gap-3 py-3 sm:py-4 px-3 sm:px-4 rounded-2xl border-2 transition-all duration-300 flex-1 min-w-[14rem] sm:min-w-[16rem] max-w-[20rem] ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
                                 style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
                             >
                                 <div className="w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>

@@ -667,6 +667,14 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('kill-all-games', () => {
+      logger.info(`kill-all-games requested — terminating ${games.size} game(s)`);
+      games.forEach((_, code) => {
+        io.to(code).emit('game-ended');
+      });
+      games.clear();
+    });
+
     socket.on('remove-player', ({ code, playerId }) => {
       const normalizedCode = code.toUpperCase();
       const game = games.get(normalizedCode);

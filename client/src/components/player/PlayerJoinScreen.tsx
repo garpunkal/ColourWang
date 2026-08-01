@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
+import React, { useState, useEffect, useRef, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { Socket } from 'socket.io-client';
 import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle, Camera, Crop } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -107,6 +107,20 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     const [dragStart, setDragStart] = useState<{ x: number; y: number; originX: number; originY: number } | null>(null);
     const uploadInputRef = useRef<HTMLInputElement | null>(null);
     const cameraInputRef = useRef<HTMLInputElement | null>(null);
+    const swipeTouchStartX = useRef<number | null>(null);
+
+    const handleAvatarSwipeStart = (e: React.TouchEvent) => {
+        swipeTouchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleAvatarSwipeEnd = (e: React.TouchEvent) => {
+        if (swipeTouchStartX.current === null) return;
+        const delta = e.changedTouches[0].clientX - swipeTouchStartX.current;
+        if (Math.abs(delta) > 40) {
+            cycleStyle(delta < 0 ? 'next' : 'prev');
+        }
+        swipeTouchStartX.current = null;
+    };
 
     const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -251,6 +265,11 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         setAvatarImage(null);
     };
 
+    const avatarActionButtonClass =
+        'rounded-full border border-white/15 bg-white/8 px-2.5 py-1.5 text-[9px] font-black uppercase tracking-[0.22em] text-white/85 transition-all hover:-translate-y-px hover:bg-white/18 hover:border-white/30 active:translate-y-0 shadow-[0_6px_16px_rgba(0,0,0,0.28)]';
+    const avatarActionSecondaryButtonClass =
+        'rounded-full border border-white/12 bg-black/25 px-2.5 py-1.5 text-[9px] font-black uppercase tracking-[0.22em] text-white/80 transition-all hover:-translate-y-px hover:bg-black/40 hover:border-white/25 active:translate-y-0 shadow-[0_6px_16px_rgba(0,0,0,0.22)]';
+
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
         const handleRoomChecked = (data: { exists: boolean, takenAvatars?: { avatar: string; avatarStyle: string; }[] }) => {
@@ -365,6 +384,71 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                 )}
             </AnimatePresence>
 
+            <AnimatePresence>
+                {cropModalOpen && cropImageData && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#1b1534] p-5 shadow-2xl"
+                        >
+                            <div className="flex items-center justify-between gap-3">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">Crop your photo</p>
+                                    <h3 className="text-xl font-black uppercase italic tracking-wide text-white">Frame your avatar</h3>
+                                </div>
+                                <div className="rounded-full border border-white/10 bg-white/10 p-2 text-color-blue">
+                                    <Crop size={20} />
+                                </div>
+                            </div>
+                            <p className="mt-3 text-sm text-white/70">Drag the image to choose the part you want to keep.</p>
+                            <div
+                                className="relative mt-4 flex aspect-square w-full max-w-[320px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40 mx-auto cursor-grab active:cursor-grabbing"
+                                onPointerDown={handleCropPointerDown}
+                                onPointerMove={handleCropPointerMove}
+                                onPointerUp={handleCropPointerUp}
+                                onPointerLeave={handleCropPointerUp}
+                                style={{ touchAction: 'none' }}
+                            >
+                                <div className="absolute inset-0 rounded-[1.5rem] border-[3px] border-white/90 z-10 pointer-events-none" />
+                                <img
+                                    src={cropImageData.dataUrl}
+                                    alt="Crop preview"
+                                    className="absolute left-0 top-0"
+                                    style={{
+                                        width: cropImageData.displayWidth,
+                                        height: cropImageData.displayHeight,
+                                        transform: `translate(${cropOffset.x}px, ${cropOffset.y}px)`,
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-5 flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={cancelCropEditor}
+                                    className="flex-1 rounded-full border border-white/10 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={applyCroppedAvatar}
+                                    className="flex-1 rounded-full border border-color-blue/30 bg-color-blue/90 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white transition hover:bg-color-blue"
+                                >
+                                    Use photo
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -402,18 +486,25 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     <div className="flex flex-col items-center space-y-4 pt-2">
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60">Style Your Wang</label>
 
-                        <div className="flex items-center justify-between w-full max-w-70 px-4">
+                        <div
+                            className="flex items-center justify-between w-full max-w-80 px-2"
+                            onTouchStart={!avatarImage ? handleAvatarSwipeStart : undefined}
+                            onTouchEnd={!avatarImage ? handleAvatarSwipeEnd : undefined}
+                        >
+                            {!avatarImage && (
                             <motion.button
                                 whileTap={{ scale: 0.8 }}
                                 onClick={() => cycleStyle('prev')}
-                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors"
+                                className="p-4 rounded-full glass hover:bg-white/10 transition-colors"
+                                aria-label="Previous style"
                             >
-                                <ChevronLeft size={24} />
+                                <ChevronLeft size={36} />
                             </motion.button>
+                            )}
 
                             <motion.div
                                 key={`${avatar}-${avatarStyle}-${avatarImage || 'default'}`}
-                                className="relative group"
+                                className={`relative group ${avatarImage ? 'mx-auto' : ''}`}
                             >
                                 <Avatar
                                     seed={avatar}
@@ -423,13 +514,16 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 />
                             </motion.div>
 
+                            {!avatarImage && (
                             <motion.button
                                 whileTap={{ scale: 0.8 }}
                                 onClick={() => cycleStyle('next')}
-                                className="p-3 rounded-full glass hover:bg-white/10 transition-colors "
+                                className="p-4 rounded-full glass hover:bg-white/10 transition-colors"
+                                aria-label="Next style"
                             >
-                                <ChevronRight size={24} />
+                                <ChevronRight size={36} />
                             </motion.button>
+                            )}
                         </div>
 
                         <div className="w-full rounded-[1.4rem] border border-white/10 bg-black/20 p-3 md:p-4">
@@ -453,7 +547,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     <button
                                         type="button"
                                         onClick={() => uploadInputRef.current?.click()}
-                                        className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                        className={avatarActionButtonClass}
                                     >
                                         Upload photo
                                     </button>
@@ -468,10 +562,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                     <button
                                         type="button"
                                         onClick={() => cameraInputRef.current?.click()}
-                                        className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                        className={avatarActionButtonClass}
                                     >
                                         <span className="flex items-center gap-2">
-                                            <Camera size={14} />
+                                            <Camera size={12} />
                                             Camera
                                         </span>
                                     </button>
@@ -479,7 +573,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         <button
                                             type="button"
                                             onClick={clearUploadedAvatar}
-                                            className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/70 transition hover:bg-black/40"
+                                            className={avatarActionSecondaryButtonClass}
                                         >
                                             Clear
                                         </button>
@@ -489,6 +583,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         </div>
                     </div>
 
+                    {!avatarImage && (
                     <div className="space-y-2">
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">{avatarStyle.replace('-', ' ')}</label>
                         <div className="flex flex-wrap gap-2 p-3 glass rounded-4xl border-white/10 shadow-inner bg-black/20 h-[320px] overflow-y-auto content-start avatar-scrollbar">
@@ -529,71 +624,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             })}
                         </div>
                     </div>
-
-                    <AnimatePresence>
-                        {cropModalOpen && cropImageData && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4"
-                            >
-                                <motion.div
-                                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                                    exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                                    className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#1b1534] p-5 shadow-2xl"
-                                >
-                                    <div className="flex items-center justify-between gap-3">
-                                        <div>
-                                            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">Crop your photo</p>
-                                            <h3 className="text-xl font-black uppercase italic tracking-wide text-white">Frame your avatar</h3>
-                                        </div>
-                                        <div className="rounded-full border border-white/10 bg-white/10 p-2 text-color-blue">
-                                            <Crop size={20} />
-                                        </div>
-                                    </div>
-                                    <p className="mt-3 text-sm text-white/70">Drag the image to choose the part you want to keep.</p>
-                                    <div
-                                        className="relative mt-4 flex aspect-square w-full max-w-[320px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40 mx-auto cursor-grab active:cursor-grabbing"
-                                        onPointerDown={handleCropPointerDown}
-                                        onPointerMove={handleCropPointerMove}
-                                        onPointerUp={handleCropPointerUp}
-                                        onPointerLeave={handleCropPointerUp}
-                                        style={{ touchAction: 'none' }}
-                                    >
-                                        <div className="absolute inset-0 rounded-[1.5rem] border-[3px] border-white/90 z-10 pointer-events-none" />
-                                        <img
-                                            src={cropImageData.dataUrl}
-                                            alt="Crop preview"
-                                            className="absolute left-0 top-0"
-                                            style={{
-                                                width: cropImageData.displayWidth,
-                                                height: cropImageData.displayHeight,
-                                                transform: `translate(${cropOffset.x}px, ${cropOffset.y}px)`,
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="mt-5 flex gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={cancelCropEditor}
-                                            className="flex-1 rounded-full border border-white/10 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={applyCroppedAvatar}
-                                            className="flex-1 rounded-full border border-color-blue/30 bg-color-blue/90 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white transition hover:bg-color-blue"
-                                        >
-                                            Use photo
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    )}
 
                     <motion.button
                         whileHover={{ scale: 1.02 }}
@@ -625,4 +656,3 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         </div >
     );
 }
-

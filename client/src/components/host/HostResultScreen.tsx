@@ -125,10 +125,10 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             key="result"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative min-h-screen w-full"
+            className="relative min-h-[100dvh] w-full overflow-x-hidden"
         >
-            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center px-4 pb-28 pt-8 md:px-8 md:pt-10">
-                <div className="mb-5 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-7 md:px-4">
+            <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-3 pb-24 pt-4 sm:px-6 md:px-8 md:pt-6">
+                <div className="mb-4 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-6 md:px-4">
                     <div className="flex items-center gap-2">
                         <Hash size={14} className="text-blue-300" />
                         <span className="text-xs font-black uppercase tracking-[0.2em] text-white/75">Code {gameState.code}</span>
@@ -145,7 +145,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         initial={{ y: 24, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.06 }}
-                        className="mx-auto mb-3 max-w-5xl text-3xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4 md:text-5xl"
+                        className="mx-auto mb-3 max-w-5xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4"
                     >
                         {currentQuestion.question}
                     </motion.h1>
@@ -159,7 +159,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         Correct Answer
                     </motion.div>
 
-                    <div className="mb-7 flex flex-wrap justify-center gap-5 md:mb-8">
+                    <div className="mb-5 flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 md:mb-6">
                         {correctColours.map((color, i) => (
                             <motion.div
                                 key={i}
@@ -179,13 +179,13 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 </div>
 
                 <div className="w-full flex-1 overflow-hidden">
-                    <div className="mb-4 flex items-center justify-center gap-4 md:mb-5">
+                    <div className="mb-3 flex items-center justify-center gap-4 md:mb-4">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30 md:w-20" />
                         <span className="text-xs font-black uppercase tracking-[0.35em] text-white/60 md:text-sm">Player Intel</span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className="mx-auto grid max-h-[42vh] w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="mx-auto grid max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem] w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {sortedPlayers.map((player, index) => {
                             const playerAnswer = sortColors(player.lastAnswer || []);
 

@@ -3,7 +3,11 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { Socket } from 'socket.io-client';
 import type { GameState } from '../types/game';
 
-export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetStateAction<GameState | null>>) {
+export function useSocketGameState(
+  socket: Socket,
+  setGameState: Dispatch<SetStateAction<GameState | null>>,
+  setRole: Dispatch<SetStateAction<'NONE' | 'HOST' | 'PLAYER'>>
+) {
   useEffect(() => {
     socket.on('game-created', (state: GameState) => {
       setGameState(state);
@@ -28,8 +32,10 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
 
     socket.on('game-ended', () => {
       setGameState(null);
+      setRole('NONE');
       localStorage.removeItem('cw_playerId');
       localStorage.removeItem('cw_gameCode');
+      localStorage.removeItem('cw_hostCode');
     });
 
     const handleRejoin = () => {
@@ -83,5 +89,5 @@ export function useSocketGameState(socket: Socket, setGameState: Dispatch<SetSta
       socket.off('connect', handleRejoin);
       socket.off('disconnect');
     };
-  }, [socket, setGameState]);
+  }, [socket, setGameState, setRole]);
 }

@@ -174,7 +174,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     return (
-        <div className="flex-1 flex flex-col relative w-full min-h-screen">
+        <div className="flex-1 flex flex-col relative w-full min-h-[100dvh] overflow-hidden">
             {/* Massive Shockwave Overlay – outside shake wrapper so fixed positioning isn't trapped */}
             <AnimatePresence>
                 {showExplosion && (
@@ -301,7 +301,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-screen' : 'flex-1 flex flex-col p-12 relative w-full min-h-screen'}>
+            <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-[100dvh] overflow-y-auto' : 'flex-1 flex flex-col p-3 sm:p-6 lg:p-8 xl:p-10 relative w-full min-h-[100dvh] overflow-y-auto'}>
             {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION') && (
                 <HostHeader
                     code={code}
@@ -334,7 +334,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
                 )}
             </AnimatePresence>
 
-            <div className={isResultView ? 'min-h-screen w-full relative z-10' : 'flex-1 flex flex-col justify-center items-center relative z-10 w-full'}>
+            <div className={isResultView ? 'min-h-[100dvh] w-full relative z-10 overflow-y-auto' : 'flex-1 flex flex-col justify-start items-center relative z-10 w-full overflow-y-auto pb-6'}>
                 <AnimatePresence>
                     {isSyncing ? (
                         <div key="syncing" className="flex-1 flex flex-col items-center justify-center p-12 text-center">

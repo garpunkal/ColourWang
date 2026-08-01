@@ -31,15 +31,15 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
 
     return (
         <>
-            <div className={`flex flex-col md:grid grid-cols-3 items-center md:items-center relative z-10 gap-8 w-full transition-all duration-500 ${compact ? 'mb-8' : 'mb-8'}`}>
+            <div className={`flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between relative z-10 w-full transition-all duration-500 ${compact ? 'mb-4 md:mb-6' : 'mb-4 md:mb-6'}`}>
 
                 {/* Join Info */}
                 <div className={`
-                    flex flex-col md:flex-row items-center glass-panel rounded-4xl
-                    transition-all duration-500 w-fit
+                    flex flex-col sm:flex-row items-center glass-panel rounded-4xl
+                    transition-all duration-500 w-full sm:w-fit
                     ${compact
-                        ? 'gap-4 p-3 pr-8 md:rounded-4xl'
-                        : 'gap-4 md:gap-8 p-4 md:p-6 pr-6 md:pr-10 md:rounded-4xl'
+                        ? 'gap-3 sm:gap-4 p-3 pr-6 sm:pr-8 md:rounded-4xl'
+                        : 'gap-3 sm:gap-4 md:gap-8 p-3 sm:p-4 md:p-6 pr-4 sm:pr-6 md:pr-10 md:rounded-4xl'
                     }
                 `}>
                     {/* QR Code */}
@@ -61,7 +61,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     <div className="flex flex-col items-center md:items-start gap-0">
                         <div className={`
                             font-mono font-black tracking-widest text-white leading-none drop-shadow-[0_10px_30px_rgba(0,229,255,0.4)] transition-all duration-500
-                            ${compact ? 'text-4xl md:text-5xl' : 'text-4xl md:text-5xl'}
+                            ${compact ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'}
                         `}>
                             {code}
                         </div>
@@ -101,7 +101,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
 
                 {/* Player Count */}
                 <div className={`
-                        flex items-center gap-3 transition-all duration-500 w-fit md:justify-self-end
+                        flex items-center gap-3 transition-all duration-500 w-fit lg:justify-self-end
                         ${compact ? '' : 'hidden'}
                     `}>
                     {compact && onAbandonGame && (

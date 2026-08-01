@@ -71,7 +71,7 @@ function App() {
   const reconnectionStatus = useReconnectionStatus(socket);
   const shouldShowConnectionOverlay = !isConnected && (hasConnectedOnce || showStartupConnectionIssue);
 
-  useSocketGameState(socket, setGameState);
+  useSocketGameState(socket, setGameState, setRole);
 
   useEffect(() => {
     if (isConnected) {

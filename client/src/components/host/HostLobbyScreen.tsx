@@ -56,14 +56,14 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
-            className="w-full max-w-[95vw] flex flex-col items-center"
+            className="w-full max-w-7xl flex flex-col items-center px-3 sm:px-4 lg:px-6 overflow-x-hidden"
         >
-            <h1 className="mt-6 md:mt-8 text-hero text-display mb-4 text-center drop-shadow-2xl">
+            <h1 className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 text-hero text-display mb-3 md:mb-4 text-center drop-shadow-2xl">
                 <span className="block text-xl md:text-3xl mb-1 tracking-[0.4em] md:tracking-[0.6em] text-color-blue opacity-80 uppercase">Player</span>
                 <span className="text-display-gradient pr-10">Lobby</span>
             </h1>
 
-            <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mb-8 px-8 pt-4 pb-2 max-h-[440px] overflow-y-auto">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 w-full max-w-7xl mb-4 md:mb-6 px-2 sm:px-4 lg:px-6 pt-2 pb-2 max-h-[38dvh] sm:max-h-[42dvh] xl:max-h-[440px] overflow-y-auto">
                 {players.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const textColor = getAvatarTextColor(player.avatar);
@@ -73,7 +73,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                             initial={{ scale: 0, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             transition={{ type: "spring", delay: i * 0.05, stiffness: 200, damping: 20 }}
-                            className="glass group relative p-3 rounded-2xl flex flex-col items-center gap-2 border-white/10 shadow-lg transition-all duration-300 min-w-52"
+                            className="glass group relative p-3 rounded-2xl flex flex-col items-center gap-2 border-white/10 shadow-lg transition-all duration-300 min-w-[9rem] sm:min-w-[10rem] md:min-w-[12rem]"
                             style={{
                                 border: `2px solid ${avatarColor}40`,
                                 background: `linear-gradient(180deg, ${avatarColor}15 0%, transparent 100%)`
@@ -144,14 +144,14 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mb-4 max-w-3xl w-full px-3"
+                className="mb-3 md:mb-4 max-w-4xl w-full px-2 sm:px-3"
             >
                 <div className="glass-panel p-2 md:p-3 rounded-xl border-white/10 bg-white/5">
                     <div className="flex items-center gap-1.5 mb-2">
                         <Settings size={14} className="text-white/40" />
                         <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/40">Game Configuration</span>
                     </div>
-                    <div className="grid grid-cols-3 md:grid-cols-5 gap-1.5 md:gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 md:gap-2">
                         <div className="flex flex-col items-center p-1.5 bg-black/20 rounded-lg border border-white/5">
                             <span className="text-[9px] font-bold uppercase tracking-wider text-white/40 mb-0.5">Rounds</span>
                             <span className="text-sm md:text-base font-black font-mono text-color-blue">{gameState.rounds?.length || 0}</span>
@@ -217,7 +217,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                         animate={{ y: 0, opacity: 1 }}
                         whileHover={{ scale: 1.05 }}
                         onClick={onStartGame}
-                        className="btn btn-primary text-2xl md:text-4xl py-6 md:py-8 px-12 md:px-24 rounded-[3rem] shadow-[0_0_80px_rgba(0,229,255,0.4)] uppercase font-black italic tracking-widest border-t-4 md:border-t-6 border-white/20 animate-pulse-slow mb-8"
+                        className="btn btn-primary text-xl sm:text-2xl md:text-3xl lg:text-4xl py-4 sm:py-5 md:py-6 lg:py-8 px-8 sm:px-10 md:px-12 lg:px-20 rounded-[2rem] sm:rounded-[3rem] shadow-[0_0_80px_rgba(0,229,255,0.4)] uppercase font-black italic tracking-widest border-t-4 md:border-t-6 border-white/20 animate-pulse-slow mb-6 md:mb-8"
                     >
                         {autoStartTimer !== null ? 'Start Now' : 'Start Game'}
                     </motion.button>
@@ -231,7 +231,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                         localStorage.removeItem('cw_hostCode');
                         window.location.reload();
                     }}
-                    className="text-white/30 hover:text-white text-sm uppercase font-bold tracking-widest transition-colors mb-12 underline decoration-white/10 hover:decoration-white decoration-2 underline-offset-4 cursor-pointer"
+                    className="text-white/30 hover:text-white text-xs sm:text-sm uppercase font-bold tracking-widest transition-colors mb-8 md:mb-12 underline decoration-white/10 hover:decoration-white decoration-2 underline-offset-4 cursor-pointer"
                 >
                     ABANDON LOBBY & RESET
                 </button>
