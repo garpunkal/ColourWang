@@ -226,13 +226,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 >
                                     <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                 </div>
-                                <span className="max-w-8 truncate text-[7px] font-black uppercase tracking-[0.18em] text-white/60 leading-none">
-                                    {player.name}
-                                </span>
-                                <span
-                                    className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border border-black/20 ${isBlocked ? 'bg-error' : isAnswered ? 'bg-emerald-400' : 'bg-white/30'}`}
-                                    aria-hidden="true"
-                                />
+                                    
                             </motion.div>
                         );
                     })}
