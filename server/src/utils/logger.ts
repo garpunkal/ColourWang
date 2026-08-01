@@ -9,6 +9,10 @@ export interface LogEntry {
 
 const LOG_BUFFER_SIZE = 200;
 
+// Matches base64-encoded data URIs (e.g. uploaded avatar images) so they are
+// never stored in the log buffer or streamed to the server dashboard.
+const REDACT_BASE64_RE = /data:[^;]+;base64,[A-Za-z0-9+/=]{20,}/g;
+
 class LogBus extends EventEmitter {}
 export const logBus = new LogBus();
 logBus.setMaxListeners(50);
@@ -19,7 +23,8 @@ function record(level: LogEntry['level'], message: any, rest: any[]): LogEntry {
     const parts = [message, ...rest].map(p =>
         typeof p === 'object' ? JSON.stringify(p) : String(p)
     );
-    const entry: LogEntry = { ts: new Date().toISOString(), level, message: parts.join(' ') };
+    const sanitized = parts.join(' ').replace(REDACT_BASE64_RE, '[image redacted]');
+    const entry: LogEntry = { ts: new Date().toISOString(), level, message: sanitized };
     logBuffer.push(entry);
     if (logBuffer.length > LOG_BUFFER_SIZE) logBuffer.shift();
     logBus.emit('entry', entry);
