@@ -348,7 +348,6 @@ const HostScreen = ({ socket, gameState }: Props) => {
                             onStartGame={startGame}
                             onRemovePlayer={removePlayer}
                             lobbyDuration={gameState.lobbyDuration}
-                            gameState={gameState}
                         />
                     ) : status === 'COUNTDOWN' ? (
                         <CountdownScreen key="countdown" />

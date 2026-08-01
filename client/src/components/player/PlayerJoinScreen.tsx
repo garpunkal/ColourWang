@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { Socket } from 'socket.io-client';
-import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle, Camera, Crop } from 'lucide-react';
+import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle, Camera, Crop, Upload, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
 import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
@@ -39,14 +39,18 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         return params.get('code')?.toUpperCase() || '';
     });
 
-    // Fetch active games on mount and prepopulate if only 1 game is available
+    // true when only one game is running and the code was auto-selected
+    const [autoJoinCode, setAutoJoinCode] = useState(false);
+
+    // Fetch active games on mount; hide the code field when exactly one game is running
     useEffect(() => {
-        // Only request if no code is already set
+        // Only request if no code is already set (e.g. via URL param)
         if (!code) {
             socket.emit('get-active-games');
             const handleActiveGames = (games: string[]) => {
                 if (games.length === 1) {
                     setCode(games[0]);
+                    setAutoJoinCode(true);
                 }
             };
             socket.on('active-games', handleActiveGames);
@@ -465,23 +469,84 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             />
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Code</label>
-                            <div className="relative group">
-                                <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
-                                <input
-                                    className="input w-full pl-14! md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-4xl py-4 md:py-8 shadow-xl transition-all"
-                                    placeholder="CODE"
-                                    maxLength={4}
-                                    value={code}
-                                    onChange={e => setCode(e.target.value)}
-                                />
+                        {!autoJoinCode && (
+                            <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Code</label>
+                                <div className="relative group">
+                                    <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
+                                    <input
+                                        className="input w-full pl-14! md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-4xl py-4 md:py-8 shadow-xl transition-all"
+                                        placeholder="CODE"
+                                        maxLength={4}
+                                        value={code}
+                                        onChange={e => setCode(e.target.value)}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Avatar Style & Preview */}
                     <div className="flex flex-col items-center space-y-4 pt-2">
+                        <div className="w-full rounded-[1.4rem] border border-white/10 bg-black/20 p-3 md:p-4">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">
+                                        {avatarImage ? 'Using your photo' : 'Optional photo avatar'}
+                                    </p>
+                                    <p className="text-xs text-white/60 mt-1">
+                                        {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <input
+                                        ref={uploadInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleAvatarUpload}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => uploadInputRef.current?.click()}
+                                        className={`${avatarActionButtonClass} h-12 w-12 p-0 shrink-0`}
+                                        aria-label="Upload a photo"
+                                        title="Upload a photo"
+                                    >
+                                        <Upload size={18} />
+                                    </button>
+                                    <input
+                                        ref={cameraInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        capture="environment"
+                                        className="hidden"
+                                        onChange={handleAvatarUpload}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => cameraInputRef.current?.click()}
+                                        className={`${avatarActionButtonClass} h-12 w-12 p-0 shrink-0`}
+                                        aria-label="Take a photo"
+                                        title="Take a photo"
+                                    >
+                                        <Camera size={18} />
+                                    </button>
+                                    {avatarImage && (
+                                        <button
+                                            type="button"
+                                            onClick={clearUploadedAvatar}
+                                            className={`${avatarActionSecondaryButtonClass} h-12 w-12 p-0 shrink-0`}
+                                            aria-label="Clear photo"
+                                            title="Clear photo"
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60">Style Your Wang</label>
 
                         <div
@@ -522,61 +587,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 <ChevronRight size={36} />
                             </motion.button>
                             )}
-                        </div>
-
-                        <div className="w-full rounded-[1.4rem] border border-white/10 bg-black/20 p-3 md:p-4">
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">
-                                        {avatarImage ? 'Using your photo' : 'Optional photo avatar'}
-                                    </p>
-                                    <p className="text-xs text-white/60 mt-1">
-                                        {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <input
-                                        ref={uploadInputRef}
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={handleAvatarUpload}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => uploadInputRef.current?.click()}
-                                        className={avatarActionButtonClass}
-                                    >
-                                        Upload
-                                    </button>
-                                    <input
-                                        ref={cameraInputRef}
-                                        type="file"
-                                        accept="image/*"
-                                        capture="environment"
-                                        className="hidden"
-                                        onChange={handleAvatarUpload}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => cameraInputRef.current?.click()}
-                                        className={avatarActionButtonClass}
-                                    >
-                                        <span className="flex items-center gap-2">
-                                            <Camera size={12} />                                         
-                                        </span>
-                                    </button>
-                                    {avatarImage && (
-                                        <button
-                                            type="button"
-                                            onClick={clearUploadedAvatar}
-                                            className={avatarActionSecondaryButtonClass}
-                                        >
-                                            Clear
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
                         </div>
                     </div>
 
