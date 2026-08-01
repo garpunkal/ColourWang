@@ -187,7 +187,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
+                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
                         {sortedPlayers.map((player, index) => {
                             const playerAnswer = sortColors(player.lastAnswer || []);
 
