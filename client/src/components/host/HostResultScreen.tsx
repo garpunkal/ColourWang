@@ -145,7 +145,8 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         initial={{ y: 24, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.06 }}
-                        className="mx-auto mb-3 max-w-5xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4"
+                        className="mx-auto mb-3 max-w-5xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4 line-clamp-4"
+                        style={{ fontSize: 'clamp(1.1rem, 4vw, 2.75rem)' }}
                     >
                         {currentQuestion.question}
                     </motion.h1>

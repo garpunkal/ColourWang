@@ -165,8 +165,9 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
 
                 <div className="flex-1 flex flex-col items-center justify-center my-6 sm:my-8 lg:my-10 gap-4 sm:gap-6 px-2 sm:px-4">
                     <motion.h1 
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-display text-display-gradient px-2 sm:px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
+                        className="font-black text-display text-display-gradient px-2 sm:px-4 md:px-8 max-w-6xl text-center wrap-break-word w-full"
                         style={{ 
+                            fontSize: 'clamp(1.5rem, 5vw, 4.5rem)',
                             lineHeight: '1.1',
                             wordBreak: 'break-word',
                             overflowWrap: 'break-word',
