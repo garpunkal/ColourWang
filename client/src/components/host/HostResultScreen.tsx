@@ -187,9 +187,9 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
+                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
                         {sortedPlayers.map((player, index) => {
-                            const playerAnswer = sortColors(player.lastAnswer || []);
+                          //  const playerAnswer = sortColors(player.lastAnswer || []);
 
                             return (
                                 <motion.div
@@ -228,7 +228,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                         </div>
                                     </div>
 
-                                    <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1' : 'p-1.5'}`}>
+                                    {/* <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1' : 'p-1.5'}`}>
                                         <div className="flex flex-wrap justify-center gap-1">
                                             {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
                                                 <ColorCard
@@ -242,7 +242,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">No Answer</span>
                                             )}
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div className={`pointer-events-none absolute right-0 top-0 h-16 w-16 opacity-30 blur-2xl ${player.isCorrect ? 'bg-success' : 'bg-error'}`} />
                                 </motion.div>
