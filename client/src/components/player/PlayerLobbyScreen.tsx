@@ -174,7 +174,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                     >
                                         {player.name}
                                     </span>
-                                    <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
+                                    {/* <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
                                         <span
                                             className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
                                             style={{
@@ -183,7 +183,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                         >
                                             {player.score} <span className="text-[10px] opacity-60 ml-0.5">PTS</span>
                                         </span>
-                                    </div>
+                                    </div> */}
                                 </motion.div>
                             );
                         })}

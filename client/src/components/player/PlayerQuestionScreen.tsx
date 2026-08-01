@@ -483,7 +483,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                     return (
                                         <div key={player.id} className="relative shrink-0">
                                             <div
-                                                className={`w-6 h-6 rounded-full overflow-hidden border-[1.5px] transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-35 grayscale scale-90'}`}
+                                                className={`w-12 h-12 rounded-full overflow-hidden border-[1.5px] transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-35 grayscale scale-90'}`}
                                                 style={{
                                                     borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
                                                     boxShadow: isAnswered ? `0 0 8px ${playerColor}40` : 'none'
