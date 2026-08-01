@@ -208,11 +208,11 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 key={player.id}
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="relative flex shrink-0 flex-col items-center gap-0.5"
+                                className="relative flex shrink-0 flex-col items-center gap-3"
                                 title={player.name}
                             >
                                 <div
-                                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
+                                    className="w-10 h-10 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
                                     style={{
                                         borderColor: isBlocked ? 'rgba(239,68,68,0.85)' : isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
                                         boxShadow: isAnswered
