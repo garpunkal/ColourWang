@@ -195,7 +195,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </motion.div>
                 </div>
 
-                <div className={`mx-auto w-full max-w-5xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[22dvh] sm:max-h-[26dvh] overflow-y-auto pb-3 pr-1' : 'pb-6'}`}>
+                <div className={`mx-auto w-full max-w-5xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[22dvh] sm:max-h-[26dvh] overflow-y-auto pt-2 sm:pt-3 pb-3 pr-1' : 'pt-2 pb-6'}`}>
                     <div className={`flex flex-wrap justify-center ${hasManyPlayers ? 'gap-2 sm:gap-2.5' : 'gap-3 sm:gap-4'}`}>
                     {gameState.players.map((player) => {
                         const playerStatus = playersAnswered.find(p => p.id === player.id);
