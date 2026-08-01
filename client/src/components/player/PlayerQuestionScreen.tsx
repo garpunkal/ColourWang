@@ -22,7 +22,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
     const myId = localStorage.getItem('cw_playerId');
     const [stealCardActiveThisQuestion, setStealCardActiveThisQuestion] = useState(true);
     const [selectedColors, setSelectedColors] = useState<string[]>(me?.lastAnswer || []);
-    const [hasAnswered, setHasAnswered] = useState(me?.lastAnswer !== null);
+    const [hasAnswered, setHasAnswered] = useState(me?.lastAnswer != null);
     const [isBlockedThisQuestion, setIsBlockedThisQuestion] = useState(Boolean(me?.isBlockedThisQuestion));
     const [hasUsedBlockCard, setHasUsedBlockCard] = useState(Boolean(me?.blockCardUsed));
     const [blockCardPending, setBlockCardPending] = useState(false);
@@ -142,8 +142,9 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
         const anyoneStole = gameState.players.some(p => p.disabledIndexes && p.disabledIndexes.length > 0);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setStealCardActiveThisQuestion(!anyoneStole);
-        setSelectedColors([]);
-        setHasAnswered(false);
+        const submittedAnswer = me?.lastAnswer ?? null;
+        setSelectedColors(submittedAnswer || []);
+        setHasAnswered(submittedAnswer != null);
         setIsBlockedThisQuestion(Boolean(me?.isBlockedThisQuestion));
         setBlockCardPending(false);
         setIsBlockTargetPickerOpen(false);
