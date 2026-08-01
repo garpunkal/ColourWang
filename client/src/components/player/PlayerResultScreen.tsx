@@ -64,7 +64,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                 style={{ borderColor: `${themeColorHex}aa` }}
             />
 
-            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center justify-center px-4 pb-28 pt-10 md:px-8 md:pt-14">
+            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center justify-center px-4 pb-40 pt-10 md:pb-28 md:px-8 md:pt-14">
                 <div className="w-full max-w-2xl text-center">
                     <motion.div
                         initial={{ scale: 0.5, opacity: 0, y: -30 }}
@@ -172,7 +172,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                 initial={{ y: 24, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.35 }}
-                className="absolute inset-x-0 bottom-6 z-20 px-4"
+                className="absolute inset-x-0 bottom-16 md:bottom-6 z-20 px-4"
             >
                 <div className="mx-auto flex w-full max-w-sm items-center justify-between rounded-2xl border border-white/15 bg-black/40 p-3 backdrop-blur-lg">
                     <div className="flex items-center gap-3">
