@@ -470,19 +470,31 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                 )}
                             </div>
                         </div>
-                        <div className="w-full mt-4 border-t border-white/5 pt-6">
-                            <div className="flex items-center justify-between mb-4 px-2">
+                         <div className="w-full mt-4 border-t border-white/5 pt-6">
+                            <div className="flex items-center justify-between mb-3 px-2">
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 italic">Room Status</span>
                                 <span className="text-[10px] font-black font-mono text-white/50">{playersAnswered.filter(p => p.hasAnswered).length} / {gameState.players.length}</span>
                             </div>
-                            <div className="flex flex-wrap justify-center gap-2">
+                            <div className="flex items-center justify-center gap-1.5 overflow-x-auto whitespace-nowrap pb-1">
                                 {gameState.players.map(player => {
                                     const status = playersAnswered.find(p => p.id === player.id);
                                     const isAnswered = status?.hasAnswered || false;
                                     const playerColor = getAvatarColor(player.avatar);
                                     return (
-                                        <div key={player.id} className={`relative w-8 h-8 rounded-lg overflow-hidden transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-30 grayscale scale-90'}`} style={{ boxShadow: isAnswered ? `0 0 10px ${playerColor}40` : 'none' }}>
-                                            <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
+                                        <div key={player.id} className="relative shrink-0">
+                                            <div
+                                                className={`w-6 h-6 rounded-full overflow-hidden border-[1.5px] transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-35 grayscale scale-90'}`}
+                                                style={{
+                                                    borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
+                                                    boxShadow: isAnswered ? `0 0 8px ${playerColor}40` : 'none'
+                                                }}
+                                            >
+                                                <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
+                                            </div>
+                                            <span
+                                                className={`absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-black/20 ${isAnswered ? 'bg-emerald-400' : 'bg-white/30'}`}
+                                                aria-hidden="true"
+                                            />
                                         </div>
                                     );
                                 })}

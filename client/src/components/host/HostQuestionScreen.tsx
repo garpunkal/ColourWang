@@ -195,8 +195,8 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </motion.div>
                 </div>
 
-                <div className={`mx-auto w-full max-w-5xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[22dvh] sm:max-h-[26dvh] overflow-y-auto pt-2 sm:pt-3 pb-3 pr-1' : 'pt-2 pb-6'}`}>
-                    <div className={`flex flex-wrap justify-center ${hasManyPlayers ? 'gap-2 sm:gap-2.5' : 'gap-3 sm:gap-4'}`}>
+                <div className="mx-auto w-full max-w-5xl px-1 sm:px-2 pt-1 pb-2">
+                    <div className="flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto whitespace-nowrap pb-1">
                     {gameState.players.map((player) => {
                         const playerStatus = playersAnswered.find(p => p.id === player.id);
                         const playerColor = getAvatarColor(player.avatar);
@@ -208,27 +208,31 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 key={player.id}
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="relative flex flex-col items-center gap-1"
+                                className="relative flex shrink-0 flex-col items-center gap-0.5"
                                 title={player.name}
                             >
                                 <div
-                                    className={`${hasManyPlayers ? 'w-11 h-11 sm:w-12 sm:h-12' : 'w-12 h-12 sm:w-14 sm:h-14'} rounded-full overflow-hidden border-2 transition-all duration-300`}
+                                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border-[1.5px] transition-all duration-300"
                                     style={{
                                         borderColor: isBlocked ? 'rgba(239,68,68,0.85)' : isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
                                         boxShadow: isAnswered
-                                            ? `0 0 18px ${playerColor}, 0 0 30px ${playerColor}80`
+                                            ? `0 0 10px ${playerColor}`
                                             : isBlocked
-                                                ? '0 0 14px rgba(239,68,68,0.5)'
+                                                ? '0 0 8px rgba(239,68,68,0.35)'
                                                 : 'none',
-                                        filter: isAnswered ? 'saturate(1.1)' : 'saturate(0.65)',
-                                        opacity: isAnswered ? 1 : 0.55
+                                        filter: isAnswered ? 'saturate(1.05)' : 'saturate(0.7)',
+                                        opacity: isAnswered ? 1 : 0.6
                                     }}
                                 >
                                     <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                 </div>
-                                <span className="max-w-16 truncate text-[10px] font-black uppercase tracking-wider text-white/70">
+                                <span className="max-w-8 truncate text-[7px] font-black uppercase tracking-[0.18em] text-white/60 leading-none">
                                     {player.name}
                                 </span>
+                                <span
+                                    className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border border-black/20 ${isBlocked ? 'bg-error' : isAnswered ? 'bg-emerald-400' : 'bg-white/30'}`}
+                                    aria-hidden="true"
+                                />
                             </motion.div>
                         );
                     })}
