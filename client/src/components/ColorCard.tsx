@@ -10,7 +10,7 @@ interface ColorCardProps {
     isCorrect?: boolean;
     onClick?: () => void;
     disabled?: boolean;
-    size?: 'mini' | 'small' | 'medium' | 'large' | 'responsive';
+    size?: 'micro' | 'mini' | 'small' | 'medium' | 'large' | 'responsive';
     index?: number;
     isStealCard?: boolean;
     stealValue?: number;
@@ -39,6 +39,7 @@ export const ColorCard = memo(function ColorCard({
     const resolvedActionValue = actionValue ?? (isStealCard ? stealValue : undefined);
 
     const sizeStyles = {
+        micro: { width: '2.6rem', height: '3.4rem' },
         mini: { width: '3.5rem', height: '4.5rem' },
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
@@ -185,12 +186,12 @@ export const ColorCard = memo(function ColorCard({
                             className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
                         >
                             <motion.div
-                                className={`rounded-full bg-white text-black flex items-center justify-center shadow-2xl ${size === 'mini' ? 'w-8 h-8' : 'w-16 h-16 md:w-20 md:h-20'}`}
+                                className={`rounded-full bg-white text-black flex items-center justify-center shadow-2xl ${size === 'mini' || size === 'micro' ? 'w-8 h-8' : 'w-16 h-16 md:w-20 md:h-20'}`}
                                 animate={{ scale: [1, 1.1, 1] }}
                                 transition={{ duration: 1.5, repeat: Infinity }}
                                 style={{ boxShadow: '0 0 30px rgba(255,255,255,0.6)' }}
                             >
-                                <Check size={size === 'mini' ? 20 : 40} strokeWidth={5} />
+                                <Check size={size === 'mini' || size === 'micro' ? 20 : 40} strokeWidth={5} />
                             </motion.div>
                         </motion.div>
                     )}

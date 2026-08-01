@@ -228,13 +228,13 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                         </div>
                                     </div>
 
-                                    <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1.5' : 'p-2'}`}>
-                                        <div className="flex flex-wrap justify-center gap-1.5">
+                                    <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1' : 'p-1.5'}`}>
+                                        <div className="flex flex-wrap justify-center gap-1">
                                             {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
                                                 <ColorCard
                                                     key={i}
                                                     color={color}
-                                                    size="mini"
+                                                    size="micro"
                                                     index={i}
                                                     disabled={true}
                                                 />
