@@ -1,6 +1,6 @@
-import { useState, useEffect, type ChangeEvent } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { Socket } from 'socket.io-client';
-import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle, Camera, Crop } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
 import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
@@ -94,27 +94,157 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<{ avatar: string; avatarStyle: string; }[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
     const [modalError, setModalError] = useState<string | null>(null);
+    const [cropModalOpen, setCropModalOpen] = useState(false);
+    const [cropImageData, setCropImageData] = useState<{
+        dataUrl: string;
+        naturalWidth: number;
+        naturalHeight: number;
+        displayWidth: number;
+        displayHeight: number;
+        scale: number;
+    } | null>(null);
+    const [cropOffset, setCropOffset] = useState({ x: 0, y: 0 });
+    const [dragStart, setDragStart] = useState<{ x: number; y: number; originX: number; originY: number } | null>(null);
+    const uploadInputRef = useRef<HTMLInputElement | null>(null);
+    const cameraInputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleAvatarUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+    const loadImageFromDataUrl = (dataUrl: string): Promise<HTMLImageElement> => new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error('We could not read that image. Please try another file.'));
+        image.src = dataUrl;
+    });
+
+    const processAvatarImageFile = async (file: File) => {
+        const reader = new FileReader();
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(new Error('We could not read that image. Please try another file.'));
+            reader.readAsDataURL(file);
+        });
+
+        const image = await loadImageFromDataUrl(dataUrl);
+        const maxDimension = 1200;
+        const width = image.naturalWidth;
+        const height = image.naturalHeight;
+        const scale = Math.min(1, maxDimension / Math.max(width, height));
+        const targetWidth = Math.max(1, Math.round(width * scale));
+        const targetHeight = Math.max(1, Math.round(height * scale));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const context = canvas.getContext('2d');
+        if (!context) {
+            throw new Error('We could not prepare that image. Please try another file.');
+        }
+
+        context.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+        const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+        const quality = mimeType === 'image/png' ? undefined : 0.92;
+        return canvas.toDataURL(mimeType, quality);
+    };
+
+    const openCropEditor = async (file: File) => {
+        try {
+            const resizedDataUrl = await processAvatarImageFile(file);
+            const image = await loadImageFromDataUrl(resizedDataUrl);
+            const frameSize = 320;
+            const scale = Math.max(frameSize / image.naturalWidth, frameSize / image.naturalHeight);
+            const displayWidth = image.naturalWidth * scale;
+            const displayHeight = image.naturalHeight * scale;
+            const initialOffsetX = (frameSize - displayWidth) / 2;
+            const initialOffsetY = (frameSize - displayHeight) / 2;
+
+            setCropImageData({
+                dataUrl: resizedDataUrl,
+                naturalWidth: image.naturalWidth,
+                naturalHeight: image.naturalHeight,
+                displayWidth,
+                displayHeight,
+                scale,
+            });
+            setCropOffset({ x: initialOffsetX, y: initialOffsetY });
+            setCropModalOpen(true);
+            setModalError(null);
+        } catch {
+            setModalError('We could not read that image. Please try another file.');
+        }
+    };
+
+    const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
-        if (file.size > 2 * 1024 * 1024) {
-            setModalError('Please choose an image smaller than 2MB.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            const dataUrl = reader.result as string;
-            setAvatarImage(dataUrl);
-            setModalError(null);
-        };
-        reader.onerror = () => {
-            setModalError('We could not read that image. Please try another file.');
-        };
-        reader.readAsDataURL(file);
+        await openCropEditor(file);
         event.target.value = '';
+    };
+
+    const handleCropPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (!cropImageData) return;
+        setDragStart({ x: event.clientX, y: event.clientY, originX: cropOffset.x, originY: cropOffset.y });
+        event.currentTarget.setPointerCapture(event.pointerId);
+    };
+
+    const handleCropPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (!cropImageData || !dragStart) return;
+
+        const deltaX = event.clientX - dragStart.x;
+        const deltaY = event.clientY - dragStart.y;
+        const maxOffsetX = cropImageData.displayWidth > 320 ? 0 : 0;
+        const minOffsetX = cropImageData.displayWidth > 320 ? 320 - cropImageData.displayWidth : 0;
+        const maxOffsetY = cropImageData.displayHeight > 320 ? 0 : 0;
+        const minOffsetY = cropImageData.displayHeight > 320 ? 320 - cropImageData.displayHeight : 0;
+
+        setCropOffset({
+            x: clamp(dragStart.originX + deltaX, minOffsetX, maxOffsetX),
+            y: clamp(dragStart.originY + deltaY, minOffsetY, maxOffsetY),
+        });
+    };
+
+    const handleCropPointerUp = () => {
+        setDragStart(null);
+    };
+
+    const applyCroppedAvatar = async () => {
+        if (!cropImageData) return;
+
+        try {
+            const image = await loadImageFromDataUrl(cropImageData.dataUrl);
+            const cropSize = 320;
+            const sourceX = clamp((0 - cropOffset.x) / cropImageData.scale, 0, Math.max(0, image.naturalWidth - (cropSize / cropImageData.scale)));
+            const sourceY = clamp((0 - cropOffset.y) / cropImageData.scale, 0, Math.max(0, image.naturalHeight - (cropSize / cropImageData.scale)));
+            const sourceWidth = Math.max(1, cropSize / cropImageData.scale);
+            const sourceHeight = Math.max(1, cropSize / cropImageData.scale);
+
+            const canvas = document.createElement('canvas');
+            const outputSize = 1024;
+            canvas.width = outputSize;
+            canvas.height = outputSize;
+            const context = canvas.getContext('2d');
+            if (!context) {
+                throw new Error('We could not prepare that image.');
+            }
+
+            context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, outputSize, outputSize);
+            setAvatarImage(canvas.toDataURL('image/jpeg', 0.92));
+            setCropModalOpen(false);
+            setCropImageData(null);
+            setCropOffset({ x: 0, y: 0 });
+            setModalError(null);
+        } catch {
+            setModalError('We could not crop that image. Please try again.');
+        }
+    };
+
+    const cancelCropEditor = () => {
+        setCropModalOpen(false);
+        setCropImageData(null);
+        setCropOffset({ x: 0, y: 0 });
+        setDragStart(null);
     };
 
     const clearUploadedAvatar = () => {
@@ -312,16 +442,39 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <label className="cursor-pointer rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={handleAvatarUpload}
-                                        />
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <input
+                                        ref={uploadInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleAvatarUpload}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => uploadInputRef.current?.click()}
+                                        className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                    >
                                         Upload photo
-                                    </label>
+                                    </button>
+                                    <input
+                                        ref={cameraInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        capture="environment"
+                                        className="hidden"
+                                        onChange={handleAvatarUpload}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => cameraInputRef.current?.click()}
+                                        className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            <Camera size={14} />
+                                            Camera
+                                        </span>
+                                    </button>
                                     {avatarImage && (
                                         <button
                                             type="button"
@@ -376,6 +529,71 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             })}
                         </div>
                     </div>
+
+                    <AnimatePresence>
+                        {cropModalOpen && cropImageData && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4"
+                            >
+                                <motion.div
+                                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                                    className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#1b1534] p-5 shadow-2xl"
+                                >
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">Crop your photo</p>
+                                            <h3 className="text-xl font-black uppercase italic tracking-wide text-white">Frame your avatar</h3>
+                                        </div>
+                                        <div className="rounded-full border border-white/10 bg-white/10 p-2 text-color-blue">
+                                            <Crop size={20} />
+                                        </div>
+                                    </div>
+                                    <p className="mt-3 text-sm text-white/70">Drag the image to choose the part you want to keep.</p>
+                                    <div
+                                        className="relative mt-4 flex aspect-square w-full max-w-[320px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40 mx-auto cursor-grab active:cursor-grabbing"
+                                        onPointerDown={handleCropPointerDown}
+                                        onPointerMove={handleCropPointerMove}
+                                        onPointerUp={handleCropPointerUp}
+                                        onPointerLeave={handleCropPointerUp}
+                                        style={{ touchAction: 'none' }}
+                                    >
+                                        <div className="absolute inset-0 rounded-[1.5rem] border-[3px] border-white/90 z-10 pointer-events-none" />
+                                        <img
+                                            src={cropImageData.dataUrl}
+                                            alt="Crop preview"
+                                            className="absolute left-0 top-0"
+                                            style={{
+                                                width: cropImageData.displayWidth,
+                                                height: cropImageData.displayHeight,
+                                                transform: `translate(${cropOffset.x}px, ${cropOffset.y}px)`,
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-5 flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={cancelCropEditor}
+                                            className="flex-1 rounded-full border border-white/10 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={applyCroppedAvatar}
+                                            className="flex-1 rounded-full border border-color-blue/30 bg-color-blue/90 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white transition hover:bg-color-blue"
+                                        >
+                                            Use photo
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     <motion.button
                         whileHover={{ scale: 1.02 }}
