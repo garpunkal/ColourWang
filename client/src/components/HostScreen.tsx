@@ -174,7 +174,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
     }
 
     return (
-        <div className="flex-1 flex flex-col relative w-full min-h-[100dvh] overflow-hidden">
+        <div className="flex-1 flex flex-col relative w-full min-h-[100dvh]">
             {/* Massive Shockwave Overlay – outside shake wrapper so fixed positioning isn't trapped */}
             <AnimatePresence>
                 {showExplosion && (

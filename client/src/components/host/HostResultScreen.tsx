@@ -127,7 +127,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
             animate={{ opacity: 1 }}
             className="relative min-h-[100dvh] w-full overflow-x-hidden"
         >
-            <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-3 pb-24 pt-4 sm:px-6 md:px-8 md:pt-6">
+            <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-3 pt-4 sm:px-6 md:px-8 md:pt-6 pb-6">
                 <div className="mb-4 flex w-full flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md md:mb-6 md:px-4">
                     <div className="flex items-center gap-2">
                         <Hash size={14} className="text-blue-300" />
@@ -170,7 +170,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 <ColorCard
                                     color={color}
                                     isCorrect={true}
-                                    size="medium"
+                                    size="small"
                                     index={i}
                                 />
                             </motion.div>
@@ -249,7 +249,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     </div>
                 </div>
 
-                <div className="absolute inset-x-0 bottom-6 z-20 px-4">
+                <div className="mt-auto pt-4 w-full px-4">
                     <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3">
                         <motion.button
                             whileHover={{ scale: 1.03, y: -2 }}
