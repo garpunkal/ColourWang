@@ -91,11 +91,11 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 1.1, rotate: 2 }}
-            className={`text-center glass rounded-[4rem] p-8 md:p-8 border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 ${isCountdownState || isRoundIntro ? 'ring-4 ring-color-blue/40 shadow-[0_0_100px_rgba(0,229,255,0.2)]' : ''}`}
+            className={`text-center glass rounded-[4rem] ${hasManyPlayers ? 'p-5 md:p-6' : 'p-8 md:p-8'} border-white/10 shadow-[0_80px_100px_-30px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 h-full min-h-0 flex flex-col ${isCountdownState || isRoundIntro ? 'ring-4 ring-color-blue/40 shadow-[0_0_100px_rgba(0,229,255,0.2)]' : ''}`}
         >
             <div className={`absolute inset-0 bg-gradient-to-br opacity-50 transition-colors duration-1000 ${isCountdownState || isRoundIntro ? 'from-color-blue/30 via-color-purple/10 to-color-pink/30' : 'from-color-blue/15 via-transparent to-color-purple/15'}`} />
 
-            <div className="mb-6 relative inline-block z-10 w-full">
+            <div className={`${hasManyPlayers ? 'mb-3' : 'mb-6'} relative inline-block z-10 w-full shrink-0`}>
                 <motion.div
                     animate={isCountdownState || isRoundIntro ? { scale: [1, 1.3, 1], rotate: [0, 5, -5, 0] } : { scale: [1, 1.6, 1], rotate: [0, 10, -10, 0] }}
                     transition={{ duration: isCountdownState || isRoundIntro ? 2 : 5, repeat: Infinity }}
@@ -130,12 +130,12 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                     </div>
                 ) : isRoundIntro ? (
                     <div className="relative z-20 animate-pulse">
-                        <h1 className="text-4xl md:text-5xl font-black mb-1 uppercase tracking-tighter italic text-yellow-500">NEXT ROUND</h1>
+                        <h1 className={`${hasManyPlayers ? 'text-3xl md:text-4xl' : 'text-4xl md:text-5xl'} font-black mb-1 uppercase tracking-tighter italic text-yellow-500`}>NEXT ROUND</h1>
                         <p className="text-white font-bold text-sm md:text-base opacity-80 uppercase tracking-widest italic">Prepare yourself...</p>
                     </div>
                 ) : (
                     <div className="relative z-20">
-                        <h1 className="text-4xl md:text-5xl font-black mb-1 uppercase tracking-tighter italic">STAND BY</h1>
+                        <h1 className={`${hasManyPlayers ? 'text-3xl md:text-4xl' : 'text-4xl md:text-5xl'} font-black mb-1 uppercase tracking-tighter italic`}>STAND BY</h1>
                         <p className="text-text-muted font-bold text-sm md:text-base opacity-60 uppercase tracking-widest italic">You're in the game!</p>
                     </div>
                 )}
@@ -144,9 +144,9 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             {/* Players List - Scale down during countdown */}
             <motion.div
                 animate={{ opacity: isCountdownState ? 0.4 : 1, scale: isCountdownState ? 0.95 : 1 }}
-                className="relative z-10"
+                className="relative z-10 min-h-0 flex-1"
             >
-                <div className={`flex flex-col items-center max-w-sm mx-auto overflow-y-auto ${hasManyPlayers ? 'gap-2 max-h-[34dvh] pr-1' : 'gap-3'}`}>
+                <div className={`max-w-sm mx-auto h-full min-h-0 overflow-y-auto pr-1 ${hasManyPlayers ? 'grid grid-cols-1 gap-1.5 content-start' : 'flex flex-col items-center gap-3'}`}>
                     {gameState.players.map((player, index) => {
                         const playerColor = getAvatarColor(player.avatar);
                         return (
@@ -155,13 +155,13 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                                className={`flex items-center rounded-2xl glass-panel w-full border ${hasManyPlayers ? 'gap-2.5 px-3 py-1.5' : 'gap-3 px-4 py-2'}`}
+                                className={`flex items-center rounded-2xl glass-panel w-full border ${hasManyPlayers ? 'gap-2 px-2.5 py-1' : 'gap-3 px-4 py-2'}`}
                                 style={{
                                     borderColor: `${playerColor}30`,
                                     backgroundColor: `${playerColor}05`
                                 }}
                             >
-                                <div className={`${hasManyPlayers ? 'w-8 h-8' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
+                                <div className={`${hasManyPlayers ? 'w-7 h-7' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
                                     <Avatar
                                         seed={player.avatar}
                                         style={player.avatarStyle}
@@ -170,13 +170,13 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                     />
                                 </div>
                                 <span
-                                    className={`font-black uppercase tracking-wider flex-1 text-left truncate text-white/90 ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}
+                                    className={`font-black uppercase tracking-wider flex-1 text-left truncate text-white/90 ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
                                 >
                                     {player.name}
                                 </span>
                                 <div className={`bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm ${hasManyPlayers ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
                                     <span
-                                        className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}
+                                        className={`font-black font-mono tabular-nums tracking-tighter text-white ${hasManyPlayers ? 'text-[11px] md:text-xs' : 'text-sm md:text-base'}`}
                                         style={{
                                             textShadow: `0 0 10px rgba(255,255,255,0.5)`
                                         }}
@@ -195,7 +195,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="mt-8 pt-6 border-t border-white/5 relative z-10 flex flex-col items-center"
+                    className={`${hasManyPlayers ? 'mt-3 pt-3' : 'mt-8 pt-6'} border-t border-white/5 relative z-10 flex flex-col items-center shrink-0`}
                 >
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-2">Auto-starting in</span>
                     <div className="flex items-baseline gap-2">
