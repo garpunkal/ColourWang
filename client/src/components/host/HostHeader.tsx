@@ -50,8 +50,8 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     >
                         <QRCodeSVG
                             value={joinUrl}
-                            size={compact ? 60 : 80}
-                            className={`rounded ${compact ? 'w-15 h-15' : 'w-20 h-20 md:w-24 md:h-24'}`}
+                            size={compact ? 60 : 48}
+                            className={`rounded ${compact ? 'w-15 h-15' : 'w-12 h-12 md:w-14 md:h-14'}`}
                             level="L"
                             marginSize={0}
                         />
@@ -61,7 +61,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                     <div className="flex flex-col items-center md:items-start gap-0">
                         <div className={`
                             font-mono font-black tracking-widest text-white leading-none drop-shadow-[0_10px_30px_rgba(0,229,255,0.4)] transition-all duration-500
-                            ${compact ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'}
+                            ${compact ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-xl sm:text-2xl md:text-3xl'}
                         `}>
                             {code}
                         </div>
