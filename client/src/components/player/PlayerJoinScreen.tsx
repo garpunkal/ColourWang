@@ -525,7 +525,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             </div>
                         </div>
 
-                        <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60">Style Your Wang</label>
+                        <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60">Your Wang</label>
 
                         <div
                             className="flex items-center justify-between w-full max-w-80 px-2"
