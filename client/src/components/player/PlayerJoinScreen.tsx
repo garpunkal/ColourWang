@@ -3,7 +3,7 @@ import type { Socket } from 'socket.io-client';
 import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle, Camera, Crop, Upload, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar } from '../GameAvatars';
-import { AVATAR_IDS, getAvatarName, getAvatarColor } from '../../constants/avatars';
+import { AVATAR_IDS, getAvatarName } from '../../constants/avatars';
 import { avatarConfig } from '../../config/avatarConfig';
 
 interface Props {

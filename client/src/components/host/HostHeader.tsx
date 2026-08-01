@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { audioManager } from '../../utils/audioManager';
 import { QRCodeSVG } from 'qrcode.react';
-import { Users } from 'lucide-react';
 import type { Socket } from 'socket.io-client';
 import { BGM_TRACKS } from '../../config/musicConfig';
-import { LogOut } from 'lucide-react';
 
 
 interface Props {
@@ -19,7 +17,7 @@ interface Props {
 }
 
 
-export function HostHeader({ code, playerCount, compact = false, musicEnabled = true, socket, currentBgm = '', onAbandonGame }: Props) {
+export function HostHeader({ code, compact = false, musicEnabled = true, socket, currentBgm = '' }: Props) {
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBGM, setSelectedBGM] = useState(currentBgm);
 
@@ -96,8 +94,8 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
                         )}
                     </div>
                 </div>
-            
-               
+
+
                 {/* <div className={`
                         flex items-center gap-3 transition-all duration-500 w-fit lg:justify-self-end
                         ${compact ? '' : 'hidden'}

@@ -1,6 +1,5 @@
 import type { Player, GameState } from '../../types/game';
 import { motion } from 'framer-motion';
-import { Trophy } from 'lucide-react';
 import { useMemo } from 'react';
 
 interface Props {
