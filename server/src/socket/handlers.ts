@@ -341,6 +341,43 @@ export function registerSocketHandlers(io: Server) {
           io.to(normalizedCode).emit('player-joined', game.players);
         }
       } else {
+        const normalizedName = typeof name === 'string' ? name.trim().toUpperCase() : '';
+        const matchingPlayersByName = normalizedName
+          ? game.players.filter(p => p.name.trim().toUpperCase() === normalizedName)
+          : [];
+
+        if (matchingPlayersByName.length === 1) {
+          const existingPlayer = matchingPlayersByName[0];
+          existingPlayer.socketId = socket.id;
+          socket.join(normalizedCode);
+
+          game.players = game.players.map(p => ({
+            ...p,
+            socketId: p.id === existingPlayer.id ? socket.id : p.socketId,
+            avatarImage: p.id === existingPlayer.id && avatarImage ? avatarImage : p.avatarImage,
+            stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
+            stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
+            blockCardUsed: typeof p.blockCardUsed === 'boolean' ? p.blockCardUsed : false,
+            disabledIndexes: Array.isArray(p.disabledIndexes) ? p.disabledIndexes : [],
+            isBlockedThisQuestion: typeof p.isBlockedThisQuestion === 'boolean' ? p.isBlockedThisQuestion : false,
+            blockedByPlayerId: typeof p.blockedByPlayerId === 'string' ? p.blockedByPlayerId : null,
+            streak: typeof p.streak === 'number' ? p.streak : 0,
+            answeredAt: typeof p.answeredAt === 'number' ? p.answeredAt : null,
+            roundScore: 0,
+            streakPoints: 0,
+            fastestFingerPoints: 0
+          }));
+
+          logger.info(`Player ${existingPlayer.name} (${existingPlayer.id}) rejoined game ${normalizedCode} via name fallback`);
+          socket.emit('joined-game', { game, playerId: existingPlayer.id });
+
+          if (game.status === 'LOBBY') {
+            io.to(normalizedCode).emit('player-joined', game.players);
+          }
+
+          return;
+        }
+
         // Player not found - possibly session expired or game was reset
         // Try to add them as a new player if game is still in lobby
         if (game.status === 'LOBBY' && name) {
