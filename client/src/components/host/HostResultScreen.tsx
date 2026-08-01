@@ -172,7 +172,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 <ColorCard
                                     color={color}
                                     isCorrect={true}
-                                    size={hasManyPlayers ? 'mini' : 'small'}
+                                    size={hasManyPlayers ? 'small' : 'medium'}
                                     index={i}
                                 />
                             </motion.div>
