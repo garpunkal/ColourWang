@@ -39,26 +39,6 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         return params.get('code')?.toUpperCase() || '';
     });
 
-    // true when only one game is running and the code was auto-selected
-    const [autoJoinCode, setAutoJoinCode] = useState(false);
-
-    // Fetch active games on mount; hide the code field when exactly one game is running
-    useEffect(() => {
-        // Only request if no code is already set (e.g. via URL param)
-        if (!code) {
-            socket.emit('get-active-games');
-            const handleActiveGames = (games: string[]) => {
-                if (games.length === 1) {
-                    setCode(games[0]);
-                    setAutoJoinCode(true);
-                }
-            };
-            socket.on('active-games', handleActiveGames);
-            return () => {
-                socket.off('active-games', handleActiveGames);
-            };
-        }
-    }, [socket, code]);
 
     // Save name, avatar, and style to localStorage
     useEffect(() => {
@@ -469,21 +449,19 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             />
                         </div>
 
-                        {!autoJoinCode && (
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Code</label>
-                                <div className="relative group">
-                                    <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
-                                    <input
-                                        className="input w-full pl-14! md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-4xl py-4 md:py-8 shadow-xl transition-all"
-                                        placeholder="CODE"
-                                        maxLength={4}
-                                        value={code}
-                                        onChange={e => setCode(e.target.value)}
-                                    />
-                                </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">Code</label>
+                            <div className="relative group">
+                                <Hash className="absolute left-6 top-1/2 -translate-y-1/2 text-color-blue opacity-50 group-focus-within:opacity-100 transition-opacity" size={24} />
+                                <input
+                                    className="input w-full pl-14! md:pl-20 text-2xl md:text-5xl font-mono font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-white border-white/10 bg-white/5 focus:bg-white/10 focus:border-color-blue/50 rounded-[1.2rem] md:rounded-4xl py-4 md:py-8 shadow-xl transition-all"
+                                    placeholder="CODE"
+                                    maxLength={4}
+                                    value={code}
+                                    onChange={e => setCode(e.target.value)}
+                                />
                             </div>
-                        )}
+                        </div>
                     </div>
 
                     {/* Avatar Style & Preview */}
