@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ChangeEvent } from 'react';
 import type { Socket } from 'socket.io-client';
 import { Hash, Lock, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +17,10 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     const [avatarStyle, setAvatarStyle] = useState(() => {
         return localStorage.getItem('playerAvatarStyle') || avatarConfig.defaultStyle;
+    });
+
+    const [avatarImage, setAvatarImage] = useState<string | null>(() => {
+        return localStorage.getItem('playerAvatarImage') || localStorage.getItem('cw_playerAvatarImage') || null;
     });
 
     // Try to restore avatar from localStorage if available and not taken
@@ -65,6 +69,16 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         if (avatarStyle) localStorage.setItem('playerAvatarStyle', avatarStyle);
     }, [avatarStyle]);
 
+    useEffect(() => {
+        if (avatarImage) {
+            localStorage.setItem('playerAvatarImage', avatarImage);
+            localStorage.setItem('cw_playerAvatarImage', avatarImage);
+        } else {
+            localStorage.removeItem('playerAvatarImage');
+            localStorage.removeItem('cw_playerAvatarImage');
+        }
+    }, [avatarImage]);
+
     const cycleStyle = (direction: 'next' | 'prev') => {
         const styles = avatarConfig.availableStyles;
         const currentIndex = styles.indexOf(avatarStyle);
@@ -80,6 +94,32 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
     const [dynamicTakenAvatars, setDynamicTakenAvatars] = useState<{ avatar: string; avatarStyle: string; }[]>(takenAvatars);
     const [isJoining, setIsJoining] = useState(false);
     const [modalError, setModalError] = useState<string | null>(null);
+
+    const handleAvatarUpload = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 2 * 1024 * 1024) {
+            setModalError('Please choose an image smaller than 2MB.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const dataUrl = reader.result as string;
+            setAvatarImage(dataUrl);
+            setModalError(null);
+        };
+        reader.onerror = () => {
+            setModalError('We could not read that image. Please try another file.');
+        };
+        reader.readAsDataURL(file);
+        event.target.value = '';
+    };
+
+    const clearUploadedAvatar = () => {
+        setAvatarImage(null);
+    };
 
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
@@ -125,13 +165,14 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
 
     // Update avatar if current one becomes taken (cascading render is fine here as it's a correction)
     useEffect(() => {
+        if (avatarImage) return;
         if (dynamicTakenAvatars.some(taken => taken.avatar === avatar && taken.avatarStyle === avatarStyle)) {
             const available = AVATAR_IDS.find(id => !dynamicTakenAvatars.some(taken => taken.avatar === id && taken.avatarStyle === avatarStyle));
             if (available) {
                 setTimeout(() => setAvatar(available), 0);
             }
         }
-    }, [dynamicTakenAvatars, avatar, avatarStyle]);
+    }, [dynamicTakenAvatars, avatar, avatarStyle, avatarImage]);
 
     const handleJoin = () => {
         if (!socket.connected) {
@@ -146,14 +187,17 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
             const upperName = name.toUpperCase();
             localStorage.setItem('cw_playerName', upperName);
             
-            socket.emit('join-game', { name: upperName, avatar, avatarStyle, code: code.toUpperCase() });
+            socket.emit('join-game', { name: upperName, avatar, avatarStyle, avatarImage: avatarImage || undefined, code: code.toUpperCase() });
 
             // Timeout to reset loading if no response
             setTimeout(() => setIsJoining(false), 5000);
         }
     };
 
-    const isAvatarTaken = (avatarId: string) => dynamicTakenAvatars.some(taken => taken.avatar === avatarId && taken.avatarStyle === avatarStyle);
+    const isAvatarTaken = (avatarId: string) => {
+        if (avatarImage) return false;
+        return dynamicTakenAvatars.some(taken => taken.avatar === avatarId && taken.avatarStyle === avatarStyle);
+    };
 
     return (
         <div className="flex flex-col max-w-md mx-auto w-full overflow-y-auto overflow-x-hidden relative z-10 min-h-dvh p-4 justify-start">
@@ -238,12 +282,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             </motion.button>
 
                             <motion.div
-                                key={`${avatar}-${avatarStyle}`}
+                                key={`${avatar}-${avatarStyle}-${avatarImage || 'default'}`}
                                 className="relative group"
                             >
                                 <Avatar
                                     seed={avatar}
                                     style={avatarStyle}
+                                    imageUrl={avatarImage || undefined}
                                     className="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                                 />
                             </motion.div>
@@ -255,6 +300,39 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             >
                                 <ChevronRight size={24} />
                             </motion.button>
+                        </div>
+
+                        <div className="w-full rounded-[1.4rem] border border-white/10 bg-black/20 p-3 md:p-4">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">
+                                        {avatarImage ? 'Using your photo' : 'Optional photo avatar'}
+                                    </p>
+                                    <p className="text-xs text-white/60 mt-1">
+                                        {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <label className="cursor-pointer rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={handleAvatarUpload}
+                                        />
+                                        Upload photo
+                                    </label>
+                                    {avatarImage && (
+                                        <button
+                                            type="button"
+                                            onClick={clearUploadedAvatar}
+                                            className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-white/70 transition hover:bg-black/40"
+                                        >
+                                            Clear
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 

@@ -213,7 +213,7 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('join-game', ({ code, name, avatar, avatarStyle }) => {
+    socket.on('join-game', ({ code, name, avatar, avatarStyle, avatarImage }) => {
       const game = games.get(code.toUpperCase());
       if (game && game.status !== 'FINAL_SCORE') {
         // Check for maximum players
@@ -222,8 +222,8 @@ export function registerSocketHandlers(io: Server) {
           return;
         }
 
-        // Check if the specific avatar+style combination is taken
-        const isAvatarStyleTaken = game.players.some(p => p.avatar === avatar && p.avatarStyle === avatarStyle);
+        // Check if the specific avatar+style combination is taken for non-photo avatars
+        const isAvatarStyleTaken = !avatarImage && game.players.some(p => p.avatar === avatar && p.avatarStyle === avatarStyle);
         if (isAvatarStyleTaken) {
           socket.emit('error', 'This avatar and style combination is already taken');
           return;
@@ -242,6 +242,7 @@ export function registerSocketHandlers(io: Server) {
           name,
           avatar: assignedAvatar,
           avatarStyle: avatarStyle || 'avataaars',
+          avatarImage: avatarImage || undefined,
           score: 0,
           lastAnswer: null,
           isCorrect: false,
@@ -282,7 +283,7 @@ export function registerSocketHandlers(io: Server) {
       }
     });
 
-    socket.on('rejoin-game', ({ code, playerId, name, isHost }) => {
+    socket.on('rejoin-game', ({ code, playerId, name, isHost, avatarImage }) => {
       const normalizedCode = code.toUpperCase();
       const game = games.get(normalizedCode);
       
@@ -312,6 +313,7 @@ export function registerSocketHandlers(io: Server) {
         game.players = game.players.map(p => ({
           ...p,
           socketId: p.id === playerId ? socket.id : p.socketId,
+          avatarImage: p.id === playerId && avatarImage ? avatarImage : p.avatarImage,
           stealCardValue: typeof p.stealCardValue === 'number' ? p.stealCardValue : Math.floor(Math.random() * 8) + 1,
           stealCardUsed: typeof p.stealCardUsed === 'boolean' ? p.stealCardUsed : false,
           blockCardUsed: typeof p.blockCardUsed === 'boolean' ? p.blockCardUsed : false,
@@ -346,6 +348,7 @@ export function registerSocketHandlers(io: Server) {
             score: 0,
             avatar: newAvatar,
             avatarStyle: 'avataaars',
+            avatarImage: avatarImage || undefined,
             socketId: socket.id,
             lastAnswer: null,
             isCorrect: false,

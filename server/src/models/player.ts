@@ -13,6 +13,7 @@ export interface Player {
     isBlockedThisQuestion?: boolean; // True when this player is blocked for the current question
     blockedByPlayerId?: string | null; // Player id of the blocker for the current question
     avatarStyle?: string;
+    avatarImage?: string;
     streak: number;
     answeredAt: number | null;
     isFastestFinger?: boolean;

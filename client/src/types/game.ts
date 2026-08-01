@@ -13,6 +13,7 @@ export interface Player {
     isBlockedThisQuestion?: boolean;
     blockedByPlayerId?: string | null;
     avatarStyle?: string;
+    avatarImage?: string;
     streak: number;
     answeredAt: number | null;
     isFastestFinger?: boolean;

@@ -63,7 +63,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                 <span className="text-display-gradient pr-10">Lobby</span>
             </h1>
 
-            <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mb-8 px-8 max-h-[440px] overflow-y-auto">
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mb-8 px-8 pt-4 pb-2 max-h-[440px] overflow-y-auto">
                 {players.map((player, i) => {
                     const avatarColor = getAvatarColor(player.avatar);
                     const textColor = getAvatarTextColor(player.avatar);
@@ -91,7 +91,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                             </button>
 
                             <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 rounded-2xl flex items-center justify-center shadow-inner border border-white/10 overflow-hidden shrink-0">
-                                <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                             </div>
                             <div className="flex flex-col items-center overflow-hidden w-full">
                                 <span

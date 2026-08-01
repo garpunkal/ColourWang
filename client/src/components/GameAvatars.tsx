@@ -12,6 +12,7 @@ interface AvatarProps {
     style?: string; // DiceBear style/collection
     onStyleChange?: (style: string) => void;
     showStyleSelector?: boolean;
+    imageUrl?: string;
 }
 
 export const Avatar = ({
@@ -20,6 +21,7 @@ export const Avatar = ({
     style = avatarConfig.defaultStyle,
     onStyleChange,
     showStyleSelector = false,
+    imageUrl,
 }: AvatarProps) => {
     const [selectedStyle, setSelectedStyle] = useState(style);
 
@@ -28,8 +30,11 @@ export const Avatar = ({
         setSelectedStyle(style);
     }, [style]);
 
-    const backgroundColor = getAvatarColor(seed).replace('#', '');
-    const url = `https://api.dicebear.com/9.x/${selectedStyle}/svg?seed=${seed}&backgroundColor=${backgroundColor}`;
+    const hasCustomImage = Boolean(imageUrl);
+    const backgroundColor = hasCustomImage ? '000000' : getAvatarColor(seed).replace('#', '');
+    const url = hasCustomImage
+        ? imageUrl
+        : `https://api.dicebear.com/9.x/${selectedStyle}/svg?seed=${seed}&backgroundColor=${backgroundColor}`;
 
     const handleStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedStyle(e.target.value);
@@ -42,7 +47,7 @@ export const Avatar = ({
                 <img
                     src={url}
                     alt={`Avatar ${seed}`}
-                    className="object-contain w-full h-full"
+                    className={hasCustomImage ? "object-cover w-full h-full" : "object-contain w-full h-full"}
                 />
             </div>
             {showStyleSelector && (

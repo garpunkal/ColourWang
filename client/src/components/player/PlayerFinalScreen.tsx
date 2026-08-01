@@ -112,7 +112,7 @@ export function PlayerFinalScreen({ player, gameState, setGameState, socket }: P
                                             {p.rank}
                                         </span>
                                         <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0">
-                                            <Avatar seed={p.avatar} style={p.avatarStyle} className="w-full h-full" />
+                                            <Avatar seed={p.avatar} style={p.avatarStyle} imageUrl={p.avatarImage} className="w-full h-full" />
                                         </div>
                                         <span className={`text-base font-black uppercase italic ${isMe ? 'text-white' : 'text-white/90'}`}>
                                             {p.name}

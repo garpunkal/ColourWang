@@ -482,7 +482,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                     const playerColor = getAvatarColor(player.avatar);
                                     return (
                                         <div key={player.id} className={`relative w-8 h-8 rounded-lg overflow-hidden transition-all duration-500 ${isAnswered ? 'opacity-100 scale-100' : 'opacity-30 grayscale scale-90'}`} style={{ boxShadow: isAnswered ? `0 0 10px ${playerColor}40` : 'none' }}>
-                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                         </div>
                                     );
                                 })}
@@ -528,7 +528,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                                         className="flex items-center gap-3 p-3 rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 transition-colors text-left"
                                     >
                                         <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/20 shrink-0">
-                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <span className="block text-base md:text-lg font-black uppercase italic truncate">{player.name}</span>

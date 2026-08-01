@@ -207,7 +207,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                 style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
                             >
                                 <div className="w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0" style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
-                                    <Avatar seed={player.avatar} style={player.avatarStyle} className="w-full h-full" />
+                                    <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                 </div>
                                 <div className="flex flex-col items-start min-w-0 flex-1">
                                     <span className="text-xl font-black uppercase italic truncate w-full text-left" style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>

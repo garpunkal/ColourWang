@@ -164,6 +164,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                     <Avatar
                                         seed={player.avatar}
                                         style={player.avatarStyle}
+                                        imageUrl={player.avatarImage}
                                         className="w-full h-full"
                                     />
                                 </div>

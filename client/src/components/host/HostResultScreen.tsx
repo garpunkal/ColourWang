@@ -210,7 +210,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                     <div className="mb-3 flex items-center gap-3">
                                         <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-lg">
                                             <div className="absolute inset-0 bg-black/15" />
-                                            <Avatar seed={player.avatar} style={player.avatarStyle} className="relative z-10 h-full w-full" />
+                                            <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="relative z-10 h-full w-full" />
                                         </div>
                                         <div className="min-w-0">
                                             <span className="block w-full truncate pr-8 text-sm font-black uppercase tracking-wide text-white md:text-base">
