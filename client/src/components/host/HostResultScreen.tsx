@@ -197,7 +197,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                     initial={{ opacity: 0, y: 26 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.28 + (index * 0.04) }}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'min-h-30 p-2.5' : 'min-h-44 p-3'}`}
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'p-2.5' : 'p-3'}`}
                                     style={{
                                         background: player.isCorrect
                                             ? 'linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.05) 100%)'

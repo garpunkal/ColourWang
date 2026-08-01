@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (action === 'kill') {
         askConfirmation({
           title: `Kill Game ${gameCode}?`,
-          body: 'This will terminate the room and disconnect all active players in this game.',
+          body: 'This will terminate the room and return every connected frontend in this game to the homepage.',
           onConfirm: async () => {
             try {
               const res = await fetch(`/api/admin/games/${encodeURIComponent(gameCode)}/kill`, {
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (action === 'restart') {
         askConfirmation({
           title: `Restart Game ${gameCode}?`,
-          body: 'This will reset the room score and return players to the lobby.',
+          body: 'This will force everyone out of the room and return their frontend to the homepage.',
           onConfirm: async () => {
             try {
               const res = await fetch(`/api/admin/games/${encodeURIComponent(gameCode)}/restart`, {
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       askConfirmation({
         title: 'Kill ALL Active Games?',
-        body: 'This will terminate every room currently running on the server. Active players will be disconnected.',
+        body: 'This will terminate every room currently running on the server and return every frontend to the homepage.',
         onConfirm: async () => {
           try {
             const res = await fetch('/api/admin/games/kill-all', {

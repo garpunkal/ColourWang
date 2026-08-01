@@ -54,6 +54,19 @@ function safeDeleteGame(code: string): boolean {
   return false;
 }
 
+function emitGameEnded(io: Server | undefined, code?: string) {
+  if (!io) return;
+
+  if (!code) {
+    io.emit('game-ended');
+    return;
+  }
+
+  const normalizedCode = String(code).trim().toUpperCase();
+  io.to(normalizedCode).emit('game-ended');
+  io.to(normalizedCode.toLowerCase()).emit('game-ended');
+}
+
 export function createAdminRouter(io?: Server) {
   const router = Router();
 
@@ -118,7 +131,7 @@ export function createAdminRouter(io?: Server) {
 
       if (io) {
         try {
-          io.emit('game_terminated', { reason: 'Host terminated all active sessions.' });
+          emitGameEnded(io);
         } catch (sErr) {
           logger.warn('[ADMIN] Socket emit warning during kill-all:', sErr);
         }
@@ -164,8 +177,7 @@ export function createAdminRouter(io?: Server) {
 
       if (io) {
         try {
-          io.to(code).emit('game_terminated', { reason: 'Game terminated by host.' });
-          io.to(code.toLowerCase()).emit('game_terminated', { reason: 'Game terminated by host.' });
+          emitGameEnded(io, code);
         } catch (sErr) {
           logger.warn(`[ADMIN] Socket emit warning for ${code}:`, sErr);
         }
@@ -220,8 +232,7 @@ export function createAdminRouter(io?: Server) {
 
       if (io) {
         try {
-          io.to(code).emit('game_restarted', { message: 'Game state reset by host.' });
-          io.to(code.toLowerCase()).emit('game_restarted', { message: 'Game state reset by host.' });
+          emitGameEnded(io, code);
         } catch (sErr) {
           logger.warn(`[ADMIN] Socket emit warning on restart for ${code}:`, sErr);
         }

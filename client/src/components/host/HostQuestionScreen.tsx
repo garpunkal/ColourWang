@@ -220,7 +220,7 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                                             : isBlocked
                                                 ? '0 0 8px rgba(239,68,68,0.35)'
                                                 : 'none',
-                                        filter: isAnswered ? 'saturate(1.05)' : 'saturate(0.7)',
+                                       filter: isAnswered ? 'saturate(1.05)' : 'grayscale(1) saturate(0.3)',
                                         opacity: isAnswered ? 1 : 0.6
                                     }}
                                 >

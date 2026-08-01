@@ -9,6 +9,14 @@ export function useSocketGameState(
   setRole: Dispatch<SetStateAction<'NONE' | 'HOST' | 'PLAYER'>>
 ) {
   useEffect(() => {
+    const resetToHomepage = () => {
+      setGameState(null);
+      setRole('NONE');
+      localStorage.removeItem('cw_playerId');
+      localStorage.removeItem('cw_gameCode');
+      localStorage.removeItem('cw_hostCode');
+    };
+
     socket.on('game-created', (state: GameState) => {
       setGameState(state);
       localStorage.setItem('cw_hostCode', state.code);
@@ -30,13 +38,9 @@ export function useSocketGameState(
       setGameState((prev: GameState | null) => prev ? { ...prev, players } : null)
     );
 
-    socket.on('game-ended', () => {
-      setGameState(null);
-      setRole('NONE');
-      localStorage.removeItem('cw_playerId');
-      localStorage.removeItem('cw_gameCode');
-      localStorage.removeItem('cw_hostCode');
-    });
+    socket.on('game-ended', resetToHomepage);
+    socket.on('game_terminated', resetToHomepage);
+    socket.on('game_restarted', resetToHomepage);
 
     const handleRejoin = () => {
       const savedId = localStorage.getItem('cw_playerId');
@@ -84,7 +88,9 @@ export function useSocketGameState(
       socket.off('joined-game');
       socket.off('game-status-changed');
       socket.off('player-joined');
-      socket.off('game-ended');
+      socket.off('game-ended', resetToHomepage);
+      socket.off('game_terminated', resetToHomepage);
+      socket.off('game_restarted', resetToHomepage);
       socket.off('error');
       socket.off('connect', handleRejoin);
       socket.off('disconnect');
