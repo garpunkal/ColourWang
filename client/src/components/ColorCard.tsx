@@ -43,7 +43,7 @@ export const ColorCard = memo(function ColorCard({
         small: { width: 'clamp(5rem, 25vw, 8rem)', height: 'clamp(7.5rem, 38vw, 12rem)' },
         medium: { width: 'clamp(7rem, 40vw, 10rem)', height: 'clamp(10.5rem, 60vw, 15rem)' },
         large: { width: 'clamp(9rem, 45vw, 12rem)', height: 'clamp(13.5rem, 68vw, 18rem)' },
-        responsive: { width: '100%', aspectRatio: '4/5', maxWidth: 'clamp(68px, 21vw, 243px)', minWidth: '52px' }
+        responsive: { width: '100%', aspectRatio: '3/4', maxWidth: 'clamp(52px, 17vw, 200px)', minWidth: '40px' }
     };
 
     const cardStyle = sizeStyles[size] || sizeStyles.medium;
