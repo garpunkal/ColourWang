@@ -291,8 +291,8 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                 )}
             </AnimatePresence>
 
-            <div className="text-center px-2 md:px-4 shrink-0 py-1 md:py-2">
-                <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-2 md:mb-8 glass-panel px-2 md:px-4 py-1 rounded-2xl mx-auto w-fit">
+            <div className="text-center px-2 md:px-4 shrink-0 py-0.5 md:py-2">
+                <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-1 md:mb-8 glass-panel px-2 md:px-4 py-1 rounded-2xl mx-auto w-fit">
                     <div className="flex flex-col items-center leading-none">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Round</span>
                         <span className="text-lg font-black italic tracking-tighter text-white">{gameState.currentRoundIndex + 1}</span>
@@ -336,7 +336,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                     )}
                 </div>
                 <h3 
-                    className="text-lg md:text-4xl lg:text-5xl text-display text-display-gradient px-2 md:px-8 py-1 md:py-2 text-center max-w-4xl mx-auto"
+                    className="text-lg md:text-4xl lg:text-5xl text-display text-display-gradient px-2 md:px-8 py-0.5 md:py-2 text-center max-w-4xl mx-auto"
                     style={{ 
                         lineHeight: '1.1',
                         wordBreak: 'break-word',
