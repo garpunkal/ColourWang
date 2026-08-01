@@ -2,7 +2,6 @@ import type { Question, GameState } from '../../types/game';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import type { Socket } from 'socket.io-client';
-import { Check } from 'lucide-react';
 import { getAvatarColor } from '../../constants/avatars';
 import { Avatar } from '../GameAvatars';
 
@@ -196,31 +195,40 @@ export function HostQuestionScreen({ socket, gameState, currentQuestion, current
                     </motion.div>
                 </div>
 
-                <div className={`mx-auto w-full max-w-7xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[28dvh] sm:max-h-[32dvh] overflow-y-auto pb-3 pr-1' : 'pb-6'}`}>
-                    <div className={`grid w-full ${hasManyPlayers ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6'}`}>
+                <div className={`mx-auto w-full max-w-5xl px-1 sm:px-2 ${hasManyPlayers ? 'max-h-[22dvh] sm:max-h-[26dvh] overflow-y-auto pb-3 pr-1' : 'pb-6'}`}>
+                    <div className={`flex flex-wrap justify-center ${hasManyPlayers ? 'gap-2 sm:gap-2.5' : 'gap-3 sm:gap-4'}`}>
                     {gameState.players.map((player) => {
                         const playerStatus = playersAnswered.find(p => p.id === player.id);
                         const playerColor = getAvatarColor(player.avatar);
                         const isAnswered = playerStatus?.hasAnswered || false;
+                        const isBlocked = blockedPlayerIds.includes(player.id);
 
                         return (
                             <motion.div
                                 key={player.id}
-                                className={`relative flex items-center gap-3 rounded-2xl border-2 transition-all duration-300 w-full ${hasManyPlayers ? 'py-2 sm:py-2.5 px-2.5 sm:px-3' : 'py-3 sm:py-4 px-3 sm:px-4'} ${isAnswered ? 'bg-white/5 opacity-100' : 'bg-black/20 opacity-50'}`}
-                                style={{ borderColor: isAnswered ? playerColor : 'rgba(255,255,255,0.1)' }}
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="relative flex flex-col items-center gap-1"
+                                title={player.name}
                             >
-                                <div className={`${hasManyPlayers ? 'w-12 h-12 sm:w-14 sm:h-14' : 'w-16 h-16'} rounded-xl overflow-hidden border-2 shrink-0`} style={{ borderColor: isAnswered ? playerColor : 'transparent' }}>
+                                <div
+                                    className={`${hasManyPlayers ? 'w-11 h-11 sm:w-12 sm:h-12' : 'w-12 h-12 sm:w-14 sm:h-14'} rounded-full overflow-hidden border-2 transition-all duration-300`}
+                                    style={{
+                                        borderColor: isBlocked ? 'rgba(239,68,68,0.85)' : isAnswered ? playerColor : 'rgba(255,255,255,0.2)',
+                                        boxShadow: isAnswered
+                                            ? `0 0 18px ${playerColor}, 0 0 30px ${playerColor}80`
+                                            : isBlocked
+                                                ? '0 0 14px rgba(239,68,68,0.5)'
+                                                : 'none',
+                                        filter: isAnswered ? 'saturate(1.1)' : 'saturate(0.65)',
+                                        opacity: isAnswered ? 1 : 0.55
+                                    }}
+                                >
                                     <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="w-full h-full" />
                                 </div>
-                                <div className="flex flex-col items-start min-w-0 flex-1">
-                                    <span className={`${hasManyPlayers ? 'text-base sm:text-lg' : 'text-xl'} font-black uppercase italic truncate w-full text-left`} style={{ color: isAnswered ? playerColor : 'white' }}>{player.name}</span>
-                                    <span className={`${hasManyPlayers ? 'text-[10px]' : 'text-xs'} font-bold uppercase tracking-widest opacity-60 text-left`}>{blockedPlayerIds.includes(player.id) ? 'Blocked' : isAnswered ? '✓ Locked In' : 'Thinking...'}</span>
-                                </div>
-                                {isAnswered && (
-                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 bg-success text-black rounded-full p-1">
-                                        <Check size={16} strokeWidth={4} />
-                                    </motion.div>
-                                )}
+                                <span className="max-w-16 truncate text-[10px] font-black uppercase tracking-wider text-white/70">
+                                    {player.name}
+                                </span>
                             </motion.div>
                         );
                     })}

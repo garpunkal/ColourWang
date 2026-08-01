@@ -146,7 +146,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         initial={{ y: 24, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.06 }}
-                        className="mx-auto mb-3 max-w-5xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] md:mb-4 line-clamp-4"
+                        className={`mx-auto max-w-5xl font-black leading-tight text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.65)] line-clamp-4 ${hasManyPlayers ? 'mb-2 md:mb-3' : 'mb-3 md:mb-4'}`}
                         style={{ fontSize: 'clamp(1.1rem, 4vw, 2.75rem)' }}
                     >
                         {currentQuestion.question}
@@ -156,12 +156,12 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                         initial={{ y: 14, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.14 }}
-                        className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-300/40 bg-blue-500/15 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-blue-200 md:mb-6"
+                        className={`inline-flex items-center gap-2 rounded-full border border-blue-300/40 bg-blue-500/15 text-xs font-black uppercase tracking-[0.2em] text-blue-200 px-4 py-1.5 ${hasManyPlayers ? 'mb-3 md:mb-4' : 'mb-5 md:mb-6'}`}
                     >
                         Correct Answer
                     </motion.div>
 
-                    <div className="mb-5 flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 md:mb-6">
+                    <div className={`flex flex-wrap justify-center ${hasManyPlayers ? 'gap-2 sm:gap-3 mb-3 md:mb-4' : 'gap-3 sm:gap-4 md:gap-5 mb-5 md:mb-6'}`}>
                         {correctColours.map((color, i) => (
                             <motion.div
                                 key={i}
@@ -172,7 +172,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 <ColorCard
                                     color={color}
                                     isCorrect={true}
-                                    size="small"
+                                    size={hasManyPlayers ? 'mini' : 'small'}
                                     index={i}
                                 />
                             </motion.div>
@@ -181,13 +181,13 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                 </div>
 
                 <div className="w-full flex-1 overflow-hidden">
-                    <div className="mb-3 flex items-center justify-center gap-4 md:mb-4">
+                    <div className={`flex items-center justify-center gap-4 ${hasManyPlayers ? 'mb-2 md:mb-3' : 'mb-3 md:mb-4'}`}>
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30 md:w-20" />
                         <span className="text-xs font-black uppercase tracking-[0.35em] text-white/60 md:text-sm">Player Intel</span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30 md:w-20" />
                     </div>
 
-                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 gap-3 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${hasManyPlayers ? 'max-h-[30dvh] sm:max-h-[34dvh] xl:max-h-[26rem]' : 'max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
+                    <div className={`mx-auto grid w-full max-w-6xl grid-cols-1 overflow-y-auto px-1 pb-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${hasManyPlayers ? 'gap-2 sm:gap-2.5 max-h-[24dvh] sm:max-h-[28dvh] xl:max-h-[22rem] pr-1' : 'gap-3 max-h-[36dvh] sm:max-h-[42dvh] xl:max-h-[32rem]'}`}>
                         {sortedPlayers.map((player, index) => {
                             const playerAnswer = sortColors(player.lastAnswer || []);
 
@@ -197,7 +197,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                     initial={{ opacity: 0, y: 26 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.28 + (index * 0.04) }}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border p-3 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'min-h-36' : 'min-h-44'}`}
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'min-h-30 p-2.5' : 'min-h-44 p-3'}`}
                                     style={{
                                         background: player.isCorrect
                                             ? 'linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.05) 100%)'
@@ -209,26 +209,26 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                         boxShadow: player.streak >= 3 ? '0 0 30px rgba(249,115,22,0.2)' : 'none'
                                     }}
                                 >
-                                    <div className="mb-3 flex items-center gap-3">
-                                        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-lg">
+                                    <div className={`flex items-center ${hasManyPlayers ? 'mb-2 gap-2.5' : 'mb-3 gap-3'}`}>
+                                        <div className={`relative shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-lg ${hasManyPlayers ? 'h-9 w-9' : 'h-11 w-11'}`}>
                                             <div className="absolute inset-0 bg-black/15" />
                                             <Avatar seed={player.avatar} style={player.avatarStyle} imageUrl={player.avatarImage} className="relative z-10 h-full w-full" />
                                         </div>
                                         <div className="min-w-0">
-                                            <span className="block w-full truncate pr-8 text-sm font-black uppercase tracking-wide text-white md:text-base">
+                                            <span className={`block w-full truncate pr-8 font-black uppercase tracking-wide text-white ${hasManyPlayers ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
                                                 {player.name}
                                             </span>
                                             <div className="flex items-center gap-1.5">
-                                                <span className={`text-sm font-black tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
+                                                <span className={`${hasManyPlayers ? 'text-xs' : 'text-sm'} font-black tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
                                                     {player.isCorrect ? `+${player.roundScore || 0} PTS` : '+0 PTS'}
                                                 </span>
-                                                {player.streak >= 3 && <span className="text-sm">🔥</span>}
-                                                {player.isFastestFinger && <span className="text-sm">⚡</span>}
+                                                {player.streak >= 3 && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>🔥</span>}
+                                                {player.isFastestFinger && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>⚡</span>}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 p-2">
+                                    <div className={`flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-black/25 ${hasManyPlayers ? 'p-1.5' : 'p-2'}`}>
                                         <div className="flex flex-wrap justify-center gap-1.5">
                                             {playerAnswer.length > 0 ? playerAnswer.map((color, i) => (
                                                 <ColorCard

@@ -108,35 +108,36 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                     );
                 })}
 
-                {/* Scanning Placeholder Card */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={`glass rounded-2xl flex flex-col items-center border-white/10 shadow-lg border-dashed border-2 bg-white/5 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-[10rem]' : 'p-3 gap-2 min-w-40'}`}
-                >
-                    <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-[4.5rem] md:h-[4.5rem]' : 'w-20 h-20 md:w-24 md:h-24'} flex items-center justify-center relative bg-black/20 rounded-2xl overflow-hidden`}>
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-2 border-[3px] border-white/10 rounded-xl"
-                        />
-                        <motion.div
-                            animate={{ rotate: -360 }}
-                            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-4 border-[3px] border-white/10 rounded-lg"
-                        />
-                        <motion.div
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                            className="w-2 h-2 bg-white/50 rounded-full"
-                        />
-                    </div>
-                    <div className="flex flex-col items-center w-full py-1">
-                        <span className="text-sm font-bold uppercase tracking-widest text-white/30 animate-pulse">
-                            waiting...
-                        </span>
-                    </div>
-                </motion.div>
+                {players.length === 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className={`glass rounded-2xl flex flex-col items-center border-white/10 shadow-lg border-dashed border-2 bg-white/5 ${hasManyPlayers ? 'p-2.5 gap-1.5 min-w-[8.2rem] sm:min-w-[9.2rem] md:min-w-[10rem]' : 'p-3 gap-2 min-w-40'}`}
+                    >
+                        <div className={`${hasManyPlayers ? 'w-16 h-16 md:w-[4.5rem] md:h-[4.5rem]' : 'w-20 h-20 md:w-24 md:h-24'} flex items-center justify-center relative bg-black/20 rounded-2xl overflow-hidden`}>
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-2 border-[3px] border-white/10 rounded-xl"
+                            />
+                            <motion.div
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-4 border-[3px] border-white/10 rounded-lg"
+                            />
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="w-2 h-2 bg-white/50 rounded-full"
+                            />
+                        </div>
+                        <div className="flex flex-col items-center w-full py-1">
+                            <span className="text-sm font-bold uppercase tracking-widest text-white/30 animate-pulse">
+                                waiting...
+                            </span>
+                        </div>
+                    </motion.div>
+                )}
             </div>
 
             {players.length > 0 && (
