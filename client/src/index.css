@@ -424,6 +424,97 @@ button {
 	line-height: 1.0;
 }
 
+.avatar-action-btn,
+.crop-action-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.75rem;
+	padding: 0.7rem 1rem;
+	border-radius: 9999px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	font-size: 0.7rem;
+	font-weight: 800;
+	line-height: 1;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: #ffffff;
+	background: linear-gradient(135deg, rgba(0, 229, 255, 0.95), rgba(157, 80, 187, 0.95));
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.avatar-action-btn:hover,
+.crop-action-btn:hover {
+	transform: translateY(-2px) scale(1.02);
+	box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.avatar-action-btn:active,
+.crop-action-btn:active {
+	transform: translateY(0) scale(0.98);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.avatar-action-btn:focus-visible,
+.crop-action-btn:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.7);
+	outline-offset: 3px;
+}
+
+.avatar-action-btn-secondary,
+.crop-action-btn-secondary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.75rem;
+	padding: 0.7rem 1rem;
+	border-radius: 9999px;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	font-size: 0.7rem;
+	font-weight: 800;
+	line-height: 1;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: #ffffff;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.avatar-action-btn-secondary:hover,
+.crop-action-btn-secondary:hover {
+	transform: translateY(-2px) scale(1.02);
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
+	box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.avatar-action-btn-secondary:active,
+.crop-action-btn-secondary:active {
+	transform: translateY(0) scale(0.98);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.avatar-action-btn-secondary:focus-visible,
+.crop-action-btn-secondary:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.7);
+	outline-offset: 3px;
+}
+
+.crop-action-btn,
+.crop-action-btn-secondary {
+	flex: 1;
+	min-height: 3rem;
+	padding: 0.85rem 1rem;
+	border-radius: 9999px;
+}
+
 .text-display-gradient {
 	background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0.5));
 	-webkit-background-clip: text;

@@ -265,10 +265,8 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
         setAvatarImage(null);
     };
 
-    const avatarActionButtonClass =
-        'rounded-full border border-white/15 bg-white/8 px-2.5 py-1.5 text-[9px] font-black uppercase tracking-[0.22em] text-white/85 transition-all hover:-translate-y-px hover:bg-white/18 hover:border-white/30 active:translate-y-0 shadow-[0_6px_16px_rgba(0,0,0,0.28)]';
-    const avatarActionSecondaryButtonClass =
-        'rounded-full border border-white/12 bg-black/25 px-2.5 py-1.5 text-[9px] font-black uppercase tracking-[0.22em] text-white/80 transition-all hover:-translate-y-px hover:bg-black/40 hover:border-white/25 active:translate-y-0 shadow-[0_6px_16px_rgba(0,0,0,0.22)]';
+    const avatarActionButtonClass = 'avatar-action-btn';
+    const avatarActionSecondaryButtonClass = 'avatar-action-btn-secondary';
 
     // Listen for room updates to get taken avatars before joining
     useEffect(() => {
@@ -432,14 +430,14 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 <button
                                     type="button"
                                     onClick={cancelCropEditor}
-                                    className="flex-1 rounded-full border border-white/10 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/20"
+                                    className="crop-action-btn-secondary"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="button"
                                     onClick={applyCroppedAvatar}
-                                    className="flex-1 rounded-full border border-color-blue/30 bg-color-blue/90 px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white transition hover:bg-color-blue"
+                                    className="crop-action-btn"
                                 >
                                     Use photo
                                 </button>

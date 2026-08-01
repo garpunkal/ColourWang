@@ -31,7 +31,7 @@ export function HostHeader({ code, playerCount, compact = false, musicEnabled = 
 
     return (
         <>
-            <div className={`flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between relative z-10 w-full transition-all duration-500 ${compact ? 'mb-4 md:mb-6' : 'mb-4 md:mb-6'}`}>
+            <div className={`flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between relative z-10 w-full transition-all duration-500 ${compact ? 'mb-4 md:mb-6' : ''}`}>
 
                 {/* Join Info */}
                 <div className={`
