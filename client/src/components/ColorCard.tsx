@@ -35,7 +35,7 @@ export const ColorCard = memo(function ColorCard({
 }: ColorCardProps) {
 
     const showActionCard = isStealCard || isActionCard;
-    const resolvedActionLabel = (actionLabel || (isStealCard ? 'STEAL' : 'ACTION')).toUpperCase();
+    const resolvedActionLabel = (actionLabel || (isStealCard ? '' : 'ACTION')).toUpperCase();
     const resolvedActionValue = actionValue ?? (isStealCard ? stealValue : undefined);
 
     const sizeStyles = {
@@ -140,7 +140,7 @@ export const ColorCard = memo(function ColorCard({
                     style={
                         showActionCard
                             ? {
-                                background: 'linear-gradient(145deg, #1a1a2e 0%, #0d0d1a 100%)',
+                                background: 'linear-gradient(90deg, #f0f0f0 0%, #ffffff 100%)',
                                 transform: 'translateZ(0)'
                             }
                             : {
@@ -150,31 +150,28 @@ export const ColorCard = memo(function ColorCard({
                     }
                 >
                     {/* Top shine gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-black/20" />
+                    <div className="absolute inset-0 bg-linear-to-b from-white/40 via-transparent to-black/20" />
 
                     {/* Diagonal shine */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-transparent" />
 
                     {showActionCard && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                             {/* Generic action card design (STEAL / BLOCK / etc.) */}
                             <div className="text-center">
                                 <motion.span
-                                    className="block text-4xl md:text-5xl font-black text-white drop-shadow-lg"
+                                    className="block text-4xl md:text-5xl font-black text-black drop-shadow-lg"
                                     animate={{ scale: [1, 1.05, 1] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
+                                    transition={{ duration: 0, repeat: Infinity }}
                                 >
                                     {resolvedActionValue !== undefined ? resolvedActionValue : '?'}
                                 </motion.span>
                                 <span
-                                    className="block text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white/80 mt-1"
+                                    className="block text-md font-black uppercase tracking-[0.3em] text-shadow-white"
                                 >
                                     {resolvedActionLabel}
                                 </span>
-                            </div>
-                            {/* Decorative lines */}
-                            <div className="absolute top-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
-                            <div className="absolute bottom-3 left-3 right-3 h-0.5 bg-linear-to-r from-transparent via-white/30 to-transparent" />
+                            </div>                          
                         </div>
                     )}
 
@@ -211,7 +208,7 @@ export const ColorCard = memo(function ColorCard({
                     <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20" />
 
                     {/* Bottom edge shadow for depth */}
-                    <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/30 to-transparent rounded-b-2xl" />
+                    <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-black/30 to-transparent rounded-b-2xl" />
                 </div>
             </div>
         </motion.div>

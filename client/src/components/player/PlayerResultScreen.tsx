@@ -2,7 +2,7 @@ import type { Player, GameState, Question } from '../../types/game';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sortColors } from '../../config/gameConfig';
 import { ColorCard } from '../ColorCard';
-import { Check, X, Timer } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Props {
@@ -145,7 +145,7 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                                     disabled={true}
                                 />
                             )) : (
-                                <span className="text-xs font-bold italic text-white/30">No Answer</span>
+                                <span className="text-xs font-bold italic text-white/30"></span>
                             )}
                         </div>
                     </div>
@@ -175,12 +175,10 @@ export function PlayerResultScreen({ player, gameState, currentQuestion }: Props
                 className="absolute inset-x-0 bottom-24 md:bottom-12 z-20 px-4"
             >
                <div className="mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-2xl border border-white/15 bg-black/40 p-3 backdrop-blur-lg">
-                   <div className={`rounded-xl p-2 ${timeLeft <= 5 ? 'bg-red-500/25 text-red-300' : 'bg-blue-500/20 text-blue-300'}`}>
-                       <Timer size={18} />
-                   </div>
+                 
                    <div className="flex items-baseline gap-1">
                        <span className="font-mono text-2xl font-black tabular-nums text-white">{timeLeft}</span>
-                       <span className="text-sm font-bold text-white/35">s</span>
+                       <span className="text-md font-bold text-white/35">s</span>
                    </div>
                </div>
             </motion.div>

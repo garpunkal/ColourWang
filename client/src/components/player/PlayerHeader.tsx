@@ -27,10 +27,10 @@ export function PlayerHeader({ name, avatar, avatarStyle, avatarImage, score, ra
 
             <div className="flex flex-col items-end">
                 <span className="text-[9px] md:text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-0.5 md:mb-1 opacity-50 italic">
-                    {rank ? 'Ranking' : 'Points'}
+                    {rank ? '' : 'Points'}
                 </span>
                 <span className="text-2xl md:text-4xl font-black glow-text leading-none font-mono tracking-tighter text-white">
-                    {rank ? `#${rank}` : (score || 0)}
+                    {rank ? `` : (score || 0)}
                 </span>
             </div>
         </motion.div >

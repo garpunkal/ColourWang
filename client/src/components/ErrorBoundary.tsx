@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
             }
 
             return (
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#22223b] via-[#4a4e69] to-[#22223b] p-4">
+                <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#22223b] via-[#4a4e69] to-[#22223b] p-4">
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}

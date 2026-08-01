@@ -182,7 +182,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                             return (
                                 <motion.div
                                     key={player.id}
-                                    initial={{ opacity: 0, y: 26 }}
+                                    initial={{ opacity: 0, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.28 + (index * 0.04) }}
                                     className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)] ${hasManyPlayers ? 'p-2.5' : 'p-3'}`}
@@ -208,7 +208,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                             </span>
                                             <div className="flex items-center gap-1.5">
                                                 <span className={`${hasManyPlayers ? 'text-xs' : 'text-sm'} font-black tracking-widest ${player.isCorrect ? 'text-success' : 'text-error'}`}>
-                                                    {player.isCorrect ? `+${player.roundScore || 0} PTS` : '+0 PTS'}
+                                                    {player.isCorrect ? `+${player.roundScore || 0} POINTS` : '0 POINTS'}
                                                 </span>
                                                 {player.streak >= 3 && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>🔥</span>}
                                                 {player.isFastestFinger && <span className={hasManyPlayers ? 'text-xs' : 'text-sm'}>⚡</span>}
@@ -240,8 +240,8 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                                 </div>
                                 <div className="shrink-0 flex items-center gap-3 md:gap-4 pl-3 md:pl-4 border-l border-white/20">
                                     <div className="flex items-center gap-1.5">
-                                        <span className="font-mono text-2xl font-black tabular-nums">{timeLeft}</span>
-                                        <span className="text-[10px] font-black uppercase opacity-40">S</span>
+                                        <span className="font-mono text-3xl font-black tabular-nums">{timeLeft}</span>
+                                        <span className="text-[16px] font-black uppercase ">s</span>
                                     </div>
                                     <Play fill="currentColor" size={20} className="transition-transform group-hover:translate-x-1" />
                                 </div>
@@ -286,7 +286,7 @@ export function HostResultScreen({ socket, gameState, currentQuestion, currentQu
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.95 }}
                     transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-                    className="fixed bottom-8 left-1/2 z-[200] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-black/80 px-5 py-3 shadow-2xl backdrop-blur-md"
+                    className="fixed bottom-8 left-1/2 z-200 -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-black/80 px-5 py-3 shadow-2xl backdrop-blur-md"
                 >
                     <CheckCircle size={18} className="shrink-0 text-green-400" />
                     <span className="text-sm font-black uppercase tracking-wide text-white">Question deleted</span>

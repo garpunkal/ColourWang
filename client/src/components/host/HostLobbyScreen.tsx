@@ -177,7 +177,7 @@ export function HostLobbyScreen({ players, onStartGame, onRemovePlayer, lobbyDur
                     }}
                     className="text-white/30 hover:text-white text-xs sm:text-sm uppercase font-bold tracking-widest transition-colors mb-8 md:mb-12 underline decoration-white/10 hover:decoration-white decoration-2 underline-offset-4 cursor-pointer"
                 >
-                    ABANDON LOBBY & RESET
+                    Reset
                 </button>
             </div>
         </motion.div>

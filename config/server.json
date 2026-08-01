@@ -28,10 +28,10 @@
         "reconnectionAttempts": 5
     },
     "timings": {
-        "roundIntroDelay": 5000,
+        "roundIntroDelay": 3000,
         "countdownDelay": 4800,
         "autoStartTimer": 30,
-        "stealNoticeDelay": 3500,
+        "stealNoticeDelay": 3800,
         "joinTimeout": 5000,
         "resultCountdownInterval": 1000
     },

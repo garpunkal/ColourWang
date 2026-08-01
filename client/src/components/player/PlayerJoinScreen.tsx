@@ -372,13 +372,13 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4"
+                        className="fixed inset-0 z-70 flex items-center justify-center bg-black/85 p-4"
                     >
                         <motion.div
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                            className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#1b1534] p-5 shadow-2xl"
+                            className="w-full max-w-md rounded-4xl border border-white/10 bg-[#1b1534] p-5 shadow-2xl"
                         >
                             <div className="flex items-center justify-between gap-3">
                                 <div>
@@ -391,14 +391,14 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                             </div>
                             <p className="mt-3 text-sm text-white/70">Drag the image to choose the part you want to keep.</p>
                             <div
-                                className="relative mt-4 flex aspect-square w-full max-w-[320px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40 mx-auto cursor-grab active:cursor-grabbing"
+                                className="relative mt-4 flex aspect-square w-full max-w-[320px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-black/40 mx-auto cursor-grab active:cursor-grabbing"
                                 onPointerDown={handleCropPointerDown}
                                 onPointerMove={handleCropPointerMove}
                                 onPointerUp={handleCropPointerUp}
                                 onPointerLeave={handleCropPointerUp}
                                 style={{ touchAction: 'none' }}
                             >
-                                <div className="absolute inset-0 rounded-[1.5rem] border-[3px] border-white/90 z-10 pointer-events-none" />
+                                <div className="absolute inset-0 rounded-3xl border-[3px] border-white/90 z-10 pointer-events-none" />
                                 <img
                                     src={cropImageData.dataUrl}
                                     alt="Crop preview"
@@ -467,14 +467,11 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     {/* Avatar Style & Preview */}
                     <div className="flex flex-col items-center space-y-4 pt-2">
                         <div className="w-full rounded-[1.4rem] border border-white/10 bg-black/20 p-3 md:p-4">
-                            <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex flex-wrap flex-col justify-between gap-3 w-full ">
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-text-muted/60">
-                                        {avatarImage ? 'Using your photo' : 'Optional photo avatar'}
-                                    </p>
-                                    <p className="text-xs text-white/60 mt-1">
-                                        {avatarImage ? 'Your uploaded image will appear for everyone in the game.' : 'Upload a selfie or photo to replace the default avatar.'}
-                                    </p>
+                                    <p className="text-sm font-black uppercase tracking-[0.35em] text-text-muted/60 text-center">
+                                        {avatarImage ? 'Your photo' : 'Photo avatar'}
+                                    </p>                                 
                                 </div>
                                 <div className="flex items-center justify-center gap-2 flex-wrap w-full sm:w-auto mx-auto">
                                     <input
@@ -539,7 +536,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 className="p-4 rounded-full glass hover:bg-white/10 transition-colors"
                                 aria-label="Previous style"
                             >
-                                <ChevronLeft size={36} />
+                                <ChevronLeft size={42} />
                             </motion.button>
                             )}
 
@@ -562,7 +559,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                 className="p-4 rounded-full glass hover:bg-white/10 transition-colors"
                                 aria-label="Next style"
                             >
-                                <ChevronRight size={36} />
+                                <ChevronRight size={42} />
                             </motion.button>
                             )}
                         </div>
@@ -571,7 +568,7 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                     {!avatarImage && (
                     <div className="space-y-2">
                         <label className="text-xs font-black uppercase tracking-[0.3em] text-text-muted/60 ml-4">{avatarStyle.replace('-', ' ')}</label>
-                        <div className="flex flex-wrap gap-2 p-3 glass rounded-4xl border-white/10 shadow-inner bg-black/20 h-[320px] overflow-y-auto content-start avatar-scrollbar">
+                        <div className="flex flex-wrap gap-2 p-3 glass rounded-4xl border-white/10 shadow-inner bg-black/20 h-80 overflow-y-auto content-start avatar-scrollbar">
                             {AVATAR_IDS.map((a) => {
                                 const taken = isAvatarTaken(a);
                                 const isSelected = avatar === a;
@@ -584,15 +581,15 @@ export function PlayerJoinScreen({ socket, takenAvatars = [] }: Props) {
                                         className={`
                                                 relative aspect-square flex items-center justify-center p-1.5 rounded-xl transition-all duration-300
                                                 ${isSelected
-                                                ? 'bg-white/10 ring-2 ring-offset-2 ring-offset-black scale-105 z-10'
+                                                ? 'bg-white/10 scale-105 z-10'
                                                 : taken
                                                     ? 'opacity-20 cursor-not-allowed'
                                                     : 'opacity-60 hover:opacity-100 hover:scale-105'
                                             }
                                             `}
                                         style={{
-                                            width: 'calc(33.333% - 6px)',
-                                            ...(isSelected ? { '--tw-ring-color': getAvatarColor(a) } as React.CSSProperties : {})
+                                            width: 'calc(33.333% - 6px)'
+                                            
                                         }}
                                         title={getAvatarName(a)}
                                     >

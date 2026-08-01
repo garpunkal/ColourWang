@@ -47,7 +47,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             });
         }, 1000);
         return () => clearInterval(interval);
-    }, [isCountdownState, isRoundIntro, autoStartTimer !== null]);
+    }, [autoStartTimer, isCountdownState, isRoundIntro]);
 
     // Start/Stop Auto-Start Timer based on player count
     useEffect(() => {
@@ -66,7 +66,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                 return () => clearTimeout(timeout);
             }
         }
-    }, [players.length, isCountdownState, isRoundIntro, autoStartTimer === null]);
+    }, [players.length, isCountdownState, isRoundIntro, autoStartTimer, gameState.lobbyDuration]);
 
     // Internal 5s countdown logic
     useEffect(() => {
@@ -118,12 +118,12 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                     </motion.div>
                 ) : isRoundIntro && currentRound ? (
                     <div className="relative z-20 flex flex-col items-center text-center space-y-4 animate-fade-in p-4">
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-400 mb-6 uppercase tracking-widest">Round {gameState.currentRoundIndex + 1}</h2>
-                        <h1 className="text-6xl md:text-9xl font-black text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 mb-10 text-center drop-shadow-2xl leading-tight">
+                        <h2 className="text-2xl md:text-4xl font-bold text-gray-400 mb-6 uppercase tracking-widest">Round {gameState.currentRoundIndex + 1}</h2>
+                        <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 mb-10 text-center drop-shadow-2xl leading-tight">
                             {currentRound.title}
                         </h1>
                         {currentRound.description && (
-                            <p className="text-2xl md:text-4xl text-gray-300 max-w-4xl text-center italic font-light">
+                            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl text-center italic font-light">
                                 "{currentRound.description}"
                             </p>
                         )}
@@ -161,7 +161,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                                         backgroundColor: `${playerColor}05`
                                     }}
                                 >
-                                    <div className={`${hasManyPlayers ? 'w-7 h-7' : 'w-10 h-10'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
+                                    <div className={`${hasManyPlayers ? 'w-12 h-12' : 'w-12 h-12'} rounded-xl overflow-hidden border border-white/10 shrink-0`}>
                                         <Avatar
                                             seed={player.avatar}
                                             style={player.avatarStyle}
@@ -192,7 +192,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
             )}
 
             {/* Auto-start timer footer */}
-            {!isCountdownState && autoStartTimer !== null && (
+            {/* {!isCountdownState && autoStartTimer !== null && (
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -206,7 +206,7 @@ export function PlayerLobbyScreen({ gameState }: Props) {
                         <span className="text-xs font-black text-white/20">SEC</span>
                     </div>
                 </motion.div>
-            )}
+            )} */}
         </motion.div>
     );
 }

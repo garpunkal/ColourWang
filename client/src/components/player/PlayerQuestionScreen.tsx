@@ -410,7 +410,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             )}
                         </div>
                         {gameState.blocksEnabled !== false && me && !hasUsedBlockCard && !blockCardPending && !isBlockedThisQuestion && targetablePlayers.length > 0 && (
-                            <div className="w-full max-w-4xl px-2 md:px-6 mx-auto mt-3 md:mt-5">
+                            <div className="w-full max-w-4xl px-2 md:px-6 mx-auto mt-2">
                                 <motion.button
                                     whileHover={{ y: -1 }}
                                     whileTap={{ scale: 0.98 }}
@@ -433,7 +433,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-4">
+                    <div className="flex flex-col gap-2 w-full shrink-0 p-1.5 md:p-2 pt-2">
                         <motion.button
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.97 }}
@@ -444,14 +444,7 @@ export function PlayerQuestionScreen({ socket, gameState, currentQuestion, curre
                             aria-label={`Submit answer - ${selectedColors.length} color${selectedColors.length !== 1 ? 's' : ''} selected`}
                         >
                             Submit
-                        </motion.button>
-                        <div className="hidden md:flex items-center justify-center gap-3 text-[10px] uppercase tracking-wider text-white/30 font-medium">
-                            <span>⌨️ Press 1-9 to select</span>
-                            <span>•</span>
-                            <span>Enter to submit</span>
-                            <span>•</span>
-                            <span>Esc to clear</span>
-                        </div>
+                        </motion.button>                       
                     </div>
                 </div>
             ) : (

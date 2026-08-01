@@ -27,7 +27,7 @@ export function CountdownScreen() {
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 exit={{ scale: 2, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="text-[20vw] font-black text-transparent bg-clip-text bg-gradient-to-br from-color-blue via-white to-color-pink drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] leading-none"
+                className="text-[20vw] font-black text-transparent bg-clip-text bg-linear-to-br from-color-blue via-white to-color-pink drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] leading-none"
             >
                 {count}
             </motion.div>

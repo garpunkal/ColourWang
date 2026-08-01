@@ -54,20 +54,15 @@ export function PlayerFinalScreen({ player, gameState }: Props) {
                         className="text-center"
                     >
                         <h3
-                            className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.9]"
+                            className="text-9xl md:text-9xl font-black tracking-tighter uppercase italic leading-[0.9]"
                             style={{
                                 color: 'white',
                                 textShadow: `0 0 40px ${themeColor}`
                             }}
                         >
-                            RANK #{rank}
+                            <span className="font-black">{rank}<sup className="ml-2 text-4xl">{rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'}</sup></span>
                         </h3>
-                        <div
-                            className="mt-2 inline-block px-4 py-1 rounded-full text-xs font-black tracking-[0.3em] uppercase opacity-70 border border-white/10"
-                            style={{ backgroundColor: `${themeColor}20`, color: 'white' }}
-                        >
-                            {isWinner ? 'WINNER' : 'LOSER'}
-                        </div>
+
                     </motion.div>
                 </div>
 
@@ -78,14 +73,13 @@ export function PlayerFinalScreen({ player, gameState }: Props) {
                     transition={{ delay: 0.4 }}
                     className="w-full glass-panel p-4 md:p-5 rounded-3xl md:rounded-4xl border-white/5 bg-white/2"
                 >
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Trophy size={18} className="text-color-yellow" />
-                            <span className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/40 font-black italic">Final Standings</span>
+                    <div className="flex items-center justify-center">
+                        <div className="flex items-center mr-4">
+                            <Trophy size={36} className="text-color-yellow" />
+
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/20 font-black italic">Your Score</span>
-                            <span className="text-lg md:text-xl font-black font-mono text-white">{player.score} PTS</span>
+                            <span className="text-2xl md:text-4xl font-black text-white">{player.score} points</span>
                         </div>
                     </div>
 
@@ -130,7 +124,7 @@ export function PlayerFinalScreen({ player, gameState }: Props) {
                     </div> */}
                 </motion.div>
 
-              
+
             </div>
         </motion.div>
     );

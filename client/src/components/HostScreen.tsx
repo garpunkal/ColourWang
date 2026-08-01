@@ -363,7 +363,7 @@ const HostScreen = ({ socket, gameState }: Props) => {
             </AnimatePresence>
 
             <div ref={shakeRef} className={isResultView ? 'flex-1 flex flex-col relative w-full min-h-dvh overflow-y-auto' : 'flex-1 flex flex-col p-3 sm:p-6 lg:p-8 xl:p-10 relative w-full min-h-dvh overflow-y-auto'}>
-            {(status === 'LOBBY' || status === 'COUNTDOWN' || status === 'QUESTION') && (
+            {(status === 'LOBBY' || status === 'COUNTDOWN' ) && (
                 <HostHeader
                     code={code}
                     playerCount={players.length}

@@ -1,6 +1,6 @@
 {
     "rounds": 4,
-    "questionsPerRound": 6,
+    "questionsPerRound": 4,
     "questionTimer": 10,
     "resultDuration": 10,
     "lobbyDuration": 10,
