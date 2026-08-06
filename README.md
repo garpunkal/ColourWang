@@ -2,7 +2,9 @@
 
 > A live colour quiz — host on a big screen, everyone joins on their phone.
 
-Real-time multiplayer party game. The host runs the game on a large screen; players join from their phones using a room code or QR code and tap colour cards to answer.
+Built using AI and tailored by me.
+
+A real-time multiplayer party game. The host runs the game on a large screen; players join from their phones using a room code or QR code and tap colour cards to answer.
 
 ![Landing page](docs/screenshots/01-landing.png)
 
