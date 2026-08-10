@@ -6,6 +6,8 @@ Built using AI and tailored by me.
 
 A real-time multiplayer party game. The host runs the game on a large screen; players join from their phones using a room code or QR code and tap colour cards to answer.
 
+# Please note: https://colourwang.garpunkal.dev is on a free hobby plan, so it might be unavailable at high usage times. 
+
 ![Landing page](docs/screenshots/01-landing.png)
 
 ## How It Works
